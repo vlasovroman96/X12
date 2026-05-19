@@ -141,7 +141,7 @@ int ProcXCloseDevice(ClientPtr client)
     DIX_FOR_EACH_SCREEN({
         DeleteDeviceEvents(d, walkScreen.root, client);
         DeleteEventsFromChildren(d, walkScreen.root.firstChild, client);
-    }){}
+    });
 
     return Success;
 }
