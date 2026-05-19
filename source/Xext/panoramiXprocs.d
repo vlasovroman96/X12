@@ -58,7 +58,7 @@ import resource;
 import panoramiXh;
 
 enum XINERAMA_IMAGE_BUFSIZE = (256*1024);
-enum INPUTONLY_LEGAL_MASK = (CWWinGravity | CWEventMask | \
+enum INPUTONLY_LEGAL_MASK = (CWWinGravity | CWEventMask |
                               CWDontPropagate | CWOverrideRedirect | CWCursor );
 
 int PanoramiXCreateWindow(ClientPtr client)
@@ -161,7 +161,7 @@ int PanoramiXCreateWindow(ClientPtr client)
         result = DoCreateWindowReq(client, stuff, cast(XID*)&stuff[1]);
         if (result != Success)
             break;
-    }){}
+    });
 
     if (result == Success)
         AddResource(newWin.info[0].id, XRT_WINDOW, newWin);
@@ -239,7 +239,7 @@ int PanoramiXChangeWindowAttributes(ClientPtr client)
         if (cmap)
             *(cast(CARD32*) &stuff[1] + cmap_offset) = cmap.info[walkScreenIdx].id;
         result = (*SavedProcVector[X_ChangeWindowAttributes]) (client);
-    }){}
+    });
 
     return result;
 }
@@ -263,7 +263,7 @@ int PanoramiXDestroyWindow(ClientPtr client)
         result = (*SavedProcVector[X_DestroyWindow]) (client);
         if (result != Success)
             break;
-    }){}
+    });
 
     /* Since ProcDestroyWindow is using FreeResource, it will free
        our resource for us on the last pass through the loop above */
@@ -290,7 +290,7 @@ int PanoramiXDestroySubwindows(ClientPtr client)
         result = (*SavedProcVector[X_DestroySubwindows]) (client);
         if (result != Success)
             break;
-    }){}
+    });
 
     /* DestroySubwindows is using FreeResource which will free
        our resources for us on the last pass through the loop above */
@@ -317,7 +317,7 @@ int PanoramiXChangeSaveSet(ClientPtr client)
         result = (*SavedProcVector[X_ChangeSaveSet]) (client);
         if (result != Success)
             break;
-    }){}
+    });
 
     return result;
 }
@@ -360,7 +360,7 @@ int PanoramiXReparentWindow(ClientPtr client)
         result = (*SavedProcVector[X_ReparentWindow]) (client);
         if (result != Success)
             break;
-    }){}
+    });
 
     return result;
 }
@@ -384,7 +384,7 @@ int PanoramiXMapWindow(ClientPtr client)
         result = (*SavedProcVector[X_MapWindow]) (client);
         if (result != Success)
             break;
-    }){}
+    });
 
     return result;
 }
@@ -408,7 +408,7 @@ int PanoramiXMapSubwindows(ClientPtr client)
         result = (*SavedProcVector[X_MapSubwindows]) (client);
         if (result != Success)
             break;
-    }){}
+    });
 
     return result;
 }
@@ -432,7 +432,7 @@ int PanoramiXUnmapWindow(ClientPtr client)
         result = (*SavedProcVector[X_UnmapWindow]) (client);
         if (result != Success)
             break;
-    }){}
+    });
 
     return result;
 }
@@ -456,7 +456,7 @@ int PanoramiXUnmapSubwindows(ClientPtr client)
         result = (*SavedProcVector[X_UnmapSubwindows]) (client);
         if (result != Success)
             break;
-    }){}
+    });
 
     return result;
 }
@@ -528,7 +528,7 @@ int PanoramiXConfigureWindow(ClientPtr client)
         result = (*SavedProcVector[X_ConfigureWindow]) (client);
         if (result != Success)
             break;
-    }){}
+    });
 
     return result;
 }
@@ -552,7 +552,7 @@ int PanoramiXCirculateWindow(ClientPtr client)
         result = (*SavedProcVector[X_CirculateWindow]) (client);
         if (result != Success)
             break;
-    }){}
+    });
 
     return result;
 }
@@ -720,7 +720,7 @@ int PanoramiXCreatePixmap(ClientPtr client)
         result = (*SavedProcVector[X_CreatePixmap]) (client);
         if (result != Success)
             break;
-    }){}
+    });
 
     if (result == Success)
         AddResource(newPix.info[0].id, XRT_PIXMAP, newPix);
@@ -751,7 +751,7 @@ int PanoramiXFreePixmap(ClientPtr client)
         result = (*SavedProcVector[X_FreePixmap]) (client);
         if (result != Success)
             break;
-    }){}
+    });
 
     /* Since ProcFreePixmap is using FreeResource, it will free
        our resource for us on the last pass through the loop above */
@@ -830,7 +830,7 @@ int PanoramiXCreateGC(ClientPtr client)
         result = (*SavedProcVector[X_CreateGC]) (client);
         if (result != Success)
             break;
-    }){}
+    });
 
     if (result == Success)
         AddResource(newGC.info[0].id, XRT_GC, newGC);
@@ -902,7 +902,7 @@ int PanoramiXChangeGC(ClientPtr client)
         result = (*SavedProcVector[X_ChangeGC]) (client);
         if (result != Success)
             break;
-    }){}
+    });
 
     return result;
 }
@@ -932,7 +932,7 @@ int PanoramiXCopyGC(ClientPtr client)
         result = (*SavedProcVector[X_CopyGC]) (client);
         if (result != Success)
             break;
-    }){}
+    });
 
     return result;
 }
@@ -956,7 +956,7 @@ int PanoramiXSetDashes(ClientPtr client)
         result = (*SavedProcVector[X_SetDashes]) (client);
         if (result != Success)
             break;
-    }){}
+    });
 
     return result;
 }
@@ -980,7 +980,7 @@ int PanoramiXSetClipRectangles(ClientPtr client)
         result = (*SavedProcVector[X_SetClipRectangles]) (client);
         if (result != Success)
             break;
-    }){}
+    });
 
     return result;
 }
@@ -1004,7 +1004,7 @@ int PanoramiXFreeGC(ClientPtr client)
         result = (*SavedProcVector[X_FreeGC]) (client);
         if (result != Success)
             break;
-    }){}
+    });
 
     /* Since ProcFreeGC is using FreeResource, it will free
        our resource for us on the last pass through the loop above */
@@ -1040,7 +1040,7 @@ int PanoramiXClearToBackground(ClientPtr client)
         result = (*SavedProcVector[X_ClearArea]) (client);
         if (result != Success)
             break;
-    }){}
+    });
 
     return result;
 }
@@ -1116,7 +1116,7 @@ int PanoramiXCopyArea(ClientPtr client)
                                                   drawables[walkScreenIdx].width,
                                                   drawables[walkScreenIdx].height,
                                                   IncludeInferiors);
-        }){}
+        });
 
         pitch = PixmapBytePad(width, drawables[0].depth);
         if (((data = cast(char*) calloc(height, pitch)) == 0))
@@ -1138,7 +1138,7 @@ int PanoramiXCopyArea(ClientPtr client)
                                    width, height, 0, ZPixmap, data);
             if (dstShared)
                 break;
-        }){}
+        });
         free(data);
 
         if (pGC && pGC.graphicsExposures) {
@@ -1180,7 +1180,7 @@ int PanoramiXCopyArea(ClientPtr client)
 
                 if (pGC.subWindowMode == IncludeInferiors)
                     RegionDestroy(sd);
-            }){}
+            });
 
             /* -dx/-dy to get back to dest-relative, plus request offsets */
             RegionTranslate(&rgn, -dx + dstx, -dy + dsty);
@@ -1246,7 +1246,7 @@ int PanoramiXCopyArea(ClientPtr client)
 
             if (dstShared)
                 break;
-        }){}
+        });
 
         if (pGC.graphicsExposures) {
             Bool overlap = void;
@@ -1358,7 +1358,7 @@ int PanoramiXCopyPlane(ClientPtr client)
 
         if (dstShared)
             break;
-    }){}
+    });
 
     if (pGC.graphicsExposures) {
         Bool overlap = void;
@@ -1429,7 +1429,7 @@ int PanoramiXPolyPoint(ClientPtr client)
             result = (*SavedProcVector[X_PolyPoint]) (client);
             if (result != Success)
                 break;
-        }){}
+        });
 
         free(origPts);
         return result;
@@ -1494,7 +1494,7 @@ int PanoramiXPolyLine(ClientPtr client)
             result = (*SavedProcVector[X_PolyLine]) (client);
             if (result != Success)
                 break;
-        }){}
+        });
 
         free(origPts);
         return result;
@@ -1563,7 +1563,7 @@ int PanoramiXPolySegment(ClientPtr client)
             result = (*SavedProcVector[X_PolySegment]) (client);
             if (result != Success)
                 break;
-        }){}
+        });
 
         free(origSegs);
         return result;
@@ -1631,7 +1631,7 @@ int PanoramiXPolyRectangle(ClientPtr client)
             result = (*SavedProcVector[X_PolyRectangle]) (client);
             if (result != Success)
                 break;
-        }){}
+        });
 
         free(origRecs);
         return result;
@@ -1697,7 +1697,7 @@ int PanoramiXPolyArc(ClientPtr client)
             result = (*SavedProcVector[X_PolyArc]) (client);
             if (result != Success)
                 break;
-        }){}
+        });
 
         free(origArcs);
         return result;
@@ -1764,7 +1764,7 @@ int PanoramiXFillPoly(ClientPtr client)
             result = (*SavedProcVector[X_FillPoly]) (client);
             if (result != Success)
                 break;
-        }){}
+        });
 
         free(locPts);
         return result;
@@ -1831,7 +1831,7 @@ int PanoramiXPolyFillRectangle(ClientPtr client)
             result = (*SavedProcVector[X_PolyFillRectangle]) (client);
             if (result != Success)
                 break;
-        }){}
+        });
 
         free(origRects);
         return result;
@@ -1898,7 +1898,7 @@ int PanoramiXPolyFillArc(ClientPtr client)
             result = (*SavedProcVector[X_PolyFillArc]) (client);
             if (result != Success)
                 break;
-        }){}
+        });
 
         free(origArcs);
         return result;
@@ -1945,7 +1945,7 @@ int PanoramiXPutImage(ClientPtr client)
         result = (*SavedProcVector[X_PutImage]) (client);
         if (result != Success)
             break;
-    }){}
+    });
 
     return result;
 }
@@ -2023,12 +2023,12 @@ int PanoramiXGetImage(ClientPtr client)
                                DixGetAttrAccess);
         if (rc != Success)
             return rc;
-    }){}
+    });
 
     XINERAMA_FOR_EACH_SCREEN_FORWARD({
         DrawablePtr d = drawables[walkScreenIdx];
         d.pScreen.SourceValidate(d, 0, 0, d.width, d.height, IncludeInferiors);
-    }){}
+    });
 
     size_t length = void;
     if (format == ZPixmap) {
@@ -2153,7 +2153,7 @@ int PanoramiXPolyText8(ClientPtr client)
         result = (*SavedProcVector[X_PolyText8]) (client);
         if (result != Success)
             break;
-    }){}
+    });
 
     return result;
 }
@@ -2197,7 +2197,7 @@ int PanoramiXPolyText16(ClientPtr client)
         result = (*SavedProcVector[X_PolyText16]) (client);
         if (result != Success)
             break;
-    }){}
+    });
 
     return result;
 }
@@ -2241,7 +2241,7 @@ int PanoramiXImageText8(ClientPtr client)
         result = (*SavedProcVector[X_ImageText8]) (client);
         if (result != Success)
             break;
-    }){}
+    });
 
     return result;
 }
@@ -2285,7 +2285,7 @@ int PanoramiXImageText16(ClientPtr client)
         result = (*SavedProcVector[X_ImageText16]) (client);
         if (result != Success)
             break;
-    }){}
+    });
 
     return result;
 }
@@ -2319,7 +2319,7 @@ int PanoramiXCreateColormap(ClientPtr client)
         result = (*SavedProcVector[X_CreateColormap]) (client);
         if (result != Success)
             break;
-    }){}
+    });
 
     if (result == Success)
         AddResource(newCmap.info[0].id, XRT_COLORMAP, newCmap);
@@ -2350,7 +2350,7 @@ int PanoramiXFreeColormap(ClientPtr client)
         result = (*SavedProcVector[X_FreeColormap]) (client);
         if (result != Success)
             break;
-    }){}
+    });
 
     /* Since ProcFreeColormap is using FreeResource, it will free
        our resource for us on the last pass through the loop above */
@@ -2387,7 +2387,7 @@ int PanoramiXCopyColormapAndFree(ClientPtr client)
         result = (*SavedProcVector[X_CopyColormapAndFree]) (client);
         if (result != Success)
             break;
-    }){}
+    });
 
     if (result == Success)
         AddResource(newCmap.info[0].id, XRT_COLORMAP, newCmap);
@@ -2417,7 +2417,7 @@ int PanoramiXInstallColormap(ClientPtr client)
         result = (*SavedProcVector[X_InstallColormap]) (client);
         if (result != Success)
             break;
-    }){}
+    });
 
     return result;
 }
@@ -2442,7 +2442,7 @@ int PanoramiXUninstallColormap(ClientPtr client)
         result = (*SavedProcVector[X_UninstallColormap]) (client);
         if (result != Success)
             break;
-    }){}
+    });
 
     return result;
 }
@@ -2499,7 +2499,7 @@ int PanoramiXAllocColor(ClientPtr client)
             /* iterating backwards, first screen comes last, so we can return here */
             return X_SEND_REPLY_SIMPLE(client, reply);
         }
-    }){}
+    });
 
     /* shouldn't ever reach here, because we already returned from within the loop
        if this ever happens, PanoramiXNumScreens must be 0 */
@@ -2527,7 +2527,7 @@ int PanoramiXAllocNamedColor(ClientPtr client)
         result = (*SavedProcVector[X_AllocNamedColor]) (client);
         if (result != Success)
             break;
-    }){}
+    });
 
     return result;
 }
@@ -2553,7 +2553,7 @@ int PanoramiXAllocColorCells(ClientPtr client)
         result = (*SavedProcVector[X_AllocColorCells]) (client);
         if (result != Success)
             break;
-    }){}
+    });
 
     return result;
 }
@@ -2579,7 +2579,7 @@ int PanoramiXAllocColorPlanes(ClientPtr client)
         result = (*SavedProcVector[X_AllocColorPlanes]) (client);
         if (result != Success)
             break;
-    }){}
+    });
 
     return result;
 }
@@ -2603,7 +2603,7 @@ int PanoramiXFreeColors(ClientPtr client)
     XINERAMA_FOR_EACH_SCREEN_BACKWARD({
         stuff.cmap = cmap.info[walkScreenIdx].id;
         result = (*SavedProcVector[X_FreeColors]) (client);
-    }){}
+    });
 
     return result;
 }
@@ -2629,7 +2629,7 @@ int PanoramiXStoreColors(ClientPtr client)
         result = (*SavedProcVector[X_StoreColors]) (client);
         if (result != Success)
             break;
-    }){}
+    });
 
     return result;
 }
@@ -2655,7 +2655,7 @@ int PanoramiXStoreNamedColor(ClientPtr client)
         result = (*SavedProcVector[X_StoreNamedColor]) (client);
         if (result != Success)
             break;
-    }){}
+    });
 
     return result;
 }
