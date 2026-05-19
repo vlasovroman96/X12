@@ -1,4 +1,4 @@
-module exevents.c;
+module Xi.exevents;
 @nogc nothrow:
 extern(C): __gshared:
 /************************************************************

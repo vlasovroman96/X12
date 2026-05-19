@@ -1,4 +1,4 @@
-module closedev.c;
+module Xi.closedev;
 @nogc nothrow:
 extern(C): __gshared:
 /************************************************************
