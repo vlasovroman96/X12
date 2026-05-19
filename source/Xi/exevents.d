@@ -119,10 +119,10 @@ import xiquerydevice;      /* For List*Info */
 import eventstr;
 
 enum string WID(string w) = `((` ~ w ~ `) ? ((` ~ w ~ `).drawable.id) : 0)`;
-enum AllModifiersMask = ( \
-	ShiftMask | LockMask | ControlMask | Mod1Mask | Mod2Mask | \
+enum AllModifiersMask = ( 
+	ShiftMask | LockMask | ControlMask | Mod1Mask | Mod2Mask | 
 	Mod3Mask | Mod4Mask | Mod5Mask );
-enum AllButtonsMask = ( \
+enum AllButtonsMask = ( 
 	Button1Mask | Button2Mask | Button3Mask | Button4Mask | Button5Mask );
 
 
@@ -1023,7 +1023,7 @@ pragma(inline, true) private Bool TouchClientWantsOwnershipEvents(ClientPtr clie
     InputClients* iclient = void;
 
     assert(wOtherInputMasks(win));
-    nt_list_for_each_entry(iclient, wOtherInputMasks(win).inputClients, next) {
+    nt_list_for_each_entry(iclient, wOtherInputMasks(win).inputClients, next); {
         if (dixClientForInputClients(iclient) != client)
             continue;
 
@@ -1356,7 +1356,7 @@ private Bool RetrieveTouchDeliveryData(DeviceIntPtr dev, TouchPointInfoPtr ti, I
 
             InputClients* iclients = null;
             nt_list_for_each_entry(iclients,
-                                   wOtherInputMasks(*win).inputClients, next)
+                                   wOtherInputMasks(*win).inputClients, next);
                 if (xi2mask_isset(iclients.xi2mask, dev, evtype))
                 break;
 
@@ -1373,7 +1373,7 @@ private Bool RetrieveTouchDeliveryData(DeviceIntPtr dev, TouchPointInfoPtr ti, I
 
             InputClients* iclients = null;
             nt_list_for_each_entry(iclients,
-                                   wOtherInputMasks(*win).inputClients, next)
+                                   wOtherInputMasks(*win).inputClients, next);
                 if (iclients.mask[dev.id] & xi_filter)
                 break;
             BUG_RETURN_VAL(!iclients, FALSE);
@@ -1387,7 +1387,7 @@ private Bool RetrieveTouchDeliveryData(DeviceIntPtr dev, TouchPointInfoPtr ti, I
 
             /* all others */
             nt_list_for_each_entry(oclients,
-                                   cast(OtherClients*) wOtherClients(*win), next)
+                                   cast(OtherClients*) wOtherClients(*win), next);
                 if (oclients.mask & core_filter)
                     break;
 
@@ -1624,7 +1624,7 @@ private void ProcessTouchEvent(InternalEvent* ev, DeviceIntPtr dev)
     if (!ti) {
         DebugF("[Xi] %s: Failed to get event %d for touchpoint %d\n",
                dev.name, type, touchid);
-        goto out;
+        goto out_;
     }
 
     /* if emulate_pointer is set, emulate the motion event right
@@ -1659,7 +1659,7 @@ private void ProcessTouchEvent(InternalEvent* ev, DeviceIntPtr dev)
     if (ev.any.type == ET_TouchEnd)
         TouchEndTouch(dev, ti);
 
- out:
+ out_:
     if (emulate_pointer)
         UpdateDeviceState(dev, &ev.device_event);
 }
@@ -1982,7 +1982,7 @@ private int DeliverTouchBeginEvent(DeviceIntPtr dev, TouchPointInfoPtr ti, Inter
                 dev.deviceGrab.grab.pointerMode == GrabModeAsync)
                 ActivateEarlyAccept(dev, ti);
         }
-        goto out;
+        goto out_;
     }
 
     has_ownershipmask = xi2mask_isset(xi2mask, dev, XI_TouchOwnership);
@@ -2006,7 +2006,7 @@ private int DeliverTouchBeginEvent(DeviceIntPtr dev, TouchPointInfoPtr ti, Inter
     }
     listener.state = state;
 
- out:
+ out_:
     return rc;
 }
 
@@ -2032,13 +2032,13 @@ private int DeliverTouchEndEvent(DeviceIntPtr dev, TouchPointInfoPtr ti, Interna
             if (rc == Success)
                 listener.state = TOUCH_LISTENER_HAS_END;
         }
-        goto out;
+        goto out_;
     }
 
     /* A client is waiting for the begin, don't give it a TouchEnd */
     if (listener.state == TOUCH_LISTENER_AWAITING_BEGIN) {
         listener.state = TOUCH_LISTENER_HAS_END;
-        goto out;
+        goto out_;
     }
 
     /* Event in response to reject */
@@ -2068,7 +2068,7 @@ private int DeliverTouchEndEvent(DeviceIntPtr dev, TouchPointInfoPtr ti, Interna
             listener.state = TOUCH_LISTENER_HAS_END;
     }
 
- out:
+ out_:
     return rc;
 }
 
@@ -2083,7 +2083,7 @@ private int DeliverTouchEvent(DeviceIntPtr dev, TouchPointInfoPtr ti, InternalEv
     if (ev.any.type == ET_TouchOwnership) {
         ev.touch_ownership_event.deviceid = dev.id;
         if (!TouchResourceIsOwner(ti, listener.listener))
-            goto out;
+            goto out_;
         rc = DeliverOneTouchEvent(client, dev, ti, grab, win, ev);
         listener.state = TOUCH_LISTENER_IS_OWNER;
     }
@@ -2106,7 +2106,7 @@ private int DeliverTouchEvent(DeviceIntPtr dev, TouchPointInfoPtr ti, InternalEv
         rc = DeliverTouchEndEvent(dev, ti, ev, listener, client, win, grab,
                                   xi2mask);
 
- out:
+ out_:
     return rc;
 }
 
@@ -2214,7 +2214,7 @@ private Bool RetrieveGestureDeliveryData(DeviceIntPtr dev, InternalEvent* ev, Ge
         evtype = GetXI2Type(ev.any.type);
 
         assert(wOtherInputMasks(*win));
-        nt_list_for_each_entry(iclients, wOtherInputMasks(*win).inputClients, next)
+        nt_list_for_each_entry(iclients, wOtherInputMasks(*win).inputClients, next);
             if (xi2mask_isset(iclients.xi2mask, dev, evtype))
                 break;
 
@@ -2677,10 +2677,10 @@ private void FreeInputMask(OtherInputMasks** imask)
     *imask = null;
 }
 
-enum XIPropagateMask = (KeyPressMask | \
-                         KeyReleaseMask | \
-                         ButtonPressMask | \
-                         ButtonReleaseMask | \
+enum XIPropagateMask = (KeyPressMask | 
+                         KeyReleaseMask | 
+                         ButtonPressMask | 
+                         ButtonReleaseMask | 
                          PointerMotionMask);
 
 void RecalculateDeviceDeliverableEvents(WindowPtr pWin)
@@ -3179,7 +3179,7 @@ void SendEventToAllWindows(DeviceIntPtr dev, Mask mask, xEvent* ev, int count)
             continue;
         DeliverEventsToWindow(dev, pWin, ev, count, mask, NullGrab);
         FindInterestedChildren(dev, pWin.firstChild, mask, ev, count);
-    }){}
+    });
 }
 
 /**
