@@ -1,4 +1,4 @@
-module xselinux_hooks.c;
+module Xext.xselinux_hooks;
 @nogc nothrow:
 extern(C): __gshared:
 /************************************************************
@@ -47,6 +47,7 @@ import dix.screensaver_priv;
 import dix.selection_priv;
 import dix.server_priv;
 import os.client_priv;
+// import include.clang;
 
 import inputstr;
 import scrnintstr;
@@ -216,7 +217,7 @@ private void SELinuxLabelInitial()
         /* Do the default colormap */
         dixLookupResourceByType(&unused, walkScreen.defColormap,
                                 X11_RESTYPE_COLORMAP, serverClient, DixCreateAccess);
-    }){}
+    });
 }
 
 /*
@@ -307,7 +308,8 @@ private int SELinuxAudit(void* auditdata, security_class_t class_, char* msgbuf,
                     audit.extension ? audit.extension : "");
 }
 
- _X_ATTRIBUTE_PRINTF(2, 3);
+static int
+SELinuxLog(int type, const char *fmt, ...);
 
 private int SELinuxLog(int type, const(char)* fmt, ...)
 {
@@ -904,9 +906,9 @@ void SELinuxFlaskInit()
     }
 
     /* Set up SELinux stuff */
-    selinux_set_callback(SELINUX_CB_LOG, union selinux_callback ( func_log: SELinuxLog ));
-    selinux_set_callback(SELINUX_CB_AUDIT, union selinux_callback ( func_audit: SELinuxAudit ));
-    selinux_set_callback(SELINUX_CB_POLICYLOAD, union selinux_callback ( func_policyload: SELinuxPolicyLoad ));
+    selinux_set_callback(SELINUX_CB_LOG, selinux_callback ( func_log: SELinuxLog ));
+    selinux_set_callback(SELINUX_CB_AUDIT,selinux_callback ( func_audit: SELinuxAudit ));
+    selinux_set_callback(SELINUX_CB_POLICYLOAD, selinux_callback ( func_policyload: SELinuxPolicyLoad ));
 
     if (selinux_set_mapping(map) < 0) {
         if (errno == EINVAL) {
