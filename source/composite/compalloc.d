@@ -1,4 +1,4 @@
-module compalloc.c;
+module composite.compalloc;
 @nogc nothrow:
 extern(C): __gshared:
 /*

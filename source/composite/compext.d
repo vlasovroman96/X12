@@ -1,4 +1,4 @@
-module compext.c;
+module composite.compext;
 @nogc nothrow:
 extern(C): __gshared:
 /*
@@ -396,7 +396,7 @@ void CompositeExtensionInit()
          */
         if (GetPictureScreenIfSet(walkScreen) == null)
             return;
-    }){}
+    });
 
     CompositeClientWindowType = CreateNewResourceType
         (&FreeCompositeClientWindow, "CompositeClientWindow");
@@ -423,7 +423,7 @@ void CompositeExtensionInit()
     DIX_FOR_EACH_SCREEN({
         if (!compScreenInit(walkScreen))
             return;
-    }){}
+    });
 
     ExtensionEntry* extEntry = AddExtension(COMPOSITE_NAME, 0, 0,
                             &ProcCompositeDispatch,
@@ -460,7 +460,7 @@ version (XINERAMA) {
         rc = SingleCompositeRedirectWindow(client, stuff);
         if (rc != Success)
             break;
-    }){}
+    });
 
     return rc;
 } else {
@@ -491,7 +491,7 @@ version (XINERAMA) {
         rc = SingleRedirectSubwindows(client, stuff);
         if (rc != Success)
             break;
-    }){}
+    });
 
     return rc;
 } else {
@@ -522,7 +522,7 @@ version (XINERAMA) {
         rc = SingleCompositeUnredirectWindow(client, stuff);
         if (rc != Success)
             break;
-    }){}
+    });
 
     return rc;
 } else {
@@ -553,7 +553,7 @@ version (XINERAMA) {
         rc = SingleCompositeUnredirectSubwindows(client, stuff);
         if (rc != Success)
             break;
-    }){}
+    });
 
     return rc;
 } else {
@@ -625,7 +625,7 @@ version (XINERAMA) {
         }
 
         ++pPixmap.refcnt;
-    }){}
+    });
 
     if (!AddResource(stuff.pixmap, XRT_PIXMAP, cast(void*) newPix))
         return BadAlloc;
@@ -707,13 +707,13 @@ version (XINERAMA) {
             free(overlayWin);
             return rc;
         }
-    }){}
+    });
 
     if (overlayWin) {
         XINERAMA_FOR_EACH_SCREEN_BACKWARD({
             cs = GetCompScreen(walkScreen);
             overlayWin.info[walkScreenIdx].id = cs.pOverlayWin.drawable.id;
-        }){}
+        });
 
         AddResource(overlayWin.info[0].id, XRT_WINDOW, overlayWin);
     }
@@ -770,7 +770,7 @@ version (XINERAMA) {
 
         /* The delete function will free the client structure */
         FreeResource(pOc.resource, X11_RESTYPE_NONE);
-    }){}
+    });
 
     return Success;
 } else {
