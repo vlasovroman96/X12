@@ -82,10 +82,10 @@ import include.protocol_versions;
 
 /* Needed for Solaris cross-zone shared memory extension */
 version (HAVE_SHMCTL64) {
-import sys/ipc_impl;
+import sys.ipc_impl;
 enum string SHMSTAT(string id, string buf) = `shmctl64(` ~ id ~ `, IPC_STAT64, ` ~ buf ~ `)`;
-enum SHMSTAT_TYPE = 		struct shmid_ds64;
-enum SHMPERM_TYPE = 		struct ipc_perm64;
+enum SHMSTAT_TYPE = shmid_ds64;
+enum SHMPERM_TYPE = ipc_perm64;
 enum string SHM_PERM(string buf) = `` ~ buf ~ `.shmx_perm`;
 enum string SHM_SEGSZ(string buf) = `` ~ buf ~ `.shmx_segsz`;
 enum string SHMPERM_UID(string p) = `` ~ p ~ `.ipcx_uid`;
@@ -96,8 +96,8 @@ enum string SHMPERM_MODE(string p) = `` ~ p ~ `.ipcx_mode`;
 enum string SHMPERM_ZONEID(string p) = `` ~ p ~ `.ipcx_zoneid`;
 } else {
 enum string SHMSTAT(string id, string buf) = `shmctl(` ~ id ~ `, IPC_STAT, ` ~ buf ~ `)`;
-enum SHMSTAT_TYPE = 		struct shmid_ds;
-enum SHMPERM_TYPE = 		struct ipc_perm;
+enum SHMSTAT_TYPE = shmid_ds;
+enum SHMPERM_TYPE = ipc_perm;
 enum string SHM_PERM(string buf) = `` ~ buf ~ `.shm_perm`;
 enum string SHM_SEGSZ(string buf) = `` ~ buf ~ `.shm_segsz`;
 enum string SHMPERM_UID(string p) = `` ~ p ~ `.uid`;
@@ -114,12 +114,11 @@ struct ShmScrPrivateRec {
 
 Bool noMITShmExtension = FALSE;
 
-
-
-
-
-
-
+static PixmapPtr fbShmCreatePixmap(XSHM_CREATE_PIXMAP_ARGS);
+static int ShmDetachSegment(void *value, XID shmseg);
+static void ShmResetProc(ExtensionEntry *extEntry);
+static void SShmCompletionEvent(xShmCompletionEvent *from,
+                                xShmCompletionEvent *to);
 
 private ubyte ShmReqCode;
 int ShmCompletionCode;
@@ -147,17 +146,17 @@ enum string VERIFY_SHMSEG(string shmseg,string shmdesc,string client) = `
 	return tmprc; 
 }`;
 
-enum string VERIFY_SHMPTR(string shmseg,string offset,string needwrite,string shmdesc,string client) = `
+enum string VERIFY_SHMPTR(string shmseg,string offset,string needwrite,string shmdesc,string client) = "
 { 
-    ` ~ VERIFY_SHMSEG!(` ~ `shmseg` ~ `, ` ~ `shmdesc` ~ `, ` ~ `client` ~ `) ~ `; 
-    if ((` ~ offset ~ ` & 3) || (` ~ offset ~ ` > ` ~ shmdesc ~ `.size)) 
+    VERIFY_SHMSEG!("~shmseg~","~ shmdesc~","~ client~"); 
+    if ((" ~ offset ~ " & 3) || (" ~ offset ~ " > " ~ shmdesc ~ ".size)) 
     { 
-	` ~ client ~ `.errorValue = ` ~ offset ~ `; 
+	" ~ client ~ ".errorValue = " ~ offset ~ "; 
 	return BadValue; 
     } 
-    if (` ~ needwrite ~ ` && !` ~ shmdesc ~ `.writable) 
+    if (" ~ needwrite ~ " && !" ~ shmdesc ~ ".writable) 
 	return BadAccess; 
-}`;
+}";
 
 enum string VERIFY_SHMSIZE(string shmdesc,string offset,string len,string client) = `
 { 
@@ -219,7 +218,7 @@ private Bool ShmRegisterPrivates()
 {
     DIX_FOR_EACH_SCREEN({
         ShmRegisterFuncs(walkScreen, NULL);
-    }){}
+    });
 }
 
 void ShmRegisterFuncs(ScreenPtr pScreen, ShmFuncsPtr funcs)
@@ -399,9 +398,13 @@ static if (SHM_FD_PASSING) {
         if (shmdesc.busfault)
             busfault_unregister(shmdesc.busfault);
         munmap(shmdesc.addr, shmdesc.size);
-    } else
-}
+    } else {
         shmdt(shmdesc.addr);
+    }
+
+}else {
+    shmdt(shmdesc.addr);
+}
     for (prev = &Shmsegs; *prev != shmdesc; prev = &(*prev).next){}
     *prev = shmdesc.next;
     free(shmdesc);
@@ -726,7 +729,7 @@ version (XINERAMA) {
         result = ShmPutImage(client, stuff);
         if (result != Success)
             break;
-    }){}
+    });
 
     return result;
 } else {
@@ -837,14 +840,14 @@ version (XINERAMA) {
             free(drawables);
             return rc;
         }
-    }){}
+    });
 
     XINERAMA_FOR_EACH_SCREEN_FORWARD({
         drawables[walkScreenIdx].pScreen.SourceValidate(drawables[walkScreenIdx], 0, 0,
                                               drawables[walkScreenIdx].width,
                                               drawables[walkScreenIdx].height,
                                               IncludeInferiors);
-    }){}
+    });
 
 
     if (length == 0) {          /* nothing to do */
@@ -992,7 +995,7 @@ version (XINERAMA) {
             result = BadAlloc;
             break;
         }
-    }){}
+    });
 
     if (result != Success) {
         while (lastOne--)
@@ -1198,7 +1201,8 @@ version (HAVE_MEMFD_CREATE) {
 
 version (O_TMPFILE) {
     for (int i = 0; i < ARRAY_SIZE(shmdirs.ptr); i++) {
-        fd = open(shmdirs[i], O_TMPFILE|O_RDWR|O_CLOEXEC|O_EXCL, 0666);
+        import std.conv.octal;
+        fd = open(shmdirs[i], O_TMPFILE|O_RDWR|O_CLOEXEC|O_EXCL, octal!"666");
         if (fd >= 0) {
             DebugF ("Using O_TMPFILE\n");
             return fd;
@@ -1376,11 +1380,11 @@ version (MUST_CHECK_FOR_SHM_SYSCALL) {
                 screen_priv.shmFuncs = &miFuncs;
             if (!screen_priv.shmFuncs.CreatePixmap)
                 sharedPixmaps = xFalse;
-        }){}
+        });
         if (sharedPixmaps)
             DIX_FOR_EACH_SCREEN({
                 dixScreenHookPixmapDestroy(walkScreen, &ShmPixmapDestroy);
-            }){}
+            });
     }
     ShmSegType = CreateNewResourceType(&ShmDetachSegment, "ShmSeg");
     if (ShmSegType &&
