@@ -1,4 +1,4 @@
-module extinit.c;
+module Xi.extinit;
 @nogc nothrow:
 extern(C): __gshared:
 /************************************************************
@@ -727,7 +727,7 @@ private void SGestureSwipeEvent(xXIGestureSwipeEvent* from, xXIGestureSwipeEvent
 }
 
 /** Event swapping function for XI2 events. */
-void _X_COLD XI2EventSwap(xGenericEvent* from, xGenericEvent* to)
+void XI2EventSwap(xGenericEvent* from, xGenericEvent* to)
 {
     switch (from.evtype) {
     case XI_Enter:
@@ -1033,7 +1033,7 @@ enum string DO_SWAP(string func,string type) = `` ~ func ~ ` (cast(type*)from, c
 
 private void SEventIDispatch(xEvent* from, xEvent* to)
 {
-    int type = from.u.u.type & 0177;
+    int type = from.u.u.type & octal!"177";
 
     if (type == DeviceValuator)
         mixin(DO_SWAP!(`SEventDeviceValuator`, `deviceValuator`));
