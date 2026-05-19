@@ -51,7 +51,7 @@ struct _SecurityAuthorizationRec {
     OsTimerPtr timer;           /* timer for this auth */
     _OtherClients* eventClients; /* clients wanting events */
 }alias SecurityAuthorizationRec = _SecurityAuthorizationRec;
-alias SecurityAuthorizationPtr = *;
+alias SecurityAuthorizationPtr = SecurityAuthorizationRec*;
 
 struct SecurityValidateGroupInfoRec {
     XID group;                  /* the group that was sent in GenerateAuthorization */
