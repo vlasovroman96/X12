@@ -52,9 +52,9 @@ import core.stdc.errno;
 
 version (CONFIG_MITSHM) {
 version (Cygwin) {
-import sys/param;
+import sys.param;
 }
-import sys/sysmacros;
+import sys.sysmacros;
 import core.sys.posix.sys.ipc;
 import core.sys.posix.sys.shm;
 import core.sys.posix.sys.stat;
@@ -63,8 +63,8 @@ import core.sys.posix.sys.stat;
 import deimos.X11.X;
 import deimos.X11.Xproto;
 import deimos.X11.extensions.xf86bigfproto;
-import deimos.X11.fonts/fontstruct; // libxfont2.h missed to include that
-import deimos.X11.fonts/libxfont2;
+import deimos.X11.fonts.fontstruct; // libxfont2.h missed to include that
+import deimos.X11.fonts.libxfont2;
 
 import dix.dix_priv;
 import dix.request_priv;
@@ -181,14 +181,14 @@ version (MUST_CHECK_FOR_SHM_SYSCALL) {
     size = (size + pagesize - 1) & -pagesize;
     shmid = shmget(IPC_PRIVATE, size, S_IWUSR | S_IRUSR | S_IRGRP | S_IROTH);
     if (shmid == -1) {
-        ErrorF(XF86BIGFONTNAME " extension: shmget() failed, size = %u, %s\n",
+        ErrorF(XF86BIGFONTNAME~ " extension: shmget() failed, size = %u, %s\n",
                size, strerror(errno));
         free(pDesc);
         return cast(ShmDescPtr) null;
     }
 
     if ((addr = shmat(shmid, 0, 0)) == cast(char*) -1) {
-        ErrorF(XF86BIGFONTNAME " extension: shmat() failed, size = %u, %s\n",
+        ErrorF(XF86BIGFONTNAME ~" extension: shmat() failed, size = %u, %s\n",
                size, strerror(errno));
         shmctl(shmid, IPC_RMID, cast(void*) 0);
         free(pDesc);
@@ -277,17 +277,23 @@ private int ProcXF86BigfontQueryVersion(ClientPtr client)
 {
     X_REQUEST_HEAD_STRUCT(xXF86BigfontQueryVersionReq);
 
+static if(CONFIG_MITSHM)
     xXF86BigfontQueryVersionReply reply = {
         majorVersion: SERVER_XF86BIGFONT_MAJOR_VERSION,
         minorVersion: SERVER_XF86BIGFONT_MINOR_VERSION,
         uid: geteuid(),
         gid: getegid(),
-#ifdef CONFIG_MITSHM
         .signature = signature,
         capabilities: (client.local && !client.swapped)
                          ? XF86Bigfont_CAP_LocalShm : 0
-#endif /* CONFIG_MITSHM */
     };
+else {
+        xXF86BigfontQueryVersionReply reply = {
+        majorVersion: SERVER_XF86BIGFONT_MAJOR_VERSION,
+        minorVersion: SERVER_XF86BIGFONT_MINOR_VERSION,
+        uid: geteuid(),
+        gid: getegid()};
+}
 
     X_REPLY_FIELD_CARD16(majorVersion);
     X_REPLY_FIELD_CARD16(minorVersion);
@@ -340,7 +346,7 @@ ProcXF86BigfontQueryFont(ClientPtr client)
 version (CONFIG_MITSHM) {
     ShmDescPtr pDesc = null;
 } else {
-enum pDesc = 0;
+    enum pDesc = 0;
 } /* CONFIG_MITSHM */
     xCharInfo* pCI;
     CARD16* pIndex2UniqIndex;
@@ -379,72 +385,155 @@ enum pDesc = 0;
     pUniqIndex2Index = null;
     nUniqCharInfos = 0;
 
-    if (nCharInfos > 0) {
-#ifdef CONFIG_MITSHM
-        if (!badSysCall) {
-            pDesc = cast(ShmDescPtr) FontGetPrivate(pFont, FontShmdescIndex);
+if (nCharInfos > 0)
+{
+    version(CONFIG_MITSHM)
+    {
+        if (!badSysCall)
+        {
+            pDesc = cast(ShmDescPtr)
+                FontGetPrivate(
+                    pFont,
+                    FontShmdescIndex
+                );
         }
-        if (pDesc) {
+
+        /*
+         * Existing shared memory block.
+         */
+        if (pDesc)
+        {
             pCI = cast(xCharInfo*) pDesc.attach_addr;
-            if (stuff_flags & XF86Bigfont_FLAGS_Shm) {
-                shmid = pDesc.shmid;
-            }
-        } else {
-            if (stuff_flags & XF86Bigfont_FLAGS_Shm && !badSysCall) {
-                pDesc = shmalloc(nCharInfos * ((xCharInfo)
-                                 + CARD32.sizeof).sizeof);
-            }
-            if (pDesc) {
-                pCI = cast(xCharInfo*) pDesc.attach_addr;
-                shmid = pDesc.shmid;
-            } else {
-//! #endif /* CONFIG_MITSHM */
-                pCI = calloc(nCharInfos, sizeof(xCharInfo));
-                if (!pCI) {
-                    return BadAlloc;
-                }
-version (CONFIG_MITSHM) {
-            }
-} /* CONFIG_MITSHM */
-            /* Fill nCharInfos starting at pCI. */
+
+            if (stuff_flags & XF86Bigfont_FLAGS_Shm)
             {
-                xCharInfo* prCI = pCI;
-                int ninfos = 0;
-                int ncols = pFont.info.lastCol - pFont.info.firstCol + 1;
-                int row;
-
-                for (row = pFont.info.firstRow;
-                     row <= pFont.info.lastRow && ninfos < nCharInfos; row++) {
-                    ubyte[512] chars;
-                    xCharInfo*[256] tmpCharInfos;
-                    c_ulong count;
-                    int col;
-                    c_ulong i;
-
-                    i = 0;
-                    for (col = pFont.info.firstCol;
-                         col <= pFont.info.lastCol; col++) {
-                        chars[i++] = row;
-                        chars[i++] = col;
-                    }
-                    (*pFont.get_metrics) (pFont, ncols, chars.ptr, TwoD16Bit,
-                                           &count, tmpCharInfos.ptr);
-                    for (i = 0; i < count && ninfos < nCharInfos; i++) {
-                        *prCI++ = *tmpCharInfos[i];
-                        ninfos++;
-                    }
-                }
-            }
-version (CONFIG_MITSHM) {
-            if (pDesc && !badSysCall) {
-                *cast(CARD32*) (pCI + nCharInfos) = signature;
-                if (!xfont2_font_set_private(pFont, FontShmdescIndex, pDesc)) {
-                    shmdealloc(pDesc);
-                    return BadAlloc;
-                }
+                shmid = pDesc.shmid;
             }
         }
-} /* CONFIG_MITSHM */
+        else
+        {
+            /*
+             * Try to allocate new SHM block.
+             */
+            if (
+                (stuff_flags & XF86Bigfont_FLAGS_Shm) &&
+                !badSysCall
+            )
+            {
+                pDesc = shmalloc(
+                    nCharInfos * xCharInfo.sizeof +
+                    CARD32.sizeof
+                );
+            }
+
+            /*
+             * SHM allocation succeeded.
+             */
+            if (pDesc)
+            {
+                pCI = cast(xCharInfo*)
+                    pDesc.attach_addr;
+
+                shmid = pDesc.shmid;
+            }
+        }
+    }
+
+    /*
+     * Fallback allocation.
+     */
+    if (pCI is null)
+    {
+        pCI = cast(xCharInfo*)
+            calloc(nCharInfos, xCharInfo.sizeof);
+
+        if (pCI is null)
+        {
+            return BadAlloc;
+        }
+    }
+
+    /*
+     * Fill metrics.
+     */
+    {
+        xCharInfo* prCI = pCI;
+        int ninfos = 0;
+        int ncols =
+            pFont.info.lastCol -
+            pFont.info.firstCol + 1;
+
+        for (
+            int row = pFont.info.firstRow;
+            row <= pFont.info.lastRow &&
+            ninfos < nCharInfos;
+            row++
+        )
+        {
+            ubyte[512] chars;
+            xCharInfo*[256] tmpCharInfos;
+
+            c_ulong count;
+            c_ulong i = 0;
+
+            for (
+                int col = pFont.info.firstCol;
+                col <= pFont.info.lastCol;
+                col++
+            )
+            {
+                chars[i++] = cast(ubyte) row;
+                chars[i++] = cast(ubyte) col;
+            }
+
+            (*pFont.get_metrics)(
+                pFont,
+                ncols,
+                chars.ptr,
+                TwoD16Bit,
+                &count,
+                tmpCharInfos.ptr
+            );
+
+            for (
+                i = 0;
+                i < count && ninfos < nCharInfos;
+                i++
+            )
+            {
+                *prCI++ = *tmpCharInfos[i];
+                ninfos++;
+            }
+        }
+    }
+
+    version(CONFIG_MITSHM)
+    {
+        /*
+         * Attach signature to SHM block.
+         */
+        if (pDesc && !badSysCall)
+        {
+            *cast(CARD32*)
+                (pCI + nCharInfos) = signature;
+
+            if (
+                !xfont2_font_set_private(
+                    pFont,
+                    FontShmdescIndex,
+                    pDesc
+                )
+            )
+            {
+                shmdealloc(pDesc);
+                return BadAlloc;
+            }
+        }
+    }
+
+    /*
+     * Deduplicate metrics for non-SHM transport.
+     */
         if (shmid == -1) {
             /* Cannot use shared memory, so remove-duplicates the xCharInfos
                using a temporary hash table. */
@@ -639,7 +728,7 @@ version (MUST_CHECK_FOR_SHM_SYSCALL) {
          * when shared memory support is not functional.
          */
         if (!CheckForShmSyscall()) {
-            ErrorF(XF86BIGFONTNAME
+            ErrorF(XF86BIGFONTNAME~
                    " extension local-client optimization disabled due to lack of shared memory support in the kernel\n");
             return;
         }
