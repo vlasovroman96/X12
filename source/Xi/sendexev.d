@@ -1,4 +1,4 @@
-module sendexev.c;
+module Xi.sendexev;
 @nogc nothrow:
 extern(C): __gshared:
 /************************************************************
@@ -96,7 +96,7 @@ int ProcXSendExtensionEvent(ClientPtr client)
                 return BadValue;
             }
 
-            EventSwapPtr proc = EventSwapVector[eventP.u.u.type & 0177];
+            EventSwapPtr proc = EventSwapVector[eventP.u.u.type & octal!"177"];
             /* no swapping proc; invalid event type? */
             if (proc == NotImplemented) {
                 client.errorValue = eventP.u.u.type;
