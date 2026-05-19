@@ -1,4 +1,4 @@
-module xvdisp.c;
+module Xext.xvdisp;
 @nogc nothrow:
 extern(C): __gshared:
 import core.stdc.config: c_long, c_ulong;
@@ -66,7 +66,7 @@ private int ProcXvQueryExtension(ClientPtr client)
     X_REQUEST_HEAD_STRUCT(xvQueryExtensionReq);
 
     xvQueryExtensionReply reply = {
-        version: XvVersion,
+        version_: XvVersion,
         revision: XvRevision
     };
 
@@ -790,7 +790,7 @@ version (XINERAMA) {
 } /* CONFIG_MITSHM */
 }
 
-__size_assert(int, INT32.sizeof);
+mixin __size_assert!(int, INT32.sizeof);
 
 private int ProcXvQueryImageAttributes(ClientPtr client)
 {
@@ -997,7 +997,7 @@ private int XineramaXvStopVideo(ClientPtr client)
             stuff.port = port.info[walkScreenIdx].id;
             result = SingleXvStopVideo(client);
         }
-    }){}
+    });
 
     return result;
 }
@@ -1018,7 +1018,7 @@ private int XineramaXvSetPortAttribute(ClientPtr client)
             stuff.port = port.info[walkScreenIdx].id;
             result = SingleXvSetPortAttribute(client);
         }
-    }){}
+    });
 
     return result;
 }
@@ -1069,7 +1069,7 @@ private int XineramaXvShmPutImage(ClientPtr client)
 
             result = SingleXvShmPutImage(client);
         }
-    }){}
+    });
 
     return result;
 }
@@ -1118,7 +1118,7 @@ private int XineramaXvPutImage(ClientPtr client)
 
             result = SingleXvPutImage(client);
         }
-    }){}
+    });
 
     return result;
 }
@@ -1164,7 +1164,7 @@ private int XineramaXvPutVideo(ClientPtr client)
 
             result = SingleXvPutVideo(client);
         }
-    }){}
+    });
 
     return result;
 }
@@ -1209,7 +1209,7 @@ private int XineramaXvPutStill(ClientPtr client)
             }
             result = SingleXvPutStill(client);
         }
-    }){}
+    });
 
     return result;
 }
@@ -1291,7 +1291,7 @@ void XineramifyXv()
 
         XINERAMA_FOR_EACH_SCREEN_FORWARD_SKIP0({
             MatchingAdaptors[walkScreenIdx] = matchAdaptor(walkScreen, refAdapt, isOverlay);
-        }){}
+        });
 
         /* now create a resource for each port */
         for (int j = 0; j < refAdapt.nPorts; j++) {
@@ -1305,7 +1305,7 @@ void XineramifyXv()
                     port.info[walkScreenIdx].id = MatchingAdaptors[walkScreenIdx].base_id + j;
                 else
                     port.info[walkScreenIdx].id = 0;
-            }){}
+            });
 
             AddResource(port.info[0].id, XvXRTPort, port);
         }
