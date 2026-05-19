@@ -1,4 +1,4 @@
-module xipassivegrab.c;
+module Xi.xipassivegrab;
 @nogc nothrow:
 extern(C): __gshared:
 /*
@@ -153,7 +153,7 @@ int ProcXIPassiveGrabDevice(ClientPtr client)
                                       X11_RESTYPE_CURSOR, client, DixUseAccess);
         if (ret != Success) {
             client.errorValue = stuff.cursor;
-            goto out;
+            goto out_;
         }
     }
 
@@ -161,11 +161,11 @@ int ProcXIPassiveGrabDevice(ClientPtr client)
         dixLookupWindow(cast(WindowPtr*) &tmp, stuff.grab_window, client,
                         DixSetAttrAccess);
     if (ret != Success)
-        goto out;
+        goto out_;
 
     ret = CheckGrabValues(client, &param);
     if (ret != Success)
-        goto out;
+        goto out_;
 
     modifiers = cast(uint*) &stuff[1] + stuff.mask_len;
     mod_dev = (InputDevIsFloating(dev)) ? dev : GetMaster(dev, MASTER_KEYBOARD);
@@ -184,7 +184,7 @@ int ProcXIPassiveGrabDevice(ClientPtr client)
         param.modifiers = *modifiers;
         ret = CheckGrabValues(client, &param);
         if (ret != Success)
-            goto out;
+            goto out_;
 
         switch (stuff.grab_type) {
         case XIGrabtypeButton:
@@ -231,7 +231,7 @@ modifier_done:
 
     return X_SEND_REPLY_WITH_RPCBUF(client, reply, rpcbuf);
 
- out:
+ out_:
     xi2mask_free(&mask.xi2mask);
     x_rpcbuf_clear(&rpcbuf);
     return ret;
