@@ -1,4 +1,4 @@
-module xibarriers.c;
+module Xi.xibarriers;
 @nogc nothrow:
 extern(C): __gshared:
 /*
@@ -129,7 +129,7 @@ private void FreePointerBarrierClient(PointerBarrierClient* c)
     PointerBarrierDevice* pbd = null, tmp = null;
 
     if (!xorg_list_is_empty(&c.per_device)) {
-        xorg_list_for_each_entry_safe(pbd, tmp, &c.per_device, entry) {
+        xorg_list_for_each_entry_safe(pbd, tmp, &c.per_device, entry); {
             free(pbd);
         }
     }
@@ -140,7 +140,7 @@ private PointerBarrierDevice* GetBarrierDevice(PointerBarrierClient* c, int devi
 {
     PointerBarrierDevice* p = void, pbd = null;
 
-    xorg_list_for_each_entry(p, &c.per_device, entry) {
+    xorg_list_for_each_entry(p, &c.per_device, entry); {
         if (p.deviceid == deviceid) {
             pbd = p;
             break;
@@ -327,7 +327,7 @@ private PointerBarrierClient* barrier_find_nearest(BarrierScreenPtr cs, DeviceIn
     PointerBarrierClient* c = void, nearest = null;
     double min_distance = INT_MAX;      /* can't get higher than that in X anyway */
 
-    xorg_list_for_each_entry(c, &cs.barriers, entry) {
+    xorg_list_for_each_entry(c, &cs.barriers, entry); {
         PointerBarrier* b = &c.barrier;
         PointerBarrierDevice* pbd = void;
         double distance = void;
@@ -407,7 +407,7 @@ void input_constrain_cursor(DeviceIntPtr dev, ScreenPtr pScreen, int current_x, 
         *nevents = 0;
 
     if (xorg_list_is_empty(&cs.barriers) || InputDevIsFloating(dev))
-        goto out;
+        goto out_;
 
     /**
      * This function is only called for slave devices, but pointer-barriers
@@ -474,7 +474,7 @@ void input_constrain_cursor(DeviceIntPtr dev, ScreenPtr pScreen, int current_x, 
         *nevents += 1;
     }
 
-    xorg_list_for_each_entry(c, &cs.barriers, entry) {
+    xorg_list_for_each_entry(c, &cs.barriers, entry); {
         PointerBarrierDevice* pbd = void;
         int flags = 0;
 
@@ -515,7 +515,7 @@ void input_constrain_cursor(DeviceIntPtr dev, ScreenPtr pScreen, int current_x, 
         pbd.barrier_event_id++;
     }
 
- out:
+ out_:
     *out_x = x;
     *out_y = y;
 }
@@ -588,7 +588,7 @@ private int CreatePointerBarrierClient(ClientPtr client, xXFixesCreatePointerBar
 
     /* Alloc one per master pointer, they're the ones that can be blocked */
     xorg_list_init(&ret.per_device);
-    nt_list_for_each_entry(dev, inputInfo.devices, next) {
+    nt_list_for_each_entry(dev, inputInfo.devices, next); {
         PointerBarrierDevice* pbd = void;
 
         if (dev.type != MASTER_POINTER)
@@ -637,7 +637,7 @@ private int BarrierFreeBarrier(void* data, XID id)
     Time ms = GetTimeInMillis();
     DeviceIntPtr dev = null;
 
-    c = container_of(data, struct PointerBarrierClient, barrier);
+    c = container_of!(data, PointerBarrierClient, barrier);
     ScreenPtr pScreen = c.pScreen;
 
     for (dev = inputInfo.devices; dev; dev = dev.next) {
@@ -699,7 +699,7 @@ private void add_master_func(void* res, XID id, void* devid)
     int* deviceid = devid;
 
     b = res;
-    barrier = container_of(b, struct PointerBarrierClient, barrier);
+    barrier = container_of(b, PointerBarrierClient, barrier);
 
     PointerBarrierDevice* pbd = AllocBarrierDevice();
     if (!pbd)
@@ -726,7 +726,7 @@ private void remove_master_func(void* res, XID id, void* devid)
         return;
 
     b = res;
-    barrier = container_of(b, struct PointerBarrierClient, barrier);
+    barrier = container_of(b, PointerBarrierClient, barrier);
 
     pbd = GetBarrierDevice(barrier, *deviceid);
     if (!pbd)
@@ -851,7 +851,7 @@ int ProcXIBarrierReleasePointer(ClientPtr client)
         PointerBarrierDevice* pbd = void;
         DeviceIntPtr dev = void;
         CARD32 barrier_id = void, event_id = void;
-        _X_UNUSED CARD32 device_id = void;
+        // CARD32 device_id = void;
 
         barrier_id = info.barrier;
         event_id = info.eventid;
@@ -872,7 +872,7 @@ int ProcXIBarrierReleasePointer(ClientPtr client)
         if (dixClientIdForXID(barrier_id) != client.index)
             return BadAccess;
 
-        barrier = container_of(b, struct PointerBarrierClient, barrier);
+        barrier = container_of(b, PointerBarrierClient, barrier);
 
         pbd = GetBarrierDevice(barrier, dev.id);
         if (!pbd) {
@@ -899,7 +899,7 @@ Bool XIBarrierInit()
             return FALSE;
         xorg_list_init(&cs.barriers);
         mixin(SetBarrierScreen!(`walkScreen`, `cs`));
-    }){}
+    });
 
     PointerBarrierType = CreateNewResourceType(&BarrierFreeBarrier,
                                                "XIPointerBarrier");
@@ -913,5 +913,5 @@ void XIBarrierReset()
         BarrierScreenPtr cs = mixin(GetBarrierScreen!(`walkScreen`));
         free(cs);
         mixin(SetBarrierScreen!(`walkScreen`, `null`));
-    }){}
+    });
 }
