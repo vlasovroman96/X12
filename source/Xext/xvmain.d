@@ -1,4 +1,4 @@
-module xvmain.c;
+module Xext.xvmain;
 @nogc nothrow:
 extern(C): __gshared:
 import core.stdc.config: c_long, c_ulong;
@@ -399,12 +399,12 @@ private int XvdiSendVideoNotify(XvPortPtr pPort, DrawablePtr pDraw, int reason)
                             serverClient, DixReadAccess);
 
     while (pn) {
-        xvEvent event = {
-            u:videoNotify:reason: reason,
-            u:videoNotify:time: currentTime.milliseconds,
-            u:videoNotify:drawable: pDraw.id,
-            u:videoNotify:port: pPort.id
-        };
+        xvEvent event;
+            event.u.videoNotify.reason = reason;
+            event.u.videoNotify.time = currentTime.milliseconds;
+            event.u.videoNotify.drawable = pDraw.id;
+            event.u.videoNotify.port = pPort.id;
+
         event.u.u.type = XvEventBase + XvVideoNotify;
         WriteEventsToClient(pn.client, 1, (xEventPtr) &event);
         pn = pn.next;
@@ -421,12 +421,12 @@ private int XvdiSendPortNotify(XvPortPtr pPort, Atom attribute, INT32 value)
     pn = pPort.pNotify;
 
     while (pn) {
-        xvEvent event = {
-            u:portNotify:time: currentTime.milliseconds,
-            u:portNotify:port: pPort.id,
-            u:portNotify:attribute: attribute,
-            u:portNotify:value: value
-        };
+        xvEvent event;
+            event.u.portNotify.time = currentTime.milliseconds;
+            event.u.portNotify.port = pPort.id;
+            event.u.portNotify.attribute = attribute;
+            event.u.portNotify.value = value;
+
         event.u.u.type = XvEventBase + XvPortNotify;
         WriteEventsToClient(pn.client, 1, (xEventPtr) &event);
         pn = pn.next;
