@@ -1,4 +1,4 @@
-module ungrdevk.c;
+module Xi.ungrdevk;
 @nogc nothrow:
 extern(C): __gshared:
 /************************************************************
@@ -69,8 +69,8 @@ import exglobals;
 import xkbsrv;
 import xkbstr;
 
-enum AllModifiersMask = ( \
-	ShiftMask | LockMask | ControlMask | Mod1Mask | Mod2Mask | \
+enum AllModifiersMask = ( 
+	ShiftMask | LockMask | ControlMask | Mod1Mask | Mod2Mask | 
 	Mod3Mask | Mod4Mask | Mod5Mask );
 
 /***********************************************************************
