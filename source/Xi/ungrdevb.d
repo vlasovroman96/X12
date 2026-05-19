@@ -1,4 +1,4 @@
-module ungrdevb.c;
+module Xi.ungrdevb;
 @nogc nothrow:
 extern(C): __gshared:
 /************************************************************
@@ -67,8 +67,8 @@ import inputstr;           /* DeviceIntPtr      */
 import windowstr;          /* window structure  */
 import exglobals;
 
-enum AllModifiersMask = ( \
-	ShiftMask | LockMask | ControlMask | Mod1Mask | Mod2Mask | \
+enum AllModifiersMask = ( 
+	ShiftMask | LockMask | ControlMask | Mod1Mask | Mod2Mask | 
 	Mod3Mask | Mod4Mask | Mod5Mask );
 
 /***********************************************************************
