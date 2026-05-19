@@ -1,4 +1,4 @@
-module xtest.c;
+module Xext.xtest;
 @nogc nothrow:
 extern(C): __gshared:
 /*
@@ -28,6 +28,8 @@ extern(C): __gshared:
    from The Open Group.
 
  */
+
+import std.conv;
 
 import build.dix_config;
 
@@ -65,7 +67,7 @@ import xkbsrv;
 import xkbstr;
 import exglobals;
 import mipointer;
-import xserver-properties;
+import xserver_properties;
 import eventstr;
 
 Bool noTestExtensions = FALSE;
@@ -198,16 +200,16 @@ private int ProcXTestFakeInput(ClientPtr client)
     nev /= xEvent.sizeof;
     UpdateCurrentTime();
     ev = cast(xEvent*) &(cast(xReq*) stuff)[1];
-    type = ev.u.u.type & 0177;
+    type = ev.u.u.type & octal!"177";
 
     if (type >= EXTENSION_EVENT_BASE) {
         extension = TRUE;
 
         /* check device */
-        int rc = dixLookupDevice(&dev, stuff.deviceid & 0177, client,
+        int rc = dixLookupDevice(&dev, stuff.deviceid & octal!"177", client,
                              DixWriteAccess);
         if (rc != Success) {
-            client.errorValue = stuff.deviceid & 0177;
+            client.errorValue = stuff.deviceid & octral!"177";
             return rc;
         }
 
@@ -500,7 +502,7 @@ private int XTestSwapFakeInput(ClientPtr client, xReq* req)
 
     nev = ((client.req_len << 2) - xReq.sizeof) / xEvent.sizeof;
     for (ev = cast(xEvent*) &req[1]; --nev >= 0; ev++) {
-        int evtype = ev.u.u.type & 0177;
+        int evtype = ev.u.u.type & octal!"177";
         /* Swap event */
         proc = EventSwapVector[evtype];
         /* no swapping proc; invalid event type? */
