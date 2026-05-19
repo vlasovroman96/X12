@@ -1,4 +1,4 @@
-module compwindow.c;
+module composite.compwindow;
 @nogc nothrow:
 extern(C): __gshared:
 /*
@@ -77,7 +77,7 @@ private int compCheckWindow(WindowPtr pWin, void* data)
         assert(pWinPixmap == pParentPixmap);
     }
 
-    assert(0 < pWinPixmap.refcnt)
+    assert(0 < pWinPixmap.refcnt);
     assert(pWinPixmap.refcnt < 3);
 
     assert(0 < pScreenPixmap.refcnt);
