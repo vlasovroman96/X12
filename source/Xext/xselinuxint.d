@@ -1,4 +1,4 @@
-module xselinuxint.h;
+module Xext.xselinuxint;
 @nogc nothrow:
 extern(C): __gshared:
 /************************************************************
@@ -21,8 +21,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ********************************************************/
 
  
-public import selinux/selinux;
-public import selinux/avc;
+public import selinux.selinux;
+public import selinux.avc;
 
 public import globals;
 public import dixaccess;
@@ -540,9 +540,9 @@ private security_class_mapping[17] map = [
 ];
 
 /* x_resource "read" bits from the list above */
-enum SELinuxReadMask = (DixReadAccess|DixGetAttrAccess|DixListPropAccess| \
-			 DixGetPropAccess|DixGetFocusAccess|DixListAccess| \
-			 DixShowAccess|DixBlendAccess|DixReceiveAccess| \
+enum SELinuxReadMask = (DixReadAccess|DixGetAttrAccess|DixListPropAccess|
+			 DixGetPropAccess|DixGetFocusAccess|DixListAccess| 
+			 DixShowAccess|DixBlendAccess|DixReceiveAccess| 
 			 DixUseAccess|DixDebugAccess);
 
 }                          /* _XSELINUX_NEED_FLASK_MAP */
