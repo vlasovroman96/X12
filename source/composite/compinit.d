@@ -1,4 +1,4 @@
-module compinit.c;
+module composite.compinit;
 @nogc nothrow:
 extern(C): __gshared:
 import core.stdc.config: c_long, c_ulong;
@@ -211,12 +211,16 @@ struct CompAlternateVisual {
     CARD32 format;
 }
 
-private CompAlternateVisual[3] altVisuals = [
-#if COMP_INCLUDE_RGB24_VISUAL
-    {24, PIXMAN_r8g8b8},
-#endif
-    {32, PIXMAN_a8r8g8b8},
+static if(COMP_INCLUDE_RGB24_VISUAL) {
+    private CompAlternateVisual[3] altVisuals = [
+    {24, PIXMAN_r8g8b8}
 ];
+}
+else {
+    private CompAlternateVisual[3] altVisuals = [
+    {32, PIXMAN_a8r8g8b8}
+];
+}
 
 private Bool compAddAlternateVisual(ScreenPtr pScreen, CompScreenPtr cs, CompAlternateVisual* alt)
 {
