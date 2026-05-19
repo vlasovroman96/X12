@@ -1,4 +1,4 @@
-module xres.c;
+module Xext.xres;
 @nogc nothrow:
 extern(C): __gshared:
 import core.stdc.config: c_long, c_ulong;
@@ -125,7 +125,7 @@ private void DestroyFragments(xorg_list* frags)
 {
     FragmentList* it = void, tmp = void;
     if (!xorg_list_is_empty(frags)) {
-        xorg_list_for_each_entry_safe(it, tmp, frags, l) {
+        xorg_list_for_each_entry_safe(it, tmp, frags, l); {
             xorg_list_del(&it.l);
             free(it);
         }
@@ -296,12 +296,17 @@ private int ProcXResQueryClientPixmapBytes(ClientPtr client)
     FindAllClientResources(owner, &ResFindResourcePixmaps,
                            cast(void*) (&bytes));
 
-    xXResQueryClientPixmapBytesReply reply = {
-        bytes: bytes,
-#ifdef _XSERVER64
-        .bytes_overflow = bytes >> 32
-#endif
-    };
+    version(_XSERVER64) {
+        xXResQueryClientPixmapBytesReply reply = {
+            bytes: bytes,
+            .bytes_overflow = bytes >> 32
+        };
+    }
+    else {
+        xXResQueryClientPixmapBytesReply reply = {
+            bytes: bytes,
+        };
+    }
 
     X_REPLY_FIELD_CARD32(bytes);
     X_REPLY_FIELD_CARD32(bytes_overflow);
@@ -351,10 +356,10 @@ private Bool WillConstructMask(ClientPtr client, CARD32 mask, ConstructClientIdC
 private Bool ConstructClientIdValue(ClientPtr sendClient, ClientPtr client, CARD32 mask, ConstructClientIdCtx* ctx)
 {
     if (WillConstructMask(client, mask, ctx, X_XResClientXIDMask)) {
-        xXResClientIdValue reply = {
-            spec:client: client.clientAsMask,
-            spec:mask: X_XResClientXIDMask
-        };
+        xXResClientIdValue reply;
+    
+        reply.spec.client = client.clientAsMask;
+        reply.spec.mask = X_XResClientXIDMask;
 
         /* can't used REPLY_FIELD_*() here, because we're looking at sendClient */
         if (sendClient.swapped) {
@@ -373,11 +378,11 @@ private Bool ConstructClientIdValue(ClientPtr sendClient, ClientPtr client, CARD
             return TRUE;
         }
 
-        xXResClientIdValue reply = {
-            spec:client: client.clientAsMask,
-            spec:mask: X_XResLocalClientPIDMask,
-            length: 4
-        };
+        xXResClientIdValue reply;
+    
+        reply.spec.client = client.clientAsMask;
+        reply.spec.mask = X_XResLocalClientPIDMask;
+        reply.length = 4;
 
         if (sendClient.swapped) {
             swapl (&reply.spec.client);
@@ -457,10 +462,10 @@ private int ProcXResQueryClientIds(ClientPtr client)
         SwapLongs(cast(CARD32*)specs, stuff.numSpecs * 2);
     }
 
-    ConstructClientIdCtx ctx = {
-        rpcbuf:swapped: client.swapped,
-        rpcbuf:err_clear: TRUE
-    };
+    ConstructClientIdCtx ctx;
+
+    ctx.rpcbuf.swapped = client.swapped;
+    ctx.rpcbuf.swapped = TRUE;
 
     int rc = ConstructClientIds(client, stuff.numSpecs, specs, &ctx);
     if (rc == Success) {
@@ -822,7 +827,7 @@ private int ProcXResQueryResourceBytes(ClientPtr client)
         }
 
         FragmentList* it = void;
-        xorg_list_for_each_entry(it, &ctx.response, l) {
+        xorg_list_for_each_entry(it, &ctx.response, l); {
             x_rpcbuf_write_CARD8s(&rpcbuf, mixin(FRAGMENT_DATA!(`it`)), it.bytes);
         }
 
