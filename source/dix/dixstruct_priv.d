@@ -1,0 +1,90 @@
+module dixstruct_priv.h;
+@nogc nothrow:
+extern(C): __gshared:
+import core.stdc.config: c_long, c_ulong;
+/* SPDX-License-Identifier: MIT OR X11
+ *
+ * Copyright 1987 by Digital Equipment Corporation, Maynard, Massachusetts.
+ * Copyright © 2024 Enrico Weigelt, metux IT consult <info@metux.net>
+ */
+ 
+public import deimos.X11.Xmd;
+
+public import dix;
+public import resource;
+public import cursor;
+public import gc;
+public import pixmap;
+public import privates;
+public import dixstruct;
+
+pragma(inline, true) private void SetReqFds(ClientPtr client, int req_fds) {
+    if (client.req_fds != 0 && req_fds != client.req_fds)
+        LogMessage(X_ERROR, "Mismatching number of request fds %d != %d\n", req_fds, client.req_fds);
+    client.req_fds = req_fds;
+}
+
+/*
+ * Scheduling interface
+ */
+extern c_long SmartScheduleTime;
+extern c_long SmartScheduleInterval;
+extern c_long SmartScheduleSlice;
+extern c_long SmartScheduleMaxSlice;
+version (HAVE_SETITIMER) {
+extern Bool SmartScheduleSignalEnable;
+} else {
+enum SmartScheduleSignalEnable = FALSE;
+}
+void SmartScheduleStartTimer();
+void SmartScheduleStopTimer();
+
+/* Client has requests queued or data on the network */
+void mark_client_ready(ClientPtr client);
+
+/*
+ * Client has requests queued or data on the network, but awaits a
+ * server grab release
+ */
+void mark_client_saved_ready(ClientPtr client);
+
+/* Client has no requests queued and no data on network */
+void mark_client_not_ready(ClientPtr client);
+
+pragma(inline, true) private Bool client_is_ready(ClientPtr client)
+{
+    return !xorg_list_is_empty(&client.ready);
+}
+
+Bool clients_are_ready();
+
+extern xorg_list output_pending_clients;
+
+pragma(inline, true) private void output_pending_mark(ClientPtr client)
+{
+    if (!client.clientGone && xorg_list_is_empty(&client.output_pending))
+        xorg_list_append(&client.output_pending, &output_pending_clients);
+}
+
+pragma(inline, true) private void output_pending_clear(ClientPtr client)
+{
+    xorg_list_del(&client.output_pending);
+}
+
+pragma(inline, true) private Bool any_output_pending() {
+    return !xorg_list_is_empty(&output_pending_clients);
+}
+
+enum SMART_MAX_PRIORITY =  (20);
+enum SMART_MIN_PRIORITY =  (-20);
+
+void SmartScheduleInit();
+
+/* This prototype is used pervasively in Xext, dix */
+enum string DISPATCH_PROC(string func) = `int func(ClientPtr);`;
+
+/* proc vectors */
+
+extern int function(ClientPtr)[3] InitialVector;
+
+ /* _XSERVER_DIXSTRUCT_PRIV_H */

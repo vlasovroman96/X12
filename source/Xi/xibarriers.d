@@ -1,0 +1,917 @@
+module xibarriers.c;
+@nogc nothrow:
+extern(C): __gshared:
+/*
+ * Copyright 2012 Red Hat, Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a
+ * copy of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the
+ * Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice (including the next
+ * paragraph) shall be included in all copies or substantial portions of the
+ * Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
+ * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+ * DEALINGS IN THE SOFTWARE.
+ *
+ * Copyright © 2002 Keith Packard
+ *
+ * Permission to use, copy, modify, distribute, and sell this software and its
+ * documentation for any purpose is hereby granted without fee, provided that
+ * the above copyright notice appear in all copies and that both that
+ * copyright notice and this permission notice appear in supporting
+ * documentation, and that the name of Keith Packard not be used in
+ * advertising or publicity pertaining to distribution of the software without
+ * specific, written prior permission.  Keith Packard makes no
+ * representations about the suitability of this software for any purpose.  It
+ * is provided "as is" without express or implied warranty.
+ *
+ * KEITH PACKARD DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE,
+ * INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS, IN NO
+ * EVENT SHALL KEITH PACKARD BE LIABLE FOR ANY SPECIAL, INDIRECT OR
+ * CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE,
+ * DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
+ * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+ * PERFORMANCE OF THIS SOFTWARE.
+ */
+
+import build.dix_config;
+
+import dix.cursor_priv;
+import dix.dix_priv;
+import dix.input_priv;
+import dix.request_priv;
+import dix.resource_priv;
+import mi.mi_priv;
+import os.bug_priv;
+import Xi.handlers;
+
+import xibarriers;
+import scrnintstr;
+import cursorstr;
+import servermd;
+import mipointer;
+import inputstr;
+import windowstr;
+import xace;
+import list;
+import exglobals;
+import eventstr;
+
+RESTYPE PointerBarrierType;
+
+private DevPrivateKeyRec BarrierScreenPrivateKeyRec;
+
+enum BarrierScreenPrivateKey = (&BarrierScreenPrivateKeyRec);
+
+alias PointerBarrierClientPtr = PointerBarrierClient*;
+
+struct PointerBarrierDevice {
+    xorg_list entry;
+    int deviceid;
+    Time last_timestamp;
+    int barrier_event_id;
+    int release_event_id;
+    Bool hit;
+    Bool seen;
+}
+
+struct PointerBarrierClient {
+    XID id;
+    ScreenPtr pScreen;
+    Window window;
+    PointerBarrier barrier;
+    xorg_list entry;
+    /* num_devices/device_ids are devices the barrier applies to */
+    int num_devices;
+    int* device_ids; /* num_devices */
+
+    /* per_device keeps track of devices actually blocked by barriers */
+    xorg_list per_device;
+}
+
+struct _BarrierScreen {
+    xorg_list barriers;
+}alias BarrierScreenRec = _BarrierScreen;
+alias BarrierScreenPtr = _BarrierScreen*;
+
+enum string GetBarrierScreen(string s) = `(cast(BarrierScreenPtr)dixLookupPrivate(&(` ~ s ~ `).devPrivates, BarrierScreenPrivateKey))`;
+enum string GetBarrierScreenIfSet(string s) = `GetBarrierScreen(` ~ s ~ `)`;
+enum string SetBarrierScreen(string s,string p) = `dixSetPrivate(&(` ~ s ~ `).devPrivates, BarrierScreenPrivateKey, ` ~ p ~ `)`;
+
+private PointerBarrierDevice* AllocBarrierDevice()
+{
+    PointerBarrierDevice* pbd = cast(PointerBarrierDevice*) calloc(1, PointerBarrierDevice.sizeof);
+    if (!pbd)
+        return null;
+
+    pbd.deviceid = -1; /* must be set by caller */
+    pbd.barrier_event_id = 1;
+    pbd.release_event_id = 0;
+    pbd.hit = FALSE;
+    pbd.seen = FALSE;
+    xorg_list_init(&pbd.entry);
+
+    return pbd;
+}
+
+private void FreePointerBarrierClient(PointerBarrierClient* c)
+{
+    PointerBarrierDevice* pbd = null, tmp = null;
+
+    if (!xorg_list_is_empty(&c.per_device)) {
+        xorg_list_for_each_entry_safe(pbd, tmp, &c.per_device, entry) {
+            free(pbd);
+        }
+    }
+    free(c);
+}
+
+private PointerBarrierDevice* GetBarrierDevice(PointerBarrierClient* c, int deviceid)
+{
+    PointerBarrierDevice* p = void, pbd = null;
+
+    xorg_list_for_each_entry(p, &c.per_device, entry) {
+        if (p.deviceid == deviceid) {
+            pbd = p;
+            break;
+        }
+    }
+
+    return pbd;
+}
+
+private BOOL barrier_is_horizontal(const(PointerBarrier)* barrier)
+{
+    return barrier.y1 == barrier.y2;
+}
+
+private BOOL barrier_is_vertical(const(PointerBarrier)* barrier)
+{
+    return barrier.x1 == barrier.x2;
+}
+
+/**
+ * @return The set of barrier movement directions the movement vector
+ * x1/y1 → x2/y2 represents.
+ */
+int barrier_get_direction(int x1, int y1, int x2, int y2)
+{
+    int direction = 0;
+
+    /* which way are we trying to go */
+    if (x2 > x1)
+        direction |= BarrierPositiveX;
+    if (x2 < x1)
+        direction |= BarrierNegativeX;
+    if (y2 > y1)
+        direction |= BarrierPositiveY;
+    if (y2 < y1)
+        direction |= BarrierNegativeY;
+
+    return direction;
+}
+
+/**
+ * Test if the barrier may block movement in the direction defined by
+ * x1/y1 → x2/y2. This function only tests whether the directions could be
+ * blocked, it does not test if the barrier actually blocks the movement.
+ *
+ * @return TRUE if the barrier blocks the direction of movement or FALSE
+ * otherwise.
+ */
+BOOL barrier_is_blocking_direction(const(PointerBarrier)* barrier, int direction)
+{
+    /* Barriers define which way is ok, not which way is blocking */
+    return (barrier.directions & direction) != direction;
+}
+
+private BOOL inside_segment(int v, int v1, int v2)
+{
+    if (v1 < 0 && v2 < 0) /* line */
+        return TRUE;
+    else if (v1 < 0)      /* ray */
+        return v <= v2;
+    else if (v2 < 0)      /* ray */
+        return v >= v1;
+    else                  /* line segment */
+        return v >= v1 && v <= v2;
+}
+
+enum string T(string v, string a, string b) = `((cast(float)` ~ v ~ `) - (` ~ a ~ `)) / ((` ~ b ~ `) - (` ~ a ~ `))`;
+enum string F(string t, string a, string b) = `((` ~ t ~ `) * ((` ~ a ~ `) - (` ~ b ~ `)) + (` ~ a ~ `))`;
+
+/**
+ * Test if the movement vector x1/y1 → x2/y2 is intersecting with the
+ * barrier. A movement vector with the startpoint or endpoint adjacent to
+ * the barrier itself counts as intersecting.
+ *
+ * @param x1 X start coordinate of movement vector
+ * @param y1 Y start coordinate of movement vector
+ * @param x2 X end coordinate of movement vector
+ * @param y2 Y end coordinate of movement vector
+ * @param[out] distance The distance between the start point and the
+ * intersection with the barrier (if applicable).
+ * @return TRUE if the barrier intersects with the given vector
+ */
+BOOL barrier_is_blocking(const(PointerBarrier)* barrier, int x1, int y1, int x2, int y2, double* distance)
+{
+    if (barrier_is_vertical(barrier)) {
+        float t = void, y = void;
+        t = mixin(T!(`barrier.x1`, `x1`, `x2`));
+        if (t < 0 || t > 1)
+            return FALSE;
+
+        /* Edge case: moving away from barrier. */
+        if (x2 > x1 && t == 0)
+            return FALSE;
+
+        y = mixin(F!(`t`, `y1`, `y2`));
+        if (!inside_segment(y, barrier.y1, barrier.y2))
+            return FALSE;
+
+        *distance = sqrt((pow(y - y1, 2) + pow(barrier.x1 - x1, 2)));
+        return TRUE;
+    }
+    else {
+        float t = void, x = void;
+        t = mixin(T!(`barrier.y1`, `y1`, `y2`));
+        if (t < 0 || t > 1)
+            return FALSE;
+
+        /* Edge case: moving away from barrier. */
+        if (y2 > y1 && t == 0)
+            return FALSE;
+
+        x = mixin(F!(`t`, `x1`, `x2`));
+        if (!inside_segment(x, barrier.x1, barrier.x2))
+            return FALSE;
+
+        *distance = sqrt((pow(x - x1, 2) + pow(barrier.y1 - y1, 2)));
+        return TRUE;
+    }
+}
+
+enum HIT_EDGE_EXTENTS = 2;
+private BOOL barrier_inside_hit_box(PointerBarrier* barrier, int x, int y)
+{
+    int x1 = void, x2 = void, y1 = void, y2 = void;
+    int dir = void;
+
+    x1 = barrier.x1;
+    x2 = barrier.x2;
+    y1 = barrier.y1;
+    y2 = barrier.y2;
+    dir = ~(barrier.directions);
+
+    if (barrier_is_vertical(barrier)) {
+        if (dir & BarrierPositiveX)
+            x1 -= HIT_EDGE_EXTENTS;
+        if (dir & BarrierNegativeX)
+            x2 += HIT_EDGE_EXTENTS;
+    }
+    if (barrier_is_horizontal(barrier)) {
+        if (dir & BarrierPositiveY)
+            y1 -= HIT_EDGE_EXTENTS;
+        if (dir & BarrierNegativeY)
+            y2 += HIT_EDGE_EXTENTS;
+    }
+
+    return x >= x1 && x <= x2 && y >= y1 && y <= y2;
+}
+
+private BOOL barrier_blocks_device(PointerBarrierClient* client, DeviceIntPtr dev)
+{
+    int i = void;
+    int master_id = void;
+
+    /* Clients with no devices are treated as
+     * if they specified XIAllDevices. */
+    if (client.num_devices == 0)
+        return TRUE;
+
+    master_id = GetMaster(dev, POINTER_OR_FLOAT).id;
+
+    for (i = 0; i < client.num_devices; i++) {
+        int device_id = client.device_ids[i];
+        if (device_id == XIAllDevices ||
+            device_id == XIAllMasterDevices ||
+            device_id == master_id)
+            return TRUE;
+    }
+
+    return FALSE;
+}
+
+/**
+ * Find the nearest barrier client that is blocking movement from x1/y1 to x2/y2.
+ *
+ * @param dir Only barriers blocking movement in direction dir are checked
+ * @param x1 X start coordinate of movement vector
+ * @param y1 Y start coordinate of movement vector
+ * @param x2 X end coordinate of movement vector
+ * @param y2 Y end coordinate of movement vector
+ * @return The barrier nearest to the movement origin that blocks this movement.
+ */
+private PointerBarrierClient* barrier_find_nearest(BarrierScreenPtr cs, DeviceIntPtr dev, int dir, int x1, int y1, int x2, int y2)
+{
+    PointerBarrierClient* c = void, nearest = null;
+    double min_distance = INT_MAX;      /* can't get higher than that in X anyway */
+
+    xorg_list_for_each_entry(c, &cs.barriers, entry) {
+        PointerBarrier* b = &c.barrier;
+        PointerBarrierDevice* pbd = void;
+        double distance = void;
+
+        pbd = GetBarrierDevice(c, dev.id);
+        if (!pbd)
+            continue;
+
+        if (pbd.seen)
+            continue;
+
+        if (!barrier_is_blocking_direction(b, dir))
+            continue;
+
+        if (!barrier_blocks_device(c, dev))
+            continue;
+
+        if (barrier_is_blocking(b, x1, y1, x2, y2, &distance)) {
+            if (min_distance > distance) {
+                min_distance = distance;
+                nearest = c;
+            }
+        }
+    }
+
+    return nearest;
+}
+
+/**
+ * Clamp to the given barrier given the movement direction specified in dir.
+ *
+ * @param barrier The barrier to clamp to
+ * @param dir The movement direction
+ * @param[out] x The clamped x coordinate.
+ * @param[out] y The clamped x coordinate.
+ */
+void barrier_clamp_to_barrier(PointerBarrier* barrier, int dir, int* x, int* y)
+{
+    if (barrier_is_vertical(barrier)) {
+        if ((dir & BarrierNegativeX) & ~barrier.directions)
+            *x = barrier.x1;
+        if ((dir & BarrierPositiveX) & ~barrier.directions)
+            *x = barrier.x1 - 1;
+    }
+    if (barrier_is_horizontal(barrier)) {
+        if ((dir & BarrierNegativeY) & ~barrier.directions)
+            *y = barrier.y1;
+        if ((dir & BarrierPositiveY) & ~barrier.directions)
+            *y = barrier.y1 - 1;
+    }
+}
+
+void input_constrain_cursor(DeviceIntPtr dev, ScreenPtr pScreen, int current_x, int current_y, int dest_x, int dest_y, int* out_x, int* out_y, int* nevents, InternalEvent* events)
+{
+    /* Clamped coordinates here refer to screen edge clamping. */
+    BarrierScreenPtr cs = mixin(GetBarrierScreen!(`pScreen`));
+    int x = dest_x, y = dest_y;
+    int dir = void;
+    PointerBarrier* nearest = null;
+    PointerBarrierClientPtr c = void;
+    Time ms = GetTimeInMillis();
+    BarrierEvent ev = {
+        header: ET_Internal,
+        type: 0,
+        length: BarrierEvent.sizeof,
+        time: ms,
+        deviceid: dev.id,
+        sourceid: dev.id,
+        dx: dest_x - current_x,
+        dy: dest_y - current_y,
+        root: pScreen.root.drawable.id,
+    };
+    InternalEvent* barrier_events = events;
+    DeviceIntPtr master = void;
+
+    if (nevents)
+        *nevents = 0;
+
+    if (xorg_list_is_empty(&cs.barriers) || InputDevIsFloating(dev))
+        goto out;
+
+    /**
+     * This function is only called for slave devices, but pointer-barriers
+     * are for master-devices only. Flip the device to the master here,
+     * continue with that.
+     */
+    master = GetMaster(dev, MASTER_POINTER);
+
+    /* How this works:
+     * Given the origin and the movement vector, get the nearest barrier
+     * to the origin that is blocking the movement.
+     * Clamp to that barrier.
+     * Then, check from the clamped intersection to the original
+     * destination, again finding the nearest barrier and clamping.
+     */
+    dir = barrier_get_direction(current_x, current_y, x, y);
+
+    while (dir != 0) {
+        int new_sequence = void;
+        PointerBarrierDevice* pbd = void;
+
+        c = barrier_find_nearest(cs, master, dir, current_x, current_y, x, y);
+        if (!c)
+            break;
+
+        nearest = &c.barrier;
+
+        pbd = GetBarrierDevice(c, master.id);
+        if (!pbd)
+            continue;
+
+        new_sequence = !pbd.hit;
+
+        pbd.seen = TRUE;
+        pbd.hit = TRUE;
+
+        if (pbd.barrier_event_id == pbd.release_event_id)
+            continue;
+
+        ev.type = ET_BarrierHit;
+        barrier_clamp_to_barrier(nearest, dir, &x, &y);
+
+        if (barrier_is_vertical(nearest)) {
+            dir &= ~(BarrierNegativeX | BarrierPositiveX);
+            current_x = x;
+        }
+        else if (barrier_is_horizontal(nearest)) {
+            dir &= ~(BarrierNegativeY | BarrierPositiveY);
+            current_y = y;
+        }
+
+        ev.flags = 0;
+        ev.event_id = pbd.barrier_event_id;
+        ev.barrierid = c.id;
+
+        ev.dt = new_sequence ? 0 : ms - pbd.last_timestamp;
+        ev.window = c.window;
+        pbd.last_timestamp = ms;
+
+        /* root x/y is filled in later */
+
+        barrier_events.barrier_event = ev;
+        barrier_events++;
+        *nevents += 1;
+    }
+
+    xorg_list_for_each_entry(c, &cs.barriers, entry) {
+        PointerBarrierDevice* pbd = void;
+        int flags = 0;
+
+        pbd = GetBarrierDevice(c, master.id);
+        if (!pbd)
+            continue;
+
+        pbd.seen = FALSE;
+        if (!pbd.hit)
+            continue;
+
+        if (barrier_inside_hit_box(&c.barrier, x, y))
+            continue;
+
+        pbd.hit = FALSE;
+
+        ev.type = ET_BarrierLeave;
+
+        if (pbd.barrier_event_id == pbd.release_event_id)
+            flags |= XIBarrierPointerReleased;
+
+        ev.flags = flags;
+        ev.event_id = pbd.barrier_event_id;
+        ev.barrierid = c.id;
+
+        ev.dt = ms - pbd.last_timestamp;
+        ev.window = c.window;
+        pbd.last_timestamp = ms;
+
+        /* root x/y is filled in later */
+
+        barrier_events.barrier_event = ev;
+        barrier_events++;
+        *nevents += 1;
+
+        /* If we've left the hit box, this is the
+         * start of a new event ID. */
+        pbd.barrier_event_id++;
+    }
+
+ out:
+    *out_x = x;
+    *out_y = y;
+}
+
+private void sort_min_max(INT16* a, INT16* b)
+{
+    INT16 A = void, B = void;
+    if (*a < 0 || *b < 0)
+        return;
+    A = *a;
+    B = *b;
+    *a = min(A, B);
+    *b = max(A, B);
+}
+
+private int CreatePointerBarrierClient(ClientPtr client, xXFixesCreatePointerBarrierReq* stuff, PointerBarrierClientPtr* client_out)
+{
+    WindowPtr pWin = void;
+    BarrierScreenPtr cs = void;
+    int err = void;
+    int i = void;
+    CARD16* in_devices = void;
+    DeviceIntPtr dev = void;
+
+    const(int) size = sizeofcast(PointerBarrierClient)
+                   + ((DeviceIntPtr) * stuff.num_devices).sizeof;
+    PointerBarrierClient* ret = cast(PointerBarrierClient*) calloc(1, size);
+    if (!ret) {
+        return BadAlloc;
+    }
+
+    xorg_list_init(&ret.per_device);
+
+    err = dixLookupWindow(&pWin, stuff.window, client, DixReadAccess);
+    if (err != Success) {
+        client.errorValue = stuff.window;
+        goto error;
+    }
+
+    ScreenPtr pScreen = pWin.drawable.pScreen;
+    cs = mixin(GetBarrierScreen!(`pScreen`));
+
+    ret.pScreen = pScreen;
+    ret.window = stuff.window;
+    ret.num_devices = stuff.num_devices;
+    if (ret.num_devices > 0)
+        ret.device_ids = cast(int*)&ret[1];
+    else
+        ret.device_ids = null;
+
+    in_devices = cast(CARD16*) &stuff[1];
+    for (i = 0; i < stuff.num_devices; i++) {
+        int device_id = in_devices[i];
+        DeviceIntPtr device = void;
+
+        if ((err = dixLookupDevice (&device, device_id,
+                                    client, DixReadAccess))) {
+            client.errorValue = device_id;
+            goto error;
+        }
+
+        if (!InputDevIsMaster (device)) {
+            client.errorValue = device_id;
+            err = BadDevice;
+            goto error;
+        }
+
+        ret.device_ids[i] = device_id;
+    }
+
+    /* Alloc one per master pointer, they're the ones that can be blocked */
+    xorg_list_init(&ret.per_device);
+    nt_list_for_each_entry(dev, inputInfo.devices, next) {
+        PointerBarrierDevice* pbd = void;
+
+        if (dev.type != MASTER_POINTER)
+            continue;
+
+        pbd = AllocBarrierDevice();
+        if (!pbd) {
+            err = BadAlloc;
+            goto error;
+        }
+        pbd.deviceid = dev.id;
+
+        input_lock();
+        xorg_list_add(&pbd.entry, &ret.per_device);
+        input_unlock();
+    }
+
+    ret.id = stuff.barrier;
+    ret.barrier.x1 = stuff.x1;
+    ret.barrier.x2 = stuff.x2;
+    ret.barrier.y1 = stuff.y1;
+    ret.barrier.y2 = stuff.y2;
+    sort_min_max(&ret.barrier.x1, &ret.barrier.x2);
+    sort_min_max(&ret.barrier.y1, &ret.barrier.y2);
+    ret.barrier.directions = stuff.directions & 0x0f;
+    if (barrier_is_horizontal(&ret.barrier))
+        ret.barrier.directions &= ~(BarrierPositiveX | BarrierNegativeX);
+    if (barrier_is_vertical(&ret.barrier))
+        ret.barrier.directions &= ~(BarrierPositiveY | BarrierNegativeY);
+    input_lock();
+    xorg_list_add(&ret.entry, &cs.barriers);
+    input_unlock();
+
+    *client_out = ret;
+    return Success;
+
+ error:
+    *client_out = null;
+    FreePointerBarrierClient(ret);
+    return err;
+}
+
+private int BarrierFreeBarrier(void* data, XID id)
+{
+    PointerBarrierClient* c = void;
+    Time ms = GetTimeInMillis();
+    DeviceIntPtr dev = null;
+
+    c = container_of(data, struct PointerBarrierClient, barrier);
+    ScreenPtr pScreen = c.pScreen;
+
+    for (dev = inputInfo.devices; dev; dev = dev.next) {
+        PointerBarrierDevice* pbd = void;
+        int root_x = void, root_y = void;
+        BarrierEvent ev = {
+            header: ET_Internal,
+            type: ET_BarrierLeave,
+            length: BarrierEvent.sizeof,
+            time: ms,
+            /* .deviceid */
+            sourceid: 0,
+            barrierid: c.id,
+            window: c.window,
+            root: pScreen.root.drawable.id,
+            dx: 0,
+            dy: 0,
+            /* .root_x */
+            /* .root_y */
+            /* .dt */
+            /* .event_id */
+            flags: XIBarrierPointerReleased,
+        };
+
+
+        if (dev.type != MASTER_POINTER)
+            continue;
+
+        pbd = GetBarrierDevice(c, dev.id);
+        if (!pbd)
+            continue;
+
+        if (!pbd.hit)
+            continue;
+
+        ev.deviceid = dev.id;
+        ev.event_id = pbd.barrier_event_id;
+        ev.dt = ms - pbd.last_timestamp;
+
+        GetSpritePosition(dev, &root_x, &root_y);
+        ev.root_x = root_x;
+        ev.root_y = root_y;
+
+        mieqEnqueue(dev, cast(InternalEvent*) &ev);
+    }
+
+    input_lock();
+    xorg_list_del(&c.entry);
+    input_unlock();
+
+    FreePointerBarrierClient(c);
+    return Success;
+}
+
+private void add_master_func(void* res, XID id, void* devid)
+{
+    PointerBarrier* b = void;
+    PointerBarrierClient* barrier = void;
+    int* deviceid = devid;
+
+    b = res;
+    barrier = container_of(b, struct PointerBarrierClient, barrier);
+
+    PointerBarrierDevice* pbd = AllocBarrierDevice();
+    if (!pbd)
+        return;
+    pbd.deviceid = *deviceid;
+
+    input_lock();
+    xorg_list_add(&pbd.entry, &barrier.per_device);
+    input_unlock();
+}
+
+private void remove_master_func(void* res, XID id, void* devid)
+{
+    PointerBarrierDevice* pbd = void;
+    PointerBarrierClient* barrier = void;
+    PointerBarrier* b = void;
+    DeviceIntPtr dev = void;
+    int* deviceid = devid;
+    int rc = void;
+    Time ms = GetTimeInMillis();
+
+    rc = dixLookupDevice(&dev, *deviceid, serverClient, DixSendAccess);
+    if (rc != Success)
+        return;
+
+    b = res;
+    barrier = container_of(b, struct PointerBarrierClient, barrier);
+
+    pbd = GetBarrierDevice(barrier, *deviceid);
+    if (!pbd)
+        return;
+
+    if (pbd.hit) {
+        BarrierEvent ev = {
+            header: ET_Internal,
+            type:ET_BarrierLeave,
+            length: BarrierEvent.sizeof,
+            time: ms,
+            deviceid: *deviceid,
+            sourceid: 0,
+            dx: 0,
+            dy: 0,
+            root: barrier.pScreen.root.drawable.id,
+            window: barrier.window,
+            dt: ms - pbd.last_timestamp,
+            flags: XIBarrierPointerReleased,
+            event_id: pbd.barrier_event_id,
+            barrierid: barrier.id,
+        };
+
+        mieqEnqueue(dev, cast(InternalEvent*) &ev);
+    }
+
+    input_lock();
+    xorg_list_del(&pbd.entry);
+    input_unlock();
+    free(pbd);
+}
+
+void XIBarrierNewMasterDevice(ClientPtr client, int deviceid)
+{
+    FindClientResourcesByType(client, PointerBarrierType, &add_master_func, &deviceid);
+}
+
+void XIBarrierRemoveMasterDevice(ClientPtr client, int deviceid)
+{
+    FindClientResourcesByType(client, PointerBarrierType, &remove_master_func, &deviceid);
+}
+
+int XICreatePointerBarrier(ClientPtr client, xXFixesCreatePointerBarrierReq* stuff)
+{
+    int err = void;
+    PointerBarrierClient* barrier = void;
+    PointerBarrier b = void;
+
+    b.x1 = stuff.x1;
+    b.x2 = stuff.x2;
+    b.y1 = stuff.y1;
+    b.y2 = stuff.y2;
+
+    if (!barrier_is_horizontal(&b) && !barrier_is_vertical(&b))
+        return BadValue;
+
+    /* no 0-sized barriers */
+    if (barrier_is_horizontal(&b) && barrier_is_vertical(&b))
+        return BadValue;
+
+    /* no infinite barriers on the wrong axis */
+    if (barrier_is_horizontal(&b) && (b.y1 < 0 || b.y2 < 0))
+        return BadValue;
+
+    if (barrier_is_vertical(&b) && (b.x1 < 0 || b.x2 < 0))
+        return BadValue;
+
+    if ((err = CreatePointerBarrierClient(client, stuff, &barrier)))
+        return err;
+
+    if (!AddResource(stuff.barrier, PointerBarrierType, &barrier.barrier))
+        return BadAlloc;
+
+    return Success;
+}
+
+int XIDestroyPointerBarrier(ClientPtr client, xXFixesDestroyPointerBarrierReq* stuff)
+{
+    int err = void;
+    void* barrier = void;
+
+    err = dixLookupResourceByType(cast(void**) &barrier, stuff.barrier,
+                                  PointerBarrierType, client, DixDestroyAccess);
+    if (err != Success) {
+        client.errorValue = stuff.barrier;
+        return err;
+    }
+
+    if (dixClientIdForXID(stuff.barrier) != client.index)
+        return BadAccess;
+
+    FreeResource(stuff.barrier, X11_RESTYPE_NONE);
+    return Success;
+}
+
+int ProcXIBarrierReleasePointer(ClientPtr client)
+{
+    X_REQUEST_HEAD_AT_LEAST(xXIBarrierReleasePointerReq);
+    X_REQUEST_FIELD_CARD32(num_barriers);
+
+    if (stuff.num_barriers > UINT32_MAX / xXIBarrierReleasePointerInfo.sizeof)
+        return BadLength;
+    REQUEST_FIXED_SIZE(xXIBarrierReleasePointerReq, stuff.num_barriers * xXIBarrierReleasePointerInfo.sizeof);
+
+    if (client.swapped) {
+        xXIBarrierReleasePointerInfo* info = cast(xXIBarrierReleasePointerInfo*) &stuff[1];
+        for (int i = 0; i < stuff.num_barriers; i++, info++) {
+            swaps(&info.deviceid);
+            swapl(&info.barrier);
+            swapl(&info.eventid);
+        }
+    }
+
+    int i = void;
+    int err = void;
+    PointerBarrierClient* barrier = void;
+    PointerBarrier* b = void;
+    xXIBarrierReleasePointerInfo* info = void;
+
+    info = cast(xXIBarrierReleasePointerInfo*) &stuff[1];
+    for (i = 0; i < stuff.num_barriers; i++, info++) {
+        PointerBarrierDevice* pbd = void;
+        DeviceIntPtr dev = void;
+        CARD32 barrier_id = void, event_id = void;
+        _X_UNUSED CARD32 device_id = void;
+
+        barrier_id = info.barrier;
+        event_id = info.eventid;
+
+        err = dixLookupDevice(&dev, info.deviceid, client, DixReadAccess);
+        if (err != Success) {
+            client.errorValue = BadDevice;
+            return err;
+        }
+
+        err = dixLookupResourceByType(cast(void**) &b, barrier_id,
+                                      PointerBarrierType, client, DixReadAccess);
+        if (err != Success) {
+            client.errorValue = barrier_id;
+            return err;
+        }
+
+        if (dixClientIdForXID(barrier_id) != client.index)
+            return BadAccess;
+
+        barrier = container_of(b, struct PointerBarrierClient, barrier);
+
+        pbd = GetBarrierDevice(barrier, dev.id);
+        if (!pbd) {
+            client.errorValue = dev.id;
+            return BadDevice;
+        }
+
+        if (pbd.barrier_event_id == event_id)
+            pbd.release_event_id = event_id;
+    }
+
+    return Success;
+}
+
+Bool XIBarrierInit()
+{
+    if (!dixRegisterPrivateKey(&BarrierScreenPrivateKeyRec, PRIVATE_SCREEN, 0))
+        return FALSE;
+
+    DIX_FOR_EACH_SCREEN({
+        BarrierScreenPtr cs = void;
+        cs = cast(BarrierScreenPtr) calloc(1, BarrierScreenRec.sizeof);
+        if (!cs)
+            return FALSE;
+        xorg_list_init(&cs.barriers);
+        mixin(SetBarrierScreen!(`walkScreen`, `cs`));
+    }){}
+
+    PointerBarrierType = CreateNewResourceType(&BarrierFreeBarrier,
+                                               "XIPointerBarrier");
+
+    return PointerBarrierType;
+}
+
+void XIBarrierReset()
+{
+    DIX_FOR_EACH_SCREEN({
+        BarrierScreenPtr cs = mixin(GetBarrierScreen!(`walkScreen`));
+        free(cs);
+        mixin(SetBarrierScreen!(`walkScreen`, `null`));
+    }){}
+}

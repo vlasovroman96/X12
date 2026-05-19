@@ -1,0 +1,368 @@
+module rrlease.c;
+@nogc nothrow:
+extern(C): __gshared:
+import core.stdc.config: c_long, c_ulong;
+/*
+ * Copyright © 2017 Keith Packard
+ *
+ * Permission to use, copy, modify, distribute, and sell this software and its
+ * documentation for any purpose is hereby granted without fee, provided that
+ * the above copyright notice appear in all copies and that both that copyright
+ * notice and this permission notice appear in supporting documentation, and
+ * that the name of the copyright holders not be used in advertising or
+ * publicity pertaining to distribution of the software without specific,
+ * written prior permission.  The copyright holders make no representations
+ * about the suitability of this software for any purpose.  It is provided "as
+ * is" without express or implied warranty.
+ *
+ * THE COPYRIGHT HOLDERS DISCLAIM ALL WARRANTIES WITH REGARD TO THIS SOFTWARE,
+ * INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS, IN NO
+ * EVENT SHALL THE COPYRIGHT HOLDERS BE LIABLE FOR ANY SPECIAL, INDIRECT OR
+ * CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE,
+ * DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
+ * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE
+ * OF THIS SOFTWARE.
+ */
+import build.dix_config;
+
+import core.sys.posix.unistd;
+
+import dix.dix_priv;
+import dix.request_priv;
+import randr.randrstr_priv;
+import randr.rrdispatch_priv;
+import os.client_priv;
+
+import swaprep;
+
+RESTYPE RRLeaseType;
+
+/*
+ * Notify of some lease change
+ */
+void RRDeliverLeaseEvent(ClientPtr client, WindowPtr window)
+{
+    ScreenPtr screen = window.drawable.pScreen;
+    rrScrPrivPtr scr_priv = rrGetScrPriv(screen);
+    RRLeasePtr lease = void;
+
+    UpdateCurrentTimeIf();
+    xorg_list_for_each_entry(lease, &scr_priv.leases, list) {
+        if (lease.id != None && (lease.state == RRLeaseCreating ||
+                                  lease.state == RRLeaseTerminating))
+        {
+            xRRLeaseNotifyEvent le = xRRLeaseNotifyEvent (
+                type: RRNotify + RREventBase,
+                subCode: RRNotify_Lease,
+                timestamp: currentTime.milliseconds,
+                window: window.drawable.id,
+                lease: lease.id,
+                created: lease.state == RRLeaseCreating,
+            );
+            WriteEventsToClient(client, 1, cast(xEvent*) &le);
+        }
+    }
+}
+
+/*
+ * Change the state of a lease and let anyone watching leases know
+ */
+private void RRLeaseChangeState(RRLeasePtr lease, RRLeaseState old, RRLeaseState new_)
+{
+    ScreenPtr screen = lease.screen;
+    rrScrPrivPtr scr_priv = rrGetScrPriv(screen);
+
+    lease.state = old;
+    scr_priv.leasesChanged = TRUE;
+    RRSetChanged(lease.screen);
+    RRTellChanged(lease.screen);
+    scr_priv.leasesChanged = FALSE;
+    lease.state = new_;
+}
+
+/*
+ * Allocate and initialize a lease
+ */
+private RRLeasePtr RRLeaseAlloc(ScreenPtr screen, RRLease lid, int numCrtcs, int numOutputs)
+{
+    RRLeasePtr lease = void;
+    lease = calloc(1,
+                   (cast(RRLeaseRec) +
+                   numCrtcs * (cast(RRCrtcPtr) +
+                   numOutputs * RROutputPtr.sizeof).sizeof).sizeof);
+    if (!lease)
+        return null;
+    lease.screen = screen;
+    xorg_list_init(&lease.list);
+    lease.id = lid;
+    lease.state = RRLeaseCreating;
+    lease.numCrtcs = numCrtcs;
+    lease.numOutputs = numOutputs;
+    lease.crtcs = cast(RRCrtcPtr*) (lease + 1);
+    lease.outputs = cast(RROutputPtr*) (lease.crtcs + numCrtcs);
+    return lease;
+}
+
+/*
+ * Check if a crtc is leased
+ */
+Bool RRCrtcIsLeased(RRCrtcPtr crtc)
+{
+    ScreenPtr screen = crtc.pScreen;
+    rrScrPrivPtr scr_priv = rrGetScrPriv(screen);
+    RRLeasePtr lease = void;
+    int c = void;
+
+    xorg_list_for_each_entry(lease, &scr_priv.leases, list) {
+        for (c = 0; c < lease.numCrtcs; c++)
+            if (lease.crtcs[c] == crtc)
+                return TRUE;
+    }
+    return FALSE;
+}
+
+/*
+ * Check if an output is leased
+ */
+Bool RROutputIsLeased(RROutputPtr output)
+{
+    ScreenPtr screen = output.pScreen;
+    rrScrPrivPtr scr_priv = rrGetScrPriv(screen);
+    RRLeasePtr lease = void;
+    int o = void;
+
+    xorg_list_for_each_entry(lease, &scr_priv.leases, list) {
+        for (o = 0; o < lease.numOutputs; o++)
+            if (lease.outputs[o] == output)
+                return TRUE;
+    }
+    return FALSE;
+}
+
+/*
+ * A lease has been terminated.
+ * The driver is responsible for noticing and
+ * calling this function when that happens
+ */
+
+void RRLeaseTerminated(RRLeasePtr lease)
+{
+    /* Notify clients with events, but only if this isn't during lease creation */
+    if (lease.state == RRLeaseRunning)
+        RRLeaseChangeState(lease, RRLeaseTerminating, RRLeaseTerminating);
+
+    if (lease.id != None)
+        FreeResource(lease.id, X11_RESTYPE_NONE);
+
+    xorg_list_del(&lease.list);
+}
+
+/*
+ * A lease is completely shut down and is
+ * ready to be deallocated
+ */
+
+void RRLeaseFree(RRLeasePtr lease)
+{
+    free(lease);
+}
+
+/*
+ * Ask the driver to terminate a lease. The
+ * driver will call RRLeaseTerminated when that has
+ * finished, which may be some time after this function returns
+ * if the driver operation is asynchronous
+ */
+void RRTerminateLease(RRLeasePtr lease)
+{
+    ScreenPtr screen = lease.screen;
+    rrScrPrivPtr scr_priv = rrGetScrPriv(screen);
+
+    scr_priv.rrTerminateLease(screen, lease);
+}
+
+/*
+ * Destroy a lease resource ID. All this
+ * does is note that the lease no longer has an ID, and
+ * so doesn't appear over the protocol anymore.
+ */
+private int RRLeaseDestroyResource(void* value, XID pid)
+{
+    RRLeasePtr lease = value;
+
+    lease.id = None;
+    return 1;
+}
+
+/*
+ * Create the lease resource type during server initialization
+ */
+Bool RRLeaseInit()
+{
+    RRLeaseType = CreateNewResourceType(&RRLeaseDestroyResource, "LEASE");
+    if (!RRLeaseType)
+        return FALSE;
+    return TRUE;
+}
+
+int ProcRRCreateLease(ClientPtr client)
+{
+    REQUEST(xRRCreateLeaseReq);
+    REQUEST_AT_LEAST_SIZE(xRRCreateLeaseReq);
+
+    if (client.swapped) {
+        swapl(&stuff.window);
+        swaps(&stuff.nCrtcs);
+        swaps(&stuff.nOutputs);
+        swapl(&stuff.lid);
+        SwapRestL(stuff);
+    }
+
+    WindowPtr window = void;
+    ScreenPtr screen = void;
+    rrScrPrivPtr scr_priv = void;
+    RRLeasePtr lease = void;
+    RRCrtc* crtcIds = void;
+    RROutput* outputIds = void;
+    int fd = void;
+    int rc = void;
+    c_ulong len = void;
+    int c = void, o = void;
+
+    LEGAL_NEW_RESOURCE(stuff.lid, client);
+
+    rc = dixLookupWindow(&window, stuff.window, client, DixGetAttrAccess);
+    if (rc != Success)
+        return rc;
+
+    len = client.req_len - bytes_to_int32(xRRCreateLeaseReq.sizeof);
+
+    if (len != stuff.nCrtcs + stuff.nOutputs)
+        return BadLength;
+
+    screen = window.drawable.pScreen;
+    scr_priv = rrGetScrPriv(screen);
+
+    if (!scr_priv)
+        return BadMatch;
+
+    if (!scr_priv.rrCreateLease && !scr_priv.rrRequestLease)
+        return BadMatch;
+
+    if (scr_priv.rrGetLease) {
+        scr_priv.rrGetLease(client, screen, &lease, &fd);
+        if (lease) {
+            if (fd >= 0)
+                goto leaseReturned;
+            else
+                goto bail_lease;
+        }
+    }
+
+    /* Allocate a structure to hold all of the lease information */
+
+    lease = RRLeaseAlloc(screen, stuff.lid, stuff.nCrtcs, stuff.nOutputs);
+    if (!lease)
+        return BadAlloc;
+
+    /* Look up all of the crtcs */
+    crtcIds = cast(RRCrtc*) (stuff + 1);
+    for (c = 0; c < stuff.nCrtcs; c++) {
+        RRCrtcPtr crtc = void;
+
+	rc = dixLookupResourceByType(cast(void**)&crtc, crtcIds[c],
+                                     RRCrtcType, client, DixSetAttrAccess);
+
+        if (rc != Success) {
+            client.errorValue = crtcIds[c];
+            goto bail_lease;
+        }
+
+        if (RRCrtcIsLeased(crtc)) {
+            client.errorValue = crtcIds[c];
+            rc = BadAccess;
+            goto bail_lease;
+        }
+
+        lease.crtcs[c] = crtc;
+    }
+
+    /* Look up all of the outputs */
+    outputIds = cast(RROutput*) (crtcIds + stuff.nCrtcs);
+    for (o = 0; o < stuff.nOutputs; o++) {
+        RROutputPtr output = void;
+
+	rc = dixLookupResourceByType(cast(void**)&output, outputIds[o],
+                                     RROutputType, client, DixSetAttrAccess);
+        if (rc != Success) {
+            client.errorValue = outputIds[o];
+            goto bail_lease;
+        }
+
+        if (RROutputIsLeased(output)) {
+            client.errorValue = outputIds[o];
+            rc = BadAccess;
+            goto bail_lease;
+        }
+
+        lease.outputs[o] = output;
+    }
+
+    if (scr_priv.rrRequestLease) {
+        rc = scr_priv.rrRequestLease(client, screen, lease);
+        if (rc == Success)
+            return Success;
+        else
+            goto bail_lease;
+    } else {
+        rc = scr_priv.rrCreateLease(screen, lease, &fd);
+        if (rc != Success)
+            goto bail_lease;
+    }
+
+leaseReturned:
+    xorg_list_add(&lease.list, &scr_priv.leases);
+
+    if (!AddResource(stuff.lid, RRLeaseType, lease)) {
+        close(fd);
+        return BadAlloc;
+    }
+
+    if (WriteFdToClient(client, fd, TRUE) < 0) {
+        RRTerminateLease(lease);
+        close(fd);
+        return BadAlloc;
+    }
+
+    RRLeaseChangeState(lease, RRLeaseCreating, RRLeaseRunning);
+
+    xRRCreateLeaseReply reply = {
+        nfd: 1,
+    };
+
+    return X_SEND_REPLY_SIMPLE(client, reply);
+
+bail_lease:
+    free(lease);
+    return rc;
+}
+
+int ProcRRFreeLease(ClientPtr client)
+{
+    REQUEST(xRRFreeLeaseReq);
+    REQUEST_SIZE_MATCH(xRRFreeLeaseReq);
+
+    if (client.swapped)
+        swapl(&stuff.lid);
+
+    RRLeasePtr lease = void;
+    VERIFY_RR_LEASE(stuff.lid, lease, DixDestroyAccess);
+
+    if (stuff.terminate)
+        RRTerminateLease(lease);
+    else
+        /* Get rid of the resource database entry */
+        FreeResource(stuff.lid, X11_RESTYPE_NONE);
+
+    return Success;
+}

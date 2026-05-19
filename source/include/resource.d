@@ -1,0 +1,207 @@
+module resource.h;
+@nogc nothrow:
+extern(C): __gshared:
+import core.stdc.config: c_long, c_ulong;
+/***********************************************************
+
+Copyright 1987, 1989, 1998  The Open Group
+
+Permission to use, copy, modify, distribute, and sell this software and its
+documentation for any purpose is hereby granted without fee, provided that
+the above copyright notice appear in all copies and that both that
+copyright notice and this permission notice appear in supporting
+documentation.
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+OPEN GROUP BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN
+AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+Except as contained in this notice, the name of The Open Group shall not be
+used in advertising or otherwise to promote the sale, use or other dealings
+in this Software without prior written authorization from The Open Group.
+
+Copyright 1987, 1989 by Digital Equipment Corporation, Maynard, Massachusetts.
+
+                        All Rights Reserved
+
+Permission to use, copy, modify, and distribute this software and its
+documentation for any purpose and without fee is hereby granted,
+provided that the above copyright notice appear in all copies and that
+both that copyright notice and this permission notice appear in
+supporting documentation, and that the name of Digital not be
+used in advertising or publicity pertaining to distribution of the
+software without specific, written prior permission.
+
+DIGITAL DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE, INCLUDING
+ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS, IN NO EVENT SHALL
+DIGITAL BE LIABLE FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR
+ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
+WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION,
+ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS
+SOFTWARE.
+
+******************************************************************/
+
+version (RESOURCE_H) {} else {
+enum RESOURCE_H = 1;
+
+public import xlibre_ptrtypes;
+
+public import callback;
+public import misc;
+public import dixaccess;
+
+/*****************************************************************
+ * STUFF FOR RESOURCES
+ *****************************************************************/
+
+/* classes for Resource routines */
+
+alias RESTYPE = uint;
+
+enum RC_VANILLA =	((RESTYPE)0);
+enum RC_CACHED =	((RESTYPE)1<<31);
+enum RC_DRAWABLE =	((RESTYPE)1<<30);
+/*  Use class RC_NEVERRETAIN for resources that should not be retained
+ *  regardless of the close down mode when the client dies.  (A client's
+ *  event selections on objects that it doesn't own are good candidates.)
+ *  Extensions can use this too!
+ */
+enum RC_NEVERRETAIN =	((RESTYPE)1<<29);
+enum RC_LASTPREDEF =	RC_NEVERRETAIN;
+enum RC_ANY =		(~(RESTYPE)0);
+
+/* types for Resource routines */
+
+// prevent namespace clash with Windows
+enum X11_RESTYPE_NONE =	((RESTYPE)0);
+enum X11_RESTYPE_WINDOW =	((RESTYPE)1|RC_DRAWABLE);
+enum X11_RESTYPE_PIXMAP =	((RESTYPE)2|RC_DRAWABLE);
+enum X11_RESTYPE_GC =		((RESTYPE)3);
+enum X11_RESTYPE_FONT =	((RESTYPE)4);
+enum X11_RESTYPE_CURSOR =	((RESTYPE)5);
+enum X11_RESTYPE_COLORMAP =	((RESTYPE)6);
+enum X11_RESTYPE_CMAPENTRY =	((RESTYPE)7);
+enum X11_RESTYPE_OTHERCLIENT =	((RESTYPE)8|RC_NEVERRETAIN);
+enum X11_RESTYPE_PASSIVEGRAB =	((RESTYPE)9|RC_NEVERRETAIN);
+enum X11_RESTYPE_LASTPREDEF =	((RESTYPE)9);
+
+enum RT_WINDOW =	X11_RESTYPE_WINDOW;
+enum RT_PIXMAP =	X11_RESTYPE_PIXMAP;
+enum RT_GC =		X11_RESTYPE_GC;
+enum RT_FONT =		X11_RESTYPE_FONT;
+enum RT_CURSOR =	X11_RESTYPE_CURSOR;
+enum RT_COLORMAP =	X11_RESTYPE_COLORMAP;
+enum RT_CMAPENTRY =	X11_RESTYPE_CMAPENTRY;
+enum RT_OTHERCLIENT =	X11_RESTYPE_OTHERCLIENT;
+enum RT_PASSIVEGRAB =	X11_RESTYPE_PASSIVEGRAB;
+enum RT_LASTPREDEF =	X11_RESTYPE_LASTPREDEF;
+enum RT_NONE =		X11_RESTYPE_NONE;
+
+
+extern _X_EXPORT unsigned; int ResourceClientBits();
+
+enum BAD_RESOURCE = 0xe0000000;
+
+alias DeleteType = int function(void* value, XID id);
+
+alias FindResType = void function(void* value, XID id, void* cdata);
+
+alias FindAllRes = void function(void* value, XID id, RESTYPE type, void* cdata);
+
+alias FindComplexResType = Bool function(void* value, XID id, void* cdata);
+
+/* Structure for estimating resource memory usage. Memory usage
+ * consists of space allocated for the resource itself and of
+ * references to other resources. Currently the most important use for
+ * this structure is to estimate pixmap usage of different resources
+ * more accurately. */
+struct _ResourceSizeRec {
+    /* Size of resource itself. Zero if not implemented. */
+    c_ulong resourceSize;
+    /* Size attributed to pixmap references from the resource. */
+    c_ulong pixmapRefSize;
+    /* Number of references to this resource; typically 1 */
+    c_ulong refCnt;
+}alias ResourceSizeRec = _ResourceSizeRec;
+alias ResourceSizePtr = *;
+
+alias SizeType = void function(void* value, XID id, ResourceSizePtr size);
+
+extern _X_EXPORT CreateNewResourceType(DeleteType deleteFunc, const(char)* name);
+
+alias FindTypeSubResources = void function(void* value, FindAllRes func, void* cdata);
+
+extern _X_EXPORT GetResourceTypeSizeFunc(RESTYPE);
+
+extern _X_EXPORT SetResourceTypeFindSubResFunc(RESTYPE, FindTypeSubResources);
+
+extern _X_EXPORT SetResourceTypeSizeFunc(RESTYPE, SizeType);
+
+extern _X_EXPORT SetResourceTypeErrorValue(RESTYPE, int);
+
+extern _X_EXPORT CreateNewResourceClass();
+
+extern _X_EXPORT InitClientResources(ClientPtr);
+
+extern _X_EXPORT FakeClientID(int);
+
+/* Quartz support on Mac OS X uses the CarbonCore
+   framework whose AddResource function conflicts here. */
+version (OSX) {
+enum AddResource = Darwin_X_AddResource;
+}
+extern _X_EXPORT AddResource(XID id, RESTYPE type, void* value);
+
+extern _X_EXPORT FreeResource(XID, RESTYPE);
+
+extern _X_EXPORT FreeResourceByType(XID, RESTYPE, Bool);
+
+extern _X_EXPORT ChangeResourceValue(XID id, RESTYPE rtype, void* value);
+
+extern _X_EXPORT FindClientResourcesByType(ClientPtr client, RESTYPE type, FindResType func, void* cdata);
+
+extern _X_EXPORT FindAllClientResources(ClientPtr client, FindAllRes func, void* cdata);
+
+/** @brief Iterate through all subresources of a resource.
+
+    @note The XID argument provided to the FindAllRes function
+          may be 0 for subresources that don't have an XID */
+extern _X_EXPORT FindSubResources(void* resource, RESTYPE type, FindAllRes func, void* cdata);
+
+extern _X_EXPORT FreeClientNeverRetainResources(ClientPtr);
+
+extern _X_EXPORT FreeClientResources(ClientPtr);
+
+extern _X_EXPORT FreeAllResources();
+
+extern _X_EXPORT LegalNewID(XID, ClientPtr);
+
+extern _X_EXPORT* LookupClientResourceComplex(ClientPtr client, RESTYPE type, FindComplexResType func, void* cdata);
+
+extern _X_EXPORT dixLookupResourceByType(void** result, XID id, RESTYPE rtype, ClientPtr client, Mask access_mode);
+
+extern _X_EXPORT dixLookupResourceByClass(void** result, XID id, RESTYPE rclass, ClientPtr client, Mask access_mode);
+
+extern _X_EXPORT lastResourceType;
+extern _X_EXPORT TypeMask;
+
+/*
+ * @brief allocate a XID (resource ID) for the server itself
+ *
+ * This is mostly for resource types that don't have their own API yet
+ * The XID is allocated within server's ID space and then can be used
+ * for registering a resource with it (@see AddResource())
+ *
+ * @obsoletes FakeClientID
+ * @return XID the newly allocated XID
+ */
+_X_EXPORT XID dixAllocServerXID();
+
+} /* RESOURCE_H */

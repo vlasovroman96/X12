@@ -1,0 +1,161 @@
+module protocol-versions.h;
+@nogc nothrow:
+extern(C): __gshared:
+/*
+ * Copyright © 2009 Red Hat, Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a
+ * copy of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the
+ * Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice (including the next
+ * paragraph) shall be included in all copies or substantial portions of the
+ * Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
+ * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+ * DEALINGS IN THE SOFTWARE.
+ *
+ */
+
+/**
+ * This file specifies the server-supported protocol versions.
+ */
+ 
+/* Apple DRI */
+enum SERVER_APPLEDRI_MAJOR_VERSION =		1;
+enum SERVER_APPLEDRI_MINOR_VERSION =		0;
+enum SERVER_APPLEDRI_PATCH_VERSION =		0;
+
+/* AppleWM */
+enum SERVER_APPLEWM_MAJOR_VERSION =		1;
+enum SERVER_APPLEWM_MINOR_VERSION =		3;
+enum SERVER_APPLEWM_PATCH_VERSION =		0;
+
+/* Composite */
+enum SERVER_COMPOSITE_MAJOR_VERSION =		0;
+enum SERVER_COMPOSITE_MINOR_VERSION =		4;
+
+/* Damage */
+enum SERVER_DAMAGE_MAJOR_VERSION =		1;
+enum SERVER_DAMAGE_MINOR_VERSION =		1;
+
+/* DPMS */
+enum SERVER_DPMS_MAJOR_VERSION =		1;
+enum SERVER_DPMS_MINOR_VERSION =		2;
+
+/* DRI3 */
+enum SERVER_DRI3_MAJOR_VERSION =               1;
+enum SERVER_DRI3_MINOR_VERSION =               4;
+
+/* Generic event extension */
+enum SERVER_GE_MAJOR_VERSION =                 1;
+enum SERVER_GE_MINOR_VERSION =                 0;
+
+/* GLX */
+enum SERVER_GLX_MAJOR_VERSION =		1;
+enum SERVER_GLX_MINOR_VERSION =		4;
+
+/* Xinerama */
+enum SERVER_PANORAMIX_MAJOR_VERSION =          1;
+enum SERVER_PANORAMIX_MINOR_VERSION =		1;
+
+/* Present */
+enum SERVER_PRESENT_MAJOR_VERSION =            1;
+version (DRI3) {
+enum SERVER_PRESENT_MINOR_VERSION =            4;
+} else {
+enum SERVER_PRESENT_MINOR_VERSION =            3;
+}
+
+/* RandR */
+enum SERVER_RANDR_MAJOR_VERSION =		1;
+enum SERVER_RANDR_MINOR_VERSION =		6;
+
+/* Record */
+enum SERVER_RECORD_MAJOR_VERSION =		1;
+enum SERVER_RECORD_MINOR_VERSION =		13;
+
+/* Render */
+enum SERVER_RENDER_MAJOR_VERSION =		0;
+enum SERVER_RENDER_MINOR_VERSION =		11;
+
+/* RandR Xinerama */
+enum SERVER_RRXINERAMA_MAJOR_VERSION =		1;
+enum SERVER_RRXINERAMA_MINOR_VERSION =		1;
+
+/* Screensaver */
+enum SERVER_SAVER_MAJOR_VERSION =		1;
+enum SERVER_SAVER_MINOR_VERSION =		1;
+
+/* Security */
+enum SERVER_SECURITY_MAJOR_VERSION =		1;
+enum SERVER_SECURITY_MINOR_VERSION =		0;
+
+/* Shape */
+enum SERVER_SHAPE_MAJOR_VERSION =		1;
+enum SERVER_SHAPE_MINOR_VERSION =		1;
+
+/* SHM */
+enum SERVER_SHM_MAJOR_VERSION =		1;
+static if (XTRANS_SEND_FDS) {
+enum SERVER_SHM_MINOR_VERSION =		2;
+} else {
+enum SERVER_SHM_MINOR_VERSION =		1;
+}
+
+/* Sync */
+enum SERVER_SYNC_MAJOR_VERSION =		3;
+enum SERVER_SYNC_MINOR_VERSION =		1;
+
+/* Windows DRI */
+enum SERVER_WINDOWSDRI_MAJOR_VERSION =		1;
+enum SERVER_WINDOWSDRI_MINOR_VERSION =		0;
+enum SERVER_WINDOWSDRI_PATCH_VERSION =		0;
+
+/* Windows WM */
+enum SERVER_WINDOWSWM_MAJOR_VERSION =		1;
+enum SERVER_WINDOWSWM_MINOR_VERSION =		0;
+enum SERVER_WINDOWSWM_PATCH_VERSION =		0;
+
+/* DGA */
+enum SERVER_XDGA_MAJOR_VERSION =		2;
+enum SERVER_XDGA_MINOR_VERSION =		0;
+
+/* Big Font */
+enum SERVER_XF86BIGFONT_MAJOR_VERSION =	1;
+enum SERVER_XF86BIGFONT_MINOR_VERSION =	1;
+
+/* DRI */
+enum SERVER_XF86DRI_MAJOR_VERSION =		4;
+enum SERVER_XF86DRI_MINOR_VERSION =		1;
+enum SERVER_XF86DRI_PATCH_VERSION =		20040604;
+
+/* Vidmode */
+enum SERVER_XF86VIDMODE_MAJOR_VERSION =	2;
+enum SERVER_XF86VIDMODE_MINOR_VERSION =	2;
+
+/* Fixes */
+enum SERVER_XFIXES_MAJOR_VERSION =		6;
+enum SERVER_XFIXES_MINOR_VERSION =		0;
+
+/* X Input */
+enum SERVER_XI_MAJOR_VERSION =			2;
+enum SERVER_XI_MINOR_VERSION =			4;
+
+/* XKB */
+enum SERVER_XKB_MAJOR_VERSION =		1;
+enum SERVER_XKB_MINOR_VERSION =		0;
+
+/* Resource */
+enum SERVER_XRES_MAJOR_VERSION =		1;
+enum SERVER_XRES_MINOR_VERSION =		2;
+
+

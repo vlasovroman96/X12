@@ -1,0 +1,116 @@
+module xfree86.c;
+@nogc nothrow:
+extern(C): __gshared:
+/**
+ * Copyright © 2011 Red Hat, Inc.
+ *
+ *  Permission is hereby granted, free of charge, to any person obtaining a
+ *  copy of this software and associated documentation files (the "Software"),
+ *  to deal in the Software without restriction, including without limitation
+ *  the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ *  and/or sell copies of the Software, and to permit persons to whom the
+ *  Software is furnished to do so, subject to the following conditions:
+ *
+ *  The above copyright notice and this permission notice (including the next
+ *  paragraph) shall be included in all copies or substantial portions of the
+ *  Software.
+ *
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
+ *  THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ *  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+ *  DEALINGS IN THE SOFTWARE.
+ */
+
+/* Test relies on assert() */
+import build.dix_config;
+
+import core.stdc.assert_;
+
+import xf86;
+import xf86Parser;
+
+import tests-common;
+
+private void xfree86_option_list_duplicate()
+{
+    XF86OptionPtr options = void;
+    XF86OptionPtr duplicate = void;
+    const(char)* o1 = "foo", o2 = "bar", v1 = "one", v2 = "two";
+    const(char)* o_null = "NULL";
+    char* val1 = void, val2 = void;
+    XF86OptionPtr a = void, b = void;
+
+    duplicate = xf86OptionListDuplicate(null);
+    assert(!duplicate);
+
+    options = xf86AddNewOption(null, o1, v1);
+    assert(options);
+    options = xf86AddNewOption(options, o2, v2);
+    assert(options);
+    options = xf86AddNewOption(options, o_null, null);
+    assert(options);
+
+    duplicate = xf86OptionListDuplicate(options);
+    assert(duplicate);
+
+    val1 = xf86CheckStrOption(options, o1, "1");
+    val2 = xf86CheckStrOption(duplicate, o1, "2");
+
+    assert(strcmp(val1, v1) == 0);
+    assert(strcmp(val1, val2) == 0);
+    free(val1);
+    free(val2);
+
+    val1 = xf86CheckStrOption(options, o2, "1");
+    val2 = xf86CheckStrOption(duplicate, o2, "2");
+
+    assert(strcmp(val1, v2) == 0);
+    assert(strcmp(val1, val2) == 0);
+    free(val1);
+    free(val2);
+
+    a = xf86FindOption(options, o_null);
+    b = xf86FindOption(duplicate, o_null);
+    assert(a);
+    assert(b);
+
+    xf86OptionListFree(duplicate);
+    xf86OptionListFree(options);
+}
+
+private void xfree86_add_comment()
+{
+    char* current = null;
+    const(char)* comment = void;
+    char[1024] compare = 0;
+
+    comment = "# foo";
+    current = xf86addComment(current, comment);
+    strcpy(compare.ptr, comment);
+    strcat(compare.ptr, "\n");
+
+    assert(!strcmp(current, compare.ptr));
+
+    /* this used to overflow */
+    strcpy(current, "\n");
+    comment = "foobar\n";
+    current = xf86addComment(current, comment);
+    strcpy(compare.ptr, "\n#");
+    strcat(compare.ptr, comment);
+    assert(!strcmp(current, compare.ptr));
+
+    free(current);
+}
+
+const(testfunc_t)* xfree86_test()
+{
+    static const(testfunc_t)[4] testfuncs = [
+        xfree86_option_list_duplicate,
+        xfree86_add_comment,
+        null,
+    ];
+    return testfuncs;
+}

@@ -1,0 +1,16 @@
+{
+	"description": "A minimal D application.",
+	"license": "proprietary",
+	"authors": [
+		"Роман"
+	],
+	"copyright": "Copyright © 2026, Роман",
+	"name": "x12",
+	"dependencies": {
+		"libx11" : "~master"
+	},
+	"targetType": "staticLibrary",
+	"dflags": [
+        "-verrors=5"
+    ]
+}

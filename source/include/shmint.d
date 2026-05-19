@@ -1,0 +1,78 @@
+module shmint.h;
+@nogc nothrow:
+extern(C): __gshared:
+/*
+ * Copyright © 2003 Keith Packard
+ *
+ * Permission to use, copy, modify, distribute, and sell this software and its
+ * documentation for any purpose is hereby granted without fee, provided that
+ * the above copyright notice appear in all copies and that both that
+ * copyright notice and this permission notice appear in supporting
+ * documentation, and that the name of Keith Packard not be used in
+ * advertising or publicity pertaining to distribution of the software without
+ * specific, written prior permission.  Keith Packard makes no
+ * representations about the suitability of this software for any purpose.  It
+ * is provided "as is" without express or implied warranty.
+ *
+ * KEITH PACKARD DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE,
+ * INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS, IN NO
+ * EVENT SHALL KEITH PACKARD BE LIABLE FOR ANY SPECIAL, INDIRECT OR
+ * CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE,
+ * DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
+ * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+ * PERFORMANCE OF THIS SOFTWARE.
+ */
+
+ 
+public import deimos.X11.Xmd;
+public import deimos.X11.extensions.shmproto;
+
+public import screenint;
+public import pixmap;
+public import gc;
+
+enum XSHM_PUT_IMAGE_ARGS = \
+    DrawablePtr		/* dst */, \
+    GCPtr		/* pGC */, \
+    int			/* depth */, \
+    unsigned int	/* format */, \
+    int			/* w */, \
+    int			/* h */, \
+    int			/* sx */, \
+    int			/* sy */, \
+    int			/* sw */, \
+    int			/* sh */, \
+    int			/* dx */, \
+    int			/* dy */, \
+    char *                      /* data */;
+
+enum XSHM_CREATE_PIXMAP_ARGS = \
+    ScreenPtr	/* pScreen */, \
+    int		/* width */, \
+    int		/* height */, \
+    int		/* depth */, \
+    char *                      /* addr */;
+
+struct _ShmFuncs {
+    PixmapPtr function(XSHM_CREATE_PIXMAP_ARGS) CreatePixmap;
+    void function(XSHM_PUT_IMAGE_ARGS) PutImage;
+}alias ShmFuncs = _ShmFuncs;
+alias ShmFuncsPtr = _ShmFuncs*;
+
+static if (XTRANS_SEND_FDS) {
+enum SHM_FD_PASSING =  1;
+}
+
+version (SHM_FD_PASSING) {
+enum string SHMDESC_IS_FD(string shmdesc) = `((` ~ shmdesc ~ `).is_fd)`;
+} else {
+enum string SHMDESC_IS_FD(string shmdesc) = `(0)`;
+}
+
+_X_EXPORT void ShmRegisterFuncs(ScreenPtr pScreen, ShmFuncsPtr funcs);
+_X_EXPORT void ShmRegisterFbFuncs(ScreenPtr pScreen);
+
+extern _X_EXPORT ShmCompletionCode;
+extern _X_EXPORT BadShmSegCode;
+
+                          /* _SHMINT_H_ */

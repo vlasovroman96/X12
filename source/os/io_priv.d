@@ -1,0 +1,33 @@
+module io_priv.h;
+@nogc nothrow:
+extern(C): __gshared:
+/* SPDX-License-Identifier: MIT OR X11
+ *
+ * Copyright © 2024 Enrico Weigelt, metux IT consult <info@metux.net>
+ */
+ 
+public import deimos.X11.Xdefs;
+
+public import include.dix; /* ClientPtr */
+
+struct _XtransConnInfo;
+
+alias ConnectionInputPtr = _connectionInput*;
+alias ConnectionOutputPtr = _connectionOutput*;
+
+struct _OsCommRec {
+    int fd;
+    ConnectionInputPtr input;
+    ConnectionOutputPtr output;
+    XID auth_id;
+    CARD32 conn_time;
+    _XtransConnInfo* trans_conn;
+    int flags;
+}alias OsCommRec = _OsCommRec;
+alias OsCommPtr = *;
+
+int FlushClient(ClientPtr who, OsCommPtr oc);
+void FreeOsBuffers(OsCommPtr oc);
+void CloseDownFileDescriptor(OsCommPtr oc);
+
+ /* __XORG_OS_IO_H */

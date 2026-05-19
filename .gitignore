@@ -1,0 +1,17 @@
+.dub
+docs.json
+__dummy.html
+docs/
+/x12
+x12.so
+x12.dylib
+x12.dll
+libx12.a
+x12.a
+x12.lib
+x12-test-*
+*.exe
+*.pdb
+*.o
+*.obj
+*.lst

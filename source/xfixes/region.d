@@ -1,0 +1,733 @@
+module region.c;
+@nogc nothrow:
+extern(C): __gshared:
+/*
+ * Copyright © 2003 Keith Packard
+ *
+ * Permission to use, copy, modify, distribute, and sell this software and its
+ * documentation for any purpose is hereby granted without fee, provided that
+ * the above copyright notice appear in all copies and that both that
+ * copyright notice and this permission notice appear in supporting
+ * documentation, and that the name of Keith Packard not be used in
+ * advertising or publicity pertaining to distribution of the software without
+ * specific, written prior permission.  Keith Packard makes no
+ * representations about the suitability of this software for any purpose.  It
+ * is provided "as is" without express or implied warranty.
+ *
+ * KEITH PACKARD DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE,
+ * INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS, IN NO
+ * EVENT SHALL KEITH PACKARD BE LIABLE FOR ANY SPECIAL, INDIRECT OR
+ * CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE,
+ * DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
+ * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+ * PERFORMANCE OF THIS SOFTWARE.
+ */
+
+import build.dix_config;
+
+import dix.dix_priv;
+import dix.request_priv;
+import dix.rpcbuf_priv;
+import dix.window_priv;
+import render.picturestr_priv;
+import Xext.panoramiX;
+import Xext.panoramiXsrv;
+
+import xfixesint;
+import scrnintstr;
+
+import regionstr;
+import gcstruct;
+import window;
+
+RESTYPE RegionResType;
+
+private int RegionResFree(void* data, XID id)
+{
+    RegionPtr pRegion = cast(RegionPtr) data;
+
+    RegionDestroy(pRegion);
+    return Success;
+}
+
+RegionPtr XFixesRegionCopy(RegionPtr pRegion)
+{
+    RegionPtr pNew = RegionCreate(RegionExtents(pRegion),
+                                  RegionNumRects(pRegion));
+
+    if (!pNew)
+        return 0;
+    if (!RegionCopy(pNew, pRegion)) {
+        RegionDestroy(pNew);
+        return 0;
+    }
+    return pNew;
+}
+
+Bool XFixesRegionInit()
+{
+    RegionResType = CreateNewResourceType(&RegionResFree, "XFixesRegion");
+
+    return RegionResType != 0;
+}
+
+int ProcXFixesCreateRegion(ClientPtr client)
+{
+    X_REQUEST_HEAD_AT_LEAST(xXFixesCreateRegionReq);
+    X_REQUEST_FIELD_CARD32(region);
+    X_REQUEST_REST_CARD16();
+
+    int things = void;
+    RegionPtr pRegion = void;
+
+    LEGAL_NEW_RESOURCE(stuff.region, client);
+
+    things = (client.req_len << 2) - xXFixesCreateRegionReq.sizeof;
+    if (things & 4)
+        return BadLength;
+    things >>= 3;
+
+    pRegion = RegionFromRects(things, cast(xRectangle*) (stuff + 1), CT_UNSORTED);
+    if (!pRegion)
+        return BadAlloc;
+    if (!AddResource(stuff.region, RegionResType, cast(void*) pRegion))
+        return BadAlloc;
+
+    return Success;
+}
+
+int ProcXFixesCreateRegionFromBitmap(ClientPtr client)
+{
+    X_REQUEST_HEAD_STRUCT(xXFixesCreateRegionFromBitmapReq);
+    X_REQUEST_FIELD_CARD32(region);
+    X_REQUEST_FIELD_CARD32(bitmap);
+
+    RegionPtr pRegion = void;
+    PixmapPtr pPixmap = void;
+    int rc = void;
+
+    LEGAL_NEW_RESOURCE(stuff.region, client);
+
+    rc = dixLookupResourceByType(cast(void**) &pPixmap, stuff.bitmap, X11_RESTYPE_PIXMAP,
+                                 client, DixReadAccess);
+    if (rc != Success) {
+        client.errorValue = stuff.bitmap;
+        return rc;
+    }
+    if (pPixmap.drawable.depth != 1)
+        return BadMatch;
+
+    pRegion = BitmapToRegion(pPixmap.drawable.pScreen, pPixmap);
+
+    if (!pRegion)
+        return BadAlloc;
+
+    if (!AddResource(stuff.region, RegionResType, cast(void*) pRegion))
+        return BadAlloc;
+
+    return Success;
+}
+
+int ProcXFixesCreateRegionFromWindow(ClientPtr client)
+{
+    X_REQUEST_HEAD_STRUCT(xXFixesCreateRegionFromWindowReq);
+    X_REQUEST_FIELD_CARD32(region);
+    X_REQUEST_FIELD_CARD32(window);
+
+    RegionPtr pRegion = void;
+    Bool copy = TRUE;
+    WindowPtr pWin = void;
+    int rc = void;
+
+    LEGAL_NEW_RESOURCE(stuff.region, client);
+    rc = dixLookupResourceByType(cast(void**) &pWin, stuff.window, X11_RESTYPE_WINDOW,
+                                 client, DixGetAttrAccess);
+    if (rc != Success) {
+        client.errorValue = stuff.window;
+        return rc;
+    }
+    switch (stuff.kind) {
+    case WindowRegionBounding:
+        pRegion = wBoundingShape(pWin);
+        if (!pRegion) {
+            pRegion = CreateBoundingShape(pWin);
+            copy = FALSE;
+        }
+        break;
+    case WindowRegionClip:
+        pRegion = wClipShape(pWin);
+        if (!pRegion) {
+            pRegion = CreateClipShape(pWin);
+            copy = FALSE;
+        }
+        break;
+    default:
+        client.errorValue = stuff.kind;
+        return BadValue;
+    }
+    if (copy && pRegion)
+        pRegion = XFixesRegionCopy(pRegion);
+    if (!pRegion)
+        return BadAlloc;
+    if (!AddResource(stuff.region, RegionResType, cast(void*) pRegion))
+        return BadAlloc;
+
+    return Success;
+}
+
+int ProcXFixesCreateRegionFromGC(ClientPtr client)
+{
+    X_REQUEST_HEAD_STRUCT(xXFixesCreateRegionFromGCReq);
+    X_REQUEST_FIELD_CARD32(region);
+    X_REQUEST_FIELD_CARD32(gc);
+
+    RegionPtr pRegion = void, pClip = void;
+    GCPtr pGC = void;
+    int rc = void;
+
+    LEGAL_NEW_RESOURCE(stuff.region, client);
+
+    rc = dixLookupGC(&pGC, stuff.gc, client, DixGetAttrAccess);
+    if (rc != Success)
+        return rc;
+
+    if (pGC.clientClip) {
+        pClip = cast(RegionPtr) pGC.clientClip;
+        pRegion = XFixesRegionCopy(pClip);
+        if (!pRegion)
+            return BadAlloc;
+    } else {
+        return BadMatch;
+    }
+
+    if (!AddResource(stuff.region, RegionResType, cast(void*) pRegion))
+        return BadAlloc;
+
+    return Success;
+}
+
+int ProcXFixesCreateRegionFromPicture(ClientPtr client)
+{
+    X_REQUEST_HEAD_STRUCT(xXFixesCreateRegionFromPictureReq);
+    X_REQUEST_FIELD_CARD32(region);
+    X_REQUEST_FIELD_CARD32(picture);
+
+    RegionPtr pRegion = void;
+    PicturePtr pPicture = void;
+
+    LEGAL_NEW_RESOURCE(stuff.region, client);
+
+    VERIFY_PICTURE(pPicture, stuff.picture, client, DixGetAttrAccess);
+
+    if (!pPicture.pDrawable)
+        return RenderErrBase + BadPicture;
+
+    if (pPicture.clientClip) {
+        pRegion = XFixesRegionCopy(cast(RegionPtr) pPicture.clientClip);
+        if (!pRegion)
+            return BadAlloc;
+    } else {
+        return BadMatch;
+    }
+
+    if (!AddResource(stuff.region, RegionResType, cast(void*) pRegion))
+        return BadAlloc;
+
+    return Success;
+}
+
+int ProcXFixesDestroyRegion(ClientPtr client)
+{
+    X_REQUEST_HEAD_STRUCT(xXFixesDestroyRegionReq);
+    X_REQUEST_FIELD_CARD32(region);
+
+    RegionPtr pRegion = void;
+
+    VERIFY_REGION(pRegion, stuff.region, client, DixWriteAccess);
+    FreeResource(stuff.region, X11_RESTYPE_NONE);
+    return Success;
+}
+
+int ProcXFixesSetRegion(ClientPtr client)
+{
+    X_REQUEST_HEAD_AT_LEAST(xXFixesSetRegionReq);
+    X_REQUEST_FIELD_CARD32(region);
+    X_REQUEST_REST_CARD16();
+
+    int things = void;
+    RegionPtr pRegion = void, pNew = void;
+
+    VERIFY_REGION(pRegion, stuff.region, client, DixWriteAccess);
+
+    things = (client.req_len << 2) - xXFixesCreateRegionReq.sizeof;
+    if (things & 4)
+        return BadLength;
+    things >>= 3;
+
+    pNew = RegionFromRects(things, cast(xRectangle*) (stuff + 1), CT_UNSORTED);
+    if (!pNew)
+        return BadAlloc;
+    if (!RegionCopy(pRegion, pNew)) {
+        RegionDestroy(pNew);
+        return BadAlloc;
+    }
+    RegionDestroy(pNew);
+    return Success;
+}
+
+int ProcXFixesCopyRegion(ClientPtr client)
+{
+    X_REQUEST_HEAD_STRUCT(xXFixesCopyRegionReq);
+    X_REQUEST_FIELD_CARD32(source);
+    X_REQUEST_FIELD_CARD32(destination);
+
+    RegionPtr pSource = void, pDestination = void;
+
+    VERIFY_REGION(pSource, stuff.source, client, DixReadAccess);
+    VERIFY_REGION(pDestination, stuff.destination, client, DixWriteAccess);
+
+    if (!RegionCopy(pDestination, pSource))
+        return BadAlloc;
+
+    return Success;
+}
+
+int ProcXFixesCombineRegion(ClientPtr client)
+{
+    X_REQUEST_HEAD_STRUCT(xXFixesCombineRegionReq);
+    X_REQUEST_FIELD_CARD32(source1);
+    X_REQUEST_FIELD_CARD32(source2);
+    X_REQUEST_FIELD_CARD32(destination);
+
+    RegionPtr pSource1 = void, pSource2 = void, pDestination = void;
+
+    VERIFY_REGION(pSource1, stuff.source1, client, DixReadAccess);
+    VERIFY_REGION(pSource2, stuff.source2, client, DixReadAccess);
+    VERIFY_REGION(pDestination, stuff.destination, client, DixWriteAccess);
+
+    switch (stuff.xfixesReqType) {
+    case X_XFixesUnionRegion:
+        if (!RegionUnion(pDestination, pSource1, pSource2))
+            return BadAlloc;
+        break;
+    case X_XFixesIntersectRegion:
+        if (!RegionIntersect(pDestination, pSource1, pSource2))
+            return BadAlloc;
+        break;
+    case X_XFixesSubtractRegion:
+        if (!RegionSubtract(pDestination, pSource1, pSource2))
+            return BadAlloc;
+        break;
+    default: break;}
+
+    return Success;
+}
+
+int ProcXFixesInvertRegion(ClientPtr client)
+{
+    X_REQUEST_HEAD_STRUCT(xXFixesInvertRegionReq);
+    X_REQUEST_FIELD_CARD32(source);
+    X_REQUEST_FIELD_CARD16(x);
+    X_REQUEST_FIELD_CARD16(y);
+    X_REQUEST_FIELD_CARD16(width);
+    X_REQUEST_FIELD_CARD16(height);
+    X_REQUEST_FIELD_CARD32(destination);
+
+    RegionPtr pSource = void, pDestination = void;
+    BoxRec bounds = void;
+
+    VERIFY_REGION(pSource, stuff.source, client, DixReadAccess);
+    VERIFY_REGION(pDestination, stuff.destination, client, DixWriteAccess);
+
+    /* Compute bounds, limit to 16 bits */
+    bounds.x1 = stuff.x;
+    bounds.y1 = stuff.y;
+    if (cast(int) stuff.x + cast(int) stuff.width > MAXSHORT)
+        bounds.x2 = MAXSHORT;
+    else
+        bounds.x2 = stuff.x + stuff.width;
+
+    if (cast(int) stuff.y + cast(int) stuff.height > MAXSHORT)
+        bounds.y2 = MAXSHORT;
+    else
+        bounds.y2 = stuff.y + stuff.height;
+
+    if (!RegionInverse(pDestination, pSource, &bounds))
+        return BadAlloc;
+
+    return Success;
+}
+
+int ProcXFixesTranslateRegion(ClientPtr client)
+{
+    X_REQUEST_HEAD_STRUCT(xXFixesTranslateRegionReq);
+    X_REQUEST_FIELD_CARD32(region);
+    X_REQUEST_FIELD_CARD16(dx);
+    X_REQUEST_FIELD_CARD16(dy);
+
+    RegionPtr pRegion = void;
+
+    VERIFY_REGION(pRegion, stuff.region, client, DixWriteAccess);
+
+    RegionTranslate(pRegion, stuff.dx, stuff.dy);
+    return Success;
+}
+
+int ProcXFixesRegionExtents(ClientPtr client)
+{
+    X_REQUEST_HEAD_STRUCT(xXFixesRegionExtentsReq);
+    X_REQUEST_FIELD_CARD32(source);
+    X_REQUEST_FIELD_CARD32(destination);
+
+    RegionPtr pSource = void, pDestination = void;
+
+    VERIFY_REGION(pSource, stuff.source, client, DixReadAccess);
+    VERIFY_REGION(pDestination, stuff.destination, client, DixWriteAccess);
+
+    RegionReset(pDestination, RegionExtents(pSource));
+
+    return Success;
+}
+
+int ProcXFixesFetchRegion(ClientPtr client)
+{
+    X_REQUEST_HEAD_STRUCT(xXFixesFetchRegionReq);
+    X_REQUEST_FIELD_CARD32(region);
+
+    RegionPtr pRegion = void;
+    VERIFY_REGION(pRegion, stuff.region, client, DixReadAccess);
+
+    BoxPtr pExtent = RegionExtents(pRegion);
+    BoxPtr pBox = RegionRects(pRegion);
+    int nBox = RegionNumRects(pRegion);
+
+    x_rpcbuf_t rpcbuf = { swapped: client.swapped, err_clear: TRUE };
+
+    for (int i = 0; i < nBox; i++) {
+        x_rpcbuf_write_rect(&rpcbuf,
+                            pBox[i].x1,
+                            pBox[i].y1,
+                            pBox[i].x2 - pBox[i].x1,
+                            pBox[i].y2 - pBox[i].y1);
+    }
+
+    xXFixesFetchRegionReply reply = {
+        x: pExtent.x1,
+        y: pExtent.y1,
+        width: pExtent.x2 - pExtent.x1,
+        height: pExtent.y2 - pExtent.y1,
+    };
+
+    X_REPLY_FIELD_CARD16(x);
+    X_REPLY_FIELD_CARD16(y);
+    X_REPLY_FIELD_CARD16(width);
+    X_REPLY_FIELD_CARD16(height);
+
+    return X_SEND_REPLY_WITH_RPCBUF(client, reply, rpcbuf);
+}
+
+version (XINERAMA) {
+
+}
+
+
+
+int ProcXFixesSetGCClipRegion(ClientPtr client)
+{
+    X_REQUEST_HEAD_STRUCT(xXFixesSetGCClipRegionReq);
+    X_REQUEST_FIELD_CARD32(gc);
+    X_REQUEST_FIELD_CARD32(region);
+    X_REQUEST_FIELD_CARD16(xOrigin);
+    X_REQUEST_FIELD_CARD16(yOrigin);
+
+version (XINERAMA) {
+    if (XFixesUseXinerama)
+        return PanoramiXFixesSetGCClipRegion(client, stuff);
+}
+    return SingleXFixesSetGCClipRegion(client, stuff);
+}
+
+private int SingleXFixesSetGCClipRegion(ClientPtr client, xXFixesSetGCClipRegionReq* stuff)
+{
+    GCPtr pGC = void;
+    int rc = dixLookupGC(&pGC, stuff.gc, client, DixSetAttrAccess);
+    if (rc != Success)
+        return rc;
+
+    RegionPtr pRegion = void;
+    VERIFY_REGION_OR_NONE(pRegion, stuff.region, client, DixReadAccess);
+
+    if (pRegion) {
+        pRegion = XFixesRegionCopy(pRegion);
+        if (!pRegion)
+            return BadAlloc;
+    }
+
+    ChangeGCVal[2] vals = void;
+    vals[0].val = stuff.xOrigin;
+    vals[1].val = stuff.yOrigin;
+    ChangeGC(null, pGC, GCClipXOrigin | GCClipYOrigin, vals.ptr);
+    (*pGC.funcs.ChangeClip) (pGC, pRegion ? CT_REGION : CT_NONE,
+                               cast(void*) pRegion, 0);
+
+    return Success;
+}
+
+alias CreateDftPtr = RegionPtr function(WindowPtr pWin);
+
+private int SingleXFixesSetWindowShapeRegion(ClientPtr client, xXFixesSetWindowShapeRegionReq* stuff)
+{
+
+    WindowPtr pWin = void;
+    int rc = dixLookupResourceByType(cast(void**) &pWin, stuff.dest, X11_RESTYPE_WINDOW,
+                                 client, DixSetAttrAccess);
+    if (rc != Success) {
+        client.errorValue = stuff.dest;
+        return rc;
+    }
+
+    RegionPtr pRegion = void;
+    VERIFY_REGION_OR_NONE(pRegion, stuff.region, client, DixWriteAccess);
+    switch (stuff.destKind) {
+    case ShapeBounding:
+    case ShapeClip:
+    case ShapeInput:
+        break;
+    default:
+        client.errorValue = stuff.destKind;
+        return BadValue;
+    }
+
+    RegionPtr* pDestRegion = null;
+
+    if (pRegion) {
+        pRegion = XFixesRegionCopy(pRegion);
+        if (!pRegion)
+            return BadAlloc;
+        if (!MakeWindowOptional(pWin))
+            return BadAlloc;
+        switch (stuff.destKind) {
+        default:
+        case ShapeBounding:
+            pDestRegion = &pWin.optional.boundingShape;
+            break;
+        case ShapeClip:
+            pDestRegion = &pWin.optional.clipShape;
+            break;
+        case ShapeInput:
+            pDestRegion = &pWin.optional.inputShape;
+            break;
+        }
+        if (stuff.xOff || stuff.yOff)
+            RegionTranslate(pRegion, stuff.xOff, stuff.yOff);
+    }
+    else {
+        if (pWin.optional) {
+            switch (stuff.destKind) {
+            default:
+            case ShapeBounding:
+                pDestRegion = &pWin.optional.boundingShape;
+                break;
+            case ShapeClip:
+                pDestRegion = &pWin.optional.clipShape;
+                break;
+            case ShapeInput:
+                pDestRegion = &pWin.optional.inputShape;
+                break;
+            }
+        }
+        else
+            pDestRegion = &pRegion;     /* a NULL region pointer */
+    }
+    if (*pDestRegion)
+        RegionDestroy(*pDestRegion);
+    *pDestRegion = pRegion;
+    (*pWin.drawable.pScreen.SetShape) (pWin, stuff.destKind);
+    SendShapeNotify(pWin, stuff.destKind);
+    return Success;
+}
+
+version (XINERAMA) {
+
+}
+
+int ProcXFixesSetWindowShapeRegion(ClientPtr client)
+{
+    X_REQUEST_HEAD_STRUCT(xXFixesSetWindowShapeRegionReq);
+    X_REQUEST_FIELD_CARD32(dest);
+    X_REQUEST_FIELD_CARD16(xOff);
+    X_REQUEST_FIELD_CARD16(yOff);
+    X_REQUEST_FIELD_CARD32(region);
+
+version (XINERAMA) {
+    if (XFixesUseXinerama)
+        return PanoramiXFixesSetWindowShapeRegion(client, stuff);
+}
+    return SingleXFixesSetWindowShapeRegion(client, stuff);
+}
+
+
+
+version (XINERAMA) {
+
+}
+
+int ProcXFixesSetPictureClipRegion(ClientPtr client)
+{
+    X_REQUEST_HEAD_STRUCT(xXFixesSetPictureClipRegionReq);
+    X_REQUEST_FIELD_CARD32(picture);
+    X_REQUEST_FIELD_CARD32(region);
+    X_REQUEST_FIELD_CARD16(xOrigin);
+    X_REQUEST_FIELD_CARD16(yOrigin);
+
+version (XINERAMA) {
+    if (XFixesUseXinerama)
+        return PanoramiXFixesSetPictureClipRegion(client, stuff);
+}
+    return SingleXFixesSetPictureClipRegion(client, stuff);
+}
+
+private int SingleXFixesSetPictureClipRegion(ClientPtr client, xXFixesSetPictureClipRegionReq* stuff)
+{
+    PicturePtr pPicture = void;
+    RegionPtr pRegion = void;
+
+    VERIFY_PICTURE(pPicture, stuff.picture, client, DixSetAttrAccess);
+    VERIFY_REGION_OR_NONE(pRegion, stuff.region, client, DixReadAccess);
+
+    if (!pPicture.pDrawable)
+        return RenderErrBase + BadPicture;
+
+    return SetPictureClipRegion(pPicture, stuff.xOrigin, stuff.yOrigin,
+                                pRegion);
+}
+
+int ProcXFixesExpandRegion(ClientPtr client)
+{
+    X_REQUEST_HEAD_STRUCT(xXFixesExpandRegionReq);
+    X_REQUEST_FIELD_CARD32(source);
+    X_REQUEST_FIELD_CARD32(destination);
+    X_REQUEST_FIELD_CARD16(left);
+    X_REQUEST_FIELD_CARD16(right);
+    X_REQUEST_FIELD_CARD16(top);
+    X_REQUEST_FIELD_CARD16(bottom);
+
+    RegionPtr pSource = void, pDestination = void;
+    VERIFY_REGION(pSource, stuff.source, client, DixReadAccess);
+    VERIFY_REGION(pDestination, stuff.destination, client, DixWriteAccess);
+
+    int nBoxes = RegionNumRects(pSource);
+    BoxPtr pSrc = RegionRects(pSource);
+    if (nBoxes) {
+        BoxPtr pTmp = calloc(nBoxes, BoxRec.sizeof);
+        if (!pTmp)
+            return BadAlloc;
+        for (int i = 0; i < nBoxes; i++) {
+            pTmp[i].x1 = pSrc[i].x1 - stuff.left;
+            pTmp[i].x2 = pSrc[i].x2 + stuff.right;
+            pTmp[i].y1 = pSrc[i].y1 - stuff.top;
+            pTmp[i].y2 = pSrc[i].y2 + stuff.bottom;
+        }
+        RegionEmpty(pDestination);
+        for (int i = 0; i < nBoxes; i++) {
+            RegionRec r = void;
+            RegionInit(&r, &pTmp[i], 0);
+            RegionUnion(pDestination, pDestination, &r);
+        }
+        free(pTmp);
+    }
+    return Success;
+}
+
+version (XINERAMA) {
+
+private int PanoramiXFixesSetGCClipRegion(ClientPtr client, xXFixesSetGCClipRegionReq* stuff)
+{
+    int result = Success;
+    PanoramiXRes* gc = void;
+
+    if ((result = dixLookupResourceByType(cast(void**) &gc, stuff.gc, XRT_GC,
+                                          client, DixWriteAccess))) {
+        client.errorValue = stuff.gc;
+        return result;
+    }
+
+    XINERAMA_FOR_EACH_SCREEN_BACKWARD({
+        stuff.gc = gc.info[walkScreenIdx].id;
+        result = SingleXFixesSetGCClipRegion(client, stuff);
+        if (result != Success)
+            break;
+    }){}
+
+    return result;
+}
+
+private int PanoramiXFixesSetWindowShapeRegion(ClientPtr client, xXFixesSetWindowShapeRegionReq* stuff)
+{
+    int result = Success;
+    PanoramiXRes* win = void;
+    RegionPtr reg = null;
+
+    if ((result = dixLookupResourceByType(cast(void**) &win, stuff.dest,
+                                          XRT_WINDOW, client,
+                                          DixWriteAccess))) {
+        client.errorValue = stuff.dest;
+        return result;
+    }
+
+    if (win.u.win.root)
+        VERIFY_REGION_OR_NONE(reg, stuff.region, client, DixReadAccess);
+
+    XINERAMA_FOR_EACH_SCREEN_FORWARD({
+        stuff.dest = win.info[walkScreenIdx].id;
+
+        if (reg)
+            RegionTranslate(reg, -walkScreen.x, -walkScreen.y);
+
+        result = SingleXFixesSetWindowShapeRegion(client, stuff);
+
+        if (reg)
+            RegionTranslate(reg, walkScreen.x, walkScreen.y);
+
+        if (result != Success)
+            break;
+    }){}
+
+    return result;
+}
+
+private int PanoramiXFixesSetPictureClipRegion(ClientPtr client, xXFixesSetPictureClipRegionReq* stuff)
+{
+    int result = Success;
+    PanoramiXRes* pict = void;
+    RegionPtr reg = null;
+
+    if ((result = dixLookupResourceByType(cast(void**) &pict, stuff.picture,
+                                          XRT_PICTURE, client,
+                                          DixWriteAccess))) {
+        client.errorValue = stuff.picture;
+        return result;
+    }
+
+    if (pict.u.pict.root)
+        VERIFY_REGION_OR_NONE(reg, stuff.region, client, DixReadAccess);
+
+    XINERAMA_FOR_EACH_SCREEN_BACKWARD({
+        stuff.picture = pict.info[walkScreenIdx].id;
+
+        if (reg)
+            RegionTranslate(reg, -walkScreen.x, -walkScreen.y);
+
+        result = SingleXFixesSetPictureClipRegion(client, stuff);
+
+        if (reg)
+            RegionTranslate(reg, walkScreen.x, walkScreen.y);
+
+        if (result != Success)
+            break;
+    }){}
+
+    return result;
+}
+
+} /* XINERAMA */
