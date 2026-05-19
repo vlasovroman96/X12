@@ -1,4 +1,4 @@
-module shape.c;
+module Xext.shape;
 @nogc nothrow:
 extern(C): __gshared:
 /************************************************************

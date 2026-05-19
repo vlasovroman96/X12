@@ -1,4 +1,4 @@
-module xf86bigfont.c;
+module Xext.xf86bigfont;
 @nogc nothrow:
 extern(C): __gshared:
 

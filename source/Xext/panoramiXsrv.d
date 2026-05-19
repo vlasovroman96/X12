@@ -1,4 +1,4 @@
-module panoramiXsrv.h;
+module Xext.panoramiXsrv;
 @nogc nothrow:
 extern(C): __gshared:
 import core.stdc.config: c_long, c_ulong;

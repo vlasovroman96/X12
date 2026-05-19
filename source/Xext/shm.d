@@ -1,4 +1,4 @@
-module shm.c;
+module Xext.shm;
 @nogc nothrow:
 extern(C): __gshared:
 
