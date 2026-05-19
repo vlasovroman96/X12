@@ -1,4 +1,4 @@
-module xf86bigfontsrv.h;
+module Xext.xf86bigfontsrv;
 @nogc nothrow:
 extern(C): __gshared:
 /*
@@ -26,7 +26,7 @@ extern(C): __gshared:
  */
 
  
-public import deimos.X11.fonts/font;
+public import deimos.X11.fonts.font;
 
 extern void XF86BigfontFreeFontShm(FontPtr);
 extern void XF86BigfontCleanup();
