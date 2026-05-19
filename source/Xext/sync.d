@@ -106,14 +106,14 @@ enum string IsSystemCounter(string pCounter) = `
     (` ~ pCounter ~ ` && (` ~ pCounter ~ `.sync.client == null))`;
 
 /* these are all the alarm attributes that pertain to the alarm's trigger */
-enum XSyncCAAllTrigger = \
+enum XSyncCAAllTrigger = 
     (XSyncCACounter | XSyncCAValueType | XSyncCAValue | XSyncCATestType);
 
+static void SyncComputeBracketValues(SyncCounter *);
 
+static void SyncInitServerTime(void);
 
-
-
-
+static void SyncInitIdleTime(void);
 
 pragma(inline, true) private void* SysCounterGetPrivate(SyncCounter* counter)
 {
@@ -1251,7 +1251,7 @@ private int ProcSyncListSystemCounters(ClientPtr client)
     x_rpcbuf_t rpcbuf = { swapped: client.swapped, err_clear: TRUE };
 
     CARD32 nCounters = 0;
-    xorg_list_for_each_entry(psci, &SysCounterList, entry) {
+    xorg_list_for_each_entry(psci, &SysCounterList, entry); {
         CARD16 namelen = strlen(psci.name);
 
         /* write xSyncSystemCounter:
@@ -1764,18 +1764,18 @@ private int ProcSyncQueryAlarm(ClientPtr client)
     xSyncQueryAlarmReply reply = {
         counter: (pTrigger.pSync) ? pTrigger.pSync.id : None,
 
-#if 0  /* XXX unclear what to do, depends on whether relative value-types
-        * are "consumed" immediately and are considered absolute from then
-        * on.
-        */
-        .value_type = pTrigger.value_type,
-        wait_value_hi: pTrigger.wait_value >> 32,
-        wait_value_lo: pTrigger.wait_value,
-#else
+// #if 0  /* XXX unclear what to do, depends on whether relative value-types
+//         * are "consumed" immediately and are considered absolute from then
+//         * on.
+//         */
+//         .value_type = pTrigger.value_type,
+//         wait_value_hi: pTrigger.wait_value >> 32,
+//         wait_value_lo: pTrigger.wait_value,
+// #else
         value_type: XSyncAbsolute,
         wait_value_hi: pTrigger.test_value >> 32,
         wait_value_lo: pTrigger.test_value,
-#endif
+// #endif
 
         test_type: pTrigger.test_type,
         delta_hi: pAlarm.delta >> 32,
@@ -2107,7 +2107,7 @@ void SyncExtensionInit()
 
     DIX_FOR_EACH_SCREEN({
         miSyncSetup(walkScreen);
-    }){}
+    });
 
     RTCounter = CreateNewResourceType(&FreeCounter, "SyncCounter");
     xorg_list_init(&SysCounterList);
