@@ -1,4 +1,4 @@
-module xvmc.c;
+module Xext.xvmc;
 @nogc nothrow:
 extern(C): __gshared:
 
@@ -52,7 +52,7 @@ struct _XvMCScreenRec {
     int minor;
     int patchLevel;
 }alias XvMCScreenRec = _XvMCScreenRec;
-alias XvMCScreenPtr = *;
+alias XvMCScreenPtr = XvMCScreenRec*;
 
 enum string XVMC_GET_PRIVATE(string pScreen) = `
     cast(XvMCScreenPtr)(dixLookupPrivate(&(` ~ pScreen ~ `).devPrivates, &XvMCScreenKeyRec))`;
@@ -437,21 +437,20 @@ private int ProcXvMCCreateSubpicture(ClientPtr client)
     x_rpcbuf_write_CARD32s(&rpcbuf, data, dwords);
     free(data);
 
-    xvmcCreateSubpictureReply reply = {
-        width_actual: pSubpicture.width,
-        height_actual: pSubpicture.height,
-        num_palette_entries: pSubpicture.num_palette_entries,
-        entry_bytes: pSubpicture.entry_bytes,
-        component_order:0: pSubpicture.component_order[0],
-        component_order:1: pSubpicture.component_order[1],
-        component_order:2: pSubpicture.component_order[2],
-        component_order:3: pSubpicture.component_order[3]
-    };
+    xvmcCreateSubpictureReply reply;
+        reply.width_actual = pSubpicture.width;
+        reply.height_actual = pSubpicture.height;
+        reply.num_palette_entries = pSubpicture.num_palette_entries;
+        reply.entry_bytes = pSubpicture.entry_bytes;
+        reply.component_order[0] = pSubpicture.component_order[0];
+        reply.component_order[1] = pSubpicture.component_order[1];
+        reply.component_order[2] = pSubpicture.component_order[2];
+        reply.component_order[3] = pSubpicture.component_order[3];
 
-    X_REPLY_FIELD_CARD16(width_actual);
-    X_REPLY_FIELD_CARD16(height_actual);
-    X_REPLY_FIELD_CARD16(num_palette_entries);
-    X_REPLY_FIELD_CARD16(entry_bytes);
+    mixin X_REPLY_FIELD_CARD16!(width_actual);
+    mixin X_REPLY_FIELD_CARD16!(height_actual);
+    mixin X_REPLY_FIELD_CARD16!(num_palette_entries);
+    mixin X_REPLY_FIELD_CARD16!(entry_bytes);
 
     pContext.refcnt++;
 
