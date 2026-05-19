@@ -1,4 +1,4 @@
-module chgdctl.c;
+module Xi.chgdctl;
 @nogc nothrow:
 extern(C): __gshared:
 /************************************************************
@@ -92,12 +92,12 @@ int ProcXChangeDeviceControl(ClientPtr client)
     DeviceIntPtr dev = void;
     int ret = dixLookupDevice(&dev, stuff.deviceid, client, DixManageAccess);
     if (ret != Success)
-        goto out;
+        goto out_;
 
     /* XTest devices are special, none of the below apply to them anyway */
     if (IsXTestDevice(dev, null)) {
         ret = BadMatch;
-        goto out;
+        goto out_;
     }
 
     xChangeDeviceControlReply reply = {
@@ -113,21 +113,21 @@ int ProcXChangeDeviceControl(ClientPtr client)
             (len !=
              bytes_to_int32(xDeviceResolutionCtl.sizeof) + r.num_valuators)) {
             ret = BadLength;
-            goto out;
+            goto out_;
         }
         if (!dev.valuator) {
             ret = BadMatch;
-            goto out;
+            goto out_;
         }
         if ((dev.deviceGrab.grab) && !SameClient(dev.deviceGrab.grab, client)) {
             reply.status = AlreadyGrabbed;
             ret = Success;
-            goto out;
+            goto out_;
         }
         CARD32* resolution = cast(CARD32*) (r + 1);
         if (r.first_valuator + r.num_valuators > dev.valuator.numAxes) {
             ret = BadValue;
-            goto out;
+            goto out_;
         }
         if (client.swapped) {
             SwapLongs(cast(CARD32*) (r + 1), r.num_valuators);
@@ -169,7 +169,7 @@ int ProcXChangeDeviceControl(ClientPtr client)
         xDeviceEnableCtl* e = cast(xDeviceEnableCtl*) &stuff[1];
         if ((len != bytes_to_int32(xDeviceEnableCtl.sizeof))) {
             ret = BadLength;
-            goto out;
+            goto out_;
         }
 
         int status = (IsXTestDevice(dev, null) ?
@@ -196,7 +196,7 @@ int ProcXChangeDeviceControl(ClientPtr client)
         ret = BadValue;
     }
 
- out:
+ out_:
     if (ret == Success) {
         devicePresenceNotify dpn = {
             type: DevicePresenceNotify,
