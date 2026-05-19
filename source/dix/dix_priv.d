@@ -44,10 +44,12 @@ enum string LEGAL_NEW_RESOURCE(string id,string client) = `
 
 /* static assert for protocol structure sizes */
 version (__size_assert) {} else {
-enum string __size_assert(string what, string howmuch) = `
-  alias _size_wrong_ = char[( !!(` ~ what ~ `.sizeof == ` ~ howmuch ~ `) )*2-1];`;
+enum __size_assert(alias what, alias howmuch) = `
+  enum _size_wrong_ = char[( !!(` ~ what ~ `.sizeof == ` ~ howmuch ~ `) )*2-1];`;
 }
-enum string XTYPE_SIZE_ASSERT(string typename) = `` ~ __size_assert!(` ~ `typename` ~ `,`SIZEOF(` ~ typename ~ `)`) ~ ``;
+mixin template XTYPE_SIZE_ASSERT(alias typename) {
+    mixin(__size_assert!(typename, SIZEOF!(typename)));
+};
 
 /* server setting: maximum size for big requests */
 enum MAX_BIG_REQUEST_SIZE = 4194303;

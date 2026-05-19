@@ -157,7 +157,7 @@ extern _X_EXPORT FakeClientID(int);
 version (OSX) {
 enum AddResource = Darwin_X_AddResource;
 }
-extern _X_EXPORT AddResource(XID id, RESTYPE type, void* value);
+extern _X_EXPORT int AddResource(XID id, RESTYPE type, void* value);
 
 extern _X_EXPORT FreeResource(XID, RESTYPE);
 

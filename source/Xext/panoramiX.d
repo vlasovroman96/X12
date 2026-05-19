@@ -1,4 +1,4 @@
-module panoramiX.c;
+module xext.panoramiX;
 @nogc nothrow:
 extern(C): __gshared:
 import core.stdc.config: c_long, c_ulong;
@@ -98,9 +98,9 @@ private XineramaVisualsEqualProcPtr XineramaVisualsEqualPtr = &VisualsEqual;
  *	Function prototypes
  */
 
+static int ProcPanoramiXDispatch(ClientPtr client);
 
-
-
+static void PanoramiXResetProc(ExtensionEntry *);
 
 /*
  *	External references for functions and data variables
@@ -126,13 +126,13 @@ struct _PanoramiXScreenRec {
 }alias PanoramiXScreenRec = _PanoramiXScreenRec;
 alias PanoramiXScreenPtr = _PanoramiXScreenRec*;
 
-
-
-
-
-
-
-
+static void XineramaValidateGC(GCPtr, ulong, DrawablePtr);
+static void XineramaChangeGC(GCPtr, ulong);
+static void XineramaCopyGC(GCPtr, ulong, GCPtr);
+static void XineramaDestroyGC(GCPtr);
+static void XineramaChangeClip(GCPtr, int, void *, int);
+static void XineramaDestroyClip(GCPtr);
+static void XineramaCopyClip(GCPtr, GCPtr);
 
 private const(GCFuncs) XineramaGCFuncs = {
     XineramaValidateGC, XineramaChangeGC, XineramaCopyGC, XineramaDestroyGC,
@@ -803,7 +803,7 @@ extern void PanoramiXConsolidate()
         saver.u.win.class_ = InputOutput;
         saver.u.win.root = TRUE;
         defmap.info[walkScreenIdx].id = walkScreen.defColormap;
-    }){}
+    });
 
     AddResource(root.info[0].id, XRT_WINDOW, root);
     AddResource(saver.info[0].id, XRT_WINDOW, saver);
@@ -951,7 +951,7 @@ int ProcXineramaIsActive(ClientPtr client)
     X_REQUEST_HEAD_STRUCT(xXineramaIsActiveReq);
 
     xXineramaIsActiveReply reply = {
-#if 1
+// #if 1
         /* The following hack fools clients into thinking that Xinerama
          * is disabled even though it is not. */
         .state = !noPanoramiXExtension && !PanoramiXExtensionDisabledHack
@@ -984,7 +984,7 @@ int ProcXineramaQueryScreens(ClientPtr client)
                                 walkScreen.y,
                                 walkScreen.width,
                                 walkScreen.height);
-        }){}
+        });
     }
 
     X_REPLY_FIELD_CARD32(number);
@@ -1204,7 +1204,7 @@ void XineramaGetImageData(DrawablePtr* pDrawables, int left, int top, int width,
                 walkScreen,
                 pDrawables[walkScreenIdx]))
             break;
-    }){}
+    });
 
     RegionUninit(&SrcRegion);
     RegionUninit(&GrabRegion);
@@ -1217,12 +1217,12 @@ enum sz_xPanoramiXGetScreenSizeReply = sz_panoramiXGetScreenSizeReply;
 enum sz_xPanoramiXGetScreenCountReply = sz_panoramiXGetScreenCountReply;
 enum sz_xPanoramiXGetStateReply = sz_panoramiXGetStateReply;
 
-XTYPE_SIZE_ASSERT(xPanoramiXQueryVersionReply);
-XTYPE_SIZE_ASSERT(xPanoramiXGetStateReply);
-XTYPE_SIZE_ASSERT(xPanoramiXGetScreenCountReply);
-XTYPE_SIZE_ASSERT(xPanoramiXGetScreenSizeReply);
-XTYPE_SIZE_ASSERT(xXineramaIsActiveReply);
-XTYPE_SIZE_ASSERT(xTranslateCoordsReply);
-XTYPE_SIZE_ASSERT(xXineramaQueryScreensReply);
-XTYPE_SIZE_ASSERT(xGetGeometryReply);
-XTYPE_SIZE_ASSERT(xGetImageReply);
+mixin XTYPE_SIZE_ASSERT!(xPanoramiXQueryVersionReply);
+mixin XTYPE_SIZE_ASSERT!(xPanoramiXGetStateReply);
+mixin XTYPE_SIZE_ASSERT!(xPanoramiXGetScreenCountReply);
+mixin XTYPE_SIZE_ASSERT!(xPanoramiXGetScreenSizeReply);
+mixin XTYPE_SIZE_ASSERT!(xXineramaIsActiveReply);
+mixin XTYPE_SIZE_ASSERT!(xTranslateCoordsReply);
+mixin XTYPE_SIZE_ASSERT!(xXineramaQueryScreensReply);
+mixin XTYPE_SIZE_ASSERT!(xGetGeometryReply);
+mixin XTYPE_SIZE_ASSERT!(xGetImageReply);
