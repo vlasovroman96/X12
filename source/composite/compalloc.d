@@ -611,7 +611,7 @@ Bool compAllocPixmap(WindowPtr pWin)
 
     if (!pPixmap) {
         status = FALSE;
-        goto out;
+        goto out_;
     }
     if (cw.update == CompositeRedirectAutomatic)
         pWin.redirectDraw = RedirectDrawAutomatic;
@@ -628,7 +628,7 @@ Bool compAllocPixmap(WindowPtr pWin)
     }
     status = TRUE;
 
-out:
+out_:
     /* Make sure our borderClip is up to date */
     RegionUninit(&cw.borderClip);
     RegionCopy(&cw.borderClip, &pWin.borderClip);
