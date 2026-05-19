@@ -318,7 +318,7 @@ version (XINERAMA) {
         result = ShapeRectangles(client, stuff);
         if (result != Success)
             break;
-    }){}
+    });
 
     return result;
 } else {
@@ -427,7 +427,7 @@ version (XINERAMA) {
         result = ShapeMask(client, stuff);
         if (result != Success)
             break;
-    }){}
+    });
 
     return result;
 } else {
@@ -551,7 +551,7 @@ version (XINERAMA) {
         result = ShapeCombine(client, stuff);
         if (result != Success)
             break;
-    }){}
+    });
 
     return result;
 } else {
@@ -614,7 +614,7 @@ version (XINERAMA) {
         result = ShapeOffset(client, stuff);
         if (result != Success)
             break;
-    }){}
+    });
 
     return result;
 } else {
@@ -976,7 +976,7 @@ private void ShapeClientDestroyCallback(CallbackListPtr* pcbl, void* unused, voi
     ClientPtr client = calldata;
     DIX_FOR_EACH_SCREEN({
         WalkTree(walkScreen, ShapeDelClientFromWin, client);
-    })
+    });
 }
 
 void ShapeExtensionInit()
@@ -988,7 +988,7 @@ void ShapeExtensionInit()
 
     DIX_FOR_EACH_SCREEN({
         dixScreenHookWindowDestroy(walkScreen,ShapeWindowDestroy);
-    })
+    });
 
     AddCallback(&ClientDestroyCallback, &ShapeClientDestroyCallback, null);
 
