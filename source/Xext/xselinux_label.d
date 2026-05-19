@@ -1,4 +1,4 @@
-module xselinux_label.c;
+module Xext.xselinux_label;
 @nogc nothrow:
 extern(C): __gshared:
 import core.stdc.config: c_long, c_ulong;
@@ -23,7 +23,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import build.dix_config;
 
-import selinux/label;
+import selinux.label;
 
 import dix.registry_priv;
 
@@ -160,13 +160,13 @@ int SELinuxAtomToSID(Atom atom, int prop, SELinuxObjectRec** obj_rtn)
     if (!obj.sid) {
         rc = SELinuxAtomToSIDLookup(atom, obj, map, polymap);
         if (rc != Success) {
-            goto out;
+            goto out_;
         }
     }
 
     *obj_rtn = obj;
     rc = Success;
- out:
+ out_:
     return rc;
 }
 
@@ -188,7 +188,7 @@ int SELinuxSelectionToSID(Atom selection, SELinuxSubjectRec* subj, security_id_t
     /* Check for an override context next */
     if (subj.sel_use_sid) {
         tsid = subj.sel_use_sid;
-        goto out;
+        goto out_;
     }
 
     tsid = obj.sid;
@@ -199,7 +199,7 @@ int SELinuxSelectionToSID(Atom selection, SELinuxSubjectRec* subj, security_id_t
         ErrorF("SELinux: a compute_member call failed!\n");
         return BadValue;
     }
- out:
+ out_:
     *sid_rtn = tsid;
     if (poly_rtn) {
         *poly_rtn = obj.poly;
@@ -225,7 +225,7 @@ int SELinuxPropertyToSID(Atom property, SELinuxSubjectRec* subj, security_id_t* 
     /* Check for an override context next */
     if (subj.prp_use_sid) {
         tsid = subj.prp_use_sid;
-        goto out;
+        goto out_;
     }
 
     /* Perform a transition */
@@ -243,7 +243,7 @@ int SELinuxPropertyToSID(Atom property, SELinuxSubjectRec* subj, security_id_t* 
             return BadValue;
         }
     }
- out:
+ out_:
     *sid_rtn = tsid;
     if (poly_rtn) {
         *poly_rtn = obj.poly;
