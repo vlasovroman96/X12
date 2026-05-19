@@ -13,7 +13,7 @@ extern int PanoramiXPixHeight;
 extern RegionRec PanoramiXScreenRegion;
 
 // exported for nvidia
-_X_EXPORT VisualID PanoramiXTranslateVisualID(int screen, VisualID orig);
+export VisualID PanoramiXTranslateVisualID(int screen, VisualID orig);
 
 void PanoramiXConsolidate();
 Bool PanoramiXCreateConnectionBlock();
@@ -46,7 +46,7 @@ pragma(inline, true) private void panoramix_setup_ids(PanoramiXRes* resource, Cl
     resource.info[0].id = base_id;
     XINERAMA_FOR_EACH_SCREEN_FORWARD_SKIP0({
         resource.info[walkScreenIdx].id = FakeClientID(client.index);
-    }){}
+    });
 }
 
                           /* _PANORAMIXSRV_H_ */
