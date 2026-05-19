@@ -1,4 +1,4 @@
-module xselinux_ext.c;
+module Xext.xselinux_ext;
 @nogc nothrow:
 extern(C): __gshared:
 /************************************************************
@@ -181,13 +181,13 @@ private int ProcSELinuxSetDeviceContext(ClientPtr client)
 
     int rc = dixLookupDevice(&dev, stuff.id, client, DixManageAccess);
     if (rc != Success) {
-        goto out;
+        goto out_;
     }
 
     if (security_check_context_raw(ctx) < 0 ||
         avc_context_to_sid_raw(ctx, &sid) < 0) {
         rc = BadValue;
-        goto out;
+        goto out_;
     }
 
     subj = dixLookupPrivate(&dev.devPrivates, subjectKey);
@@ -196,7 +196,7 @@ private int ProcSELinuxSetDeviceContext(ClientPtr client)
     obj.sid = sid;
 
     rc = Success;
- out:
+ out_:
     free(ctx);
     return rc;
 }
