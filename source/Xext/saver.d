@@ -71,15 +71,16 @@ import include.protocol_versions;
 
 Bool noScreenSaverExtension = FALSE;
 
-private int ScreenSaverEventBase = 0;
+int ScreenSaverEventBase = 0;
 
+static Bool ScreenSaverHandle(ScreenPtr pScreen, int xstate, Bool force);
+static Bool CreateSaverWindow(ScreenPtr pScreen);
+static Bool DestroySaverWindow(ScreenPtr pScreen);
+static void CheckScreenPrivate(ScreenPtr pScreen);
+static void SScreenSaverNotifyEvent(xScreenSaverNotifyEvent *from,
+                                    xScreenSaverNotifyEvent *to);
 
-
-
-
-
-
-private RESTYPE SuspendType;     /* resource type for suspension records */
+RESTYPE SuspendType;     /* resource type for suspension records */
 
 alias ScreenSaverSuspensionPtr = _ScreenSaverSuspension*;
 
@@ -99,7 +100,7 @@ struct ScreenSaverSuspensionRec {
     int count;
 }
 
-
+static int ScreenSaverFreeSuspend(void *value, XID id);
 
 /*
  * each screen has a list of clients requesting
@@ -121,7 +122,7 @@ struct ScreenSaverEventRec {
     CARD32 mask;
 }
 
-
+static int ScreenSaverFreeEvents(void * value, XID id);
 
 /*
  * when a client sets the screen saver attributes, a resource is
@@ -148,11 +149,14 @@ struct _ScreenSaverAttr {
 }alias ScreenSaverAttrRec = _ScreenSaverAttr;
 alias ScreenSaverAttrPtr = _ScreenSaverAttr*;
 
+static int ScreenSaverFreeAttr(void *value, XID id);
 
+static void FreeScreenAttr(ScreenSaverAttrPtr pAttr);
 
-
-
-
+static void
+SendScreenSaverNotify(ScreenPtr pScreen,
+                      int       state,
+                      Bool      forced);
 
 struct _ScreenSaverScreenPrivate {
     ScreenSaverEventPtr events;
@@ -162,7 +166,7 @@ struct _ScreenSaverScreenPrivate {
 }alias ScreenSaverScreenPrivateRec = _ScreenSaverScreenPrivate;
 alias ScreenSaverScreenPrivatePtr = _ScreenSaverScreenPrivate*;
 
-
+static ScreenSaverScreenPrivatePtr MakeScreenPrivate(ScreenPtr pScreen);
 
 private DevPrivateKeyRec ScreenPrivateKeyRec;
 
@@ -172,7 +176,7 @@ enum string GetScreenPrivate(string s) = `(cast(ScreenSaverScreenPrivatePtr)
     dixLookupPrivate(&(` ~ s ~ `).devPrivates, ScreenPrivateKey))`;
 enum string SetScreenPrivate(string s,string v) = `
     dixSetPrivate(&(` ~ s ~ `).devPrivates, ScreenPrivateKey, ` ~ v ~ `);`;
-enum string SetupScreen(string s) = `ScreenSaverScreenPrivatePtr pPriv = (` ~ s ~ ` ? ` ~ GetScreenPrivate!(` ~ `s` ~ `) ~ ` : null);`;
+enum string SetupScreen(string s) = `ScreenSaverScreenPrivatePtr pPriv = (` ~ s ~ ` ? ` ~ GetScreenPrivate!(s) ~ " : null);";
 
 private void CheckScreenPrivate(ScreenPtr pScreen)
 {
@@ -361,21 +365,24 @@ private int ScreenSaverFreeSuspend(void* value, XID id)
     if (screenSaverSuspended && suspendingClients == null) {
         screenSaverSuspended = FALSE;
 
+    void checkSuspend() {
+            DeviceIntPtr dev = void;
+            UpdateCurrentTimeIf();
+            nt_list_for_each_entry(dev, inputInfo.devices, next); {
+                NoticeTime(dev, currentTime);
+            }
+            SetScreenSaverTimer();
+    }
         /* The screensaver could be active, since suspending it (by design)
            doesn't prevent it from being forcibly activated */
 version (DPMSExtension) {
         if (screenIsSaved != SCREEN_SAVER_ON && DPMSPowerLevel == DPMSModeOn)
-#else
+            checkSuspend();
+}
+else {
         if (screenIsSaved != SCREEN_SAVER_ON)
-#endif
-        {
-            DeviceIntPtr dev = void;
-            UpdateCurrentTimeIf();
-            nt_list_for_each_entry(dev, inputInfo.devices, next) {
-                NoticeTime(dev, currentTime);
-            }
-            SetScreenSaverTimer();
-        }}
+            checkSuspend();
+}
     }
 
     return Success;
@@ -596,10 +603,10 @@ private Bool ScreenSaverHandle(ScreenPtr pScreen, int xstate, Bool force)
     default: break;}
 version (XINERAMA) {
     if (noPanoramiXExtension || !pScreen.myNum)
-} /* XINERAMA */
-    {
         SendScreenSaverNotify(pScreen, state, force);
-    }
+} /* XINERAMA */
+else
+    SendScreenSaverNotify(pScreen, state, force);
     return ret;
 }
 
@@ -1168,7 +1175,7 @@ version (XINERAMA) {
                 stuff.visualID = PanoramiXTranslateVisualID(walkScreenIdx, orig_visual);
 
             status = ScreenSaverSetAttributes(client, stuff);
-        }){}
+        });
 
         return status;
     }
@@ -1305,7 +1312,7 @@ void ScreenSaverExtensionInit()
 
     DIX_FOR_EACH_SCREEN({
         SetScreenPrivate(walkScreen, NULL);
-    }){}
+    });
 
     if (AttrType && SaverEventType && SuspendType &&
         (extEntry = AddExtension(ScreenSaverName, ScreenSaverNumberEvents, 0,
