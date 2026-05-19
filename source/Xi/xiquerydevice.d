@@ -1,4 +1,4 @@
-module xiquerydevice.c;
+module Xi.xiquerydevice;
 @nogc nothrow:
 extern(C): __gshared:
 /*
@@ -50,15 +50,16 @@ import Xi.handlers;
 import inputstr;
 import xkbstr;
 import xkbsrv;
-import xserver-properties;
+import xserver_properties;
 import exglobals;
 import privates;
 import xiquerydevice;
 
-
-
-
-
+static Bool ShouldSkipDevice(ClientPtr client, int deviceid, DeviceIntPtr d);
+static int
+ ListDeviceInfo(ClientPtr client, DeviceIntPtr dev, xXIDeviceInfo * info);
+static int SizeDeviceInfo(DeviceIntPtr dev);
+static void SwapDeviceInfo(DeviceIntPtr dev, xXIDeviceInfo * info);
 
 int ProcXIQueryDevice(ClientPtr client)
 {
