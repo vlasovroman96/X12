@@ -1,4 +1,4 @@
-module xiproperty.c;
+module Xi.xiproperty;
 @nogc nothrow:
 extern(C): __gshared:
 import core.stdc.config: c_long, c_ulong;
@@ -49,7 +49,8 @@ import inputstr;
 import exglobals;
 import swaprep;
 import xiproperty;
-import xserver-properties;
+import xserver_properties;
+import include.clang;
 
 /**
  * Properties used or alloced from inside the server.
@@ -217,7 +218,7 @@ private void send_property_event(DeviceIntPtr dev, Atom property, int what)
                           cast(xEvent*) &xi2, 1);
 }
 
-private int get_property(ClientPtr client, DeviceIntPtr dev, Atom property, Atom type, BOOL delete, int offset, int length, int* bytes_after, Atom* type_return, int* format, int* nitems, int* length_return, char** data)
+private int get_property(ClientPtr client, DeviceIntPtr dev, Atom property, Atom type, Bool delete_, int offset, int length, int* bytes_after, Atom* type_return, int* format, int* nitems, int* length_return, char** data)
 {
     c_ulong n = void, len = void, ind = void;
     int rc = void;
@@ -228,8 +229,8 @@ private int get_property(ClientPtr client, DeviceIntPtr dev, Atom property, Atom
         client.errorValue = property;
         return BadAtom;
     }
-    if ((delete != xTrue) && (delete != xFalse)) {
-        client.errorValue = delete;
+    if ((delete_ != xTrue) && (delete_ != xFalse)) {
+        client.errorValue = delete_;
         return BadValue;
     }
 
@@ -901,15 +902,15 @@ int ProcXGetDeviceProperty(ClientPtr client)
     char* data = void;
     Atom type = void;
 
-    if (stuff.delete)
+    if (stuff.delete_)
         UpdateCurrentTime();
     rc = dixLookupDevice(&dev, stuff.deviceid, client,
-                         stuff.delete ? DixSetPropAccess : DixGetPropAccess);
+                         stuff.delete_ ? DixSetPropAccess : DixGetPropAccess);
     if (rc != Success)
         return rc;
 
     rc = get_property(client, dev, stuff.property, stuff.type,
-                      stuff.delete, stuff.longOffset, stuff.longLength,
+                      stuff.delete_, stuff.longOffset, stuff.longLength,
                       &bytes_after, &type, &format, &nitems, &length, &data);
 
     if (rc != Success)
@@ -924,7 +925,7 @@ int ProcXGetDeviceProperty(ClientPtr client)
         deviceid: dev.id
     };
 
-    if (stuff.delete && (reply.bytesAfter == 0))
+    if (stuff.delete_ && (reply.bytesAfter == 0))
         send_property_event(dev, stuff.property, XIPropertyDeleted);
 
     x_rpcbuf_t rpcbuf = { swapped: client.swapped, err_clear: TRUE };
@@ -944,7 +945,7 @@ int ProcXGetDeviceProperty(ClientPtr client)
     }
 
     /* delete the Property */
-    if (stuff.delete && (reply.bytesAfter == 0)) {
+    if (stuff.delete_ && (reply.bytesAfter == 0)) {
         XIPropertyPtr prop = void; XIPropertyPtr* prev = void;
 
         for (prev = &dev.properties.properties; ((prop = *prev) != 0);
@@ -1061,15 +1062,15 @@ int ProcXIGetProperty(ClientPtr client)
     char* data = void;
     Atom type = void;
 
-    if (stuff.delete)
+    if (stuff.delete_)
         UpdateCurrentTime();
     rc = dixLookupDevice(&dev, stuff.deviceid, client,
-                         stuff.delete ? DixSetPropAccess : DixGetPropAccess);
+                         stuff.delete_ ? DixSetPropAccess : DixGetPropAccess);
     if (rc != Success)
         return rc;
 
     rc = get_property(client, dev, stuff.property, stuff.type,
-                      stuff.delete, stuff.offset, stuff.len,
+                      stuff.delete_, stuff.offset, stuff.len,
                       &bytes_after, &type, &format, &nitems, &length, &data);
 
     if (rc != Success)
@@ -1083,7 +1084,7 @@ int ProcXIGetProperty(ClientPtr client)
         format: format
     };
 
-    if (length && stuff.delete && (reply.bytes_after == 0))
+    if (length && stuff.delete_ && (reply.bytes_after == 0))
         send_property_event(dev, stuff.property, XIPropertyDeleted);
 
     x_rpcbuf_t rpcbuf = { swapped: client.swapped, err_clear: TRUE };
@@ -1111,7 +1112,7 @@ int ProcXIGetProperty(ClientPtr client)
         return rc;
 
     /* delete the Property */
-    if (stuff.delete && (reply.bytes_after == 0)) {
+    if (stuff.delete_ && (reply.bytes_after == 0)) {
         XIPropertyPtr prop = void; XIPropertyPtr* prev = void;
 
         for (prev = &dev.properties.properties; ((prop = *prev) != 0);
