@@ -1,4 +1,4 @@
-module colormap_priv.h;
+module dix.colormap_priv;
 @nogc nothrow:
 extern(C): __gshared:
 /* SPDX-License-Identifier: MIT OR X11
@@ -105,6 +105,6 @@ int StoreColors(ColormapPtr pmap, int count, xColorItem* defs, ClientPtr client)
 int IsMapInstalled(Colormap map, WindowPtr pWin);
 
 /* only exported for glx, but should not be used by external drivers */
-_X_EXPORT Bool ResizeVisualArray(ScreenPtr pScreen, int new_vis_count, DepthPtr depth);
+Bool ResizeVisualArray(ScreenPtr pScreen, int new_vis_count, DepthPtr depth);
 
  /* _XSERVER_DIX_COLORMAP_PRIV_H */
