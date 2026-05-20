@@ -1,4 +1,4 @@
-module devices.c;
+module dix.devices;
 @nogc nothrow:
 extern(C): __gshared:
 import core.stdc.config: c_long, c_ulong;
@@ -92,7 +92,7 @@ import exglobals;
 import xiquerydevice;      /* for SizeDeviceClasses */
 import xiproperty;
 import enterleave;         /* for EnterWindow() */
-import xserver-properties;
+import include.xserver_properties;
 import xichangehierarchy;  /* For XISendDeviceHierarchyEvent */
 import syncsrv;
 
@@ -550,21 +550,21 @@ void DisableAllDevices()
     DeviceIntPtr dev = void, tmp = void;
 
     /* Disable slave devices first, excluding XTest devices */
-    nt_list_for_each_entry_safe(dev, tmp, inputInfo.devices, next) {
+    nt_list_for_each_entry_safe(dev, tmp, inputInfo.devices, next); {
         if (!IsXTestDevice(dev, null) && !InputDevIsMaster(dev))
             DisableDevice(dev, FALSE);
     }
     /* Disable XTest devices */
-    nt_list_for_each_entry_safe(dev, tmp, inputInfo.devices, next) {
+    nt_list_for_each_entry_safe(dev, tmp, inputInfo.devices, next); {
         if (!InputDevIsMaster(dev))
             DisableDevice(dev, FALSE);
     }
     /* master keyboards need to be disabled first */
-    nt_list_for_each_entry_safe(dev, tmp, inputInfo.devices, next) {
+    nt_list_for_each_entry_safe(dev, tmp, inputInfo.devices, next); {
         if (dev.enabled && InputDevIsMaster(dev) && IsKeyboardDevice(dev))
             DisableDevice(dev, FALSE);
     }
-    nt_list_for_each_entry_safe(dev, tmp, inputInfo.devices, next) {
+    nt_list_for_each_entry_safe(dev, tmp, inputInfo.devices, next); {
         if (dev.enabled)
             DisableDevice(dev, FALSE);
     }
@@ -947,7 +947,7 @@ private void FreePendingFrozenDeviceEvents(DeviceIntPtr dev)
         return;
 
     /* Dequeue any frozen pending events */
-    xorg_list_for_each_entry_safe(qe, tmp, &syncEvents.pending, next) {
+    xorg_list_for_each_entry_safe(qe, tmp, &syncEvents.pending, next); {
         if (qe.device == dev) {
             xorg_list_del(&qe.next);
             free(qe);
@@ -1096,12 +1096,12 @@ void AbortDevices()
      * state the input thread might be in, and that could
      * cause a dead-lock.
      */
-    nt_list_for_each_entry(dev, inputInfo.devices, next) {
+    nt_list_for_each_entry(dev, inputInfo.devices, next); {
         if (!InputDevIsMaster(dev))
             (*dev.deviceProc) (dev, DEVICE_ABORT);
     }
 
-    nt_list_for_each_entry(dev, inputInfo.off_devices, next) {
+    nt_list_for_each_entry(dev, inputInfo.off_devices, next); {
         if (!InputDevIsMaster(dev))
             (*dev.deviceProc) (dev, DEVICE_ABORT);
     }
@@ -1272,7 +1272,7 @@ ValuatorClassPtr AllocValuatorClass(ValuatorClassPtr src, int numAxes)
     int size = void;
 
     size =
-        (cast(align_u) + numAxes * (sizeofcast(double) + AxisInfo.sizeof)).sizeof;
+        (align_u).sizeof + numAxes * (double.sizeof + AxisInfo.sizeof);
     align_ = cast(align_u*) realloc(src, size);
 
     if (!align_)
@@ -2386,8 +2386,10 @@ private void RecalculateMasterButtons(DeviceIntPtr slave)
             time: GetTimeInMillis(),
             deviceid: master.id,
             flags: DEVCHANGE_POINTER_EVENT | DEVCHANGE_DEVICE_CHANGE,
-            buttons:num_buttons: maxbuttons
+            // .buttons.num_buttons: maxbuttons
         };
+
+        event.buttons.num_buttons = maxbuttons;
 
         master.button.numButtons = maxbuttons;
         if (last_num_buttons < maxbuttons) {
