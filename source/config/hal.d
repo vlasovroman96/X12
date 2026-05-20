@@ -1,4 +1,4 @@
-module hal.c;
+module config.hal;
 @nogc nothrow:
 extern(C): __gshared:
 /*
@@ -31,16 +31,16 @@ import build.dix_config;
 
 import core.stdc.string;
 import core.sys.posix.sys.select;
-import dbus/dbus;
-import hal/libhal;
+import dbus.dbus;
+import hal.libhal;
 
 import config.hotplug_priv;
-import config.dbus-core;
+import config.dbus_core;
 import os.fmt;
 
 import input;
 import inputstr;
-import config-backends;
+import config.config_backends;
 import os;
 
 enum LIBHAL_PROP_KEY = "input.x11_options.";
