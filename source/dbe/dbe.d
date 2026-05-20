@@ -1,4 +1,4 @@
-module dbe.c;
+module dbe.dbe;
 @nogc nothrow:
 extern(C): __gshared:
 /******************************************************************************
@@ -918,7 +918,7 @@ private void DbeResetProc(ExtensionEntry* extEntry)
             dixScreenUnhookWindowPosition(walkScreen, miDbeWindowPosition);
             free(pDbeScreenPriv);
         }
-    }){}
+    });
 }
 
 /**
@@ -1029,14 +1029,14 @@ version (XINERAMA) {
                 DbeStubScreen(pDbeScreenPriv, &nStubbedScreens);
             }
         }
-    }){}
+    });
 
     if (nStubbedScreens == screenInfo.numScreens) {
         /* All screens stubbed.  Clean up and return. */
         DIX_FOR_EACH_SCREEN({
             free(dixLookupPrivate(&walkScreen.devPrivates, &dbeScreenPrivKeyRec));
             dixSetPrivate(&walkScreen.devPrivates, &dbeScreenPrivKeyRec, null);
-        }){}
+        });
         return;
     }
 
