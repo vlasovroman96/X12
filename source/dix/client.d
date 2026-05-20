@@ -9,6 +9,6 @@ import build.dix_config;
 
 import core.stdc.stddef;
 
-import include.callback;{}
+import include.callback;
 
 CallbackListPtr ClientDestroyCallback = null;
