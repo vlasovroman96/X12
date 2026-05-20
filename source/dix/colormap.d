@@ -1,4 +1,4 @@
-module colormap.c;
+module dix.colormap;
 @nogc nothrow:
 extern(C): __gshared:
 import core.stdc.config: c_long, c_ulong;
@@ -122,7 +122,7 @@ enum string NUMGREEN(string vis) = `((` ~ vis ~ `.greenMask >> ` ~ vis ~ `.offse
 enum string NUMBLUE(string vis) = `((` ~ vis ~ `.blueMask >> ` ~ vis ~ `.offsetBlue) + 1)`;
 enum string ALPHAMASK(string vis) = `((` ~ vis ~ `).nplanes < 32 ? 0 : 
 			 cast(CARD32) ~((` ~ vis ~ `).redMask|(` ~ vis ~ `).greenMask|(` ~ vis ~ `).blueMask))`;
-enum string RGBMASK(string vis) = `(` ~ vis ~ `.redMask | ` ~ vis ~ `.greenMask | ` ~ vis ~ `.blueMask | ` ~ ALPHAMASK!(` ~ `vis` ~ `) ~ `)`;
+enum string RGBMASK(string vis) = `(` ~ vis ~ `.redMask | ` ~ vis ~ `.greenMask | ` ~ vis ~ `.blueMask | ` ~ ALPHAMASK!(vis) ~ `)`;
 
 /* GetNextBitsOrBreak(bits, mask, base)  --
  * (Suggestion: First read the macro, then read this explanation.
@@ -388,17 +388,20 @@ private int TellNoMap(WindowPtr pwin, Colormap* pmid)
 {
     if (wColormap(pwin) == *pmid) {
         /* This should be call to DeliverEvent */
-        xEvent xE = {
-            u:colormap:window: pwin.drawable.id,
-            u:colormap:colormap: None,
-            u:colormap:new: TRUE,
-            u:colormap:state: ColormapUninstalled
-        };
-        xE.u.u.type = ColormapNotify;
+        xEvent xE;
+            xE.u.colormap.window = pwin.drawable.id;
+            xE.u.colormap.colormap = None;
+            xE.u.colormap.с_new = true;
+            xE.u.colormap.state = ColormapUninstalled;
+            xE.u.u.type = ColormapNotify;
 version (XINERAMA) {
         if (noPanoramiXExtension || !pwin.drawable.pScreen.myNum)
-} /* XINERAMA */
             DeliverEvents(pwin, &xE, 1, cast(WindowPtr) null);
+
+}
+else { /* XINERAMA */
+            DeliverEvents(pwin, &xE, 1, cast(WindowPtr) null);
+}
         if (pwin.optional) {
             pwin.optional.colormap = None;
             CheckWindowOptionalNeed(pwin);
@@ -419,13 +422,19 @@ version (XINERAMA) {
 } /* XINERAMA */
     if (wColormap(pwin) == *pmid) {
         /* This should be call to DeliverEvent */
-        xEvent xE = {
-            u:colormap:window: pwin.drawable.id,
-            u:colormap:colormap: *pmid,
-            u:colormap:new: FALSE,
-            u:colormap:state: ColormapUninstalled
-        };
-        xE.u.u.type = ColormapNotify;
+        // xEvent xE = {
+        //     u:colormap:window: pwin.drawable.id,
+        //     u:colormap:colormap: *pmid,
+        //     u:colormap:new: FALSE,
+        //     u:colormap:state: ColormapUninstalled
+        // };
+        xEvent xE;
+            xE.u.colormap.window = pwin.drawable.id;
+            xE.u.colormap.colormap = *pmid;
+            xE.u.colormap.с_new = false;
+            xE.u.colormap.state = ColormapUninstalled;
+            // xE.u.u.type = ColormapNotify;
+            xE.u.u.type = ColormapNotify;
         DeliverEvents(pwin, &xE, 1, cast(WindowPtr) null);
     }
 
@@ -443,12 +452,13 @@ version (XINERAMA) {
 } /* XINERAMA */
     if (wColormap(pwin) == *pmid) {
         /* This should be call to DeliverEvent */
-        xEvent xE = {
-            u:colormap:window: pwin.drawable.id,
-            u:colormap:colormap: *pmid,
-            u:colormap:new: FALSE,
-            u:colormap:state: ColormapInstalled
-        };
+        xEvent xE;
+            xE.u.colormap.window = pwin.drawable.id;
+            xE.u.colormap.colormap = *pmid;
+            xE.u.colormap.с_new = false;
+            xE.u.colormap.state = ColormapInstalled;
+            // xE.u.u.type = ColormapNotify;
+            xE.u.u.type = ColormapNotify;
         xE.u.u.type = ColormapNotify;
         DeliverEvents(pwin, &xE, 1, cast(WindowPtr) null);
     }
@@ -1127,8 +1137,8 @@ alias BigNumPtr = _bignum*;
 enum string BigNumGreater(string x,string y) = `(((` ~ x ~ `).upper > (` ~ y ~ `).upper) ||
 			    ((` ~ x ~ `).upper == (` ~ y ~ `).upper && (` ~ x ~ `).lower > (` ~ y ~ `).lower))`;
 
-enum string UnsignedToBigNum(string u,string r) = `(((` ~ r ~ `).upper = ` ~ UPPERPART!(` ~ `u` ~ `) ~ `), 
-				 ((` ~ r ~ `).lower = ` ~ LOWERPART!(` ~ `u` ~ `) ~ `))`;
+enum string UnsignedToBigNum(string u,string r) = `(((` ~ r ~ `).upper = ` ~ UPPERPART!(u) ~ `), 
+				 ((` ~ r ~ `).lower = ` ~ LOWERPART!(u) ~ `))`;
 
 enum string MaxBigNum(string r) = `(((` ~ r ~ `).upper = BIGNUMUPPER-1), 
 				 ((` ~ r ~ `).lower = BIGNUMLOWER-1))`;
@@ -1785,9 +1795,9 @@ private Bool AllocCP(ColormapPtr pmap, EntryPtr pentFirst, int count, int planes
         ((cast(Pixel) 1) << (dplanes - planes - 1));
     for (mask = ((cast(Pixel) 3) << (planes - 1)) - 1; mask <= finalmask; mask++) {
         /* next 3 magic statements count number of ones (HAKMEM #169) */
-        Pixel pixel = (mask >> 1) & 033333333333;
-        pixel = mask - pixel - ((pixel >> 1) & 033333333333);
-        if ((((pixel + (pixel >> 3)) & 030707070707) % 077) != planes)
+        Pixel pixel = (mask >> 1) & octal!"033333333333";
+        pixel = mask - pixel - ((pixel >> 1) & octal!"033333333333");
+        if ((((pixel + (pixel >> 3)) & octal!"030707070707") % octal!"077") != planes)
             continue;
         Pixel* ppix = pixels;
         int found = 0;
