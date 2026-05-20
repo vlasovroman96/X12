@@ -1,4 +1,4 @@
-module config-backends.h;
+module config.config_backends;
 @nogc nothrow:
 extern(C): __gshared:
 /*
