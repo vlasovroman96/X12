@@ -1,4 +1,4 @@
-module cursor.c;
+module dix.cursor;
 @nogc nothrow:
 extern(C): __gshared:
 import core.stdc.config: c_long, c_ulong;
@@ -124,7 +124,7 @@ int FreeCursor(void* value, XID cid)
     DIX_FOR_EACH_SCREEN({
         if (walkScreen.UnrealizeCursor)
             walkScreen.UnrealizeCursor(pDev, walkScreen, pCurs);
-    }){}
+    });
 
     FreeCursorBits(pCurs.bits);
     dixFiniPrivates(pCurs, PRIVATE_CURSOR);
@@ -217,7 +217,7 @@ private int RealizeCursorAllScreens(CursorPtr pCurs)
                 }
             }
         }
-    }){}
+    });
 
     return Success;
 }
@@ -240,7 +240,7 @@ int AllocARGBCursor(ubyte* psrcbits, ubyte* pmaskbits, CARD32* argb, CursorMetri
 
     CursorBitsPtr bits = cast(CursorBitsPtr) (cast(char*) pCurs + CURSOR_REC_SIZE);
     dixInitPrivates(pCurs, pCurs + 1, PRIVATE_CURSOR);
-    dixInitPrivates(bits, bits + 1, PRIVATE_CURSOR_BITS)
+    dixInitPrivates(bits, bits + 1, PRIVATE_CURSOR_BITS);
         bits.source = psrcbits;
     bits.mask = pmaskbits;
     bits.argb = argb;
