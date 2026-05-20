@@ -38,9 +38,9 @@ import config.hotplug_priv;
 
 import os;
 import inputstr;
-import config-backends;
+import config.config_backends;
 
-import ...hw.xfree86.os-support.linux.systemd-logind;
+import hw.xfree86.os_support.linux.systemd_logind;
 
 void config_pre_init()
 {
