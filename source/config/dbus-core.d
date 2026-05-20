@@ -1,4 +1,4 @@
-module dbus-core.c;
+module config.dbus_core;
 @nogc nothrow:
 extern(C): __gshared:
 /*
@@ -28,7 +28,7 @@ extern(C): __gshared:
 
 import build.dix_config;
 
-import dbus/dbus;
+import dbus.dbus;
 import core.sys.posix.sys.select;
 
 import os.log_priv;
@@ -36,7 +36,7 @@ import os.log_priv;
 import dix;
 import os;
 
-import config.dbus-core;
+import config.dbus_core;
 
 /* How often to attempt reconnecting when we get booted off the bus. */
 enum RECONNECT_DELAY = (10 * 1000)     /* in ms */;
