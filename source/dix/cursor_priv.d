@@ -1,4 +1,4 @@
-module cursor_priv.h;
+module dix.cursor_priv;
 @nogc nothrow:
 extern(C): __gshared:
 /* SPDX-License-Identifier: MIT OR X11
@@ -6,7 +6,7 @@ extern(C): __gshared:
  * Copyright © 2024 Enrico Weigelt, metux IT consult <info@metux.net>
  */
  
-public import deimos.X11.fonts/font;
+public import deimos.X11.fonts.font;
 public import deimos.X11.X;
 public import deimos.X11.Xdefs;
 public import deimos.X11.Xmd;
@@ -17,8 +17,8 @@ public import include.dix;
 public import include.input;
 public import include.window;
 
-enum CURSOR_BITS_SIZE = (sizeof(CursorBits) + (size_t)dixPrivatesSize(PRIVATE_CURSOR_BITS));
-enum CURSOR_REC_SIZE = (sizeof(CursorRec) + (size_t)dixPrivatesSize(PRIVATE_CURSOR));
+enum CURSOR_BITS_SIZE = sizeof(CursorBits) + cast(size_t)dixPrivatesSize(PRIVATE_CURSOR_BITS);
+enum CURSOR_REC_SIZE = sizeof(CursorRec) + cast(size_t)dixPrivatesSize(PRIVATE_CURSOR);
 
 extern CursorPtr rootCursor;
 
