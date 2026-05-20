@@ -1,4 +1,4 @@
-module udev.c;
+module config.udev;
 @nogc nothrow:
 extern(C): __gshared:
 /*
@@ -38,15 +38,18 @@ import os.fmt;
 
 import input;
 import inputstr;
-import config-backends;
+import config.config_backends;
 import os;
 import globals;
 
-import ...hw.xfree86.os-support.linux.systemd-logind;
+import hw.xfree86.os_support.linux.systemd_logind;
 
 version (HAVE_SYS_SYSMACROS_H) {
-import sys/sysmacros;
+import sys.sysmacros;
 }
+
+struct udev_enumerate;
+extern udev_enumerate* udev_enumerate_unref(udev_enumerate *p);
 
 enum UDEV_XKB_PROP_KEY = "xkb";
 
@@ -216,7 +219,7 @@ version (CONFIG_UDEV_KMS) {
     }
 
     set = udev_device_get_properties_list_entry(udev_device);
-    udev_list_entry_foreach(entry, set) {
+    udev_list_entry_foreach(entry, set); {
         key = udev_list_entry_get_name(entry);
         if (!key)
             continue;
@@ -435,7 +438,7 @@ version (HAVE_UDEV_ENUMERATE_ADD_MATCH_TAG) {
 
     udev_enumerate_scan_devices(enumerate);
     devices = udev_enumerate_get_list_entry(enumerate);
-    udev_list_entry_foreach(device, devices) {
+    udev_list_entry_foreach(device, devices); {
         const(char)* syspath = udev_list_entry_get_name(device);
         udev_device* udev_device = udev_device_new_from_syspath(udev, syspath);
 
@@ -446,6 +449,7 @@ version (HAVE_UDEV_ENUMERATE_ADD_MATCH_TAG) {
         device_added(udev_device);
         udev_device_unref(udev_device);
     }
+
     udev_enumerate_unref(enumerate);
 
     SetNotifyFd(udev_monitor_get_fd(udev_monitor), &socket_handler, X_NOTIFY_READ, null);
@@ -572,7 +576,7 @@ version (HAVE_UDEV_ENUMERATE_ADD_MATCH_TAG) {
 }
     udev_enumerate_scan_devices(enumerate);
     devices = udev_enumerate_get_list_entry(enumerate);
-    udev_list_entry_foreach(device, devices) {
+    udev_list_entry_foreach(device, devices); {
         const(char)* syspath = udev_list_entry_get_name(device);
         udev_device* udev_device = udev_device_new_from_syspath(udev, syspath);
         const(char)* path = udev_device_get_devnode(udev_device);
