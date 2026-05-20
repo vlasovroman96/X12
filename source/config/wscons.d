@@ -1,4 +1,4 @@
-module wscons.c;
+module config.wscons;
 @nogc nothrow:
 extern(C): __gshared:
 /*
@@ -27,8 +27,8 @@ extern(C): __gshared:
 import build.dix_config;
 
 import core.sys.posix.sys.time;
-import dev/wscons/wsconsio;
-import dev/wscons/wsksymdef;
+import dev.wscons.wsconsio;
+import dev.wscons.wsksymdef;
 
 import core.sys.posix.sys.ioctl;
 import core.stdc.errno;
@@ -39,30 +39,38 @@ import core.sys.posix.unistd;
 import input;
 import inputstr;
 import os;
-import config-backends;
+import config.config_backends;
 
 enum WSCONS_KBD_DEVICE = "/dev/wskbd";
 enum WSCONS_MOUSE_PREFIX = "/dev/wsmouse";
 
-enum KB_OVRENC = \
-	{ KB_UK,	"gb" }, \
-	{ KB_SV,	"se" }, \
-	{ KB_SG,	"ch" }, \
-	{ KB_SF,	"ch" }, \
-	{ KB_LA,	"latam" }, \
-	{ KB_CF,	"ca" };
-
 struct nameint {
     int val;
     const(char)* name;
-}nameint[3] kbdenc = [
-    KB_OVRENC,
-    KB_ENCTAB
-#ifndef __NetBSD__
-    ,
-#endif
-    {0}
-];
+}
+
+enum nameint KB_OVRENC = {
+	{ KB_UK,	"gb" }, 
+	{ KB_SV,	"se" }, 
+	{ KB_SG,	"ch" }, 
+	{ KB_SF,	"ch" }, 
+	{ KB_LA,	"latam" },
+	{ KB_CF,	"ca" }
+};
+
+version(NetBSD) {
+    enum nameint[3] kbdenc = [
+        KB_OVRENC,
+        KB_ENCTAB,
+        {0}
+    ];
+}
+else {
+    enum nameint[3] kbdenc = [
+        KB_OVRENC,
+        KB_ENCTAB
+    ];
+}
 
 nameint[9] kbdvar = [
     {KB_NODEAD | KB_SG, "de_nodeadkeys"},
