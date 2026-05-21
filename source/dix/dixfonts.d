@@ -1,4 +1,4 @@
-module dixfonts.c;
+module dix.dixfonts;
 @nogc nothrow:
 extern(C): __gshared:
 import core.stdc.config: c_long, c_ulong;
@@ -58,9 +58,9 @@ import core.stdc.stddef;
 import deimos.X11.X;
 import deimos.X11.Xmd;
 import deimos.X11.Xproto;
-import deimos.X11.fonts/font;
-import deimos.X11.fonts/fontstruct;
-import deimos.X11.fonts/libxfont2;
+import deimos.X11.fonts.font;
+import deimos.X11.fonts.fontstruct;
+import deimos.X11.fonts.libxfont2;
 
 import dix.dix_priv;
 import dix.gc_priv;
@@ -319,20 +319,16 @@ private Bool doOpenFont(ClientPtr client, open_font_closure* c)
          BitmapFormatByteOrderLSB : BitmapFormatByteOrderMSB) |
         ((screenInfo.bitmapBitOrder == LSBFirst) ?
          BitmapFormatBitOrderLSB : BitmapFormatBitOrderMSB) |
-        BitmapFormatImageRectMin |
-#if GLYPHPADBYTES == 1
-        BitmapFormatScanlinePad8 |
-#endif
-#if GLYPHPADBYTES == 2
-        BitmapFormatScanlinePad16 |
-#endif
-#if GLYPHPADBYTES == 4
-        BitmapFormatScanlinePad32 |
-#endif
-#if GLYPHPADBYTES == 8
-        BitmapFormatScanlinePad64 |
-#endif
-        BitmapFormatScanlineUnit8;
+        BitmapFormatImageRectMin; 
+static if(GLYPHPADBYTES == 1)
+        FontFormat |= BitmapFormatScanlinePad8 ;
+static if(GLYPHPADBYTES == 2)
+        FontFormat |= BitmapFormatScanlinePad16 ;
+static if(GLYPHPADBYTES == 4)
+        FontFormat |= BitmapFormatScanlinePad32 ;
+static if(GLYPHPADBYTES == 8)
+        FontFormat |= BitmapFormatScanlinePad64 ;
+        FontFormat |= BitmapFormatScanlineUnit8;
 
     if (client.clientGone) {
         if (c.current_fpe < c.num_fpes) {
@@ -415,7 +411,7 @@ private Bool doOpenFont(ClientPtr client, open_font_closure* c)
                     goto bail;
                 }
             }
-        }){}
+        });
     }
     if (!AddResource(c.fontid, X11_RESTYPE_FONT, cast(void*) pfont)) {
         err = AllocError;
@@ -531,7 +527,7 @@ int CloseFont(void* value, XID fid)
         DIX_FOR_EACH_SCREEN({
             if (walkScreen.UnrealizeFont)
                 walkScreen.UnrealizeFont(walkScreen, pfont);
-        }){}
+        });
         if (pfont == defaultFont)
             defaultFont = null;
 version (XF86BIGFONT) {
@@ -1372,7 +1368,6 @@ private int doPolyText(ClientPtr client, poly_text_closure* c)
     }
 
  bail:
-
     if (client_state == START_SLEEP) {
         /* Step 4 */
         if (origGC && (pFont != origGC.font)) {
@@ -1393,8 +1388,11 @@ private int doPolyText(ClientPtr client, poly_text_closure* c)
     if (err != Success && c.client != serverClient) {
 version (XINERAMA) {
         if (noPanoramiXExtension || !c.pGC.pScreen.myNum)
-} /* XINERAMA */
             SendErrorToClient(c.client, c.reqType, 0, 0, err);
+} /* XINERAMA */
+else {
+            SendErrorToClient(c.client, c.reqType, 0, 0, err);
+}
     }
     if (ClientIsAsleep(client)) {
         ClientWakeup(c.client);
@@ -1970,7 +1968,7 @@ private void remove_fs_fd(int fd)
 {
     fs_fd_entry* entry = void, temp = void;
 
-    xorg_list_for_each_entry_safe(entry, temp, &fs_fd_list, entry) {
+    xorg_list_for_each_entry_safe(entry, temp, &fs_fd_list, entry); {
         if (entry.fd == fd) {
             xorg_list_del(&entry.entry);
             free(entry);
@@ -2020,14 +2018,13 @@ private uint wrap_time_in_millis()
     return GetTimeInMillis();
 }
 
- _X_ATTRIBUTE_PRINTF(1, 0);
 private void verrorf(const(char)* f, va_list args)
 {
     LogVMessageVerb(X_NONE, -1, f, args);
 }
 
 private const(xfont2_client_funcs_rec) xfont2_client_funcs = {
-    version: XFONT2_CLIENT_FUNCS_VERSION,
+    c_version: XFONT2_CLIENT_FUNCS_VERSION,
     client_auth_generation: _client_auth_generation,
     client_signal: dixClientSignal,
     delete_font_client_id: delete_font_client_id,
