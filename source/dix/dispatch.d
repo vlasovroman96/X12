@@ -1,4 +1,4 @@
-module dispatch.c;
+module dix.dispatch;
 @nogc nothrow:
 extern(C): __gshared:
 import core.stdc.config: c_long, c_ulong;
@@ -101,11 +101,11 @@ Equipment Corporation.
  */
 
 import build.dix_config;
-import version-config;
+import version_config;
 
 import core.stdc.stddef;
-import deimos.X11.fonts/fontstruct;
-import deimos.X11.fonts/libxfont2;
+import deimos.X11.fonts.fontstruct;
+import deimos.X11.fonts.libxfont2;
 
 import dix.client_priv;
 import dix.colormap_priv;
@@ -153,10 +153,10 @@ import dixstruct_priv;
 enum mskcnt = ((MAXCLIENTS + 31) / 32);
 enum string BITMASK(string i) = `(1U << ((` ~ i ~ `) & 31))`;
 enum string MASKIDX(string i) = `((` ~ i ~ `) >> 5)`;
-enum string MASKWORD(string buf, string i) = `` ~ buf ~ `[` ~ MASKIDX!(` ~ `i` ~ `) ~ `]`;
-enum string BITSET(string buf, string i) = `` ~ MASKWORD!(` ~ `buf` ~ `, ` ~ `i` ~ `) ~ ` |= ` ~ BITMASK!(` ~ `i` ~ `) ~ ``;
-enum string BITCLEAR(string buf, string i) = `` ~ MASKWORD!(` ~ `buf` ~ `, ` ~ `i` ~ `) ~ ` &= ~` ~ BITMASK!(` ~ `i` ~ `) ~ ``;
-enum string GETBIT(string buf, string i) = `(` ~ MASKWORD!(` ~ `buf` ~ `, ` ~ `i` ~ `) ~ ` & ` ~ BITMASK!(` ~ `i` ~ `) ~ `)`;
+enum string MASKWORD(string buf, string i) = buf ~ `[` ~ MASKIDX!(i) ~ `]`;
+enum string BITSET(string buf, string i) = MASKWORD!(buf, i) ~ ` |= ` ~ BITMASK!(i);
+enum string BITCLEAR(string buf, string i) = MASKWORD!(buf, i) ~ ` &= ~` ~ BITMASK!(i);
+enum string GETBIT(string buf, string i) = `(` ~ MASKWORD!(buf,i) ~ ` & ` ~ BITMASK!(i) ~ `)`;
 
 xConnSetupPrefix connSetupPrefix;
 
@@ -307,7 +307,7 @@ private void mark_client_grab(ClientPtr grab)
 {
     ClientPtr client = void, tmp = void;
 
-    xorg_list_for_each_entry_safe(client, tmp, &ready_clients, ready) {
+    xorg_list_for_each_entry_safe(client, tmp, &ready_clients, ready); {
         if (client != grab) {
             xorg_list_del(&client.ready);
             xorg_list_append(&client.ready, &saved_ready_clients);
@@ -319,7 +319,7 @@ private void mark_client_ungrab()
 {
     ClientPtr client = void, tmp = void;
 
-    xorg_list_for_each_entry_safe(client, tmp, &saved_ready_clients, ready) {
+    xorg_list_for_each_entry_safe(client, tmp, &saved_ready_clients, ready); {
         xorg_list_del(&client.ready);
         xorg_list_append(&client.ready, &ready_clients);
     }
@@ -333,7 +333,7 @@ private ClientPtr SmartScheduleClient()
     int bestRobin = 0;
     c_long idle = 2 * SmartScheduleSlice;
 
-    xorg_list_for_each_entry(pClient, &ready_clients, ready) {
+    xorg_list_for_each_entry(pClient, &ready_clients, ready); {
         nready++;
 
         /* Praise clients which haven't run in a while */
@@ -701,7 +701,7 @@ Bool CreateConnectionBlock()
                 sizesofar += xVisualType.sizeof;
             }
         }
-    }){}
+    });
     connSetupPrefix.success = xTrue;
     connSetupPrefix.length = lenofblock / 4;
     connSetupPrefix.majorVersion = X_PROTOCOL;
@@ -1717,11 +1717,15 @@ void SendGraphicsExpose(ClientPtr client, RegionPtr pRgn, XID drawable, CARD8 ma
         free(pEvent);
     }
     else {
-        xEvent event = {
-            u:noExposure:drawable: drawable,
-            u:noExposure:majorEvent: major,
-            u:noExposure:minorEvent: minor
-        };
+        // xEvent event = {
+        //     u:noExposure:drawable: drawable,
+        //     u:noExposure:majorEvent: major,
+        //     u:noExposure:minorEvent: minor
+        // };
+        xEvent event;
+            event.u.oExposure.drawable = drawable;
+            event.u.oExposure.majorEvent = major;
+            event.u.oExposure.minorEvent = minor;        
         event.u.u.type = NoExpose;
         WriteEventsToClient(client, 1, &event);
     }
@@ -2502,19 +2506,19 @@ int ProcInstallColormap(ClientPtr client)
     rc = dixLookupResourceByType(cast(void**) &pcmp, stuff.id, X11_RESTYPE_COLORMAP,
                                  client, DixInstallAccess);
     if (rc != Success)
-        goto out;
+        goto out_;
 
     rc = dixCallScreenAccessCallback(client, pcmp.pScreen, DixSetAttrAccess);
     if (rc != Success) {
         if (rc == BadValue)
             rc = BadColor;
-        goto out;
+        goto out_;
     }
 
     (*(pcmp.pScreen.InstallColormap)) (pcmp);
     return Success;
 
- out:
+ out_:
     client.errorValue = stuff.id;
     return rc;
 }
@@ -2533,20 +2537,20 @@ int ProcUninstallColormap(ClientPtr client)
     rc = dixLookupResourceByType(cast(void**) &pcmp, stuff.id, X11_RESTYPE_COLORMAP,
                                  client, DixUninstallAccess);
     if (rc != Success)
-        goto out;
+        goto out_;
 
     rc = dixCallScreenAccessCallback(client, pcmp.pScreen, DixSetAttrAccess);
     if (rc != Success) {
         if (rc == BadValue)
             rc = BadColor;
-        goto out;
+        goto out_;
     }
 
     if (pcmp.mid != pcmp.pScreen.defColormap)
         (*(pcmp.pScreen.UninstallColormap)) (pcmp);
     return Success;
 
- out:
+ out_:
     client.errorValue = stuff.id;
     return rc;
 }
@@ -2735,10 +2739,24 @@ int ProcAllocColorCells(ClientPtr client)
             return rc;
         }
 version (XINERAMA) {
-        if (noPanoramiXExtension || !pcmp.pScreen.myNum)
-} /* XINERAMA */
+        if (noPanoramiXExtension || !pcmp.pScreen.myNum) /* XINERAMA */
         {
             xAllocColorCellsReply reply = {
+                nPixels: npixels,
+                nMasks: nmasks
+            };
+            if (client.swapped) {
+                swaps(&reply.nPixels);
+                swaps(&reply.nMasks);
+                SwapLongs(ppixels, length / 4);
+            }
+
+            return X_SEND_REPLY_WITH_RPCBUF(client, reply, rpcbuf);
+        }
+}
+
+        else {
+             xAllocColorCellsReply reply = {
                 nPixels: npixels,
                 nMasks: nmasks
             };
@@ -2810,13 +2828,17 @@ int ProcAllocColorPlanes(ClientPtr client)
         }
 
 version (XINERAMA) {
-        if (noPanoramiXExtension || !pcmp.pScreen.myNum)
-} /* XINERAMA */
+        if (noPanoramiXExtension || !pcmp.pScreen.myNum) /* XINERAMA */
         {
             return X_SEND_REPLY_WITH_RPCBUF(client, reply, rpcbuf);
         }
+}
+else {
+            return X_SEND_REPLY_WITH_RPCBUF(client, reply, rpcbuf);
+}
         x_rpcbuf_clear(&rpcbuf);
         return Success;
+
     }
     else {
         client.errorValue = stuff.cmap;
@@ -3223,7 +3245,7 @@ int ProcSetScreenSaver(ClientPtr client)
         int rc = dixCallScreensaverAccessCallback(client, walkScreen, DixSetAttrAccess);
         if (rc != Success)
             return rc;
-    }){}
+    });
 
     blankingOption = stuff.preferBlank;
     if ((blankingOption != DontPreferBlanking) &&
@@ -3278,7 +3300,7 @@ int ProcGetScreenSaver(ClientPtr client)
         int rc = dixCallScreensaverAccessCallback(client, walkScreen, DixGetAttrAccess);
         if (rc != Success)
             return rc;
-    }){}
+    });
 
     xGetScreenSaverReply reply = {
         timeout: ScreenSaverTime / MILLI_PER_SECOND,
