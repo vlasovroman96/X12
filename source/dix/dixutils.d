@@ -125,7 +125,7 @@ int CompareTimeStamps(TimeStamp a, TimeStamp b)
  * convert client times to server TimeStamps
  */
 
-enum HALFMONTH = ((unsigned long) 1<<31);
+enum ulong HALFMONTH = 1<<31;
 TimeStamp ClientTimeToServerTime(CARD32 c)
 {
     TimeStamp ts = void;
@@ -340,12 +340,12 @@ void BlockHandler(void* pTimeout)
     DIX_FOR_EACH_GPU_SCREEN({
         if (walkScreen.BlockHandler)
             walkScreen.BlockHandler(walkScreen, pTimeout);
-    }){}
+    });
 
     DIX_FOR_EACH_SCREEN({
         if (walkScreen.BlockHandler)
             walkScreen.BlockHandler(walkScreen, pTimeout);
-    }){}
+    });
 
     if (handlerDeleted) {
         for (size_t i = 0; i < numHandlers;)
@@ -373,12 +373,12 @@ void WakeupHandler(int result)
     DIX_FOR_EACH_SCREEN({
         if (walkScreen.WakeupHandler)
             walkScreen.WakeupHandler(walkScreen, result);
-    }){}
+    });
 
     DIX_FOR_EACH_GPU_SCREEN({
         if (walkScreen.WakeupHandler)
             walkScreen.WakeupHandler(walkScreen, result);
-    }){}
+    });
 
     for (size_t i = numHandlers; i > 0; i--)
         if (!handlers[i-1].deleted)
