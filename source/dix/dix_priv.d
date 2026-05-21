@@ -341,7 +341,6 @@ void SetCriticalEvent(int event);
  * @return TRUE when event was delivered
  */
 Bool MaybeDeliverEventToClient(WindowPtr pWindow, xEvent* pEvent, Mask filter, ClientPtr skipClient);
-    _X_ATTRIBUTE_NONNULL_ARG(1,2);
 
 /*
  * @brief select window events to listen on
@@ -352,7 +351,6 @@ Bool MaybeDeliverEventToClient(WindowPtr pWindow, xEvent* pEvent, Mask filter, C
  * @return X error code
  */
 XRetCode EventSelectForWindow(WindowPtr pWindow, ClientPtr pClient, Mask mask);
-    _X_ATTRIBUTE_NONNULL_ARG(1,2);
 
 /*
  * @brief set block propagation of specific events on window
@@ -364,7 +362,6 @@ XRetCode EventSelectForWindow(WindowPtr pWindow, ClientPtr pClient, Mask mask);
  * @return X error code
  */
 int EventSuppressForWindow(WindowPtr pWindow, ClientPtr pClient, Mask mask, Bool* checkOptional);
-    _X_ATTRIBUTE_NONNULL_ARG(1,2,4);
 
 /*
  * @brief allocate new ClientRec and initialize it
@@ -382,7 +379,6 @@ ClientPtr NextAvailableClient(void* ospriv);
  * @param pClient pointer to client that has exception
  */
 void dixMarkClientException(ClientPtr pClient);
-    _X_ATTRIBUTE_NONNULL_ARG(1);
 
 alias ClientSleepProcPtr = Bool function(ClientPtr client, void* closure);
 
@@ -394,7 +390,6 @@ alias ClientSleepProcPtr = Bool function(ClientPtr client, void* closure);
  * @param closure   data passed to the callback function
  */
 Bool ClientSleep(ClientPtr pClient, ClientSleepProcPtr func, void* closure);
-    _X_ATTRIBUTE_NONNULL_ARG(1,2);
 
 /*
  * @brief signal to sleeping client there's work to do
@@ -403,7 +398,6 @@ Bool ClientSleep(ClientPtr pClient, ClientSleepProcPtr func, void* closure);
  * @return TRUE on success
  */
 Bool dixClientSignal(ClientPtr pClient);
-    _X_ATTRIBUTE_NONNULL_ARG(1);
 
 enum CLIENT_SIGNAL_ANY = ((void *)-1);
 /*
@@ -418,7 +412,6 @@ enum CLIENT_SIGNAL_ANY = ((void *)-1);
  * @return number of matched / queued clients
  */
 int ClientSignalAll(ClientPtr pClient, ClientSleepProcPtr func, void* closure);
-    _X_ATTRIBUTE_NONNULL_ARG(1,2);
 
 /*
  * @brief wake up a client and restart request processing of this client
@@ -426,7 +419,6 @@ int ClientSignalAll(ClientPtr pClient, ClientSleepProcPtr func, void* closure);
  * @param pClient pointer to client structure
  */
 void ClientWakeup(ClientPtr pclient);
-    _X_ATTRIBUTE_NONNULL_ARG(1);
 
 /*
  * @brief check whether client is asleep
@@ -435,7 +427,6 @@ void ClientWakeup(ClientPtr pclient);
  * @return TRUE if client is sleeping and has no work to do
  */
 Bool ClientIsAsleep(ClientPtr pClient);
-    _X_ATTRIBUTE_NONNULL_ARG(1);
 
 /*
  * @brief send error packet (xError) to client
@@ -447,7 +438,6 @@ Bool ClientIsAsleep(ClientPtr pClient);
  * @param errorCode   error code value
  */
 void SendErrorToClient(ClientPtr pClient, CARD8 majorCode, CARD16 minorCode, XID resId, BYTE errorCode);
-    _X_ATTRIBUTE_NONNULL_ARG(1);
 
 /*
  * @brief send GraphicsExposure events for given region to client
@@ -462,7 +452,6 @@ void SendErrorToClient(ClientPtr pClient, CARD8 majorCode, CARD16 minorCode, XID
  * @param minorOpcode minor opcode of request which caused the expose event
  */
 void SendGraphicsExpose(ClientPtr pClient, RegionPtr pRegion, XID drawable, BYTE majorOpcode, CARD16 minorOpcode);
-    _X_ATTRIBUTE_NONNULL_ARG(1);
 
 /*
  * @brief alter the SaveSet of a window (see automatic reparenting when client gone)
@@ -502,7 +491,6 @@ XRetCode AlterSaveSetForClient(ClientPtr pClient, WindowPtr pWin, uint mode, Boo
  * client.
  */
 _X_EXPORT TryClientEvents(ClientPtr pClient, DeviceIntPtr device, xEventPtr pEvents, size_t count, Mask mask, Mask filter, GrabPtr grab);
-    _X_ATTRIBUTE_NONNULL_ARG(3);
 
 /**
  * @brief deliver event to a window and its immediate parent.
@@ -518,8 +506,7 @@ _X_EXPORT TryClientEvents(ClientPtr pClient, DeviceIntPtr device, xEventPtr pEve
  * @param count         number of events in xE.
  * @param otherParent   Used for ReparentNotify events.
  */
-_X_EXPORT enum; EventDeliveryState DeliverEvents(WindowPtr pWindow, xEventPtr events, size_t nEvents, WindowPtr otherParent);
-    _X_ATTRIBUTE_NONNULL_ARG(1,2);
+EventDeliveryState DeliverEvents(WindowPtr pWindow, xEventPtr events, size_t nEvents, WindowPtr otherParent);
 
 /**
  * @brief deliver events to a window.
@@ -545,13 +532,12 @@ _X_EXPORT enum; EventDeliveryState DeliverEvents(WindowPtr pWindow, xEventPtr ev
  * has not been delivered _and_ rejected by at least one client.
  */
 int DeliverEventsToWindow(DeviceIntPtr pDev, WindowPtr pWindow, xEventPtr pEvents, size_t count, Mask filter, GrabPtr grab);
-    _X_ATTRIBUTE_NONNULL_ARG(1,2,3);
 
 /*
  * @brief callback when root window has is finalized
  */
 /* only exported temporariy for Nvidia legacy */
-extern _X_EXPORT CallbackListPtr; RootWindowFinalizeCallback;
+extern CallbackListPtr RootWindowFinalizeCallback;
 
 /*
  * @brief do post actions necessary when window got a new cursor
@@ -561,7 +547,6 @@ extern _X_EXPORT CallbackListPtr; RootWindowFinalizeCallback;
  * @param pWindow   window that just got a new cursor
  */
 void WindowHasNewCursor(WindowPtr pWin);
-    _X_ATTRIBUTE_NONNULL_ARG(1);
 
 /*
  * @brief do post actions necessary when windows have been restructured
@@ -576,7 +561,6 @@ void WindowsRestructured();
  * currently eg. fixing up cursors and their confinements (randr)
  */
 void ScreenRestructured(ScreenPtr pScreen);
-    _X_ATTRIBUTE_NONNULL_ARG(1);
 
 /*
  * @brief destructor for X11_RESTYPE_OTHERCLIENT resources
@@ -595,7 +579,6 @@ int OtherClientGone(void* value, XID id);
  * @return TRUE if `child` is a child window of `parent`
  */
 Bool WindowIsParent(WindowPtr parent, WindowPtr child);
-    _X_ATTRIBUTE_NONNULL_ARG(1,2);
 
 /*
  * @brief call the block handlers
@@ -689,7 +672,7 @@ pragma(inline, true) private int xmitClientEvent(ClientPtr pClient, xEvent ev)
  */
 int dixAllocColor(ClientPtr client, Colormap cmap, CARD16* red, CARD16* green, CARD16* blue, CARD32* pixel);
 
-void ReplyNotSwappd(ClientPtr pClient, int size, void* pbuf);  _X_NORETURN;
+void ReplyNotSwappd(ClientPtr pClient, int size, void* pbuf);
 
 /*
  * Byte swap a list of CARD32s
