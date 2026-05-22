@@ -168,7 +168,7 @@ int screenIsSaved = SCREEN_SAVER_OFF;
 
 
 
-enum INPUTONLY_LEGAL_MASK = (CWWinGravity | CWEventMask | \
+enum INPUTONLY_LEGAL_MASK = (CWWinGravity | CWEventMask | 
 			      CWDontPropagate | CWOverrideRedirect | CWCursor );
 
 enum string BOXES_OVERLAP(string b1, string b2) = `
@@ -186,7 +186,7 @@ enum string SubSend(string pWin) = `
 enum string StrSend(string pWin) = `
     ((` ~ pWin ~ `.eventMask|wOtherEventMasks(` ~ pWin ~ `)) & StructureNotifyMask)`;
 
-enum string SubStrSend(string pWin,string pParent) = `(` ~ StrSend!(` ~ `pWin` ~ `) ~ ` || ` ~ SubSend!(` ~ `pParent` ~ `) ~ `)`;
+enum string SubStrSend(string pWin,string pParent) = `(` ~ StrSend!(pWin) ~ ` || ` ~ SubSend!(pParent) ~ `)`;
 
 private const(char)* overlay_win_name = "<composite overlay>";
 
@@ -409,7 +409,7 @@ void PrintWindowTree()
                 break;
             pWin = pWin.nextSib;
         }
-    }){}
+    });
 }
 
 int TraverseTree(WindowPtr pWin, VisitWindowProcPtr func, void* data)
@@ -893,16 +893,16 @@ WindowPtr dixCreateWindow(Window wid, WindowPtr pParent, int x, int y, uint w, u
     }
 
     if (mixin(SubSend!(`pParent`))) {
-        xEvent event = {
-            u:createNotify:window: wid,
-            u:createNotify:parent: pParent.drawable.id,
-            u:createNotify:x: x,
-            u:createNotify:y: y,
-            u:createNotify:width: w,
-            u:createNotify:height: h,
-            u:createNotify:borderWidth: bw,
-            u:createNotify:override: pWin.overrideRedirect
-        };
+        xEvent event;
+            event.u.createNotify.window= wid,
+            event.u.createNotify.parent= pParent.drawable.id,
+            event.u.createNotify.x= x,
+            event.u.createNotify.y= y,
+            event.u.createNotify.width= w,
+            event.u.createNotify.height= h,
+            event.u.createNotify.borderWidth= bw,
+            event.u.createNotify.c_override = pWin.overrideRedirect;
+
         event.u.u.type = CreateNotify;
         DeliverEvents(pParent, &event, 1, NullWindow);
     }
@@ -984,7 +984,8 @@ private void CrushTree(WindowPtr pWin)
         while (1) {
             WindowPtr pParent = pChild.parent;
             if (mixin(SubStrSend!(`pChild`, `pParent`))) {
-                xEvent event = { u:u:type: DestroyNotify };
+                xEvent event;
+                event.u.u.type = DestroyNotify ;
                 event.u.destroyNotify.window = pChild.drawable.id;
                 DeliverEvents(pChild, &event, 1, NullWindow);
             }
@@ -1024,7 +1025,7 @@ int DeleteWindow(void* value, XID wid)
 
     pParent = pWin.parent;
     if (wid && pParent && mixin(SubStrSend!(`pWin`, `pParent`))) {
-        xEvent event = { u:u:type: DestroyNotify };
+        event.u.u.type = DestroyNotify ;
         event.u.destroyNotify.window = pWin.drawable.id;
         DeliverEvents(pWin, &event, 1, NullWindow);
     }
@@ -1410,12 +1411,12 @@ int ChangeWindowAttributes(WindowPtr pWin, Mask vmask, XID* vlist, ClientPtr cli
                         CheckWindowOptionalNeed(pChild);
                 }
 
-                xE = xEvent (
-                    u:colormap:window: pWin.drawable.id,
-                    u:colormap:colormap: cmap,
-                    u:colormap:new: xTrue,
-                    u:colormap:state: IsMapInstalled(cmap, pWin)
-                );
+                xE = xEvent;
+                    xE.u.colormap.window = pWin.drawable.id,
+                    xE.u.colormap.colormap = cmap,
+                    xE.u.colormap.c_new = xTrue,
+                    xE.u.colormap.state = IsMapInstalled(cmap, pWin);
+                // );
                 xE.u.u.type = ColormapNotify;
                 DeliverEvents(pWin, &xE, 1, NullWindow);
             }
@@ -1544,25 +1545,25 @@ int ProcGetWindowAttributes(ClientPtr client)
     if (rc != Success)
         return rc;
 
-    xGetWindowAttributesReply reply = {
-        bitGravity: pWin.bitGravity,
-        winGravity: pWin.winGravity,
-        backingStore: pWin.backingStore,
-        backingBitPlanes: wBackingBitPlanes(pWin),
-        backingPixel: wBackingPixel(pWin),
-        saveUnder: cast(BOOL) pWin.saveUnder,
-        override: pWin.overrideRedirect,
-        mapState: (!pWin.mapped ? IsUnmapped :
+    xGetWindowAttributesReply reply; 
+        reply.bitGravity = pWin.bitGravity,
+        reply.winGravity = pWin.winGravity,
+        reply.backingStore = pWin.backingStore,
+        reply.backingBitPlanes = wBackingBitPlanes(pWin),
+        reply.backingPixel = wBackingPixel(pWin),
+        reply.saveUnder = cast(BOOL) pWin.saveUnder,
+        reply.c_override = pWin.overrideRedirect,
+        reply.mapState = (!pWin.mapped ? IsUnmapped :
                      (pWin.realized ? IsViewable : IsUnviewable)),
-        colormap: wColormap(pWin),
-        mapInstalled: (wColormap(pWin) == None) ? xFalse
-            : IsMapInstalled(wColormap(pWin), pWin),
-        yourEventMask: EventMaskForClient(pWin, client),
-        allEventMasks: pWin.eventMask | wOtherEventMasks(pWin),
-        doNotPropagateMask: wDontPropagateMask(pWin),
-        class: pWin.drawable.class_,
-        visualID: wVisual(pWin),
-    };
+        reply.colormap = wColormap(pWin),
+        reply.mapInstalled = (wColormap(pWin) == None) ? xFalse
+             : IsMapInstalled(wColormap(pWin), pWin),
+        reply.yourEventMask = EventMaskForClient(pWin, client),
+        reply.allEventMasks = pWin.eventMask | wOtherEventMasks(pWin),
+        reply.doNotPropagateMask = wDontPropagateMask(pWin),
+        reply.c_class = pWin.drawable.class_,
+        reply.visualID = wVisual(pWin);
+    // };
 
     if (client.swapped) {
         swapl(&reply.visualID);
@@ -1651,7 +1652,8 @@ version (ROOTLESS) {
      * is in the correct position from X's point of view,
      * the underlying window system may want to reorder it.
      */
-     if(pWin RestackWindow);
+         if (pWin.drawable.pScreen.RestackWindow)
+            (*pWin.drawable.pScreen.RestackWindow) (pWin, pWin.nextSib);
 }
 
     return pFirstChange;
@@ -1795,11 +1797,12 @@ void ResizeChildrenWinSize(WindowPtr pWin, int dx, int dy, int dw, int dh)
             GravityTranslate(cwsx, cwsy, cwsx - dx, cwsy - dy, dw, dh,
                              pSib.winGravity, &cwsx, &cwsy);
             if (cwsx != pSib.origin.x || cwsy != pSib.origin.y) {
-                xEvent event = {
-                    u:gravity:window: pSib.drawable.id,
-                    u:gravity:x: cwsx - wBorderWidth(pSib),
-                    u:gravity:y: cwsy - wBorderWidth(pSib)
-                };
+                xEvent event;
+                
+                    event.u.gravity.window = pSib.drawable.id,
+                    event.u.gravity.x = cwsx - wBorderWidth(pSib),
+                    event.u.gravity.y = cwsy - wBorderWidth(pSib),
+
                 event.u.u.type = GravityNotify;
                 DeliverEvents(pSib, &event, 1, NullWindow);
                 pSib.origin.x = cwsx;
@@ -2207,17 +2210,17 @@ enum REBORDER_WIN =   3;
         pSib = pWin.nextSib;
 
     if ((!pWin.overrideRedirect) && (mixin(RedirectSend!(`pParent`)))) {
-        xEvent event = {
-            u:configureRequest:window: pWin.drawable.id,
-            u:configureRequest:sibling: (mask & CWSibling) ? sibwid : None,
-            u:configureRequest:x: x,
-            u:configureRequest:y: y,
-            u:configureRequest:width: w,
-            u:configureRequest:height: h,
-            u:configureRequest:borderWidth: bw,
-            u:configureRequest:valueMask: mask,
-            u:configureRequest:parent: pParent.drawable.id
-        };
+        xEvent event;
+            event.u.configureRequest.window = pWin.drawable.id,
+            event.u.configureRequest.sibling = (mask & CWSibling) ? sibwid : None,
+            event.u.configureRequest.x = x,
+            event.u.configureRequest.y = y,
+            event.u.configureRequest.width = w,
+            event.u.configureRequest.height = h,
+            event.u.configureRequest.borderWidth = bw,
+            event.u.configureRequest.valueMask = mask,
+            event.u.configureRequest.parent = pParent.drawable.id;
+        // };
         event.u.u.type = ConfigureRequest;
         event.u.u.detail = (mask & CWStackMode) ? smode : Above;
 version (XINERAMA) {
@@ -2237,11 +2240,12 @@ version (XINERAMA) {
 
         if (size_change &&
             ((pWin.eventMask | wOtherEventMasks(pWin)) & ResizeRedirectMask)) {
-            xEvent eventT = {
-                u:resizeRequest:window: pWin.drawable.id,
-                u:resizeRequest:width: w,
-                u:resizeRequest:height: h
-            };
+            xEvent eventT; 
+
+                eventT.u.resizeRequest.window = pWin.drawable.id,
+                eventT.u.resizeRequest.width = w,
+                eventT.u.resizeRequest.height = h,
+            // };
             eventT.u.u.type = ResizeRequest;
             if (MaybeDeliverEventToClient(pWin, &eventT,
                                           ResizeRedirectMask, client)) {
@@ -2274,6 +2278,7 @@ version (XINERAMA) {
 version (ROOTLESS) {} else {
         /* See above for why we always reorder in rootless mode. */
         if (pWin.nextSib != pSib)
+        goto ActuallyDoSomething;
 }
             goto ActuallyDoSomething;
     }
@@ -2293,16 +2298,29 @@ version (ROOTLESS) {} else {
     }
 
     if (mixin(SubStrSend!(`pWin`, `pParent`))) {
-        xEvent event = {
-            u:configureNotify:window: pWin.drawable.id,
-            u:configureNotify:aboveSibling: pSib ? pSib.drawable.id : None,
-            u:configureNotify:x: x,
-            u:configureNotify:y: y,
-            u:configureNotify:width: w,
-            u:configureNotify:height: h,
-            u:configureNotify:borderWidth: bw,
-            u:configureNotify:override: pWin.overrideRedirect
-        };
+        // xEvent event = {
+            // u:configureNotify:window: pWin.drawable.id,
+        //     u:configureNotify:aboveSibling: pSib ? pSib.drawable.id : None,
+        //     u:configureNotify:x: x,
+        //     u:configureNotify:y: y,
+        //     u:configureNotify:width: w,
+        //     u:configureNotify:height: h,
+        //     u:configureNotify:borderWidth: bw,
+        //     u:configureNotify:override: pWin.overrideRedirect
+        // };
+
+        xEvent event;
+            event.u.configureRequest.window = pWin.drawable.id,
+            event.u.configureRequest.aboveSibling = pSib ? pSib.drawable.id : None,
+            event.u.configureRequest.x = x,
+            event.u.configureRequest.y = y,
+            event.u.configureRequest.width = w,
+            event.u.configureRequest.height = h,
+            event.u.configureRequest.borderWidth = bw,
+            // event.u.configureRequest.valueMask = mask,
+            event.u.configureRequest.parent = pParent.drawable.id;
+        // };
+        // event.u.u.type = ConfigureRequest;
         event.u.u.type = ConfigureNotify;
 version (XINERAMA) {
         if (!noPanoramiXExtension && (!pParent || !pParent.parent)) {
@@ -2378,13 +2396,21 @@ int CirculateWindow(WindowPtr pParent, int direction, ClientPtr client)
             return Success;
     }
 
-    event = xEvent (
-        u:circulate:window: pWin.drawable.id,
-        u:circulate:parent: pParent.drawable.id,
-        u:circulate:event: pParent.drawable.id,
-        u:circulate:place: (direction == RaiseLowest) ?
-                              PlaceOnTop : PlaceOnBottom,
-    );
+    // event = xEvent (
+    //     u:circulate:window: pWin.drawable.id,
+    //     u:circulate:parent: pParent.drawable.id,
+    //     u:circulate:event: pParent.drawable.id,
+    //     u:circulate:place: (direction == RaiseLowest) ?
+    //                           PlaceOnTop : PlaceOnBottom,
+    // );
+
+    event = xEvent ;
+        event.u.circulate.window = pWin.drawable.id,
+        event.u.circulate.parent = pParent.drawable.id,
+        event.u.circulate.event = pParent.drawable.id,
+        event.u.circulate.place = (direction == RaiseLowest) ?
+                              PlaceOnTop : PlaceOnBottom;
+    // );
 
     if (mixin(RedirectSend!(`pParent`))) {
         event.u.u.type = CirculateRequest;
@@ -2434,13 +2460,13 @@ int ReparentWindow(WindowPtr pWin, WindowPtr pParent, int x, int y, ClientPtr cl
     if (WasMapped)
         UnmapWindow(pWin, FALSE);
 
-    event = xEvent (
-        u:reparent:window: pWin.drawable.id,
-        u:reparent:parent: pParent.drawable.id,
-        u:reparent:x: x,
-        u:reparent:y: y,
-        u:reparent:override: pWin.overrideRedirect
-    );
+    event = xEvent;
+        event.u.reparent.window = pWin.drawable.id,
+        event.u.reparent.parent = pParent.drawable.id,
+        event.u.reparent.x = x,
+        event.u.reparent.y = y,
+        event.u.reparent.c_override = pWin.overrideRedirect;
+    // );
     event.u.u.type = ReparentNotify;
 version (XINERAMA) {
     if (!noPanoramiXExtension && !pParent.parent) {
@@ -2536,10 +2562,10 @@ private void RealizeTree(WindowPtr pWin)
 
 private Bool MaybeDeliverMapRequest(WindowPtr pWin, WindowPtr pParent, ClientPtr client)
 {
-    xEvent event = {
-        u:mapRequest:window: pWin.drawable.id,
-        u:mapRequest:parent: pParent.drawable.id
-    };
+    xEvent event;
+        event.u.mapRequest.window = pWin.drawable.id,
+        event.u.mapRequest.parent = pParent.drawable.id;
+    // };
     event.u.u.type = MapRequest;
 
     return MaybeDeliverEventToClient(pParent, &event,
@@ -2549,10 +2575,10 @@ private Bool MaybeDeliverMapRequest(WindowPtr pWin, WindowPtr pParent, ClientPtr
 
 private void DeliverMapNotify(WindowPtr pWin)
 {
-    xEvent event = {
-        u:mapNotify:window: pWin.drawable.id,
-        u:mapNotify:override: pWin.overrideRedirect,
-    };
+    xEvent event;
+        event.u.mapNotify.window = pWin.drawable.id,
+        event.u.mapNotify.c_override = pWin.overrideRedirect;
+    // };
     event.u.u.type = MapNotify;
     DeliverEvents(pWin, &event, 1, NullWindow);
 }
@@ -2732,10 +2758,10 @@ version (XINERAMA) {
 
 private void DeliverUnmapNotify(WindowPtr pWin, Bool fromConfigure)
 {
-    xEvent event = {
-        u:unmapNotify:window: pWin.drawable.id,
-        u:unmapNotify:fromConfigure: fromConfigure
-    };
+    xEvent event;
+        event.u.unmapNotify.window = pWin.drawable.id,
+        event.u.unmapNotify.fromConfigure = fromConfigure;
+    // };
     event.u.u.type = UnmapNotify;
     DeliverEvents(pWin, &event, 1, NullWindow);
 }
@@ -2948,7 +2974,7 @@ version (XINERAMA) {
                 if (!walkScreenIdx)
                     pWin = pWin2;
             }
-        }){}
+        });
         }
             break;
         case VisibilityPartiallyObscured:
@@ -2974,7 +3000,7 @@ version (XINERAMA) {
                 if (!walkScreenIdx)
                     pWin = pWin2;
             }
-        }){}
+        });
             break;
         }
         default: break;}
@@ -2983,10 +3009,10 @@ version (XINERAMA) {
     }
 } /* XINERAMA */
 
-    event = xEvent (
-        u:visibility:window: pWin.drawable.id,
-        u:visibility:state: visibility
-    );
+    event = xEvent; 
+        event.u.visibility.window = pWin.drawable.id,
+        event.u.visibility.state = visibility;
+    // );
     event.u.u.type = VisibilityNotify;
     DeliverEvents(pWin, &event, 1, NullWindow);
 }
@@ -3016,7 +3042,7 @@ int dixSaveScreens(ClientPtr client, int on, int mode)
                       DixShowAccess | DixHideAccess);
         if (rc != Success)
             return rc;
-    }){}
+    });
 
     DIX_FOR_EACH_SCREEN({
         if (on == SCREEN_SAVER_FORCER)
@@ -3082,14 +3108,14 @@ int dixSaveScreens(ClientPtr client, int on, int mode)
                 walkScreen.screensaver.blanked = SCREEN_ISNT_SAVED;
             break;
         default: break;}
-    }){}
+    });
 
     screenIsSaved = what;
     if (mode == ScreenSaverReset) {
         if (on == SCREEN_SAVER_FORCER) {
             DeviceIntPtr dev = void;
             UpdateCurrentTimeIf();
-            nt_list_for_each_entry(dev, inputInfo.devices, next)
+            nt_list_for_each_entry(dev, inputInfo.devices, next);
                 NoticeTime(dev, currentTime);
         }
         SetScreenSaverTimer();
@@ -3369,7 +3395,7 @@ int ChangeWindowDeviceCursor(WindowPtr pWin, DeviceIntPtr pDev, CursorPtr pCurso
                 pWin.optional.deviceCursors = pNode.next;
 
             free(pNode);
-            goto out;
+            goto out_;
         }
 
     }
@@ -3408,7 +3434,7 @@ int ChangeWindowDeviceCursor(WindowPtr pWin, DeviceIntPtr pDev, CursorPtr pCurso
         }
     }
 
- out:
+ out_:
     CursorVisible = TRUE;
 
     if (pWin.realized)
