@@ -153,11 +153,11 @@ int ChangeGC(ClientPtr client, GCPtr pGC, BITS32 mask, ChangeGCValPtr pUnion)
             break;
         }
         case GCPlaneMask:
-            NEXTVAL(unsigned long, pGC.planemask);
+            mixin(NEXTVAL!(ulong, pGC.planemask));
 
             break;
         case GCForeground:
-            NEXTVAL(unsigned long, pGC.fgPixel);
+            mixin(NEXTVAL!(ulong, pGC.fgPixel));
 
             /*
              * this is for CreateGC
@@ -168,7 +168,7 @@ int ChangeGC(ClientPtr client, GCPtr pGC, BITS32 mask, ChangeGCValPtr pUnion)
             }
             break;
         case GCBackground:
-            NEXTVAL(unsigned long, pGC.bgPixel);
+            mixin(NEXTVAL!(ulong, pGC.bgPixel));
 
             break;
         case GCLineWidth:      /* ??? line width is a CARD16 */
@@ -178,7 +178,7 @@ int ChangeGC(ClientPtr client, GCPtr pGC, BITS32 mask, ChangeGCValPtr pUnion)
         case GCLineStyle:
         {
             uint newlinestyle = void;
-            NEXTVAL(unsigned int, newlinestyle);
+            mixin(NEXTVAL!(uint, newlinestyle));
 
             if (newlinestyle <= LineDoubleDash)
                 pGC.lineStyle = newlinestyle;
@@ -192,7 +192,7 @@ int ChangeGC(ClientPtr client, GCPtr pGC, BITS32 mask, ChangeGCValPtr pUnion)
         case GCCapStyle:
         {
             uint newcapstyle = void;
-            NEXTVAL(unsigned int, newcapstyle);
+            mixin(NEXTVAL!(uint, newcapstyle));
 
             if (newcapstyle <= CapProjecting)
                 pGC.capStyle = newcapstyle;
@@ -206,7 +206,7 @@ int ChangeGC(ClientPtr client, GCPtr pGC, BITS32 mask, ChangeGCValPtr pUnion)
         case GCJoinStyle:
         {
             uint newjoinstyle = void;
-            NEXTVAL(unsigned int, newjoinstyle);
+            mixin(NEXTVAL!(uint, newjoinstyle));
 
             if (newjoinstyle <= JoinBevel)
                 pGC.joinStyle = newjoinstyle;
@@ -220,7 +220,7 @@ int ChangeGC(ClientPtr client, GCPtr pGC, BITS32 mask, ChangeGCValPtr pUnion)
         case GCFillStyle:
         {
             uint newfillstyle = void;
-            NEXTVAL(unsigned int, newfillstyle);
+            mixin(NEXTVAL!(uint, newfillstyle));
 
             if (newfillstyle <= FillOpaqueStippled)
                 pGC.fillStyle = newfillstyle;
@@ -234,7 +234,7 @@ int ChangeGC(ClientPtr client, GCPtr pGC, BITS32 mask, ChangeGCValPtr pUnion)
         case GCFillRule:
         {
             uint newfillrule = void;
-            NEXTVAL(unsigned int, newfillrule);
+            mixin(NEXTVAL!(uint, newfillrule));
 
             if (newfillrule <= WindingRule)
                 pGC.fillRule = newfillrule;
@@ -298,7 +298,7 @@ int ChangeGC(ClientPtr client, GCPtr pGC, BITS32 mask, ChangeGCValPtr pUnion)
         case GCSubwindowMode:
         {
             uint newclipmode = void;
-            NEXTVAL(unsigned int, newclipmode);
+            mixin(NEXTVAL!(uint, newclipmode));
 
             if (newclipmode <= IncludeInferiors)
                 pGC.subWindowMode = newclipmode;
@@ -312,7 +312,7 @@ int ChangeGC(ClientPtr client, GCPtr pGC, BITS32 mask, ChangeGCValPtr pUnion)
         case GCGraphicsExposures:
         {
             uint newge = void;
-            NEXTVAL(unsigned int, newge);
+            mixin(NEXTVAL!(uint, newge));
 
             if (newge <= xTrue)
                 pGC.graphicsExposures = newge;
@@ -384,7 +384,7 @@ int ChangeGC(ClientPtr client, GCPtr pGC, BITS32 mask, ChangeGCValPtr pUnion)
         case GCArcMode:
         {
             uint newarcmode = void;
-            NEXTVAL(unsigned int, newarcmode);
+            mixin(NEXTVAL!(uint, newarcmode));
 
             if (newarcmode <= ArcPieSlice)
                 pGC.arcMode = newarcmode;
@@ -545,7 +545,7 @@ GCPtr CreateGC(DrawablePtr pDrawable, BITS32 mask, XID* pval, int* pStatus, XID 
     *pStatus = XaceHookResourceAccess(client, gcid, X11_RESTYPE_GC, pGC,
                         X11_RESTYPE_NONE, null, DixCreateAccess | DixSetAttrAccess);
     if (*pStatus != Success)
-        goto out;
+        goto out_;
 
     pGC.stateChanges = GCAllBits;
     if (!(*pGC.pScreen.CreateGC) (pGC))
@@ -555,7 +555,7 @@ GCPtr CreateGC(DrawablePtr pDrawable, BITS32 mask, XID* pval, int* pStatus, XID 
     else
         *pStatus = Success;
 
- out:
+ out_:
     if (*pStatus != Success) {
         if (!pGC.tileIsPixel && !pGC.tile.pixmap)
             pGC.tileIsPixel = TRUE;    /* undo special case */
