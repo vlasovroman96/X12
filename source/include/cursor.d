@@ -53,7 +53,7 @@ public import screenint;
 public import window;
 public import privates;
 
-enum NullCursor = ((CursorPtr)NULL);
+enum NullCursor = cast(CursorPtr)null;
 
 /* Provide support for alpha composited cursors */
 version = ARGB_CURSOR;
