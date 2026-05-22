@@ -532,7 +532,7 @@ private Bool exaAssertNotDirty(PixmapPtr pPixmap)
     nbox = RegionNumRects(&ValidReg);
 
     if (!nbox)
-        goto out;
+        goto out_;
 
     pBox = RegionRects(&ValidReg);
 
@@ -581,7 +581,7 @@ private Bool exaAssertNotDirty(PixmapPtr pPixmap)
     pExaPixmap.use_gpu_copy = save_use_gpu_copy;
     pPixmap.devKind = save_pitch;
 
- out:
+ out_:
     RegionUninit(&ValidReg);
     return ret;
 }
