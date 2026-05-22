@@ -738,35 +738,35 @@ enum EXA_MIXED_PIXMAPS = (1 << 6);
 /** @} */
 
 /* in exa.c */
-extern _X_EXPORT ExaDriverPtr; exaDriverAlloc(void);
+extern ExaDriverPtr exaDriverAlloc(void);
 
-extern _X_EXPORT exaDriverInit(ScreenPtr pScreen, ExaDriverPtr pScreenInfo);
+extern int exaDriverInit(ScreenPtr pScreen, ExaDriverPtr pScreenInfo);
 
-extern _X_EXPORT exaDriverFini(ScreenPtr pScreen);
+extern int exaDriverFini(ScreenPtr pScreen);
 
-extern _X_EXPORT exaMarkSync(ScreenPtr pScreen);
-extern _X_EXPORT exaWaitSync(ScreenPtr pScreen);
+extern int exaMarkSync(ScreenPtr pScreen);
+extern int exaWaitSync(ScreenPtr pScreen);
 
-extern _X_EXPORT unsigned; c_long exaGetPixmapOffset(PixmapPtr pPix);
+extern ulong exaGetPixmapOffset(PixmapPtr pPix);
 
-extern _X_EXPORT unsigned; c_long exaGetPixmapPitch(PixmapPtr pPix);
+extern ulong exaGetPixmapPitch(PixmapPtr pPix);
 
-extern _X_EXPORT* exaGetPixmapDriverPrivate(PixmapPtr p);
+extern int* exaGetPixmapDriverPrivate(PixmapPtr p);
 
 /* in exa_offscreen.c */
-extern _X_EXPORT* exaOffscreenAlloc(ScreenPtr pScreen, int size, int align_, Bool locked, ExaOffscreenSaveProc save, void* privData);
+extern int* exaOffscreenAlloc(ScreenPtr pScreen, int size, int align_, Bool locked, ExaOffscreenSaveProc save, void* privData);
 
-extern _X_EXPORT* exaOffscreenFree(ScreenPtr pScreen, ExaOffscreenArea* area);
+extern int* exaOffscreenFree(ScreenPtr pScreen, ExaOffscreenArea* area);
 
-extern _X_EXPORT exaEnableDisableFBAccess(ScreenPtr pScreen, Bool enable);
+extern int exaEnableDisableFBAccess(ScreenPtr pScreen, Bool enable);
 
-extern _X_EXPORT exaDrawableIsOffscreen(DrawablePtr pDrawable);
+extern int exaDrawableIsOffscreen(DrawablePtr pDrawable);
 
 /* in exa.c */
-extern _X_EXPORT exaMoveInPixmap(PixmapPtr pPixmap);
+extern int exaMoveInPixmap(PixmapPtr pPixmap);
 
 /* in exa_unaccel.c */
-extern _X_EXPORT exaGetPixmapFirstPixel(PixmapPtr pPixmap);
+extern int exaGetPixmapFirstPixel(PixmapPtr pPixmap);
 
 /**
  * Returns TRUE if the given planemask covers all the significant bits in the
