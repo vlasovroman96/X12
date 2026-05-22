@@ -46,41 +46,41 @@ private char* _glamor_create_getcolor_fs_source(ScreenPtr screen, int stops_coun
 {
     char* gradient_fs = null;
 
-enum gradient_fs_getcolor =\
-	    GLAMOR_DEFAULT_PRECISION\
-	    "uniform int n_stop;\n"\
-	    "uniform float stops[%d];\n"\
-	    "uniform vec4 stop_colors[%d];\n"\
-	    "vec4 get_color(float stop_len)\n"\
-	    "{\n"\
-	    "    int i = 0;\n"\
-	    "    vec4 stop_color_before;\n"\
-	    "    vec4 gradient_color;\n"\
-	    "    float stop_delta;\n"\
-	    "    float percentage; \n"\
-	    "    \n"\
-	    "    if(stop_len < stops[0])\n"\
-	    "        return vec4(0.0, 0.0, 0.0, 0.0); \n"\
-	    "    for(i = 1; i < n_stop; i++) {\n"\
-	    "        if(stop_len < stops[i])\n"\
-	    "            break; \n"\
-	    "    }\n"\
-	    "    if(i == n_stop)\n"\
-	    "        return vec4(0.0, 0.0, 0.0, 0.0); \n"\
-	    "    \n"\
-	    "    stop_color_before = stop_colors[i-1];\n"\
-	    "    stop_delta = stops[i] - stops[i-1];\n"\
-	    "    if(stop_delta > 2.0)\n"\
-	    "        percentage = 0.0;\n" /*For comply with pixman, walker->stepper overflow.*/\
-	    "    else if(stop_delta < 0.000001)\n"\
-	    "        percentage = 0.0;\n"\
-	    "    else \n"\
-	    "        percentage = (stop_len - stops[i-1])/stop_delta;\n"\
-	    "    \n"\
-	    "    gradient_color = stop_color_before;\n"\
-	    "    if(percentage != 0.0)\n"\
-	    "        gradient_color += (stop_colors[i] - gradient_color)*percentage;\n"\
-	    "    return vec4(gradient_color.rgb * gradient_color.a, gradient_color.a);\n"\
+enum gradient_fs_getcolor =
+	    GLAMOR_DEFAULT_PRECISION~
+	    "uniform int n_stop;\n"~
+	    "uniform float stops[%d];\n"~
+	    "uniform vec4 stop_colors[%d];\n"~
+	    "vec4 get_color(float stop_len)\n"~
+	    "{\n"~
+	    "    int i = 0;\n"~
+	    "    vec4 stop_color_before;\n"~
+	    "    vec4 gradient_color;\n"~
+	    "    float stop_delta;\n"~
+	    "    float percentage; \n"~
+	    "    \n"~
+	    "    if(stop_len < stops[0])\n"~
+	    "        return vec4(0.0, 0.0, 0.0, 0.0); \n"~
+	    "    for(i = 1; i < n_stop; i++) {\n"~
+	    "        if(stop_len < stops[i])\n"~
+	    "            break; \n"~
+	    "    }\n"~
+	    "    if(i == n_stop)\n"~
+	    "        return vec4(0.0, 0.0, 0.0, 0.0); \n"~
+	    "    \n"~
+	    "    stop_color_before = stop_colors[i-1];\n"~
+	    "    stop_delta = stops[i] - stops[i-1];\n"~
+	    "    if(stop_delta > 2.0)\n"~
+	    "        percentage = 0.0;\n"~ /*For comply with pixman, walker->stepper overflow.*/
+	    "    else if(stop_delta < 0.000001)\n"~
+	    "        percentage = 0.0;\n"~
+	    "    else \n"~
+	    "        percentage = (stop_len - stops[i-1])/stop_delta;\n"~
+	    "    \n"~
+	    "    gradient_color = stop_color_before;\n"~
+	    "    if(percentage != 0.0)\n"~
+	    "        gradient_color += (stop_colors[i] - gradient_color)*percentage;\n"~
+	    "    return vec4(gradient_color.rgb * gradient_color.a, gradient_color.a);\n"~
 	    "}\n";
 
     /* Because the array access for shader is very slow, the performance is very low
@@ -224,93 +224,93 @@ private Bool _glamor_create_radial_gradient_program(ScreenPtr screen, int stops_
      *     radius associated to it is negative (or it falls outside the valid t range)
      */
 
-enum gradient_radial_fs_template =\
-	    GLAMOR_DEFAULT_PRECISION\
-	    "uniform mat3 transform_mat;\n"\
-	    "uniform int repeat_type;\n"\
-	    "uniform float A_value;\n"\
-	    "uniform vec2 c1;\n"\
-	    "uniform float r1;\n"\
-	    "uniform vec2 c2;\n"\
-	    "uniform float r2;\n"\
-	    "varying vec2 source_texture;\n"\
-	    "\n"\
-	    "vec4 get_color(float stop_len);\n"\
-	    "\n"\
-	    "int t_invalid;\n"\
-	    "\n"\
-	    "float get_stop_len()\n"\
-	    "{\n"\
-	    "    float t = 0.0;\n"\
-	    "    float sqrt_value;\n"\
-	    "    t_invalid = 0;\n"\
-	    "    \n"\
-	    "    vec3 tmp = vec3(source_texture.x, source_texture.y, 1.0);\n"\
-	    "    vec3 source_texture_trans = transform_mat * tmp;\n"\
-	    "    source_texture_trans.xy = source_texture_trans.xy/source_texture_trans.z;\n"\
-	    "    float B_value = (source_texture_trans.x - c1.x) * (c2.x - c1.x)\n"\
-	    "                     + (source_texture_trans.y - c1.y) * (c2.y - c1.y)\n"\
-	    "                     + r1 * (r2 - r1);\n"\
-	    "    float C_value = (source_texture_trans.x - c1.x) * (source_texture_trans.x - c1.x)\n"\
-	    "                     + (source_texture_trans.y - c1.y) * (source_texture_trans.y - c1.y)\n"\
-	    "                     - r1*r1;\n"\
-	    "    if(abs(A_value) < 0.00001) {\n"\
-	    "        if(B_value == 0.0) {\n"\
-	    "            t_invalid = 1;\n"\
-	    "            return t;\n"\
-	    "        }\n"\
-	    "        t = 0.5 * C_value / B_value;"\
-	    "    } else {\n"\
-	    "        sqrt_value = B_value * B_value - A_value * C_value;\n"\
-	    "        if(sqrt_value < 0.0) {\n"\
-	    "            t_invalid = 1;\n"\
-	    "            return t;\n"\
-	    "        }\n"\
-	    "        sqrt_value = sqrt(sqrt_value);\n"\
-	    "        t = (B_value + sqrt_value) / A_value;\n"\
-	    "    }\n"\
-	    "    if(repeat_type == %d) {\n" /* RepeatNone case. */\
-	    "        if((t <= 0.0) || (t > 1.0))\n"\
-	    /*           try another if first one invalid*/\
-	    "            t = (B_value - sqrt_value) / A_value;\n"\
-	    "        \n"\
-	    "        if((t <= 0.0) || (t > 1.0)) {\n" /*still invalid, return.*/\
-	    "            t_invalid = 1;\n"\
-	    "            return t;\n"\
-	    "        }\n"\
-	    "    } else {\n"\
-	    "        if(t * (r2 - r1) <= -1.0 * r1)\n"\
-	    /*           try another if first one invalid*/\
-	    "            t = (B_value - sqrt_value) / A_value;\n"\
-	    "        \n"\
-	    "        if(t * (r2 -r1) <= -1.0 * r1) {\n" /*still invalid, return.*/\
-	    "            t_invalid = 1;\n"\
-	    "            return t;\n"\
-	    "        }\n"\
-	    "    }\n"\
-	    "    \n"\
-	    "    if(repeat_type == %d){\n" /* repeat normal*/\
-	    "        t = fract(t);\n"\
-	    "    }\n"\
-	    "    \n"\
-	    "    if(repeat_type == %d) {\n" /* repeat reflect*/\
-	    "        t = abs(fract(t * 0.5 + 0.5) * 2.0 - 1.0);\n"\
-	    "    }\n"\
-	    "    \n"\
-	    "    return t;\n"\
-	    "}\n"\
-	    "\n"\
-	    "void main()\n"\
-	    "{\n"\
-	    "    float stop_len = get_stop_len();\n"\
-	    "    if(t_invalid == 1) {\n"\
-	    "        gl_FragColor = vec4(0.0, 0.0, 0.0, 0.0);\n"\
-	    "    } else {\n"\
-	    "        gl_FragColor = get_color(stop_len);\n"\
-	    "    }\n"\
-	    "}\n"\
-	    "\n"\
-            "%s\n" /* fs_getcolor_source */;
+enum gradient_radial_fs_template =
+	    GLAMOR_DEFAULT_PRECISION~
+	    "uniform mat3 transform_mat;\n"~
+        	    "uniform int repeat_type;\n"~
+        	    "uniform float A_value;\n"~
+        	    "uniform vec2 c1;\n"~
+        	    "uniform float r1;\n"~
+        	    "uniform vec2 c2;\n"~
+        	    "uniform float r2;\n"~
+        	    "varying vec2 source_texture;\n"~
+        	    "\n"~
+        	    "vec4 get_color(float stop_len);\n"~
+        	    "\n"~
+        	    "int t_invalid;\n"~
+        	    "\n"~
+        	    "float get_stop_len()\n"~
+        	    "{\n"~
+        	    "    float t = 0.0;\n"~
+        	    "    float sqrt_value;\n"~
+        	    "    t_invalid = 0;\n"~
+        	    "    \n"~
+        	    "    vec3 tmp = vec3(source_texture.x, source_texture.y, 1.0);\n"~
+        	    "    vec3 source_texture_trans = transform_mat * tmp;\n"~
+        	    "    source_texture_trans.xy = source_texture_trans.xy/source_texture_trans.z;\n"~
+        	    "    float B_value = (source_texture_trans.x - c1.x) * (c2.x - c1.x)\n"~
+        	    "                     + (source_texture_trans.y - c1.y) * (c2.y - c1.y)\n"~
+        	    "                     + r1 * (r2 - r1);\n"~
+        	    "    float C_value = (source_texture_trans.x - c1.x) * (source_texture_trans.x - c1.x)\n"~
+        	    "                     + (source_texture_trans.y - c1.y) * (source_texture_trans.y - c1.y)\n"~
+        	    "                     - r1*r1;\n"~
+        	    "    if(abs(A_value) < 0.00001) {\n"~
+        	    "        if(B_value == 0.0) {\n"~
+        	    "            t_invalid = 1;\n"~
+        	    "            return t;\n"~
+        	    "        }\n"~
+        	    "        t = 0.5 * C_value / B_value;"~
+        	    "    } else {\n"~
+        	    "        sqrt_value = B_value * B_value - A_value * C_value;\n"~
+        	    "        if(sqrt_value < 0.0) {\n"~
+        	    "            t_invalid = 1;\n"~
+        	    "            return t;\n"~
+        	    "        }\n"~
+        	    "        sqrt_value = sqrt(sqrt_value);\n"~
+        	    "        t = (B_value + sqrt_value) / A_value;\n"~
+        	    "    }\n"~
+        	    "    if(repeat_type == %d) {\n"~ /* RepeatNone case. */
+	    "        if((t <= 0.0) || (t > 1.0))\n"~
+        	    /*           try another if first one invalid*/
+	    "            t = (B_value - sqrt_value) / A_value;\n"~
+        	    "        \n"~
+        	    "        if((t <= 0.0) || (t > 1.0)) {\n" ~/*still invalid, return.*/
+	    "            t_invalid = 1;\n"~
+        	    "            return t;\n"~
+        	    "        }\n"~
+        	    "    } else {\n"~
+        	    "        if(t * (r2 - r1) <= -1.0 * r1)\n"~
+        	    /*           try another if first one invalid*/
+	    "            t = (B_value - sqrt_value) / A_value;\n"~
+        	    "        \n"~
+        	    "        if(t * (r2 -r1) <= -1.0 * r1) {\n"~ /*still invalid, return.*/
+	    "            t_invalid = 1;\n"~
+        	    "            return t;\n"~
+        	    "        }\n"~
+        	    "    }\n"~
+        	    "    \n"~
+        	    "    if(repeat_type == %d){\n"~ /* repeat normal*/
+	    "        t = fract(t);\n"~
+        	    "    }\n"~
+        	    "    \n"~
+        	    "    if(repeat_type == %d) {\n" ~/* repeat reflect*/
+	    "        t = abs(fract(t * 0.5 + 0.5) * 2.0 - 1.0);\n"~
+        	    "    }\n"~
+        	    "    \n"~
+        	    "    return t;\n"~
+        	    "}\n"~
+        	    "\n"~
+        	    "void main()\n"~
+        	    "{\n"~
+        	    "    float stop_len = get_stop_len();\n"~
+        	    "    if(t_invalid == 1) {\n"~
+        	    "        gl_FragColor = vec4(0.0, 0.0, 0.0, 0.0);\n"~
+        	    "    } else {\n"~
+        	    "        gl_FragColor = get_color(stop_len);\n"~
+        	    "    }\n"~
+        	    "}\n"~
+        	    "\n"~
+                    "%s\n" /* fs_getcolor_source */;
     char* fs_getcolor_source = void;
 
     glamor_priv = glamor_get_screen_private(screen);
@@ -385,7 +385,7 @@ private Bool _glamor_create_linear_gradient_program(ScreenPtr screen, int stops_
     char* gradient_fs = null;
     GLint fs_prog = void, vs_prog = void;
 
-    const(char)* gradient_vs = GLAMOR_DEFAULT_PRECISION;
+    const(char)* gradient_vs = GLAMOR_DEFAULT_PRECISION~
         "attribute vec4 v_position;\n"
         ~ "attribute vec4 v_texcoord;\n"
         ~ "varying vec2 source_texture;\n"
@@ -444,59 +444,59 @@ private Bool _glamor_create_linear_gradient_program(ScreenPtr screen, int stops_
      *              before and after it. Use the interpolation formula to compute RGBA.
      */
 
-enum gradient_fs_template =	\
-	    GLAMOR_DEFAULT_PRECISION\
-	    "uniform mat3 transform_mat;\n"\
-	    "uniform int repeat_type;\n"\
-	    "uniform int hor_ver;\n"\
-	    "uniform float pt_slope;\n"\
-	    "uniform float cos_val;\n"\
-	    "uniform float p1_distance;\n"\
-	    "uniform float pt_distance;\n"\
-	    "varying vec2 source_texture;\n"\
-	    "\n"\
-	    "vec4 get_color(float stop_len);\n"\
-	    "\n"\
-	    "float get_stop_len()\n"\
-	    "{\n"\
-	    "    vec3 tmp = vec3(source_texture.x, source_texture.y, 1.0);\n"\
-	    "    float distance;\n"\
-	    "    float _p1_distance;\n"\
-	    "    float _pt_distance;\n"\
-	    "    float y_dist;\n"\
-	    "    vec3 source_texture_trans = transform_mat * tmp;\n"\
-	    "    \n"\
-	    "    if(hor_ver == 0) { \n" /*Normal case.*/\
-	    "        y_dist = source_texture_trans.y - source_texture_trans.x*pt_slope;\n"\
-	    "        distance = y_dist * cos_val;\n"\
-	    "        _p1_distance = p1_distance * source_texture_trans.z;\n"\
-	    "        _pt_distance = pt_distance * source_texture_trans.z;\n"\
-	    "        \n"\
-	    "    } else if (hor_ver == 1) {\n"/*horizontal case.*/\
-	    "        distance = source_texture_trans.x;\n"\
-	    "        _p1_distance = p1_distance * source_texture_trans.z;\n"\
-	    "        _pt_distance = pt_distance * source_texture_trans.z;\n"\
-	    "    } \n"\
-	    "    \n"\
-	    "    distance = (distance - _p1_distance) / _pt_distance;\n"\
-	    "    \n"\
-	    "    if(repeat_type == %d){\n" /* repeat normal*/\
-	    "        distance = fract(distance);\n"\
-	    "    }\n"\
-	    "    \n"\
-	    "    if(repeat_type == %d) {\n" /* repeat reflect*/\
-	    "        distance = abs(fract(distance * 0.5 + 0.5) * 2.0 - 1.0);\n"\
-	    "    }\n"\
-	    "    \n"\
-	    "    return distance;\n"\
-	    "}\n"\
-	    "\n"\
-	    "void main()\n"\
-	    "{\n"\
-	    "    float stop_len = get_stop_len();\n"\
-	    "    gl_FragColor = get_color(stop_len);\n"\
-	    "}\n"\
-	    "\n"\
+enum gradient_fs_template =	
+	    GLAMOR_DEFAULT_PRECISION~
+	    "uniform mat3 transform_mat;\n"~
+	    "uniform int repeat_type;\n"~
+	    "uniform int hor_ver;\n"~
+	    "uniform float pt_slope;\n"~
+	    "uniform float cos_val;\n"~
+	    "uniform float p1_distance;\n"~
+	    "uniform float pt_distance;\n"~
+	    "varying vec2 source_texture;\n"~
+	    "\n"~
+	    "vec4 get_color(float stop_len);\n"~
+	    "\n"~
+	    "float get_stop_len()\n"~
+	    "{\n"~
+	    "    vec3 tmp = vec3(source_texture.x, source_texture.y, 1.0);\n"~
+	    "    float distance;\n"~
+	    "    float _p1_distance;\n"~
+	    "    float _pt_distance;\n"~
+	    "    float y_dist;\n"~
+	    "    vec3 source_texture_trans = transform_mat * tmp;\n"~
+	    "    \n"~
+	    "    if(hor_ver == 0) { \n"~ /*Normal case.*/
+	    "        y_dist = source_texture_trans.y - source_texture_trans.x*pt_slope;\n"~
+	    "        distance = y_dist * cos_val;\n"~
+	    "        _p1_distance = p1_distance * source_texture_trans.z;\n"~
+	    "        _pt_distance = pt_distance * source_texture_trans.z;\n"~
+	    "        \n"~
+	    "    } else if (hor_ver == 1) {\n"~/*horizontal case.*/
+	    "        distance = source_texture_trans.x;\n"~
+	    "        _p1_distance = p1_distance * source_texture_trans.z;\n"~
+	    "        _pt_distance = pt_distance * source_texture_trans.z;\n"~
+	    "    } \n"~
+	    "    \n"~
+	    "    distance = (distance - _p1_distance) / _pt_distance;\n"~
+	    "    \n"~
+	    "    if(repeat_type == %d){\n" ~/* repeat normal*/
+	    "        distance = fract(distance);\n"~
+	    "    }\n"~
+	    "    \n"~
+	    "    if(repeat_type == %d) {\n"~ /* repeat reflect*/
+	    "        distance = abs(fract(distance * 0.5 + 0.5) * 2.0 - 1.0);\n"~
+	    "    }\n"~
+	    "    \n"~
+	    "    return distance;\n"~
+	    "}\n"~
+	    "\n"~
+	    "void main()\n"~
+	    "{\n"~
+	    "    float stop_len = get_stop_len();\n"~
+	    "    gl_FragColor = get_color(stop_len);\n"~
+	    "}\n"~
+	    "\n"~
             "%s" /* fs_getcolor_source */;
     char* fs_getcolor_source = void;
 
