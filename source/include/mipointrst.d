@@ -42,5 +42,5 @@ struct _MiPointerScreenRec {
     Bool waitForUpdate;         /* don't move cursor from input thread */
     Bool showTransparent;       /* show empty cursors */
 }alias miPointerScreenRec = _MiPointerScreenRec;
-alias miPointerScreenPtr = *;
+alias miPointerScreenPtr = miPointerScreenRec*;
                           /* MIPOINTRST_H */
