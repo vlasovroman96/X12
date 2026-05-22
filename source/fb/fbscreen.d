@@ -129,69 +129,88 @@ Bool fbSetupScreen(ScreenPtr pScreen, void* pbits, int xsize, int ysize, int dpi
     return TRUE;
 }
 
-version (FB_ACCESS_WRAPPER) {
-Bool wfbFinishScreenInit(ScreenPtr pScreen, void* pbits, int xsize, int ysize, int dpix, int dpiy, int width, int bpp, SetupWrapProcPtr setupWrap, FinishWrapProcPtr finishWrap);
-} else {
-Bool fbFinishScreenInit(ScreenPtr pScreen, void* pbits, int xsize, int ysize, int dpix, int dpiy, int width, int bpp)
-#endif
-{
-    VisualPtr visuals = void;
-    DepthPtr depths = void;
-    int nvisuals = void;
-    int ndepths = void;
-    int rootdepth = void;
-    VisualID defaultVisual = void;
 
-version (FB_DEBUG) {
-    int stride = void;
+version(FB_ACCESS_WRAPPER) {
+    Bool wfbFinishScreenInit(ScreenPtr pScreen, void* pbits, int xsize, int ysize, int dpix, int dpiy, int width, int bpp, SetupWrapProcPtr setupWrap, FinishWrapProcPtr finishWrap) {
+        VisualPtr visuals = void;
+        DepthPtr depths = void;
+        int nvisuals = void;
+        int ndepths = void;
+        int rootdepth = void;
+        VisualID defaultVisual = void;
 
-    ysize -= 2;
-    stride = (width * bpp) / 8;
-    fbSetBits(cast(FbStip*) pbits, stride / FbStip.sizeof, FB_HEAD_BITS);
-    pbits = cast(void*) (cast(char*) pbits + stride);
-    fbSetBits(cast(FbStip*) (cast(char*) pbits + stride * ysize),
-              stride / FbStip.sizeof, FB_TAIL_BITS);
+        int stride = void;
+
+        ysize -= 2;
+        stride = (width * bpp) / 8;
+        fbSetBits(cast(FbStip*) pbits, stride / FbStip.sizeof, FB_HEAD_BITS);
+        pbits = cast(void*) (cast(char*) pbits + stride);
+        fbSetBits(cast(FbStip*) (cast(char*) pbits + stride * ysize),
+                stride / FbStip.sizeof, FB_TAIL_BITS);
+        /* fb requires power-of-two bpp */
+        if (Ones(bpp) != 1)
+            return FALSE;
+        fbGetScreenPrivate(pScreen).setupWrap = setupWrap;
+        fbGetScreenPrivate(pScreen).finishWrap = finishWrap;
+        rootdepth = 0;
+        if (!fbInitVisuals(&visuals, &depths, &nvisuals, &ndepths, &rootdepth,
+                        &defaultVisual, (cast(c_ulong) 1 << (bpp - 1)),
+                        8))
+            return FALSE;
+        if (!miScreenInit(pScreen, pbits, xsize, ysize, dpix, dpiy, width,
+                        rootdepth, ndepths, depths,
+                        defaultVisual, nvisuals, visuals))
+            return FALSE;
+        /* overwrite miCloseScreen with our own */
+        pScreen.CloseScreen = fbCloseScreen;
+        return TRUE;
+    }
 }
-    /* fb requires power-of-two bpp */
-    if (Ones(bpp) != 1)
-        return FALSE;
-version (FB_ACCESS_WRAPPER) {
-    fbGetScreenPrivate(pScreen).setupWrap = setupWrap;
-    fbGetScreenPrivate(pScreen).finishWrap = finishWrap;
-}
-    rootdepth = 0;
-    if (!fbInitVisuals(&visuals, &depths, &nvisuals, &ndepths, &rootdepth,
-                       &defaultVisual, (cast(c_ulong) 1 << (bpp - 1)),
-                       8))
-        return FALSE;
-    if (!miScreenInit(pScreen, pbits, xsize, ysize, dpix, dpiy, width,
-                      rootdepth, ndepths, depths,
-                      defaultVisual, nvisuals, visuals))
-        return FALSE;
-    /* overwrite miCloseScreen with our own */
-    pScreen.CloseScreen = fbCloseScreen;
-    return TRUE;
+else {
+    Bool fbFinishScreenInit(ScreenPtr pScreen, void* pbits, int xsize, int ysize, int dpix, int dpiy, int width, int bpp) {
+        VisualPtr visuals = void;
+        DepthPtr depths = void;
+        int nvisuals = void;
+        int ndepths = void;
+        int rootdepth = void;
+        VisualID defaultVisual = void;
+        /* fb requires power-of-two bpp */
+        if (Ones(bpp) != 1)
+            return FALSE;
+        rootdepth = 0;
+        if (!fbInitVisuals(&visuals, &depths, &nvisuals, &ndepths, &rootdepth,
+                        &defaultVisual, (cast(c_ulong) 1 << (bpp - 1)),
+                        8))
+            return FALSE;
+        if (!miScreenInit(pScreen, pbits, xsize, ysize, dpix, dpiy, width,
+                        rootdepth, ndepths, depths,
+                        defaultVisual, nvisuals, visuals))
+            return FALSE;
+        /* overwrite miCloseScreen with our own */
+        pScreen.CloseScreen = fbCloseScreen;
+        return TRUE;
+    }
 }
 
 /* dts * (inch/dot) * (25.4 mm / inch) = mm */
 version (FB_ACCESS_WRAPPER) {
-Bool wfbScreenInit(ScreenPtr pScreen, void* pbits, int xsize, int ysize, int dpix, int dpiy, int width, int bpp, SetupWrapProcPtr setupWrap, FinishWrapProcPtr finishWrap)
-{
-    if (!fbSetupScreen(pScreen, pbits, xsize, ysize, dpix, dpiy, width, bpp))
-        return FALSE;
-    if (!wfbFinishScreenInit(pScreen, pbits, xsize, ysize, dpix, dpiy,
-                             width, bpp, setupWrap, finishWrap))
-        return FALSE;
-    return TRUE;
-}
+    Bool wfbScreenInit(ScreenPtr pScreen, void* pbits, int xsize, int ysize, int dpix, int dpiy, int width, int bpp, SetupWrapProcPtr setupWrap, FinishWrapProcPtr finishWrap)
+    {
+        if (!fbSetupScreen(pScreen, pbits, xsize, ysize, dpix, dpiy, width, bpp))
+            return FALSE;
+        if (!wfbFinishScreenInit(pScreen, pbits, xsize, ysize, dpix, dpiy,
+                                width, bpp, setupWrap, finishWrap))
+            return FALSE;
+        return TRUE;
+    }
 } else {
-Bool fbScreenInit(ScreenPtr pScreen, void* pbits, int xsize, int ysize, int dpix, int dpiy, int width, int bpp)
-{
-    if (!fbSetupScreen(pScreen, pbits, xsize, ysize, dpix, dpiy, width, bpp))
-        return FALSE;
-    if (!fbFinishScreenInit(pScreen, pbits, xsize, ysize, dpix, dpiy,
-                            width, bpp))
-        return FALSE;
-    return TRUE;
+    Bool fbScreenInit(ScreenPtr pScreen, void* pbits, int xsize, int ysize, int dpix, int dpiy, int width, int bpp)
+    {
+        if (!fbSetupScreen(pScreen, pbits, xsize, ysize, dpix, dpiy, width, bpp))
+            return FALSE;
+        if (!fbFinishScreenInit(pScreen, pbits, xsize, ysize, dpix, dpiy,
+                                width, bpp))
+            return FALSE;
+        return TRUE;
+    }
 }
-}}
