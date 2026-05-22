@@ -33,7 +33,7 @@ extern(C): __gshared:
 
 import build.dix_config;
 
-import GL/gl;
+import GL.gl;
 import glxserver;
 import singlesize;
 import indirect_size_get;
