@@ -31,7 +31,7 @@ struct _mergeRopBits {
 }alias FbMergeRopRec = _mergeRopBits;
 alias FbMergeRopPtr = _mergeRopBits*;
 
-extern const(_X_EXPORT) FbMergeRopRec; FbMergeRopBits[16];
+extern FbMergeRopRec[16] FbMergeRopBits;
 
 enum string FbDeclareMergeRop() = `FbBits _ca1 = void, _cx1 = void, _ca2 = void, _cx2 = void;`;
 enum string FbDeclarePrebuiltMergeRop() = `FbBits _cca = void, _ccx = void;`;
@@ -80,30 +80,30 @@ enum string FbDoMaskRRop(string dst, string and, string xor, string mask) = `
  */
 enum string fbFillFromBit(string b,string t) = `(~(cast(` ~ t ~ `) ((` ~ b ~ `) & 1)-1))`;
 
-enum string fbXorT(string rop,string fg,string pm,string t) = `((((` ~ fg ~ `) & ` ~ fbFillFromBit!(`(` ~ rop ~ `) >> 1`,` ~ `t` ~ `) ~ `) | 
-			      (~(` ~ fg ~ `) & ` ~ fbFillFromBit!(`(` ~ rop ~ `) >> 3`,` ~ `t` ~ `) ~ `)) & (` ~ pm ~ `))`;
+enum string fbXorT(string rop,string fg,string pm,string t) = `((((` ~ fg ~ `) & ` ~ fbFillFromBit!(`(` ~ rop ~ `) >> 1`,t) ~ `) | 
+			      (~(` ~ fg ~ `) & ` ~ fbFillFromBit!(`(` ~ rop ~ `) >> 3`,t) ~ `)) & (` ~ pm ~ `))`;
 
-enum string fbAndT(string rop,string fg,string pm,string t) = `((((` ~ fg ~ `) & ` ~ fbFillFromBit! (`` ~ rop ~ ` ^ (` ~ rop ~ `>>1)`,` ~ `t` ~ `) ~ `) | 
-			      (~(` ~ fg ~ `) & ` ~ fbFillFromBit!(`(` ~ rop ~ `>>2) ^ (` ~ rop ~ `>>3)`,` ~ `t` ~ `) ~ `)) | 
+enum string fbAndT(string rop,string fg,string pm,string t) = `((((` ~ fg ~ `) & ` ~ fbFillFromBit! (`` ~ rop ~ ` ^ (` ~ rop ~ `>>1)`,t) ~ `) | 
+			      (~(` ~ fg ~ `) & ` ~ fbFillFromBit!(`(` ~ rop ~ `>>2) ^ (` ~ rop ~ `>>3)`,t) ~ `)) | 
 			     ~(` ~ pm ~ `))`;
 
-enum string fbXor(string rop,string fg,string pm) = `` ~ fbXorT!(` ~ `rop` ~ `,` ~ `fg` ~ `,` ~ `pm` ~ `,`FbBits`) ~ ``;
+enum string fbXor(string rop,string fg,string pm) = `` ~ fbXorT!(rop,fg,pm,`FbBits`) ~ ``;
 
-enum string fbAnd(string rop,string fg,string pm) = `` ~ fbAndT!(` ~ `rop` ~ `,` ~ `fg` ~ `,` ~ `pm` ~ `,`FbBits`) ~ ``;
+enum string fbAnd(string rop,string fg,string pm) = `` ~ fbAndT!(rop,fg,pm,`FbBits`) ~ ``;
 
-enum string fbXorStip(string rop,string fg,string pm) = `` ~ fbXorT!(` ~ `rop` ~ `,` ~ `fg` ~ `,` ~ `pm` ~ `,`FbStip`) ~ ``;
+enum string fbXorStip(string rop,string fg,string pm) = `` ~ fbXorT!(rop,fg,pm,`FbStip`) ~ ``;
 
-enum string fbAndStip(string rop,string fg,string pm) = `` ~ fbAndT!(` ~ `rop` ~ `,` ~ `fg` ~ `,` ~ `pm` ~ `,`FbStip`) ~ ``;
+enum string fbAndStip(string rop,string fg,string pm) = `` ~ fbAndT!(rop,fg,pm,`FbStip`) ~ ``;
 
 /*
  * Stippling operations;
  */
 
 enum string FbStippleRRop(string dst, string b, string fa, string fx, string ba, string bx) = `
-    (` ~ FbDoRRop!(` ~ `dst` ~ `, ` ~ `fa` ~ `, ` ~ `fx` ~ `) ~ ` & ` ~ b ~ `) | (` ~ FbDoRRop!(` ~ `dst` ~ `, ` ~ `ba` ~ `, ` ~ `bx` ~ `) ~ ` & ~` ~ b ~ `)`;
+    (` ~ FbDoRRop!(dst, fa, fx) ~ ` & ` ~ b ~ `) | (` ~ FbDoRRop!(dst, ba, bx) ~ ` & ~` ~ b ~ `)`;
 
 enum string FbStippleRRopMask(string dst, string b, string fa, string fx, string ba, string bx, string m) = `
-    (` ~ FbDoMaskRRop!(` ~ `dst` ~ `, ` ~ `fa` ~ `, ` ~ `fx` ~ `, ` ~ `m` ~ `) ~ ` & (` ~ b ~ `)) | (` ~ FbDoMaskRRop!(` ~ `dst` ~ `, ` ~ `ba` ~ `, ` ~ `bx` ~ `, ` ~ `m` ~ `) ~ ` & ~(` ~ b ~ `))`;
+    (` ~ FbDoMaskRRop!(dst, fa, fx, m) ~ ` & (` ~ b ~ `)) | (` ~ FbDoMaskRRop!(dst, ba, bx, m) ~ ` & ~(` ~ b ~ `))`;
 
 enum string FbDoLeftMaskByteStippleRRop(string dst, string b, string fa, string fx, string ba, string bx, string lb, string l) = `{ 
     FbBits __xor = ((` ~ fx ~ `) & (` ~ b ~ `)) | ((` ~ bx ~ `) & ~(` ~ b ~ `)); 
@@ -123,9 +123,9 @@ enum string FbOpaqueStipple(string b, string fg, string bg) = `(((` ~ fg ~ `) & 
  */
 enum string FbStipple1RopPick(string alu,string b) = `(((` ~ alu ~ `) >> (2 - (((` ~ b ~ `) & 1) << 1))) & 3)`;
 
-enum string FbOpaqueStipple1Rop(string alu,string fg,string bg) = `(` ~ FbStipple1RopPick!(` ~ `alu` ~ `,` ~ `fg` ~ `) ~ ` | 
-					   (` ~ FbStipple1RopPick!(` ~ `alu` ~ `,` ~ `bg` ~ `) ~ ` << 2))`;
+enum string FbOpaqueStipple1Rop(string alu,string fg,string bg) = `(` ~ FbStipple1RopPick!(alu,fg) ~ ` | 
+					   (` ~ FbStipple1RopPick!(alu,bg) ~ ` << 2))`;
 
-enum string FbStipple1Rop(string alu,string fg) = `(` ~ FbStipple1RopPick!(` ~ `alu` ~ `,` ~ `fg` ~ `) ~ ` | 4)`;
+enum string FbStipple1Rop(string alu,string fg) = `(` ~ FbStipple1RopPick!(alu,fg) ~ ` | 4)`;
 
 
