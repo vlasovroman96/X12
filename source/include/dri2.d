@@ -48,7 +48,7 @@ struct _DRI2BufferRec {
     uint format;
     void* driverPrivate;
 }alias DRI2BufferRec = _DRI2BufferRec;
-alias DRI2BufferPtr = *;
+alias DRI2BufferPtr = DRI2BufferRec*;
 
 alias DRI2Buffer2Rec = DRI2BufferRec;
 alias DRI2Buffer2Ptr = DRI2BufferRec*;
