@@ -216,11 +216,11 @@ int ProcSetSelectionOwner(ClientPtr client)
         };
         CallCallbacks(&SelectionFilterCallback, &eventParam);
         if (!param.skip) {
-            xEvent event = {
-                u:selectionClear:time: time.milliseconds,
-                u:selectionClear:window: eventParam.owner,
-                u:selectionClear:atom: eventParam.selection,
-            };
+            xEvent event;
+                event.u.selectionClear.time = time.milliseconds;
+                event.u.selectionClear.window = eventParam.owner;
+                event.u.selectionClear.atom = eventParam.selection;
+
             event.u.u.type = SelectionClear;
             WriteEventsToClient(eventParam.recvClient, 1, &event);
         }
@@ -250,12 +250,12 @@ int ProcGetSelectionOwner(ClientPtr client)
     };
     CallCallbacks(&SelectionFilterCallback, &param);
     if (param.skip) {
-        goto out;
+        goto out_;
     }
 
     if (!ValidAtom(param.selection)) {
         param.status = BadAtom;
-        goto out;
+        goto out_;
     }
 
     xGetSelectionOwnerReply reply = { 0 };
@@ -266,7 +266,7 @@ int ProcGetSelectionOwner(ClientPtr client)
     else if (param.status == BadMatch)
         reply.owner = None;
     else
-        goto out;
+        goto out_;
 
     if (client.swapped) {
         swapl(&reply.owner);
@@ -274,7 +274,7 @@ int ProcGetSelectionOwner(ClientPtr client)
 
     return X_SEND_REPLY_SIMPLE(client, reply);
 
-out:
+out_:
     if (param.status != Success)
         client.errorValue = stuff.id;
     return param.status;
