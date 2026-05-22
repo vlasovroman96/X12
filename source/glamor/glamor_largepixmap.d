@@ -26,7 +26,7 @@ pragma(inline, true) private glamor_pixmap_private* __glamor_large(glamor_pixmap
  */
 version (none) {
 //#define DEBUGF(str, ...)  do {} while(0)
-enum string DEBUGF(string str, ...) = `ErrorF(` ~ str ~ `, ##__VA_ARGS__)`;
+enum string DEBUGF(string str) = `ErrorF(` ~ str ~ `, ##__VA_ARGS__)`;
 //#define DEBUGRegionPrint(x) do {} while (0)
 enum DEBUGRegionPrint = RegionPrint;
 }
