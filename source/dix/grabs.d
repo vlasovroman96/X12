@@ -72,8 +72,8 @@ import inputstr;
 import cursorstr;
 import exglobals;
 
-enum MasksPerDetailMask = 8    /* 256 keycodes and 256 possible;
-                                   modifier combinations; modifier MASKWORD(buf, i);
+enum MasksPerDetailMask = 8;    /* 256 keycodes and 256 possible;
+                                   modifier combinations; modifier MASKWORD(buf, i); */
 enum string BITCLEAR(string buf, string i) = `MASKWORD(` ~ buf ~ `, ` ~ i ~ `) &= ~BITMASK(` ~ i ~ `)`;
 enum string GETBIT(string buf, string i) = `(MASKWORD(` ~ buf ~ `, ` ~ i ~ `) & BITMASK(` ~ i ~ `))`;
 
