@@ -27,7 +27,7 @@ SOFTWARE.
  
 public import servermd;
 public import dixfont;
-public import deimos.X11.fonts/fontstruct;
+public import deimos.X11.fonts.fontstruct;
 public import deimos.X11.Xproto;         /* for xQueryFontReply */
 
 enum string FONTCHARSET(string font) = `(` ~ font ~ `)`;
@@ -58,13 +58,13 @@ enum string FONTREFCNT(string font) = `(` ~ font ~ `).refcnt`;
 /*
  * for linear char sets
  */
-enum string N1dChars(string pfont) = `(` ~ FONTLASTCOL!(` ~ `pfont` ~ `) ~ ` - ` ~ FONTFIRSTCOL!(` ~ `pfont` ~ `) ~ ` + 1)`;
+enum string N1dChars(string pfont) = `(` ~ FONTLASTCOL!(pfont) ~ ` - ` ~ FONTFIRSTCOL!(pfont) ~ ` + 1)`;
 
 /*
  * for 2D char sets
  */
-enum string N2dChars(string pfont) = `(` ~ N1dChars!(` ~ `pfont` ~ `) ~ ` * 
-			 (` ~ FONTLASTROW!(` ~ `pfont` ~ `) ~ ` - ` ~ FONTFIRSTROW!(` ~ `pfont` ~ `) ~ ` + 1))`;
+enum string N2dChars(string pfont) = `(` ~ N1dChars!(pfont) ~ ` * 
+			 (` ~ FONTLASTROW!(pfont) ~ ` - ` ~ FONTFIRSTROW!(pfont) ~ ` + 1))`;
 
 enum GLYPHPADBYTES = -1;
 
