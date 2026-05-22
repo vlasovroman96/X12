@@ -59,7 +59,7 @@ extern _X_EXPORT miPointerGetPosition(DeviceIntPtr pDev, int* x, int* y);
  * x and y are modified in-place. */
 extern _X_EXPORT miPointerSetPosition(DeviceIntPtr pDev, int mode, double* x, double* y, int* nevents, InternalEvent* events);
 
-extern _X_EXPORT DevPrivateKeyRec; miPointerScreenKeyRec;
+extern DevPrivateKeyRec miPointerScreenKeyRec;
 
 enum miPointerScreenKey = (&miPointerScreenKeyRec);
 
@@ -89,6 +89,6 @@ enum miPointerScreenKey = (&miPointerScreenKeyRec);
                         but wait for somebody else triggering it explicitly
  * @return TRUE on success, FALSE usually indicates allocation failure
  */
-_X_EXPORT Bool miPointerInitialize(ScreenPtr pScreen, miPointerSpriteFuncPtr spriteFuncs, miPointerScreenFuncPtr screenFuncs, Bool waitForUpdate);
+ Bool miPointerInitialize(ScreenPtr pScreen, miPointerSpriteFuncPtr spriteFuncs, miPointerScreenFuncPtr screenFuncs, Bool waitForUpdate);
 
                           /* MIPOINTER_H */
