@@ -82,7 +82,7 @@ enum string damageGetScrPriv(string pScr) = `(cast(DamageScrPrivPtr)
     dixLookupPrivate(&(` ~ pScr ~ `).devPrivates, damageScrPrivateKey))`;
 
 enum string damageScrPriv(string pScr) = `
-    DamageScrPrivPtr pScrPriv = ` ~ damageGetScrPriv!(` ~ `pScr` ~ `) ~ `;`;
+    DamageScrPrivPtr pScrPriv = ` ~ damageGetScrPriv!(pScr) ~ `;`;
 
 enum string damageGetPixPriv(string pPix) = `
     dixLookupPrivate(&(` ~ pPix ~ `).devPrivates, damagePixPrivateKey)`;
@@ -91,13 +91,13 @@ enum string damgeSetPixPriv(string pPix,string v) = `
     dixSetPrivate(&(` ~ pPix ~ `).devPrivates, damagePixPrivateKey, ` ~ v ~ `)`;
 
 enum string damagePixPriv(string pPix) = `
-    DamagePtr pDamage = ` ~ damageGetPixPriv!(` ~ `pPix` ~ `) ~ `;`;
+    DamagePtr pDamage = ` ~ damageGetPixPriv!(pPix) ~ `;`;
 
 enum string damageGetGCPriv(string pGC) = `
     dixLookupPrivate(&(` ~ pGC ~ `).devPrivates, damageGCPrivateKey)`;
 
 enum string damageGCPriv(string pGC) = `
-    DamageGCPrivPtr pGCPriv = ` ~ damageGetGCPriv!(` ~ `pGC` ~ `) ~ `;`;
+    DamageGCPrivPtr pGCPriv = ` ~ damageGetGCPriv!(pGC) ~ `;`;
 
 enum string damageGetWinPriv(string pWin) = `
     (cast(DamagePtr)dixLookupPrivate(&(` ~ pWin ~ `).devPrivates, damageWinPrivateKey))`;
