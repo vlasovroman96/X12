@@ -108,7 +108,7 @@ enum N_STACK_GLYPHS = 512;
 
     if (n_glyphs > N_STACK_GLYPHS) {
 	if (((pglyphs = cast(pixman_glyph_t*) calloc(n_glyphs, pixman_glyph_t.sizeof)) == 0))
-	    goto out;
+	    goto out_;
     }
 
     i = 0;
@@ -134,7 +134,7 @@ enum N_STACK_GLYPHS = 512;
 		}
 
 		if (((glyphImage = image_from_pict(pPicture, FALSE, &xoff, &yoff)) == 0))
-		    goto out;
+		    goto out_;
 
 		g = pixman_glyph_cache_insert(glyphCache, glyph, null,
 					      glyph.info.x,
@@ -144,7 +144,7 @@ enum N_STACK_GLYPHS = 512;
 		free_pixman_pict(pPicture, glyphImage);
 
 		if (!g)
-		    goto out;
+		    goto out_;
 	    }
 
 	    pglyphs[i].x = x;
@@ -160,7 +160,7 @@ enum N_STACK_GLYPHS = 512;
     }
 
     if (((srcImage = image_from_pict(pSrc, FALSE, &srcXoff, &srcYoff)) == 0))
-	goto out;
+	goto out_;
 
     if (((dstImage = image_from_pict(pDst, TRUE, &dstXoff, &dstYoff)) == 0))
 	goto out_free_src;
@@ -193,7 +193,7 @@ enum N_STACK_GLYPHS = 512;
 out_free_src:
     free_pixman_pict(pSrc, srcImage);
 
-out:
+out_:
     pixman_glyph_cache_thaw(glyphCache);
     if (pglyphs != stack_glyphs.ptr)
 	free(pglyphs);
