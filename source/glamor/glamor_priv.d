@@ -41,34 +41,34 @@ public import misyncshm;
 public import misyncstr;
 }
 
-public import epoxy/gl;
+public import epoxy.gl;
 version (GLAMOR_HAS_GBM) {
 version = MESA_EGL_NO_X11_HEADERS;
 version = EGL_NO_X11;
-public import epoxy/egl;
+public import epoxy.egl;
 }
 
-enum GLAMOR_DEFAULT_PRECISION =  \
-    "#ifdef GL_ES\n"              \
-    "precision mediump float;\n"  \
+enum GLAMOR_DEFAULT_PRECISION = 
+    "#ifdef GL_ES\n"             ~
+    "precision mediump float;\n" ~
     "#endif\n";
 
-enum GLAMOR_DEFAULT_POINT_SIZE =  \
-    "#ifdef GL_ES\n"              \
-    "       gl_PointSize = 1.0;\n"  \
+enum GLAMOR_DEFAULT_POINT_SIZE = 
+    "#ifdef GL_ES\n"             ~
+    "       gl_PointSize = 1.0;\n" ~
     "#endif\n";
 
-enum GLAMOR_COMPAT_DEFINES_VS =  \
-    "#define in attribute\n" \
-    "#define out varying\n"  \
+enum GLAMOR_COMPAT_DEFINES_VS = 
+    "#define in attribute\n"~
+    "#define out varying\n"
 ;
-enum GLAMOR_COMPAT_DEFINES_FS =  \
-    "#if __VERSION__ < 130\n" \
-    "#define in varying\n"  \
-    "#define frag_color gl_FragColor\n" \
-    "#define texture texture2D\n" \
-    "#else\n" \
-    "out vec4 frag_color;\n" \
+enum GLAMOR_COMPAT_DEFINES_FS = 
+    "#if __VERSION__ < 130\n"~
+    "#define in varying\n" ~
+    "#define frag_color gl_FragColor\n"~
+    "#define texture texture2D\n"~
+    "#else\n"~
+    "out vec4 frag_color;\n"~
     "#endif\n";
 
 public import glyphstr;
@@ -666,7 +666,7 @@ void glamor_gldrawarrays_quads_using_indices(glamor_screen_private* glamor_priv,
 Bool glamor_get_drawable_location(const(DrawablePtr) drawable);
 void glamor_get_drawable_deltas(DrawablePtr drawable, PixmapPtr pixmap, int* x, int* y);
 GLint glamor_compile_glsl_prog(GLenum type, const(char)* source);
-Bool glamor_link_glsl_prog(ScreenPtr screen, GLint prog, const(char)* format, ...); _X_ATTRIBUTE_PRINTF(3,4);
+Bool glamor_link_glsl_prog(ScreenPtr screen, GLint prog, const(char)* format, ...);
 void glamor_get_color_4f_from_pixel(PixmapPtr pixmap, c_ulong fg_pixel, GLfloat* color);
 
 int glamor_set_destination_pixmap(PixmapPtr pixmap);
