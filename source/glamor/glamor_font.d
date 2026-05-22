@@ -27,8 +27,8 @@ import core.stdc.config: c_long, c_ulong;
 import build.dix_config;
 
 import core.stdc.stddef;
-import deimos.X11.fonts/fontstruct; // libxfont2.h missed to include that
-import deimos.X11.fonts/libxfont2;
+import deimos.X11.fonts.fontstruct; // libxfont2.h missed to include that
+import deimos.X11.fonts.libxfont2;
 
 import glamor_priv;
 import glamor_font;
