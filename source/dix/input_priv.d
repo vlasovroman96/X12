@@ -250,7 +250,7 @@ int InputThreadUnregisterDev(int fd);
  * @return pointer to device cursor
  */
 CursorPtr InputDevGetSpriteCursor(DeviceIntPtr pDev);
-    _X_ATTRIBUTE_NONNULL_ARG(1);
+    // _X_ATTRIBUTE_NONNULL_ARG(1);
 
 /*
  * @brief confine cursor position to specific region
@@ -264,7 +264,7 @@ CursorPtr InputDevGetSpriteCursor(DeviceIntPtr pDev);
  * @param py     in/out buffer for Y position
  */
 void ConfineToShape(RegionPtr region, int* px, int* py);
-    _X_ATTRIBUTE_NONNULL_ARG(1,2,3);
+    // _X_ATTRIBUTE_NONNULL_ARG(1,2,3);
 
 /*
  * @brief get root window the input device is currently on
@@ -273,7 +273,7 @@ void ConfineToShape(RegionPtr region, int* px, int* py);
  * @return pointer to current root window
  */
 WindowPtr InputDevCurrentRootWindow(DeviceIntPtr pDev);
-    _X_ATTRIBUTE_NONNULL_ARG(1);
+    // _X_ATTRIBUTE_NONNULL_ARG(1);
 
 /*
  * @brief return Window underneath the input device's cursor sprite
@@ -282,7 +282,7 @@ WindowPtr InputDevCurrentRootWindow(DeviceIntPtr pDev);
  * @return pointer to window the cursor is currently above
  */
 WindowPtr InputDevSpriteWindow(DeviceIntPtr pDev);
-    _X_ATTRIBUTE_NONNULL_ARG(1);
+    // _X_ATTRIBUTE_NONNULL_ARG(1);
 
 /*
  * @brief deliver a raw input device event
@@ -291,7 +291,7 @@ WindowPtr InputDevSpriteWindow(DeviceIntPtr pDev);
  * @param device    pointer to input device structure
  */
 void DeliverRawEvent(RawDeviceEvent* event, DeviceIntPtr device);
-    _X_ATTRIBUTE_NONNULL_ARG(1,2);
+    // _X_ATTRIBUTE_NONNULL_ARG(1,2);
 
 /*
  * @brief callback on input device events
@@ -307,7 +307,7 @@ extern CallbackListPtr DeviceEventCallback;
  *  3) The first master device.
  */
 DeviceIntPtr PickPointer(ClientPtr pClient);
-    _X_ATTRIBUTE_NONNULL_ARG(1);
+    // _X_ATTRIBUTE_NONNULL_ARG(1);
 
 /*
  * @brief pick an appropriate keyboard for the given client
@@ -316,7 +316,7 @@ DeviceIntPtr PickPointer(ClientPtr pClient);
  * paired with the client's pointer.
  */
 DeviceIntPtr PickKeyboard(ClientPtr client);
-    _X_ATTRIBUTE_NONNULL_ARG(1);
+    // _X_ATTRIBUTE_NONNULL_ARG(1);
 
 /*
  * @brief check whether input device is a pointer device
@@ -325,7 +325,7 @@ DeviceIntPtr PickKeyboard(ClientPtr client);
  * @return TRUE if dev is a pointer device
  */
 Bool IsPointerDevice(DeviceIntPtr dev);
-    _X_ATTRIBUTE_NONNULL_ARG(1);
+    // _X_ATTRIBUTE_NONNULL_ARG(1);
 
 /*
  * @brief check whether input device is a keyboard
@@ -334,7 +334,7 @@ Bool IsPointerDevice(DeviceIntPtr dev);
  * @return TRUE if dev is a keyboard device
  */
 Bool IsKeyboardDevice(DeviceIntPtr dev);
-    _X_ATTRIBUTE_NONNULL_ARG(1);
+    // _X_ATTRIBUTE_NONNULL_ARG(1);
 
 /*
  * @brief check whether input device is a master
@@ -343,7 +343,7 @@ Bool IsKeyboardDevice(DeviceIntPtr dev);
  * @return TRUE if the device is a master
  */
 Bool InputDevIsMaster(DeviceIntPtr dev);
-    _X_ATTRIBUTE_NONNULL_ARG(1);
+    // _X_ATTRIBUTE_NONNULL_ARG(1);
 
 /*
  * @brief check whether input device is floating
@@ -356,7 +356,7 @@ Bool InputDevIsMaster(DeviceIntPtr dev);
  * @return TRUE if the device is in `floating` state
  */
 Bool InputDevIsFloating(DeviceIntPtr dev);
-    _X_ATTRIBUTE_NONNULL_ARG(1);
+    // _X_ATTRIBUTE_NONNULL_ARG(1);
 
 /*
  * @brief store timestamp as the device's last event time
@@ -365,7 +365,7 @@ Bool InputDevIsFloating(DeviceIntPtr dev);
  * @param time      the timestamp to store
  */
 void NoticeTime(const(DeviceIntPtr) dev, TimeStamp time);
-    _X_ATTRIBUTE_NONNULL_ARG(1);
+    // _X_ATTRIBUTE_NONNULL_ARG(1);
 
 /*
  * @brief store event's timestamp as the device's last event time
@@ -374,7 +374,7 @@ void NoticeTime(const(DeviceIntPtr) dev, TimeStamp time);
  * @param dev       device the timestamp is stored for
  */
 void NoticeEventTime(InternalEvent* ev, DeviceIntPtr dev);
-    _X_ATTRIBUTE_NONNULL_ARG(1,2);
+    // _X_ATTRIBUTE_NONNULL_ARG(1,2);
 
 /*
  * @brief retrieve last event's timestamp for given device ID
