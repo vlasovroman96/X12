@@ -75,7 +75,7 @@ struct _ExaGlyphBuffer {
     ExaCompositeRectRec[GLYPH_BUFFER_SIZE] rects;
     int count;
 }alias ExaGlyphBuffer = _ExaGlyphBuffer;
-alias ExaGlyphBufferPtr = *;
+alias ExaGlyphBufferPtr = ExaGlyphBuffer*;
 
 enum ExaGlyphCacheResult {
     ExaGlyphSuccess,            /* Glyph added to render buffer */
