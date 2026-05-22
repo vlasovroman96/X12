@@ -35,7 +35,7 @@ private const(glamor_facet) glamor_facet_poly_lines = {
     name: "poly_lines",
     vs_vars: "in vec2 primitive;\n",
     vs_exec: ("       vec2 pos = vec2(0.0,0.0);\n"
-                GLAMOR_POS(gl_Position, primitive.xy)),
+                ~GLAMOR_POS(gl_Position, primitive.xy)),
 };
 
 private Bool glamor_poly_lines_solid_gl(DrawablePtr drawable, GCPtr gc, int mode, int n, DDXPointPtr points)
@@ -106,7 +106,7 @@ private Bool glamor_poly_lines_solid_gl(DrawablePtr drawable, GCPtr gc, int mode
 
     BUG_RETURN_VAL(!pixmap_priv, FALSE);
 
-    glamor_pixmap_loop(pixmap_priv, box_index) {
+    glamor_pixmap_loop(pixmap_priv, box_index); {
         int nbox = RegionNumRects(gc.pCompositeClip);
         BoxPtr box = RegionRects(gc.pCompositeClip);
 
