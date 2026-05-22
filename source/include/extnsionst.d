@@ -77,13 +77,13 @@ struct ExtensionEntry {
  */
 alias EventSwapPtr = void function(xEvent*, xEvent*);
 
-extern _X_EXPORT EventSwapPtr; EventSwapVector[128];
+extern EventSwapPtr[128] EventSwapVector;
 
-extern _X_EXPORT NotImplemented(xEvent*, xEvent*); _X_NORETURN;
+extern noreturn NotImplemented(xEvent*, xEvent*);
 
-extern _X_EXPORT* AddExtension(const(char)*, int, int, int function(ClientPtr), int function(ClientPtr), void function(ExtensionEntry*), ushort function(ClientPtr));
+extern int* AddExtension(const(char)*, int, int, int function(ClientPtr), int function(ClientPtr), void function(ExtensionEntry*), ushort function(ClientPtr));
 
-extern _X_EXPORT* CheckExtension(const(char)* extname);
-extern _X_EXPORT* GetExtensionEntry(int major);
+extern int* CheckExtension(const(char)* extname);
+extern int* GetExtensionEntry(int major);
 
                           /* EXTENSIONSTRUCT_H */
