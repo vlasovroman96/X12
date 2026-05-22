@@ -31,31 +31,31 @@ public import screenint;
 public import pixmap;
 public import gc;
 
-enum XSHM_PUT_IMAGE_ARGS = \
-    DrawablePtr		/* dst */, \
-    GCPtr		/* pGC */, \
-    int			/* depth */, \
-    unsigned int	/* format */, \
-    int			/* w */, \
-    int			/* h */, \
-    int			/* sx */, \
-    int			/* sy */, \
-    int			/* sw */, \
-    int			/* sh */, \
-    int			/* dx */, \
-    int			/* dy */, \
-    char *                      /* data */;
+enum string XSHM_PUT_IMAGE_ARGS = "
+    DrawablePtr,		/* dst */,
+    GCPtr,		/* pGC */,
+    int			/* depth */,
+    unsigned int	/* format */,
+    int			/* w */,
+    int			/* h */,
+    int			/* sx */,
+    int			/* sy */,
+    int			/* sw */,
+    int			/* sh */,
+    int			/* dx */,
+    int			/* dy */,
+    char *      ";                /* data */;
 
-enum XSHM_CREATE_PIXMAP_ARGS = \
-    ScreenPtr	/* pScreen */, \
-    int		/* width */, \
-    int		/* height */, \
-    int		/* depth */, \
-    char *                      /* addr */;
+enum XSHM_CREATE_PIXMAP_ARGS = "
+    ScreenPtr	/* pScreen */, 
+    int		/* width */, 
+    int		/* height */,
+    int		/* depth */, 
+    char *                      /* addr */";
 
 struct _ShmFuncs {
-    PixmapPtr function(XSHM_CREATE_PIXMAP_ARGS) CreatePixmap;
-    void function(XSHM_PUT_IMAGE_ARGS) PutImage;
+    PixmapPtr function(mixin(XSHM_CREATE_PIXMAP_ARGS)) CreatePixmap;
+    void function(mixin(XSHM_PUT_IMAGE_ARGS)) PutImage;
 }alias ShmFuncs = _ShmFuncs;
 alias ShmFuncsPtr = _ShmFuncs*;
 
@@ -69,10 +69,10 @@ enum string SHMDESC_IS_FD(string shmdesc) = `((` ~ shmdesc ~ `).is_fd)`;
 enum string SHMDESC_IS_FD(string shmdesc) = `(0)`;
 }
 
-_X_EXPORT void ShmRegisterFuncs(ScreenPtr pScreen, ShmFuncsPtr funcs);
-_X_EXPORT void ShmRegisterFbFuncs(ScreenPtr pScreen);
+void ShmRegisterFuncs(ScreenPtr pScreen, ShmFuncsPtr funcs);
+void ShmRegisterFbFuncs(ScreenPtr pScreen);
 
-extern _X_EXPORT ShmCompletionCode;
-extern _X_EXPORT BadShmSegCode;
+extern int ShmCompletionCode;
+extern int BadShmSegCode;
 
                           /* _SHMINT_H_ */
