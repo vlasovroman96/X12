@@ -123,7 +123,7 @@ enum FALSE = 0;
 public import os;                 /* for ALLOCATE_LOCAL and DEALLOCATE_LOCAL */
 public import deimos.X11.Xfuncs;         /* for bcopy, bzero, and bcmp */
 
-enum NullBox = ((BoxPtr)0);
+enum NullBox = cast(BoxPtr)0;
 
 /* @deprecated */
 enum string min(string a, string b) = `(((` ~ a ~ `) < (` ~ b ~ `)) ? (` ~ a ~ `) : (` ~ b ~ `))`;
@@ -204,7 +204,7 @@ enum string LengthRestS(string stuff) = `
     ((client.req_len << 1) - (((*` ~ stuff ~ `) >> 1).sizeof))`;
 
 enum string SwapRestS(string stuff) = `
-    SwapShorts(cast(short*)(` ~ stuff ~ ` + 1), ` ~ LengthRestS!(` ~ `stuff` ~ `) ~ `)`;
+    SwapShorts(cast(short*)(` ~ stuff ~ ` + 1), ` ~ LengthRestS!(stuff) ~ `)`;
 
 static if (HasVersion!"__GNUC__" && ((__GNUC__ > 4) || (__GNUC__ == 4 && __GNUC_MINOR__ >= 3))) {
 
@@ -289,7 +289,7 @@ alias GrabPtr = _GrabRec*;
 
 alias x_server_generation_t = c_ulong;
 
-extern _X_EXPORT unsigned; c_long globalSerialNumber;
-extern _X_EXPORT x_server_generation_t; serverGeneration;
+extern ulong globalSerialNumber;
+extern x_server_generation_t serverGeneration;
 
 }                          /* MISC_H */
