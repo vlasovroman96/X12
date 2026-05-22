@@ -101,7 +101,7 @@ private int proc_dri3_query_version(ClientPtr client)
             reply.minorVersion = 4;
             break;
         }
-    }){}
+    });
 
     DIX_FOR_EACH_GPU_SCREEN({
         if (!dri3_screen_can_one_point_one(walkScreen)) {
@@ -119,7 +119,7 @@ private int proc_dri3_query_version(ClientPtr client)
             reply.minorVersion = 4;
             break;
         }
-    }){}
+    });
 
     /* From DRI3 proto:
      *
