@@ -60,7 +60,7 @@ struct _SelectionFilterParamRec {
     Atom property;
     Atom target;
 }alias SelectionFilterParamRec = _SelectionFilterParamRec;
-alias SelectionFilterParamPtr = *;
+alias SelectionFilterParamPtr = SelectionFilterParamRec*;
 
 extern Selection* CurrentSelections;
 
