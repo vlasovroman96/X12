@@ -13,8 +13,8 @@ extern(C): __gshared:
  
 version = MESA_EGL_NO_X11_HEADERS;
 version = EGL_NO_X11;
-public import epoxy/gl;
-public import epoxy/egl;
+public import epoxy.gl;
+public import epoxy.egl;
 
 public import scrnintstr;
 public import glamor_egl_ext;
