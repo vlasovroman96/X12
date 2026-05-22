@@ -26,7 +26,7 @@ extern(C): __gshared:
 
 import build.dix_config;
 
-import deimos.X11.fonts/fontstruct;
+import deimos.X11.fonts.fontstruct;
 
 import fb.fb_priv;
 import include.dixfontstr;
