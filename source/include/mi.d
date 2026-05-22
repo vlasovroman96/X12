@@ -49,7 +49,7 @@ SOFTWARE.
 
  
 public import deimos.X11.X;
-public import deimos.X11.fonts/font;
+public import deimos.X11.fonts.font;
 
 public import regionstr;
 public import validate;
@@ -147,8 +147,8 @@ extern _X_EXPORT miPolylines(DrawablePtr pDrawable, GCPtr pGC, int mode, int npt
 
 extern _X_EXPORT miZeroPolyArc(DrawablePtr, GCPtr, int, xArc*);
 
-_X_EXPORT void miZeroLine(DrawablePtr dst, GCPtr gc, int mode, int nptInit, xPoint* pptInit);
-_X_EXPORT void miZeroDashLine(DrawablePtr dst, GCPtr pgc, int mode, int nptInit, xPoint* pptInit);
+_X_EXPORT miZeroLine(DrawablePtr dst, GCPtr gc, int mode, int nptInit, xPoint* pptInit);
+_X_EXPORT miZeroDashLine(DrawablePtr dst, GCPtr pgc, int mode, int nptInit, xPoint* pptInit);
 
 extern _X_EXPORT miPolyFillArc(DrawablePtr, GCPtr, int, xArc*);
 
