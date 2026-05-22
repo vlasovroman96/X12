@@ -76,7 +76,7 @@ void SendEventToAllWindows(DeviceIntPtr dev, Mask mask, xEvent* ev, int count);
 
 void TouchRejected(DeviceIntPtr sourcedev, TouchPointInfoPtr ti, XID resource, TouchOwnershipEvent* ev);
 
-_X_HIDDEN void XI2EventSwap(xGenericEvent* from, xGenericEvent* to);
+void XI2EventSwap(xGenericEvent* from, xGenericEvent* to);
 
 /* For an event such as MappingNotify which affects client interpretation
  * of input events sent by device dev, should we notify the client, or
