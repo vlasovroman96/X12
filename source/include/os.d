@@ -73,7 +73,7 @@ public import misc;
  * part of public SDK / driver API
  */
 version (_X_ATTRIBUTE_NONNULL_ARG) {} else {
-enum string _X_ATTRIBUTE_NONNULL_ARG(...) = `__attribute__((nonnull(__VA_ARGS__)))`;
+enum string = `__attribute__((nonnull(__VA_ARGS__)))`;
 }
 
 version (_X_ATTRIBUTE_VPRINTF) {} else {
@@ -155,7 +155,7 @@ extern _X_EXPORT* XNFalloc(c_ulong);
  * This function calloc(3)s buffer, terminating the server if there is not
  * enough memory.
  */
-extern _X_EXPORT* XNFcalloc(c_ulong); _X_DEPRECATED;
+extern _X_EXPORT* XNFcalloc(c_ulong);
 
 /*
  * This function calloc(3)s buffer, terminating the server if there is not
@@ -193,7 +193,7 @@ extern _X_EXPORT PrivsElevated();
 extern _X_EXPORT GetClientFd(ClientPtr);
 
 /* stuff for FlushCallback */
-extern _X_EXPORT CallbackListPtr; FlushCallback;
+extern CallbackListPtr FlushCallback;
 
 extern _X_EXPORT TimeSinceLastInputEvent();
 
@@ -256,21 +256,19 @@ extern _X_EXPORT _X_ATTRIBUTE_PRINTF();
 extern _X_EXPORT _X_ATTRIBUTE_PRINTF();
 
 extern _X_EXPORT LogHdrMessageVerb(MessageType type, int verb, const(char)* msg_format, va_list msg_args, const(char)* hdr_format, ...);
-_X_ATTRIBUTE_PRINTF(3, 0)
-_X_ATTRIBUTE_PRINTF(5, 6);
 
-extern _X_EXPORT _X_NORETURN;
+// extern _X_EXPORT _X_NORETURN;
 
 extern _X_EXPORT _X_ATTRIBUTE_PRINTF();
 
 extern _X_EXPORT xorg_backtrace();
 
 /* should not be used anymore, just for backwards compat with drivers */
-enum string LogVMessageVerbSigSafe(...) = `LogVMessageVerb(__VA_ARGS__)`;
-enum string LogMessageVerbSigSafe(...) = `LogMessageVerb(__VA_ARGS__)`;
-enum string ErrorFSigSafe(...) = `ErrorF(__VA_ARGS__)`;
-enum string VErrorFSigSafe(...) = `VErrorF(__VA_ARGS__)`;
-enum string VErrorF(...) = `LogVMessageVerb(X_NONE, -1, __VA_ARGS__)`;
+// enum string LogVMessageVerbSigSafe(...) = `LogVMessageVerb(__VA_ARGS__)`;
+// enum string LogMessageVerbSigSafe(...) = `LogMessageVerb(__VA_ARGS__)`;
+// enum string ErrorFSigSafe(...) = `ErrorF(__VA_ARGS__)`;
+// enum string VErrorFSigSafe(...) = `VErrorF(__VA_ARGS__)`;
+// enum string VErrorF(...) = `LogVMessageVerb(X_NONE, -1, __VA_ARGS__)`;
 
 /* only for backwards compat with drivers that haven't kept up yet
    (xf86-video-intel)
