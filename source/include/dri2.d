@@ -221,7 +221,7 @@ struct _DRI2InfoRec {
     DRI2DestroyBuffer2ProcPtr DestroyBuffer2;
     DRI2CopyRegion2ProcPtr CopyRegion2;
 }alias DRI2InfoRec = _DRI2InfoRec;
-alias DRI2InfoPtr = *;
+alias DRI2InfoPtr = DRI2InfoRec*;
 
 extern _X_EXPORT DRI2ScreenInit(ScreenPtr pScreen, DRI2InfoPtr info);
 
