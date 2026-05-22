@@ -30,6 +30,8 @@ import os.bug_priv;
 import glamor_priv;
 import dixfontstr;
 import glamor_transform;
+import servermd.h;
+import deimos.X11.X;
 
 /*
  * Fill in the array of charinfo pointers for the provided characters. For
@@ -189,7 +191,7 @@ private int glamor_text(DrawablePtr drawable, GCPtr gc, glamor_font_t* glamor_fo
 
         BUG_RETURN_VAL(!pixmap_priv, 0);
 
-        glamor_pixmap_loop(pixmap_priv, box_index) {
+        glamor_pixmap_loop(pixmap_priv, box_index); {
             BoxPtr box = RegionRects(gc.pCompositeClip);
             int nbox = RegionNumRects(gc.pCompositeClip);
 
@@ -225,30 +227,35 @@ private const(char)[56] vs_vars_text = "in vec4 primitive;\n"
     ~ "in vec2 source;\n"
     ~ "out vec2 glyph_pos;\n";
 
-private const(char)[75] vs_exec_text = "       vec2 pos = primitive.zw * vec2(gl_VertexID&1, (gl_VertexID&2)>>1);\n";
-    GLAMOR_POS(gl_Position, (primitive.xy + pos))
+private const(char)[75] vs_exec_text = "       vec2 pos = primitive.zw * vec2(gl_VertexID&1, (gl_VertexID&2)>>1);\n"
+    ~GLAMOR_POS(gl_Position, (primitive.xy + pos))~
     "       glyph_pos = source + pos;\n";
 
 private const(char)[20] fs_vars_text = "in vec2 glyph_pos;\n";
 
-private const(char)[48] fs_exec_text = "       ivec2 itile_texture = ivec2(glyph_pos);\n";
-#if BITMAP_BIT_ORDER == MSBFirst
-    "       uint x = uint(7) - uint(itile_texture.x & 7);\n"
-#else
-    ~ "       uint x = uint(itile_texture.x & 7);\n"
-#endif
+static if(BITMAP_BIT_ORDER == MSBFirst) {
+    private const(char)[48] fs_exec_text = "       ivec2 itile_texture = ivec2(glyph_pos);\n"
+    ~ "       uint x = uint(7) - uint(itile_texture.x & 7);\n"
+    // ~ "       uint x = uint(itile_texture.x & 7);\n"
     ~ "       itile_texture.x >>= 3;\n"
     ~ "       uint texel = texelFetch(font, itile_texture, 0).x;\n"
     ~ "       uint bit = (texel >> x) & uint(1);\n"
     ~ "       if (bit == uint(0))\n"
     ~ "               discard;\n";
+}
+else {
+    private const(char)[48] fs_exec_text = "       ivec2 itile_texture = ivec2(glyph_pos);\n"
+        ~ "       uint x = uint(itile_texture.x & 7);\n"
+        ~ "       itile_texture.x >>= 3;\n"
+        ~ "       uint texel = texelFetch(font, itile_texture, 0).x;\n"
+        ~ "       uint bit = (texel >> x) & uint(1);\n"
+        ~ "       if (bit == uint(0))\n"
+        ~ "               discard;\n";
+}
 
-private const(char)[48] fs_exec_te = "       ivec2 itile_texture = ivec2(glyph_pos);\n";
-#if BITMAP_BIT_ORDER == MSBFirst
-    "       uint x = uint(7) - uint(itile_texture.x & 7);\n"
-#else
-    ~ "       uint x = uint(itile_texture.x & 7);\n"
-#endif
+static if(BITMAP_BIT_ORDER == MSBFirst) {
+    private const(char)[48] fs_exec_te = "       ivec2 itile_texture = ivec2(glyph_pos);\n"
+    ~ "       uint x = uint(7) - uint(itile_texture.x & 7);\n"
     ~ "       itile_texture.x >>= 3;\n"
     ~ "       uint texel = texelFetch(font, itile_texture, 0).x;\n"
     ~ "       uint bit = (texel >> x) & uint(1);\n"
@@ -256,10 +263,22 @@ private const(char)[48] fs_exec_te = "       ivec2 itile_texture = ivec2(glyph_p
     ~ "               frag_color = bg;\n"
     ~ "       else\n"
     ~ "               frag_color = fg;\n";
+}
+else {
+    private const(char)[48] fs_exec_te = "       ivec2 itile_texture = ivec2(glyph_pos);\n"
+    ~ "       uint x = uint(itile_texture.x & 7);\n"
+    ~ "       itile_texture.x >>= 3;\n"
+    ~ "       uint texel = texelFetch(font, itile_texture, 0).x;\n"
+    ~ "       uint bit = (texel >> x) & uint(1);\n"
+    ~ "       if (bit == uint(0))\n"
+    ~ "               frag_color = bg;\n"
+    ~ "       else\n"
+    ~ "               frag_color = fg;\n";
+}
 
 private const(glamor_facet) glamor_facet_poly_text = {
     name: "poly_text",
-    version: 130,
+    c_version: 130,
     vs_vars: vs_vars_text,
     vs_exec: vs_exec_text,
     fs_vars: fs_vars_text,
@@ -334,7 +353,7 @@ int glamor_poly_text16(DrawablePtr drawable, GCPtr gc, int x, int y, int count, 
 
 private const(glamor_facet) glamor_facet_image_text = {
     name: "image_text",
-    version: 130,
+    c_version: 130,
     vs_vars: vs_vars_text,
     vs_exec: vs_exec_text,
     fs_vars: fs_vars_text,
@@ -365,7 +384,7 @@ private Bool glamor_te_text_use(DrawablePtr drawable, GCPtr gc, glamor_program* 
 
 private const(glamor_facet) glamor_facet_te_text = {
     name: "te_text",
-    version: 130,
+    c_version: 130,
     vs_vars: vs_vars_text,
     vs_exec: vs_exec_text,
     fs_vars: fs_vars_text,
