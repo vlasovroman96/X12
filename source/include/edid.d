@@ -209,9 +209,9 @@ struct _Xf86Monitor {
     int no_sections;
     ubyte* rawData;
 }alias xf86Monitor = _Xf86Monitor;
-alias xf86MonPtr = *;
+alias xf86MonPtr = xf86Monitor*;
 
-extern _X_EXPORT xf86MonPtr; ConfiguredMonitor;
+extern xf86MonPtr ConfiguredMonitor;
 
 /*
  * check whether monitor supports Generalized Timing Formula
@@ -219,6 +219,6 @@ extern _X_EXPORT xf86MonPtr; ConfiguredMonitor;
  * @param  monitor the monitor information structure to check
  * @return true if GTF is supported by the monitor
  */
-_X_EXPORT bool xf86Monitor_gtf_supported(xf86MonPtr monitor);
+bool xf86Monitor_gtf_supported(xf86MonPtr monitor);
 
                           /* _EDID_H_ */
