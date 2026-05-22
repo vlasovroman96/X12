@@ -63,13 +63,13 @@ enum CT_YSORTED =		10;
 enum CT_YXSORTED =		14;
 enum CT_YXBANDED =		18;
 
-enum GC_CHANGE_SERIAL_BIT =        (((unsigned long)1)<<31);
+enum ulong GC_CHANGE_SERIAL_BIT =        1<<31;
 
 enum DRAWABLE_SERIAL_BITS =        (~(GC_CHANGE_SERIAL_BIT));
 
 enum MAX_SERIAL_NUM =     (1L<<28);
 
-enum NEXT_SERIAL_NUMBER = ((++globalSerialNumber) > MAX_SERIAL_NUM ? \
+enum NEXT_SERIAL_NUMBER = ((++globalSerialNumber) > MAX_SERIAL_NUM ? 
 	    (globalSerialNumber  = 1): globalSerialNumber);
 
 alias GCInterestPtr = _GCInterest*;
@@ -82,7 +82,7 @@ union _ChangeGCVal {
     CARD32 val;
     void* ptr;
 }alias ChangeGCVal = _ChangeGCVal;
-alias ChangeGCValPtr = *;
+alias ChangeGCValPtr = ChangeGCVal*;
 
 extern _X_EXPORT ChangeGC(ClientPtr, GCPtr, BITS32, ChangeGCValPtr);
 
