@@ -77,15 +77,15 @@ Equipment Corporation.
 ******************************************************************/
 
 import build.dix_config;
-import version-config;
+import versio_config;
 
 import pixman;
 import deimos.X11.X;
 import deimos.X11.Xos;            /* for unistd.h  */
 import deimos.X11.Xproto;
-import deimos.X11.fonts/font;
-import deimos.X11.fonts/fontstruct;
-import deimos.X11.fonts/libxfont2;
+import deimos.X11.fonts.font;
+import deimos.X11.fonts.fontstruct;
+import deimos.X11.fonts.libxfont2;
 
 import config.hotplug_priv;
 import dix.atom_priv;
@@ -206,7 +206,7 @@ int dix_main(int argc, char** argv, char** envp)
                 FatalError("failed to create screen pixmap properties");
             if (!dixScreenRaiseCreateResources(walkScreen))
                 FatalError("failed to create screen resources");
-        }){}
+        });
 
         /* Let all screens register the necessary privates */
     
@@ -215,7 +215,7 @@ int dix_main(int argc, char** argv, char** envp)
                 FatalError("failed to create screen pixmap properties");
             if (!dixScreenRaiseCreateResources(walkScreen))
                 FatalError("failed to create screen resources");
-        }){}
+        });
 
         /* Then use these privates to initialize root windows etc */
 
@@ -227,7 +227,7 @@ int dix_main(int argc, char** argv, char** envp)
             if (!CreateRootWindow(walkScreen))
                 FatalError("failed to create root window");
             CallCallbacks(&RootWindowFinalizeCallback, walkScreen);
-        }){}
+        });
 
         if (SetDefaultFontPath(defaultFontPath) != Success) {
             ErrorF("[dix] failed to set default font path '%s'",
@@ -254,7 +254,7 @@ version (XINERAMA) {
         DIX_FOR_EACH_SCREEN({
             InitRootWindow(walkScreen.root);
             CallCallbacks(&PostInitRootWindowCallback, walkScreen);
-        }){}
+        });
 
         LogMessageVerb(X_INFO, 1, "Screen(s) initialized\n");
 
@@ -269,19 +269,25 @@ version (XINERAMA) {
 
         dixCloseRegistry();
 
-version (XINERAMA) {
+version(XINERAMA) {
         if (!noPanoramiXExtension) {
             if (!PanoramiXCreateConnectionBlock()) {
                 FatalError("could not create connection block info");
             }
         }
-        else
-} /* XINERAMA */
+        else/* XINERAMA */
         {
             if (!CreateConnectionBlock()) {
                 FatalError("could not create connection block info");
             }
         }
+
+}
+else {
+            if (!CreateConnectionBlock()) {
+                FatalError("could not create connection block info");
+            }
+}
 
         NotifyParentProcess();
 
@@ -316,7 +322,7 @@ version (XINERAMA) {
 
         InputThreadFini();
 
-        DIX_FOR_EACH_SCREEN({ walkScreen.root = NullWindow; }){}
+        DIX_FOR_EACH_SCREEN({ walkScreen.root = NullWindow; });
 
         CloseDownDevices();
 
