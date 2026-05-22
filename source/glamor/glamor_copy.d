@@ -56,7 +56,7 @@ private Bool use_copyarea(DrawablePtr drawable, GCPtr gc, glamor_program* prog, 
 private const(glamor_facet) glamor_facet_copyarea = {
     "copy_area",
     vs_vars: "in vec2 primitive;\n",
-    vs_exec: (GLAMOR_POS(gl_Position, primitive.xy)
+    vs_exec: (GLAMOR_POS(gl_Position, primitive.xy)~
                 "       fill_pos = (fill_offset + primitive.xy) * fill_size_inv;\n"),
     fs_exec: "       frag_color = texture(sampler, fill_pos);\n",
     locations: glamor_program_location_fillsamp | glamor_program_location_fillpos,
@@ -145,9 +145,9 @@ private Bool use_copyplane(DrawablePtr drawable, GCPtr gc, glamor_program* prog,
 
 private const(glamor_facet) glamor_facet_copyplane = {
     "copy_plane",
-    version: 130,
+    c_version: 130,
     vs_vars: "in vec2 primitive;\n",
-    vs_exec: (GLAMOR_POS(gl_Position, (primitive.xy))
+    vs_exec: (GLAMOR_POS(gl_Position, (primitive.xy))~
                 "       fill_pos = (fill_offset + primitive.xy) * fill_size_inv;\n"),
     fs_exec: ("       uvec4 bits = uvec4(round(texture(sampler, fill_pos) * bitmul));\n"
                 ~ "       if ((bits & bitplane) != uvec4(0,0,0,0))\n"
@@ -409,7 +409,7 @@ private Bool glamor_copy_fbo_fbo_draw(DrawablePtr src, DrawablePtr dst, GCPtr gc
 
     BUG_RETURN_VAL(!src_priv, FALSE);
 
-    glamor_pixmap_loop(src_priv, src_box_index) {
+    glamor_pixmap_loop(src_priv, src_box_index); {
         BoxPtr src_box = glamor_pixmap_box_at(src_priv, src_box_index);
 
         args.dx = dx + src_off_x - src_box.x1;
@@ -421,7 +421,7 @@ private Bool glamor_copy_fbo_fbo_draw(DrawablePtr src, DrawablePtr dst, GCPtr gc
 
         BUG_RETURN_VAL(!dst_priv, FALSE);
 
-        glamor_pixmap_loop(dst_priv, dst_box_index) {
+        glamor_pixmap_loop(dst_priv, dst_box_index); {
             BoxRec scissor = {
                 x1: max(-args.dx, bounds.x1),
                 y1: max(-args.dy, bounds.y1),
