@@ -385,12 +385,12 @@ static if (RANDR_12_INTERFACE) {
 }alias rrScrPrivRec = _rrScrPriv;
 alias rrScrPrivPtr = _rrScrPriv*;
 
-extern _X_EXPORT DevPrivateKeyRec; rrPrivKeyRec;
+extern DevPrivateKeyRec rrPrivKeyRec;
 
 enum rrPrivKey = (&rrPrivKeyRec);
 
 enum string rrGetScrPriv(string pScr) = `(cast(rrScrPrivPtr)dixLookupPrivate(&(` ~ pScr ~ `).devPrivates, rrPrivKey))`;
-enum string rrScrPriv(string pScr) = `rrScrPrivPtr pScrPriv = ` ~ rrGetScrPriv!(` ~ `pScr` ~ `) ~ `;`;
+enum string rrScrPriv(string pScr) = `rrScrPrivPtr pScrPriv = ` ~ rrGetScrPriv!(pScr) ~ `;`;
 enum string SetRRScreen(string s,string p) = `dixSetPrivate(&(` ~ s ~ `).devPrivates, rrPrivKey, ` ~ p ~ `)`;
 
 /*
