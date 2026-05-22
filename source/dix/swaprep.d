@@ -52,7 +52,7 @@ import build.dix_config;
 
 import deimos.X11.X;
 import deimos.X11.Xproto;
-import deimos.X11.fonts/fontstruct;
+import deimos.X11.fonts.fontstruct;
 
 import dix.dix_priv;
 
@@ -89,7 +89,7 @@ void SwapFontInfo(xQueryFontReply* pr)
     swapl(&pr.nCharInfos);
 }
 
-void _X_COLD SwapFont(xQueryFontReply* pr, Bool hasGlyphs)
+void SwapFont(xQueryFontReply* pr, Bool hasGlyphs)
 {
     xCharInfo* pxci = void;
     uint nchars = void, nprops = void;
@@ -116,7 +116,7 @@ void _X_COLD SwapFont(xQueryFontReply* pr, Bool hasGlyphs)
     }
 }
 
-void _X_COLD SErrorEvent(xError* from, xError* to)
+void SErrorEvent(xError* from, xError* to)
 {
     to.type = X_Error;
     to.errorCode = from.errorCode;
@@ -126,7 +126,7 @@ void _X_COLD SErrorEvent(xError* from, xError* to)
     to.majorCode = from.majorCode;
 }
 
-void _X_COLD SKeyButtonPtrEvent(xEvent* from, xEvent* to)
+void SKeyButtonPtrEvent(xEvent* from, xEvent* to)
 {
     to.u.u.type = from.u.u.type;
     to.u.u.detail = from.u.u.detail;
@@ -143,7 +143,7 @@ void _X_COLD SKeyButtonPtrEvent(xEvent* from, xEvent* to)
     to.u.keyButtonPointer.sameScreen = from.u.keyButtonPointer.sameScreen;
 }
 
-void _X_COLD SEnterLeaveEvent(xEvent* from, xEvent* to)
+void SEnterLeaveEvent(xEvent* from, xEvent* to)
 {
     to.u.u.type = from.u.u.type;
     to.u.u.detail = from.u.u.detail;
@@ -161,7 +161,7 @@ void _X_COLD SEnterLeaveEvent(xEvent* from, xEvent* to)
     to.u.enterLeave.flags = from.u.enterLeave.flags;
 }
 
-void _X_COLD SFocusEvent(xEvent* from, xEvent* to)
+void SFocusEvent(xEvent* from, xEvent* to)
 {
     to.u.u.type = from.u.u.type;
     to.u.u.detail = from.u.u.detail;
@@ -170,7 +170,7 @@ void _X_COLD SFocusEvent(xEvent* from, xEvent* to)
     to.u.focus.mode = from.u.focus.mode;
 }
 
-void _X_COLD SExposeEvent(xEvent* from, xEvent* to)
+void SExposeEvent(xEvent* from, xEvent* to)
 {
     to.u.u.type = from.u.u.type;
     cpswaps(from.u.u.sequenceNumber, to.u.u.sequenceNumber);
@@ -182,7 +182,7 @@ void _X_COLD SExposeEvent(xEvent* from, xEvent* to)
     cpswaps(from.u.expose.count, to.u.expose.count);
 }
 
-void _X_COLD SGraphicsExposureEvent(xEvent* from, xEvent* to)
+void SGraphicsExposureEvent(xEvent* from, xEvent* to)
 {
     to.u.u.type = from.u.u.type;
     cpswaps(from.u.u.sequenceNumber, to.u.u.sequenceNumber);
@@ -197,7 +197,7 @@ void _X_COLD SGraphicsExposureEvent(xEvent* from, xEvent* to)
     to.u.graphicsExposure.majorEvent = from.u.graphicsExposure.majorEvent;
 }
 
-void _X_COLD SNoExposureEvent(xEvent* from, xEvent* to)
+void SNoExposureEvent(xEvent* from, xEvent* to)
 {
     to.u.u.type = from.u.u.type;
     cpswaps(from.u.u.sequenceNumber, to.u.u.sequenceNumber);
@@ -206,7 +206,7 @@ void _X_COLD SNoExposureEvent(xEvent* from, xEvent* to)
     to.u.noExposure.majorEvent = from.u.noExposure.majorEvent;
 }
 
-void _X_COLD SVisibilityEvent(xEvent* from, xEvent* to)
+void SVisibilityEvent(xEvent* from, xEvent* to)
 {
     to.u.u.type = from.u.u.type;
     cpswaps(from.u.u.sequenceNumber, to.u.u.sequenceNumber);
@@ -214,7 +214,7 @@ void _X_COLD SVisibilityEvent(xEvent* from, xEvent* to)
     to.u.visibility.state = from.u.visibility.state;
 }
 
-void _X_COLD SCreateNotifyEvent(xEvent* from, xEvent* to)
+void SCreateNotifyEvent(xEvent* from, xEvent* to)
 {
     to.u.u.type = from.u.u.type;
     cpswaps(from.u.u.sequenceNumber, to.u.u.sequenceNumber);
@@ -228,7 +228,7 @@ void _X_COLD SCreateNotifyEvent(xEvent* from, xEvent* to)
     to.u.createNotify.override_ = from.u.createNotify.override_;
 }
 
-void _X_COLD SDestroyNotifyEvent(xEvent* from, xEvent* to)
+void SDestroyNotifyEvent(xEvent* from, xEvent* to)
 {
     to.u.u.type = from.u.u.type;
     cpswaps(from.u.u.sequenceNumber, to.u.u.sequenceNumber);
@@ -236,7 +236,7 @@ void _X_COLD SDestroyNotifyEvent(xEvent* from, xEvent* to)
     cpswapl(from.u.destroyNotify.window, to.u.destroyNotify.window);
 }
 
-void _X_COLD SUnmapNotifyEvent(xEvent* from, xEvent* to)
+void SUnmapNotifyEvent(xEvent* from, xEvent* to)
 {
     to.u.u.type = from.u.u.type;
     cpswaps(from.u.u.sequenceNumber, to.u.u.sequenceNumber);
@@ -245,7 +245,7 @@ void _X_COLD SUnmapNotifyEvent(xEvent* from, xEvent* to)
     to.u.unmapNotify.fromConfigure = from.u.unmapNotify.fromConfigure;
 }
 
-void _X_COLD SMapNotifyEvent(xEvent* from, xEvent* to)
+void SMapNotifyEvent(xEvent* from, xEvent* to)
 {
     to.u.u.type = from.u.u.type;
     cpswaps(from.u.u.sequenceNumber, to.u.u.sequenceNumber);
@@ -254,7 +254,7 @@ void _X_COLD SMapNotifyEvent(xEvent* from, xEvent* to)
     to.u.mapNotify.override_ = from.u.mapNotify.override_;
 }
 
-void _X_COLD SMapRequestEvent(xEvent* from, xEvent* to)
+void SMapRequestEvent(xEvent* from, xEvent* to)
 {
     to.u.u.type = from.u.u.type;
     cpswaps(from.u.u.sequenceNumber, to.u.u.sequenceNumber);
@@ -262,7 +262,7 @@ void _X_COLD SMapRequestEvent(xEvent* from, xEvent* to)
     cpswapl(from.u.mapRequest.window, to.u.mapRequest.window);
 }
 
-void _X_COLD SReparentEvent(xEvent* from, xEvent* to)
+void SReparentEvent(xEvent* from, xEvent* to)
 {
     to.u.u.type = from.u.u.type;
     cpswaps(from.u.u.sequenceNumber, to.u.u.sequenceNumber);
@@ -274,7 +274,7 @@ void _X_COLD SReparentEvent(xEvent* from, xEvent* to)
     to.u.reparent.override_ = from.u.reparent.override_;
 }
 
-void _X_COLD SConfigureNotifyEvent(xEvent* from, xEvent* to)
+void SConfigureNotifyEvent(xEvent* from, xEvent* to)
 {
     to.u.u.type = from.u.u.type;
     cpswaps(from.u.u.sequenceNumber, to.u.u.sequenceNumber);
@@ -291,7 +291,7 @@ void _X_COLD SConfigureNotifyEvent(xEvent* from, xEvent* to)
     to.u.configureNotify.override_ = from.u.configureNotify.override_;
 }
 
-void _X_COLD SConfigureRequestEvent(xEvent* from, xEvent* to)
+void SConfigureRequestEvent(xEvent* from, xEvent* to)
 {
     to.u.u.type = from.u.u.type;
     to.u.u.detail = from.u.u.detail;  /* actually stack-mode */
@@ -309,7 +309,7 @@ void _X_COLD SConfigureRequestEvent(xEvent* from, xEvent* to)
             to.u.configureRequest.valueMask);
 }
 
-void _X_COLD SGravityEvent(xEvent* from, xEvent* to)
+void SGravityEvent(xEvent* from, xEvent* to)
 {
     to.u.u.type = from.u.u.type;
     cpswaps(from.u.u.sequenceNumber, to.u.u.sequenceNumber);
@@ -319,7 +319,7 @@ void _X_COLD SGravityEvent(xEvent* from, xEvent* to)
     cpswaps(from.u.gravity.y, to.u.gravity.y);
 }
 
-void _X_COLD SResizeRequestEvent(xEvent* from, xEvent* to)
+void SResizeRequestEvent(xEvent* from, xEvent* to)
 {
     to.u.u.type = from.u.u.type;
     cpswaps(from.u.u.sequenceNumber, to.u.u.sequenceNumber);
@@ -328,7 +328,7 @@ void _X_COLD SResizeRequestEvent(xEvent* from, xEvent* to)
     cpswaps(from.u.resizeRequest.height, to.u.resizeRequest.height);
 }
 
-void _X_COLD SCirculateEvent(xEvent* from, xEvent* to)
+void SCirculateEvent(xEvent* from, xEvent* to)
 {
     to.u.u.type = from.u.u.type;
     to.u.u.detail = from.u.u.detail;
@@ -339,7 +339,7 @@ void _X_COLD SCirculateEvent(xEvent* from, xEvent* to)
     to.u.circulate.place = from.u.circulate.place;
 }
 
-void _X_COLD SPropertyEvent(xEvent* from, xEvent* to)
+void SPropertyEvent(xEvent* from, xEvent* to)
 {
     to.u.u.type = from.u.u.type;
     cpswaps(from.u.u.sequenceNumber, to.u.u.sequenceNumber);
@@ -349,7 +349,7 @@ void _X_COLD SPropertyEvent(xEvent* from, xEvent* to)
     to.u.property.state = from.u.property.state;
 }
 
-void _X_COLD SSelectionClearEvent(xEvent* from, xEvent* to)
+void SSelectionClearEvent(xEvent* from, xEvent* to)
 {
     to.u.u.type = from.u.u.type;
     cpswaps(from.u.u.sequenceNumber, to.u.u.sequenceNumber);
@@ -358,7 +358,7 @@ void _X_COLD SSelectionClearEvent(xEvent* from, xEvent* to)
     cpswapl(from.u.selectionClear.atom, to.u.selectionClear.atom);
 }
 
-void _X_COLD SSelectionRequestEvent(xEvent* from, xEvent* to)
+void SSelectionRequestEvent(xEvent* from, xEvent* to)
 {
     to.u.u.type = from.u.u.type;
     cpswaps(from.u.u.sequenceNumber, to.u.u.sequenceNumber);
@@ -372,7 +372,7 @@ void _X_COLD SSelectionRequestEvent(xEvent* from, xEvent* to)
     cpswapl(from.u.selectionRequest.property, to.u.selectionRequest.property);
 }
 
-void _X_COLD SSelectionNotifyEvent(xEvent* from, xEvent* to)
+void SSelectionNotifyEvent(xEvent* from, xEvent* to)
 {
     to.u.u.type = from.u.u.type;
     cpswaps(from.u.u.sequenceNumber, to.u.u.sequenceNumber);
@@ -383,7 +383,7 @@ void _X_COLD SSelectionNotifyEvent(xEvent* from, xEvent* to)
     cpswapl(from.u.selectionNotify.property, to.u.selectionNotify.property);
 }
 
-void _X_COLD SColormapEvent(xEvent* from, xEvent* to)
+void SColormapEvent(xEvent* from, xEvent* to)
 {
     to.u.u.type = from.u.u.type;
     cpswaps(from.u.u.sequenceNumber, to.u.u.sequenceNumber);
@@ -393,7 +393,7 @@ void _X_COLD SColormapEvent(xEvent* from, xEvent* to)
     to.u.colormap.state = from.u.colormap.state;
 }
 
-void _X_COLD SMappingEvent(xEvent* from, xEvent* to)
+void SMappingEvent(xEvent* from, xEvent* to)
 {
     to.u.u.type = from.u.u.type;
     cpswaps(from.u.u.sequenceNumber, to.u.u.sequenceNumber);
@@ -402,7 +402,7 @@ void _X_COLD SMappingEvent(xEvent* from, xEvent* to)
     to.u.mappingNotify.count = from.u.mappingNotify.count;
 }
 
-void _X_COLD SClientMessageEvent(xEvent* from, xEvent* to)
+void SClientMessageEvent(xEvent* from, xEvent* to)
 {
     to.u.u.type = from.u.u.type;
     to.u.u.detail = from.u.u.detail;  /* actually format */
@@ -451,7 +451,7 @@ void _X_COLD SClientMessageEvent(xEvent* from, xEvent* to)
     default: break;}
 }
 
-void _X_COLD SKeymapNotifyEvent(xEvent* from, xEvent* to)
+void SKeymapNotifyEvent(xEvent* from, xEvent* to)
 {
     /* Keymap notify events are special; they have no
        sequence number field, and contain entirely 8-bit data */
@@ -507,7 +507,7 @@ private void SwapVisual(xVisualType* pVis, xVisualType* pVisT)
     cpswapl(pVis.blueMask, pVisT.blueMask);
 }
 
-void _X_COLD SwapConnSetupInfo(char* pInfo, char* pInfoT)
+void SwapConnSetupInfo(char* pInfo, char* pInfoT)
 {
     int nbytesVendor = void;
     xConnSetup* pConnSetup = cast(xConnSetup*) pInfo;
@@ -551,7 +551,7 @@ void _X_COLD SwapConnSetupInfo(char* pInfo, char* pInfoT)
     }
 }
 
-void _X_COLD WriteSConnectionInfo(ClientPtr pClient, c_ulong size, char* pInfo)
+void WriteSConnectionInfo(ClientPtr pClient, c_ulong size, char* pInfo)
 {
     char* pInfoTBase = cast(char*) calloc(1, size);
     if (!pInfoTBase) {
@@ -563,7 +563,7 @@ void _X_COLD WriteSConnectionInfo(ClientPtr pClient, c_ulong size, char* pInfo)
     free(pInfoTBase);
 }
 
-void _X_COLD SwapConnSetupPrefix(xConnSetupPrefix* pcspFrom, xConnSetupPrefix* pcspTo)
+void SwapConnSetupPrefix(xConnSetupPrefix* pcspFrom, xConnSetupPrefix* pcspTo)
 {
     pcspTo.success = pcspFrom.success;
     pcspTo.lengthReason = pcspFrom.lengthReason;
@@ -572,7 +572,7 @@ void _X_COLD SwapConnSetupPrefix(xConnSetupPrefix* pcspFrom, xConnSetupPrefix* p
     cpswaps(pcspFrom.length, pcspTo.length);
 }
 
-void _X_COLD WriteSConnSetupPrefix(ClientPtr pClient, xConnSetupPrefix* pcsp)
+void WriteSConnSetupPrefix(ClientPtr pClient, xConnSetupPrefix* pcsp)
 {
     xConnSetupPrefix cspT = void;
 
@@ -584,7 +584,7 @@ void _X_COLD WriteSConnSetupPrefix(ClientPtr pClient, xConnSetupPrefix* pcsp)
  * Dummy entry for ReplySwapVector[]
  */
 
-void _X_COLD ReplyNotSwappd(ClientPtr pClient, int size, void* pbuf)
+void ReplyNotSwappd(ClientPtr pClient, int size, void* pbuf)
 {
     FatalError("Not implemented");
 }
