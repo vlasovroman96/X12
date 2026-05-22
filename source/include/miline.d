@@ -127,7 +127,7 @@ enum string SetYMajorOctant(string _octant) = `((` ~ _octant ~ `) |= YMAJOR)`;
 enum string FIXUP_ERROR(string _e, string _octant, string _bias) = `
     (` ~ _e ~ `) -= (((` ~ _bias ~ `) >> (` ~ _octant ~ `)) & 1)`;
 
-extern _X_EXPORT DevPrivateKeyRec; miZeroLineScreenKeyRec;
+extern DevPrivateKeyRec miZeroLineScreenKeyRec;
 
 enum miZeroLineScreenKey = (&miZeroLineScreenKeyRec);
 
