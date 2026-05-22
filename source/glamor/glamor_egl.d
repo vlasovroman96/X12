@@ -2,7 +2,7 @@ module glamor_egl.c;
 @nogc nothrow:
 extern(C): __gshared:
 
-private template HasVersion(string versionId) {
+template HasVersion(string versionId) {
 	mixin("version("~versionId~") {enum HasVersion = true;} else {enum HasVersion = false;}");
 }
 /*
@@ -42,10 +42,10 @@ import core.sys.posix.sys.stat;
 import core.stdc.errno;
 
 version (HAVE_SYS_SYSMACROS_H) {
-import sys/sysmacros; /* for major() & minor() */
+import sys.sysmacros; /* for major() & minor() */
 }
 version (HAVE_SYS_MKDEV_H) {
-import sys/mkdev;          /* for major() & minor() on Solaris */
+import sys.mkdev;          /* for major() & minor() on Solaris */
 }
 
 version (WITH_LIBDRM) {
@@ -90,9 +90,9 @@ struct FreeDisplayList {
     _freeDisplayList* next;
 }
 
-private FreeDisplayList* freeDisplayList = null;
+FreeDisplayList* freeDisplayList = null;
 
-private void glamor_egl_add_display_to_list(EGLDisplay dpy)
+void glamor_egl_add_display_to_list(EGLDisplay dpy)
 {
     if (dpy == EGL_NO_DISPLAY) {
         return;
@@ -108,7 +108,7 @@ private void glamor_egl_add_display_to_list(EGLDisplay dpy)
     (*ptr).next = null;
 }
 
-private void glamor_egl_destroy_display(EGLDisplay dpy)
+void glamor_egl_destroy_display(EGLDisplay dpy)
 {
     int num_found = 0;
 
@@ -137,9 +137,9 @@ private void glamor_egl_destroy_display(EGLDisplay dpy)
     }
 }
 
-private DevPrivateKeyRec glamor_egl_screen_private_key;
+DevPrivateKeyRec glamor_egl_screen_private_key;
 
-pragma(inline, true) private Bool glamor_egl_init_screen_private(ScreenPtr screen)
+pragma(inline, true) Bool glamor_egl_init_screen_private(ScreenPtr screen)
 {
     if (!dixRegisterPrivateKey(&glamor_egl_screen_private_key, PRIVATE_SCREEN, glamor_egl_priv_t.sizeof)) {
         LogMessage(X_ERROR,
@@ -151,7 +151,7 @@ pragma(inline, true) private Bool glamor_egl_init_screen_private(ScreenPtr scree
     return TRUE;
 }
 
-private glamor_egl_priv_t* _glamor_egl_get_screen_private(ScreenPtr screen)
+glamor_egl_priv_t* _glamor_egl_get_screen_private(ScreenPtr screen)
 {
     return dixLookupPrivate(&screen.devPrivates, &glamor_egl_screen_private_key);
 }
@@ -160,16 +160,16 @@ private glamor_egl_priv_t* _glamor_egl_get_screen_private(ScreenPtr screen)
  * Hack to not break xf86 drivers.
  *
  * We actually want this to be a regular dixprivate,
- * just like the regular glamor private is.
+ * just like the regular glamor is.
  *
  * However, this risks breaking drivers.
  *
  * See: https://gitlab.freedesktop.org/xorg/xserver/-/merge_requests/309
  */
 
-private glamor_egl_priv_t* function(ScreenPtr screen) glamor_egl_get_screen_private = _glamor_egl_get_screen_private;
+glamor_egl_priv_t* function(ScreenPtr screen) glamor_egl_get_screen_= _glamor_egl_get_screen_private;
 
-private void glamor_egl_make_current(glamor_context* glamor_ctx)
+void glamor_egl_make_current(glamor_context* glamor_ctx)
 {
     /* There's only a single global dispatch table in Mesa.  EGL, GLX,
      * and AIGLX's direct dispatch table manipulation don't talk to
@@ -188,7 +188,7 @@ private void glamor_egl_make_current(glamor_context* glamor_ctx)
 }
 
 static if (HasVersion!"GLAMOR_HAS_GBM" && HasVersion!"WITH_LIBDRM") {
-private int glamor_get_flink_name(int fd, int handle, int* name)
+int glamor_get_flink_name(int fd, int handle, int* name)
 {
     drm_gem_flink flink = void;
 
@@ -211,7 +211,7 @@ private int glamor_get_flink_name(int fd, int handle, int* name)
 }
 
 version (GLAMOR_HAS_GBM) {
-private Bool glamor_create_texture_from_image(ScreenPtr screen, EGLImageKHR image, GLuint* texture)
+Bool glamor_create_texture_from_image(ScreenPtr screen, EGLImageKHR image, GLuint* texture)
 {
     glamor_screen_private* glamor_priv = glamor_get_screen_private(screen);
 
@@ -239,7 +239,7 @@ version (GLAMOR_HAS_GBM) {
 }
 
 version (GLAMOR_HAS_GBM) {
-private void glamor_egl_set_pixmap_image(PixmapPtr pixmap, EGLImageKHR image, Bool used_modifiers)
+void glamor_egl_set_pixmap_image(PixmapPtr pixmap, EGLImageKHR image, Bool used_modifiers)
 {
     glamor_pixmap_private* pixmap_priv = glamor_get_pixmap_private(pixmap);
     EGLImageKHR old = void;
@@ -432,7 +432,7 @@ enum string ADD_ATTR(string attrs, string num, string attr) = `
 }
 
 static if (HasVersion!"GLAMOR_HAS_GBM" && HasVersion!"WITH_LIBDRM") {
-private void glamor_get_name_from_bo(int gbm_fd, gbm_bo* bo, int* name)
+void glamor_get_name_from_bo(int gbm_fd, gbm_bo* bo, int* name)
 {
     gbm_bo_handle handle = void;
 
@@ -443,7 +443,7 @@ private void glamor_get_name_from_bo(int gbm_fd, gbm_bo* bo, int* name)
 }
 
 version (GLAMOR_HAS_GBM) {
-private Bool glamor_make_pixmap_exportable(PixmapPtr pixmap, Bool modifiers_ok)
+Bool glamor_make_pixmap_exportable(PixmapPtr pixmap, Bool modifiers_ok)
 {
     ScreenPtr screen = pixmap.drawable.pScreen;
     glamor_egl_priv_t* glamor_egl = glamor_egl_get_screen_private(screen);
@@ -527,28 +527,34 @@ version (none) {
 
     if (!bo)
     {
-        /* TODO: Is scanout ever used? If so, where? */
-        bo = gbm_bo_create(glamor_egl.gbm, width, height, format,
-#ifdef GBM_BO_USE_LINEAR
+version(GBM_HAVE_BO_USE_LINEAR) { 
+    bo = gbm_bo_create(glamor_egl.gbm, width, height, format,
                 (pixmap.usage_hint == CREATE_PIXMAP_USAGE_SHARED ?
-                 GBM_BO_USE_LINEAR : 0) |
-#endif
+                 GBM_BO_USE_LINEAR : 0) |GBM_BO_USE_RENDERING | GBM_BO_USE_SCANOUT);
+}
+
+else {
+        bo = gbm_bo_create(glamor_egl.gbm, width, height, format,
                 GBM_BO_USE_RENDERING | GBM_BO_USE_SCANOUT);
+}
         if (!bo) {
-            /* something failed, try again without GBM_BO_USE_SCANOUT */
+
+version(GBM_BO_USE_LINEAR) {
+                /* something failed, try again without GBM_BO_USE_SCANOUT */
             bo = gbm_bo_create(glamor_egl.gbm, width, height, format,
-#ifdef GBM_BO_USE_LINEAR
                     (pixmap.usage_hint == CREATE_PIXMAP_USAGE_SHARED ?
                      GBM_BO_USE_LINEAR : 0) |
-#endif
                      GBM_BO_USE_RENDERING);
-version (none) {
+}
+else {
+                bo = gbm_bo_create(glamor_egl.gbm, width, height, format,
+                     GBM_BO_USE_RENDERING);
+}
             if (bo) {
                 /* TODO: scanout failed, but regular buffer succeeded, maybe log something? */
             }
 }
         }
-    }
 
     if (!bo) {
         LogMessage(X_ERROR,
@@ -593,7 +599,7 @@ version (none) {
 }
 
 version (GLAMOR_HAS_GBM) {
-private gbm_bo* glamor_gbm_bo_from_pixmap_internal(ScreenPtr screen, PixmapPtr pixmap)
+gbm_bo* glamor_gbm_bo_from_pixmap_internal(ScreenPtr screen, PixmapPtr pixmap)
 {
     glamor_egl_priv_t* glamor_egl = glamor_egl_get_screen_private(screen);
     glamor_pixmap_private* pixmap_priv = glamor_get_pixmap_private(pixmap);
@@ -741,7 +747,7 @@ static if (HasVersion!"GLAMOR_HAS_GBM" && HasVersion!"WITH_LIBDRM") {
 }
 
 version (GLAMOR_HAS_GBM) {
-private bool gbm_format_for_depth(CARD8 depth, uint* format)
+bool gbm_format_for_depth(CARD8 depth, uint* format)
 {
     switch (depth) {
     case 15:
@@ -838,7 +844,6 @@ version (GBM_BO_WITH_MODIFIERS) {
             gbm_bo_destroy(bo);
         }
     } else
-}
     {
         if (num_fds == 1) {
             ret = glamor_back_pixmap_from_fd(pixmap, fds[0], width, height,
@@ -854,6 +859,7 @@ error:
     return pixmap;
 } else {
     return null;
+}
 }
 }
 
@@ -878,7 +884,7 @@ version (GLAMOR_HAS_GBM) {
 }
 }
 
-private Bool glamor_get_formats_internal(glamor_egl_priv_t* glamor_egl, CARD32* num_formats, CARD32** formats)
+Bool glamor_get_formats_internal(glamor_egl_priv_t* glamor_egl, CARD32* num_formats, CARD32** formats)
 {
 version (GLAMOR_HAS_EGL_QUERY_DMABUF) {
     EGLint num = void;
@@ -922,7 +928,7 @@ Bool glamor_get_formats(ScreenPtr screen, CARD32* num_formats, CARD32** formats)
     return glamor_get_formats_internal(glamor_egl, num_formats, formats);
 }
 
-private void glamor_filter_modifiers(uint* num_modifiers, ulong** modifiers, EGLBoolean* external_only, int linear_only)
+void glamor_filter_modifiers(uint* num_modifiers, ulong** modifiers, EGLBoolean* external_only, int linear_only)
 {
     uint write_pos = 0;
     for (uint i = 0; i < *num_modifiers; i++) {
@@ -930,16 +936,23 @@ private void glamor_filter_modifiers(uint* num_modifiers, ulong** modifiers, EGL
             continue;
         }
 
-        if (linear_only &&
-#ifdef WITH_LIBDRM
+version(WITH_LIBDRM) {
+            if (linear_only &&
             ((*modifiers)[i] != DRM_FORMAT_MOD_LINEAR) &&
             ((*modifiers)[i] != DRM_FORMAT_MOD_INVALID))
-//! #else
-            (*modifiers)[i] != 0) /* DRM_FORMAT_MOD_LINEAR */
-//! #endif
         {
             continue;
         }
+}
+else {
+
+        if (linear_only
+            (*modifiers)[i] != 0) /* DRM_FORMAT_MOD_LINEAR */
+        {
+            continue;
+        }
+
+}
 
         (*modifiers)[write_pos++] = (*modifiers)[i];
     }
@@ -957,7 +970,7 @@ private void glamor_filter_modifiers(uint* num_modifiers, ulong** modifiers, EGL
     }
 }
 
-private Bool glamor_get_modifiers_internal(glamor_egl_priv_t* glamor_egl, uint format, uint* num_modifiers, ulong** modifiers)
+Bool glamor_get_modifiers_internal(glamor_egl_priv_t* glamor_egl, uint format, uint* num_modifiers, ulong** modifiers)
 {
 version (GLAMOR_HAS_EGL_QUERY_DMABUF) {
     EGLBoolean* external_only = void;
@@ -1037,7 +1050,7 @@ version (GLAMOR_HAS_EGL_QUERY_DRIVER) {
 }
 
 version (GLAMOR_HAS_GBM) {
-private void glamor_egl_pixmap_destroy(CallbackListPtr* pcbl, ScreenPtr pScreen, PixmapPtr pixmap)
+void glamor_egl_pixmap_destroy(CallbackListPtr* pcbl, ScreenPtr pScreen, PixmapPtr pixmap)
 {
     ScreenPtr screen = pixmap.drawable.pScreen;
     glamor_egl_priv_t* glamor_egl = glamor_egl_get_screen_private(screen);
@@ -1081,7 +1094,7 @@ version (GLAMOR_HAS_GBM) {
 
 
 
-private void glamor_egl_close_screen(CallbackListPtr* pcbl, ScreenPtr screen, void* unused)
+void glamor_egl_close_screen(CallbackListPtr* pcbl, ScreenPtr screen, void* unused)
 {
     glamor_egl_priv_t* glamor_egl = void;
 version (GLAMOR_HAS_GBM) {
@@ -1109,7 +1122,7 @@ version (GLAMOR_HAS_GBM) {
 }
 }
 
-private void glamor_egl_post_close_screen(CallbackListPtr* pcbl, ScreenPtr screen, void* unused)
+void glamor_egl_post_close_screen(CallbackListPtr* pcbl, ScreenPtr screen, void* unused)
 {
 version (GLAMOR_HAS_GBM) {
     glamor_egl_priv_t* glamor_egl = glamor_egl_get_screen_private(screen);
@@ -1122,7 +1135,7 @@ version (GLAMOR_HAS_GBM) {
 }
 
 version (DRI3) {
-private int glamor_dri3_open_client(ClientPtr client, ScreenPtr screen, RRProviderPtr provider, int* fdp)
+int glamor_dri3_open_client(ClientPtr client, ScreenPtr screen, RRProviderPtr provider, int* fdp)
 {
     glamor_egl_priv_t* glamor_egl = glamor_egl_get_screen_private(screen);
     int fd = void;
@@ -1166,8 +1179,8 @@ private int glamor_dri3_open_client(ClientPtr client, ScreenPtr screen, RRProvid
     return Success;
 }
 
-private const(dri3_screen_info_rec) glamor_dri3_info = {
-    version: 2,
+const(dri3_screen_info_rec) glamor_dri3_info = {
+    c_version: 2,
     open_client: glamor_dri3_open_client,
     pixmap_from_fds: glamor_pixmap_from_fds,
     fd_from_pixmap: glamor_egl_fd_from_pixmap,
@@ -1178,7 +1191,7 @@ private const(dri3_screen_info_rec) glamor_dri3_info = {
 };
 } /* DRI3 */
 
-pragma(inline, true) private void glamor_egl_set_glvnd_vendor(ScreenPtr screen)
+pragma(inline, true) void glamor_egl_set_glvnd_vendor(ScreenPtr screen)
 {
     const(char)* vendor = void;
     const(char)* renderer = void;
@@ -1286,7 +1299,7 @@ version (GLXEXT) {
 }
 }
 
-private Bool glamor_query_devices_ext(EGLDeviceEXT** devices, EGLint* num_devices)
+Bool glamor_query_devices_ext(EGLDeviceEXT** devices, EGLint* num_devices)
 {
     EGLint max_devices = 0;
 
@@ -1326,7 +1339,7 @@ private Bool glamor_query_devices_ext(EGLDeviceEXT** devices, EGLint* num_device
     return TRUE;
 }
 
-pragma(inline, true) private Bool glamor_egl_fd_is_render_node(int fd)
+pragma(inline, true) Bool glamor_egl_fd_is_render_node(int fd)
 {
     stat buf = void;
     if(fstat(fd, &buf) < 0) {
@@ -1337,7 +1350,7 @@ pragma(inline, true) private Bool glamor_egl_fd_is_render_node(int fd)
     return (major(buf.st_rdev) != 0) && (minor(buf.st_rdev) >= 128);
 }
 
-pragma(inline, true) private int glamor_egl_render_node_from_fd(int fd)
+pragma(inline, true) int glamor_egl_render_node_from_fd(int fd)
 {
 version (WITH_LIBDRM) {
     const(char)* render_name = void;
@@ -1353,7 +1366,7 @@ version (WITH_LIBDRM) {
 }
 }
 
-pragma(inline, true) private int glamor_egl_device_get_fd(EGLDeviceEXT device)
+pragma(inline, true) int glamor_egl_device_get_fd(EGLDeviceEXT device)
 {
     const(char)* dev_file = eglQueryDeviceStringEXT(device, EGL_DRM_DEVICE_FILE_EXT);
     if (!dev_file) {
@@ -1363,7 +1376,7 @@ pragma(inline, true) private int glamor_egl_device_get_fd(EGLDeviceEXT device)
     return open(dev_file, O_RDWR);
 }
 
-pragma(inline, true) private int glamor_egl_device_get_matching_fd(EGLDeviceEXT device, int fd)
+pragma(inline, true) int glamor_egl_device_get_matching_fd(EGLDeviceEXT device, int fd)
 {
     int card_fd = glamor_egl_device_get_fd(device);
     if (glamor_egl_fd_is_render_node(fd)) {
@@ -1375,7 +1388,7 @@ pragma(inline, true) private int glamor_egl_device_get_matching_fd(EGLDeviceEXT 
     return card_fd;
 }
 
-pragma(inline, true) private Bool glamor_egl_device_matches_fd(EGLDeviceEXT device, int fd)
+pragma(inline, true) Bool glamor_egl_device_matches_fd(EGLDeviceEXT device, int fd)
 {
     int dev_fd = glamor_egl_device_get_matching_fd(device, fd);
     if (dev_fd < 0) {
@@ -1402,7 +1415,7 @@ pragma(inline, true) private Bool glamor_egl_device_matches_fd(EGLDeviceEXT devi
     return (stat1.st_dev == stat2.st_dev) && (stat1.st_ino == stat2.st_ino);
 }
 
-pragma(inline, true) private const(char)* glamor_egl_device_get_name(EGLDeviceEXT device)
+pragma(inline, true) const(char)* glamor_egl_device_get_name(EGLDeviceEXT device)
 {
 /**
  * For some reason, this isn't part of the epoxy headers.
@@ -1465,7 +1478,7 @@ enum EGL_RENDERER_EXT = 0x335F;
  * we save the statically allocated string with the EGLDevice's name
  * in *driver_name, even if that name is NULL.
  */
-pragma(inline, true) private Bool glamor_egl_device_matches_config(EGLDeviceEXT device, glamor_egl_priv_t* glamor_egl, int strict, const(char)** driver_name)
+pragma(inline, true) Bool glamor_egl_device_matches_config(EGLDeviceEXT device, glamor_egl_priv_t* glamor_egl, int strict, const(char)** driver_name)
 {
     *driver_name = glamor_egl_device_get_name(device);
 
@@ -1535,7 +1548,7 @@ pragma(inline, true) private Bool glamor_egl_device_matches_config(EGLDeviceEXT 
     return device_is_nvidia == config_is_nvidia;
 }
 
-private void glamor_egl_pre_close_screen_cleanup(glamor_egl_priv_t* glamor_egl)
+void glamor_egl_pre_close_screen_cleanup(glamor_egl_priv_t* glamor_egl)
 {
     if (!glamor_egl) {
         return;
@@ -1584,7 +1597,7 @@ void glamor_egl_cleanup_screen(ScreenPtr screen)
     }
 }
 
-private void glamor_egl_chose_configs(EGLDisplay display, const(EGLint)* attrib_list, EGLConfig** configs, EGLint* num_configs)
+void glamor_egl_chose_configs(EGLDisplay display, const(EGLint)* attrib_list, EGLConfig** configs, EGLint* num_configs)
 {
     EGLint max_configs = 0;
     *configs = null;
@@ -1609,7 +1622,7 @@ private void glamor_egl_chose_configs(EGLDisplay display, const(EGLint)* attrib_
         }
     }
 }
-private EGLContext glamor_egl_create_context(EGLDisplay display, const(EGLint)* config_attrib_list, const(EGLint)** ctx_attrib_lists, int num_attr_lists)
+EGLContext glamor_egl_create_context(EGLDisplay display, const(EGLint)* config_attrib_list, const(EGLint)** ctx_attrib_lists, int num_attr_lists)
 {
     EGLConfig* configs = null;
     EGLint num_configs = 0;
@@ -1639,7 +1652,7 @@ private EGLContext glamor_egl_create_context(EGLDisplay display, const(EGLint)* 
     return EGL_NO_CONTEXT;
 }
 
-private Bool glamor_egl_try_big_gl_api(glamor_egl_priv_t* glamor_egl)
+Bool glamor_egl_try_big_gl_api(glamor_egl_priv_t* glamor_egl)
 {
     static const(EGLint)[7] config_attribs_core = [
         EGL_CONTEXT_OPENGL_PROFILE_MASK_KHR,
@@ -1703,7 +1716,7 @@ private Bool glamor_egl_try_big_gl_api(glamor_egl_priv_t* glamor_egl)
     return TRUE;
 }
 
-private Bool glamor_egl_try_gles_api(glamor_egl_priv_t* glamor_egl)
+Bool glamor_egl_try_gles_api(glamor_egl_priv_t* glamor_egl)
 {
     static const(EGLint)[3] config_attribs = [
         EGL_CONTEXT_CLIENT_VERSION, 2,
@@ -1752,7 +1765,7 @@ private Bool glamor_egl_try_gles_api(glamor_egl_priv_t* glamor_egl)
 }
 
 version (GLAMOR_HAS_GBM) {
-pragma(inline, true) private gbm_device* gbm_create_device_by_name(int fd, const(char)* name)
+pragma(inline, true) gbm_device* gbm_create_device_by_name(int fd, const(char)* name)
 {
     gbm_device* ret = null;
     const(char)* old_backend = getenv("GBM_BACKEND");
@@ -1766,7 +1779,7 @@ pragma(inline, true) private gbm_device* gbm_create_device_by_name(int fd, const
 }
 }
 
-private Bool glamor_egl_init_display(glamor_egl_priv_t* glamor_egl, int* dri_fd)
+Bool glamor_egl_init_display(glamor_egl_priv_t* glamor_egl, int* dri_fd)
 {
     EGLDeviceEXT* devices = null;
     EGLint num_devices = 0;
@@ -1881,7 +1894,7 @@ Bool glamor_egl_init_internal(glamor_egl_conf_t* glamor_egl_conf, int* caps)
     }
 
     if (glamor_egl_conf.GLAMOR_EGL_PRIV_PROC) {
-        glamor_egl_get_screen_private = glamor_egl_conf.GLAMOR_EGL_PRIV_PROC;
+        glamor_egl_get_screen_= glamor_egl_conf.GLAMOR_EGL_PRIV_PROC;
         glamor_egl = glamor_egl_conf.glamor_egl_priv;
     } else {
         if (!glamor_egl_conf.screen ||
