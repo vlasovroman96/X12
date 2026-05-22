@@ -53,6 +53,6 @@ struct _XDGAModeRec {
     int reserved1;
     int reserved2;
 }alias XDGAModeRec = _XDGAModeRec;
-alias XDGAModePtr = *;
+alias XDGAModePtr = XDGAModeRec*;
 
                           /* __DGAPROC_H */
