@@ -38,7 +38,7 @@ import glamor_transform;
 private const(glamor_facet) glamor_facet_point = {
     name: "poly_point",
     vs_vars: "in vec2 primitive;\n",
-    vs_exec: (GLAMOR_DEFAULT_POINT_SIZE
+    vs_exec: (~GLAMOR_DEFAULT_POINT_SIZE~
                 GLAMOR_POS(gl_Position, primitive)),
 };
 
@@ -95,7 +95,7 @@ private Bool glamor_poly_point_gl(DrawablePtr drawable, GCPtr gc, int mode, int 
 
     BUG_RETURN_VAL(!pixmap_priv, FALSE);
 
-    glamor_pixmap_loop(pixmap_priv, box_index) {
+    glamor_pixmap_loop(pixmap_priv, box_index); {
         int nbox = RegionNumRects(gc.pCompositeClip);
         BoxPtr box = RegionRects(gc.pCompositeClip);
 
