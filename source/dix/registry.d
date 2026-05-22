@@ -39,7 +39,7 @@ enum BASE_SIZE = 16;
 
 version (X_REGISTRY_REQUEST) {
 enum CORE = "X11";
-enum FILENAME = SERVER_MISC_CONFIG_PATH "/protocol.txt";
+enum FILENAME = SERVER_MISC_CONFIG_PATH ~ "/protocol.txt";
 
 enum PROT_COMMENT = '#';
 enum PROT_REQUEST = 'R';
@@ -204,7 +204,7 @@ void RegisterExtensionNames(ExtensionEntry* extEntry)
         default: break;}
 
  invalid:
-        LogMessage(X_WARNING, "Invalid line in " FILENAME ~ ", skipping\n");
+        LogMessage(X_WARNING, "Invalid line in " ~ FILENAME ~ ", skipping\n");
  skip:
         free(lineobj);
     }
@@ -388,7 +388,7 @@ version (X_REGISTRY_REQUEST) {
     fh = fopen(FILENAME, "r");
     if (!fh)
         LogMessage(X_WARNING,
-                   "Failed to open protocol names file " FILENAME ~ "\n");
+                   "Failed to open protocol names file " ~ FILENAME ~ "\n");
 
     /* Add the core protocol */
     RegisterExtensionNames(&extEntry);
