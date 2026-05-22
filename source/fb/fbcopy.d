@@ -54,7 +54,9 @@ fbCopyNtoN(DrawablePtr pSrcDrawable,
     fbGetDrawable(pDstDrawable, dst, dstStride, dstBpp, dstXoff, dstYoff);
 
     while (nbox--) {
-#ifndef FB_ACCESS_WRAPPER       /* pixman_blt() doesn't support accessors yet */
+        static if( FB_ACCESS_WRAPPER) {} 
+        else {
+// #ifndef FB_ACCESS_WRAPPER       /* pixman_blt() doesn't support accessors yet */
         if (pm == FB_ALLONES && alu == GXcopy && !reverse && !upsidedown) {
             if (!pixman_blt
                 (cast(uint*) src, cast(uint*) dst, srcStride, dstStride,
@@ -67,7 +69,8 @@ fbCopyNtoN(DrawablePtr pSrcDrawable,
                 goto next;
         }
  fallback:
-#endif
+        }
+// #endif
         fbBlt(src + (pbox.y1 + dy + srcYoff) * srcStride,
               srcStride,
               (pbox.x1 + dx + srcXoff) * srcBpp,
@@ -76,9 +79,12 @@ fbCopyNtoN(DrawablePtr pSrcDrawable,
               (pbox.x1 + dstXoff) * dstBpp,
               (pbox.x2 - pbox.x1) * dstBpp,
               (pbox.y2 - pbox.y1), alu, pm, dstBpp, reverse, upsidedown);
-#ifndef FB_ACCESS_WRAPPER
+static if(FB_ACCESS_WAPPER) {}
+else {
+// #ifndef FB_ACCESS_WRAPPER
  next:
-#endif
+}
+// #endif
         pbox++;
     }
     fbFinishAccess(pDstDrawable);
