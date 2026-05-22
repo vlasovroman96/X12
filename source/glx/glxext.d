@@ -266,9 +266,9 @@ private void glxClientCallback(CallbackListPtr* list, void* closure, void* data)
 
 private __GLXprovider* __glXProviderStack = BUILD_GLX_DRI
                                            &__glXDRISWRastProvider;
-//! #else
-                                           NULL;
-//! #endif
+// ! #else
+                                        //    NULL;
+// ! #endif
 
 void GlxPushProvider(__GLXprovider* provider)
 {
@@ -285,7 +285,7 @@ private Bool checkScreenVisuals()
                 walkScreen.visuals[j].nplanes > 12)
                 return TRUE;
         }
-    }){}
+    });
 
     return FALSE;
 }
@@ -529,7 +529,7 @@ private void xorgGlxServerInit(CallbackListPtr* pcbl, void* param, void* ext)
             LogMessage(X_INFO,
                        "GLX: no usable GL providers found for screen %d\n", walkScreenIdx);
         }
-    }){}
+    });
 }
 
 void xorgGlxCreateVendor()
