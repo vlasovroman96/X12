@@ -106,7 +106,7 @@ alias ExaMigrationSmart = ExaMigrationHeuristic.ExaMigrationSmart;
 struct _ExaCachedGlyphRec {
     ubyte[20] sha1;
 }alias ExaCachedGlyphRec = _ExaCachedGlyphRec;
-alias ExaCachedGlyphPtr = *;
+alias ExaCachedGlyphPtr = ExaCachedGlyphRec*;
 
 struct _ExaGlyphCacheRec {
     /* The identity of the cache, statically configured at initialization */
@@ -133,7 +133,7 @@ struct _ExaGlyphCacheRec {
     int columns;                /* Number of columns the glyphs are laid out in */
     int evictionPosition;       /* Next random position to evict a glyph */
 }alias ExaGlyphCacheRec = _ExaGlyphCacheRec;
-alias ExaGlyphCachePtr = *;
+alias ExaGlyphCachePtr = ExaGlyphCacheRec*;
 
 enum EXA_NUM_GLYPH_CACHES = 4;
 
@@ -211,17 +211,17 @@ struct _ExaScreenPrivRec {
     DevPrivateKeyRec pixmapPrivateKeyRec;
     DevPrivateKeyRec gcPrivateKeyRec;
 }alias ExaScreenPrivRec = _ExaScreenPrivRec;
-alias ExaScreenPrivPtr = *;
+alias ExaScreenPrivPtr = ExaScreenPrivRec*;
 
 extern DevPrivateKeyRec exaScreenPrivateKeyRec;
 
 enum exaScreenPrivateKey = (&exaScreenPrivateKeyRec);
 
 enum string ExaGetScreenPriv(string s) = `(cast(ExaScreenPrivPtr)dixGetPrivate(&(` ~ s ~ `).devPrivates, exaScreenPrivateKey))`;
-enum string ExaScreenPriv(string s) = `ExaScreenPrivPtr pExaScr = ` ~ ExaGetScreenPriv!(` ~ `s` ~ `) ~ `;`;
+enum string ExaScreenPriv(string s) = `ExaScreenPrivPtr pExaScr = ` ~ ExaGetScreenPriv!(s) ~ `;`;
 
 enum string ExaGetGCPriv(string gc) = `(cast(ExaGCPrivPtr)dixGetPrivateAddr(&(` ~ gc ~ `).devPrivates, &` ~ ExaGetScreenPriv!(`` ~ gc ~ `.pScreen`) ~ `.gcPrivateKeyRec))`;
-enum string ExaGCPriv(string gc) = `ExaGCPrivPtr pExaGC = ` ~ ExaGetGCPriv!(` ~ `gc` ~ `) ~ `;`;
+enum string ExaGCPriv(string gc) = `ExaGCPrivPtr pExaGC = ` ~ ExaGetGCPriv!(gc) ~ `;`;
 
 /*
  * Some macros to deal with function wrapping.
@@ -242,7 +242,7 @@ enum string swap(string priv, string real_, string mem) = `{\
 }`;
 
 enum string EXA_PRE_FALLBACK(string _screen_) = `
-    ` ~ ExaScreenPriv!(` ~ `_screen_` ~ `) ~ `; 
+    ` ~ ExaScreenPriv!(_screen_) ~ `; 
     pExaScr.fallback_counter++;`;
 
 enum string EXA_POST_FALLBACK(string _screen_) = `
@@ -250,13 +250,13 @@ enum string EXA_POST_FALLBACK(string _screen_) = `
 
 enum string EXA_PRE_FALLBACK_GC(string _gc_) = `
     ` ~ ExaScreenPriv!(`` ~ _gc_ ~ `.pScreen`) ~ `; 
-    ` ~ ExaGCPriv!(` ~ `_gc_` ~ `) ~ `; 
+    ` ~ ExaGCPriv!(_gc_) ~ `; 
     pExaScr.fallback_counter++; 
-    ` ~ swap!(`pExaGC`, ` ~ `_gc_` ~ `, `ops`) ~ `;`;
+    ` ~ swap!(`pExaGC`, _gc_, `ops`) ~ `;`;
 
 enum string EXA_POST_FALLBACK_GC(string _gc_) = `
     pExaScr.fallback_counter--; 
-    ` ~ swap!(`pExaGC`, ` ~ `_gc_` ~ `, `ops`) ~ `;`;
+    ` ~ swap!(`pExaGC`, _gc_, `ops`) ~ `;`;
 
 /** Align an offset to an arbitrary alignment */
 enum string EXA_ALIGN(string offset, string align_) = `(((` ~ offset ~ `) + (` ~ align_ ~ `) - 1) - 
@@ -272,7 +272,7 @@ enum EXA_PIXMAP_SCORE_PINNED =	    1000;
 enum EXA_PIXMAP_SCORE_INIT =	    1001;
 
 enum string ExaGetPixmapPriv(string p) = `(cast(ExaPixmapPrivPtr)dixGetPrivateAddr(&(` ~ p ~ `).devPrivates, &` ~ ExaGetScreenPriv!(`(` ~ p ~ `).drawable.pScreen`) ~ `.pixmapPrivateKeyRec))`;
-enum string ExaPixmapPriv(string p) = `ExaPixmapPrivPtr pExaPixmap = ` ~ ExaGetPixmapPriv!(` ~ `p` ~ `) ~ `;`;
+enum string ExaPixmapPriv(string p) = `ExaPixmapPrivPtr pExaPixmap = ` ~ ExaGetPixmapPriv!(p) ~ `;`;
 
 enum EXA_RANGE_PITCH = (1 << 0);
 enum EXA_RANGE_WIDTH = (1 << 1);
@@ -317,14 +317,14 @@ struct _ExaPixmapPrivRec {
      */
     void* driverPriv;
 }alias ExaPixmapPrivRec = _ExaPixmapPrivRec;
-alias ExaPixmapPrivPtr = *;
+alias ExaPixmapPrivPtr = ExaPixmapPrivRec*;
 
 struct _ExaGCPrivRec {
     /* GC values from the layer below. */
     const(GCOps)* Savedops;
     const(GCFuncs)* Savedfuncs;
 }alias ExaGCPrivRec = _ExaGCPrivRec;
-alias ExaGCPrivPtr = *;
+alias ExaGCPrivPtr = ExaGCPrivRec*;
 
 struct _ExaCompositeRectRec {
     PicturePtr pDst;
@@ -337,7 +337,7 @@ struct _ExaCompositeRectRec {
     INT16 width;
     INT16 height;
 }alias ExaCompositeRectRec = _ExaCompositeRectRec;
-alias ExaCompositeRectPtr = *;
+alias ExaCompositeRectPtr = ExaCompositeRectRec*;
 
 /**
  * exaDDXDriverInit must be implemented by the DDX using EXA, and is the place
