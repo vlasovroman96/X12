@@ -65,32 +65,32 @@ public import dixaccess;
 
 alias RESTYPE = uint;
 
-enum RC_VANILLA =	((RESTYPE)0);
-enum RC_CACHED =	((RESTYPE)1<<31);
-enum RC_DRAWABLE =	((RESTYPE)1<<30);
+enum RC_VANILLA =	(cast(RESTYPE)0);
+enum RC_CACHED =	(cast(RESTYPE)1<<31);
+enum RC_DRAWABLE =	(cast(RESTYPE)1<<30);
 /*  Use class RC_NEVERRETAIN for resources that should not be retained
  *  regardless of the close down mode when the client dies.  (A client's
  *  event selections on objects that it doesn't own are good candidates.)
  *  Extensions can use this too!
  */
-enum RC_NEVERRETAIN =	((RESTYPE)1<<29);
+enum RC_NEVERRETAIN =	(cast(RESTYPE)1<<29);
 enum RC_LASTPREDEF =	RC_NEVERRETAIN;
-enum RC_ANY =		(~(RESTYPE)0);
+enum RC_ANY =		(~cast(RESTYPE)0);
 
 /* types for Resource routines */
 
 // prevent namespace clash with Windows
-enum X11_RESTYPE_NONE =	((RESTYPE)0);
-enum X11_RESTYPE_WINDOW =	((RESTYPE)1|RC_DRAWABLE);
-enum X11_RESTYPE_PIXMAP =	((RESTYPE)2|RC_DRAWABLE);
-enum X11_RESTYPE_GC =		((RESTYPE)3);
-enum X11_RESTYPE_FONT =	((RESTYPE)4);
-enum X11_RESTYPE_CURSOR =	((RESTYPE)5);
-enum X11_RESTYPE_COLORMAP =	((RESTYPE)6);
-enum X11_RESTYPE_CMAPENTRY =	((RESTYPE)7);
-enum X11_RESTYPE_OTHERCLIENT =	((RESTYPE)8|RC_NEVERRETAIN);
-enum X11_RESTYPE_PASSIVEGRAB =	((RESTYPE)9|RC_NEVERRETAIN);
-enum X11_RESTYPE_LASTPREDEF =	((RESTYPE)9);
+enum X11_RESTYPE_NONE =	(cast(RESTYPE)0);
+enum X11_RESTYPE_WINDOW =	(cast(RESTYPE)1|RC_DRAWABLE);
+enum X11_RESTYPE_PIXMAP =	(cast(RESTYPE)2|RC_DRAWABLE);
+enum X11_RESTYPE_GC =		(cast(RESTYPE)3);
+enum X11_RESTYPE_FONT =	(cast(RESTYPE)4);
+enum X11_RESTYPE_CURSOR =	(cast(RESTYPE)5);
+enum X11_RESTYPE_COLORMAP =	(cast(RESTYPE)6);
+enum X11_RESTYPE_CMAPENTRY =	(cast(RESTYPE)7);
+enum X11_RESTYPE_OTHERCLIENT =	(cast(RESTYPE)8|RC_NEVERRETAIN);
+enum X11_RESTYPE_PASSIVEGRAB =	(cast(RESTYPE)9|RC_NEVERRETAIN);
+enum X11_RESTYPE_LASTPREDEF =	(cast(RESTYPE)9);
 
 enum RT_WINDOW =	X11_RESTYPE_WINDOW;
 enum RT_PIXMAP =	X11_RESTYPE_PIXMAP;
@@ -130,7 +130,7 @@ struct _ResourceSizeRec {
     /* Number of references to this resource; typically 1 */
     c_ulong refCnt;
 }alias ResourceSizeRec = _ResourceSizeRec;
-alias ResourceSizePtr = *;
+alias ResourceSizePtr = ResourceSizeRec*;
 
 alias SizeType = void function(void* value, XID id, ResourceSizePtr size);
 
@@ -157,7 +157,7 @@ extern _X_EXPORT FakeClientID(int);
 version (OSX) {
 enum AddResource = Darwin_X_AddResource;
 }
-extern _X_EXPORT int AddResource(XID id, RESTYPE type, void* value);
+extern int AddResource(XID id, RESTYPE type, void* value);
 
 extern _X_EXPORT FreeResource(XID, RESTYPE);
 
@@ -202,6 +202,6 @@ extern _X_EXPORT TypeMask;
  * @obsoletes FakeClientID
  * @return XID the newly allocated XID
  */
-_X_EXPORT XID dixAllocServerXID();
+XID dixAllocServerXID();
 
 } /* RESOURCE_H */
