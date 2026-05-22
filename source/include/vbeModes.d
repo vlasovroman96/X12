@@ -62,10 +62,10 @@ enum string VBE_MODE_VGA(string m) = `(((` ~ m ~ `).ModeAttributes & 0x40) == 0)
 enum string VBE_MODE_LINEAR(string m) = `(((` ~ m ~ `).ModeAttributes & 0x80) != 0 && 
 				 ((` ~ m ~ `).PhysBasePtr != 0))`;
 
-enum string VBE_MODE_USABLE(string m, string f) = `(` ~ VBE_MODE_SUPPORTED!(` ~ `m` ~ `) ~ ` || 
+enum string VBE_MODE_USABLE(string m, string f) = `(` ~ VBE_MODE_SUPPORTED!(m) ~ ` || 
 				 (` ~ f ~ ` & V_MODETYPE_BAD)) && 
-				` ~ VBE_MODE_GRAPHICS!(` ~ `m` ~ `) ~ ` && 
-				(` ~ VBE_MODE_VGA!(` ~ `m` ~ `) ~ ` || ` ~ VBE_MODE_LINEAR!(` ~ `m` ~ `) ~ `)`;
+				` ~ VBE_MODE_GRAPHICS!(m) ~ ` && 
+				(` ~ VBE_MODE_VGA!(m) ~ ` || ` ~ VBE_MODE_LINEAR!(m) ~ `)`;
 
 enum V_MODETYPE_VBE =		0x01;
 enum V_MODETYPE_VGA =		0x02;
