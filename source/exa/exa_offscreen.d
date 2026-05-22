@@ -464,7 +464,7 @@ void ExaOffscreenMarkUsed(PixmapPtr pPixmap)
  * leaving the total amount of memory available as a single area at the
  * beginning (when there are no pinned allocations).
  */
-_X_HIDDEN ExaOffscreenArea* ExaOffscreenDefragment(ScreenPtr pScreen)
+ExaOffscreenArea* ExaOffscreenDefragment(ScreenPtr pScreen)
 {
     ExaScreenPriv(pScreen);
     ExaOffscreenArea* area = void, largest_available = null;
