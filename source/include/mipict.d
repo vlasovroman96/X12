@@ -45,7 +45,7 @@ enum string miCvtR8G8B8to15(string s) = `((((` ~ s ~ `) >> 3) & 0x001f) |
 			     (((` ~ s ~ `) >> 6) & 0x03e0) | 
 			     (((` ~ s ~ `) >> 9) & 0x7c00))`;
 enum string miIndexToEnt15(string mif,string rgb15) = `((` ~ mif ~ `).ent[` ~ rgb15 ~ `])`;
-enum string miIndexToEnt24(string mif,string rgb24) = `` ~ miIndexToEnt15!(` ~ `mif` ~ `,` ~ `miCvtR8G8B8to15!(` ~ `rgb24` ~ `)` ~ `) ~ ``;
+enum string miIndexToEnt24(string mif,string rgb24) = `` ~ miIndexToEnt15!(mif,miCvtR8G8B8to15!(rgb24)) ~ ``;
 
 enum string miIndexToEntY24(string mif,string rgb24) = `((` ~ mif ~ `).ent[CvtR8G8B8toY15(` ~ rgb24 ~ `)])`;
 
