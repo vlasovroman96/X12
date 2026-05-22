@@ -1,4 +1,4 @@
-module protocol-versions.h;
+module include.protocol_versions;
 @nogc nothrow:
 extern(C): __gshared:
 /*
