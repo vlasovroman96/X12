@@ -103,7 +103,7 @@ enum string PixmapWidthInPadUnits(string w, string d) = `
  * depth and width will be padded.
  */
 enum string PixmapBytePad(string w, string d) = `
-    (` ~ PixmapWidthInPadUnits!(` ~ `w` ~ `, ` ~ `d` ~ `) ~ ` << PixmapWidthPaddingInfo[` ~ d ~ `].padBytesLog2)`;
+    (` ~ PixmapWidthInPadUnits!(w, d) ~ ` << PixmapWidthPaddingInfo[` ~ d ~ `].padBytesLog2)`;
 
 enum string BitmapBytePad(string w) = `
     ((cast(int)((` ~ w ~ `) + BITMAP_SCANLINE_PAD - 1) >> LOG2_BITMAP_PAD) << LOG2_BYTES_PER_SCANLINE_PAD)`;
