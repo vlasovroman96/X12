@@ -45,7 +45,7 @@ import glamor_priv;
 import fbpict;
 version (none) {
 //#define DEBUGF(str, ...)  do {} while(0)
-enum string DEBUGF(string str, ...) = `ErrorF(` ~ str ~ `, ##__VA_ARGS__)`;
+enum string DEBUGF(string str) = `ErrorF(` ~ str ~ `, ##__VA_ARGS__)`;
 //#define DEBUGRegionPrint(x) do {} while (0)
 enum DEBUGRegionPrint = RegionPrint;
 }
@@ -240,8 +240,10 @@ private GLuint glamor_create_composite_fs(glamor_screen_private* glamor_priv, sh
     const(char)* header_norm = glamor_priv.glsl_version > 120 ?
         "#version 130\n" :
         glamor_priv.use_gpu_shader4 ?
-          "#version 120\n#extension GL_EXT_gpu_shader4 : require\n" GLAMOR_COMPAT_DEFINES_FS :
-          "#version 120\n" GLAMOR_COMPAT_DEFINES_FS;
+          "#version 120\n#extension GL_EXT_gpu_shader4 : require\n"
+           ~GLAMOR_COMPAT_DEFINES_FS :
+          "#version 120\n"
+           ~GLAMOR_COMPAT_DEFINES_FS;
     const(char)* header_es = glamor_priv.glsl_version > 100 ? "#version 300 es\n" : "#version 100\n"; GLAMOR_COMPAT_DEFINES_FS;
     const(char)* dest_swizzle = void;
     GLuint prog = void;
@@ -319,7 +321,7 @@ private GLuint glamor_create_composite_fs(glamor_screen_private* glamor_priv, sh
 
     if (asprintf(&source,
                  "%s"
-                 GLAMOR_DEFAULT_PRECISION
+                 ~GLAMOR_DEFAULT_PRECISION
                  ~ "%s%s%s%s%s%s%s%s", header, GLAMOR_COMPAT_DEFINES_FS,
                  repeat_define, relocate_texture,
                  enable_rel_sampler ? rel_sampler : stub_rel_sampler,
@@ -368,7 +370,7 @@ private GLuint glamor_create_composite_vs(glamor_screen_private* priv, shader_ke
 
     if (asprintf(&source,
                  "%s"
-                 GLAMOR_DEFAULT_PRECISION
+                 ~GLAMOR_DEFAULT_PRECISION
                  ~ "%s%s%s%s%s",
                  version_, defines, main_opening, source_coords_setup,
                  mask_coords_setup, main_closing) == -1)
@@ -1476,7 +1478,7 @@ Bool glamor_composite_clipped_region(CARD8 op, PicturePtr source, PicturePtr mas
                     box, nbox, x_source - x_dest,
                     y_source - y_dest, FALSE, FALSE, 0, null);
         ok = TRUE;
-        goto out;
+        goto out_;
     }
 
     /* XXX is it possible source mask have non-zero drawable.x/y? */
@@ -1494,7 +1496,7 @@ Bool glamor_composite_clipped_region(CARD8 op, PicturePtr source, PicturePtr mas
                                             width, height);
         if (!temp_src) {
             temp_src = source;
-            goto out;
+            goto out_;
         }
         temp_src_pixmap = cast(PixmapPtr) (temp_src.pDrawable);
         temp_src_priv = glamor_get_pixmap_private(temp_src_pixmap);
@@ -1518,7 +1520,7 @@ Bool glamor_composite_clipped_region(CARD8 op, PicturePtr source, PicturePtr mas
                                             width, height);
         if (!temp_mask) {
             temp_mask = mask;
-            goto out;
+            goto out_;
         }
         temp_mask_pixmap = cast(PixmapPtr) (temp_mask.pDrawable);
         temp_mask_priv = glamor_get_pixmap_private(temp_mask_pixmap);
@@ -1533,7 +1535,7 @@ Bool glamor_composite_clipped_region(CARD8 op, PicturePtr source, PicturePtr mas
             if (op == PictOpOver) {
                 if (glamor_pixmap_is_memory(mask_pixmap)) {
                     glamor_fallback("two pass not supported on memory pximaps\n");
-                    goto out;
+                    goto out_;
                 }
                 ca_state = CA_TWO_PASS;
                 op = PictOpOutReverse;
@@ -1543,11 +1545,11 @@ Bool glamor_composite_clipped_region(CARD8 op, PicturePtr source, PicturePtr mas
 
     if (temp_src_pixmap == dest_pixmap) {
         glamor_fallback("source and dest pixmaps are the same\n");
-        goto out;
+        goto out_;
     }
     if (temp_mask_pixmap == dest_pixmap) {
         glamor_fallback("mask and dest pixmaps are the same\n");
-        goto out;
+        goto out_;
     }
 
     x_dest += dest.pDrawable.x;
@@ -1598,7 +1600,7 @@ Bool glamor_composite_clipped_region(CARD8 op, PicturePtr source, PicturePtr mas
 
     if (prect != rect.ptr)
         free(prect);
- out:
+ out_:
     if (temp_src != source)
         FreePicture(temp_src, 0);
     if (temp_mask != mask)
