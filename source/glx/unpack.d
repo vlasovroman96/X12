@@ -48,13 +48,13 @@ enum string __GLX_GET_VENDPRIV_CONTEXT_TAG(string pc) = `((cast(xGLXVendorPrivat
 */
 version (__GLX_ALIGN64) {
 enum string __GLX_MEM_COPY(string dst,string src,string n) = `memmove(` ~ dst ~ `,` ~ src ~ `,` ~ n ~ `)`;
-enum string __GLX_GET_DOUBLE(string dst,string src) = `` ~ __GLX_MEM_COPY!(`&` ~ dst ~ ``,` ~ `src` ~ `,`8`) ~ ``;
+enum string __GLX_GET_DOUBLE(string dst,string src) = `` ~ __GLX_MEM_COPY!(`&` ~ dst,src,`8`) ~ ``;
 } else {
 enum string __GLX_GET_DOUBLE(string dst,string src) = `(` ~ dst ~ `) = *(cast(GLdouble*)(` ~ src ~ `))`;
 }
 
 enum string __GLX_BEGIN_REPLY(string size) = `
-	reply.length = ` ~ __GLX_PAD!(` ~ `size` ~ `) ~ ` >> 2;	
+	reply.length = ` ~ __GLX_PAD!(size) ~ ` >> 2;	
 	reply.type = X_Reply; 			
 	reply.sequenceNumber = client.sequence;`;
 
@@ -119,11 +119,10 @@ enum string __GLX_SEND_UINT_ARRAY(string len) = `__GLX_SEND_INT_ARRAY(` ~ len ~ 
 ** Machine dependent optimizations abound here; these swapping macros can
 ** conceivably be replaced with routines that do the job faster.
 */
-enum __GLX_DECLARE_SWAP_VARIABLES = \
-	GLbyte sw;
+enum __GLX_DECLARE_SWAP_VARIABLES = sw;
 
-enum __GLX_DECLARE_SWAP_ARRAY_VARIABLES = \
-  	GLbyte *swapPC;		\
+enum __GLX_DECLARE_SWAP_ARRAY_VARIABLES = 
+  	GLbyte *swapPC;	
   	GLbyte *swapEnd;
 
 enum string __GLX_SWAP_DOUBLE(string pc) = `
