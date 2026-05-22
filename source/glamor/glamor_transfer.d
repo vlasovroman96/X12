@@ -57,7 +57,7 @@ void glamor_upload_boxes(DrawablePtr drawable, BoxPtr in_boxes, int in_nbox, int
 
     BUG_RETURN(!priv);
 
-    glamor_pixmap_loop(priv, box_index) {
+    glamor_pixmap_loop(priv, box_index); {
         BoxPtr box = glamor_pixmap_box_at(priv, box_index);
         glamor_pixmap_fbo* fbo = glamor_pixmap_fbo_at(priv, box_index);
         BoxPtr boxes = in_boxes;
@@ -155,7 +155,7 @@ void glamor_download_boxes(DrawablePtr drawable, BoxPtr in_boxes, int in_nbox, i
 
     BUG_RETURN(!priv);
 
-    glamor_pixmap_loop(priv, box_index) {
+    glamor_pixmap_loop(priv, box_index); {
         BoxPtr box = glamor_pixmap_box_at(priv, box_index);
         glamor_pixmap_fbo* fbo = glamor_pixmap_fbo_at(priv, box_index);
         BoxPtr boxes = in_boxes;
