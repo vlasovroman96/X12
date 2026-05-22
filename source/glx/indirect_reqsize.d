@@ -730,25 +730,25 @@ int __glXVertexAttribs4dvNVReqSize(const(GLbyte)* pc, Bool swap, int reqlen)
     return safe_pad(safe_mul(n, 32));
 }
 
-mixin(ALIAS!(`Fogiv`, `Fogfv`))
-    mixin(ALIAS!(`Lightiv`, `Lightfv`))
-    mixin(ALIAS!(`LightModeliv`, `LightModelfv`))
-    mixin(ALIAS!(`Materialiv`, `Materialfv`))
-    mixin(ALIAS!(`TexParameteriv`, `TexParameterfv`))
-    mixin(ALIAS!(`TexEnviv`, `TexEnvfv`))
-    mixin(ALIAS!(`TexGeniv`, `TexGenfv`))
-    mixin(ALIAS!(`PixelMapuiv`, `PixelMapfv`))
-    mixin(ALIAS!(`ColorTableParameteriv`, `ColorTableParameterfv`))
-    mixin(ALIAS!(`ConvolutionParameteriv`, `ConvolutionParameterfv`))
-    mixin(ALIAS!(`CompressedTexSubImage1D`, `CompressedTexImage1D`))
-    mixin(ALIAS!(`CompressedTexSubImage2D`, `CompressedTexImage3D`))
-    mixin(ALIAS!(`PointParameteriv`, `PointParameterfv`))
-    mixin(ALIAS!(`DeleteFramebuffers`, `DrawBuffers`))
-    mixin(ALIAS!(`DeleteRenderbuffers`, `DrawBuffers`))
-    mixin(ALIAS!(`VertexAttribs1fvNV`, `PixelMapfv`))
-    mixin(ALIAS!(`VertexAttribs1svNV`, `PixelMapusv`))
-    mixin(ALIAS!(`VertexAttribs2fvNV`, `VertexAttribs1dvNV`))
-    mixin(ALIAS!(`VertexAttribs2svNV`, `PixelMapfv`))
-    mixin(ALIAS!(`VertexAttribs4fvNV`, `VertexAttribs2dvNV`))
-    mixin(ALIAS!(`VertexAttribs4svNV`, `VertexAttribs1dvNV`))
-    mixin(ALIAS!(`VertexAttribs4ubvNV`, `PixelMapfv`))
+mixin(ALIAS!(`Fogiv`, `Fogfv`));
+    mixin(ALIAS!(`Lightiv`, `Lightfv`));
+    mixin(ALIAS!(`LightModeliv`, `LightModelfv`));
+    mixin(ALIAS!(`Materialiv`, `Materialfv`));
+    mixin(ALIAS!(`TexParameteriv`, `TexParameterfv`));
+    mixin(ALIAS!(`TexEnviv`, `TexEnvfv`));
+    mixin(ALIAS!(`TexGeniv`, `TexGenfv`));
+    mixin(ALIAS!(`PixelMapuiv`, `PixelMapfv`));
+    mixin(ALIAS!(`ColorTableParameteriv`, `ColorTableParameterfv`));
+    mixin(ALIAS!(`ConvolutionParameteriv`, `ConvolutionParameterfv`));
+    mixin(ALIAS!(`CompressedTexSubImage1D`, `CompressedTexImage1D`));
+    mixin(ALIAS!(`CompressedTexSubImage2D`, `CompressedTexImage3D`));
+    mixin(ALIAS!(`PointParameteriv`, `PointParameterfv`));
+    mixin(ALIAS!(`DeleteFramebuffers`, `DrawBuffers`));
+    mixin(ALIAS!(`DeleteRenderbuffers`, `DrawBuffers`));
+    mixin(ALIAS!(`VertexAttribs1fvNV`, `PixelMapfv`));
+    mixin(ALIAS!(`VertexAttribs1svNV`, `PixelMapusv`));
+    mixin(ALIAS!(`VertexAttribs2fvNV`, `VertexAttribs1dvNV`));
+    mixin(ALIAS!(`VertexAttribs2svNV`, `PixelMapfv`));
+    mixin(ALIAS!(`VertexAttribs4fvNV`, `VertexAttribs2dvNV`));
+    mixin(ALIAS!(`VertexAttribs4svNV`, `VertexAttribs1dvNV`));
+    mixin(ALIAS!(`VertexAttribs4ubvNV`, `PixelMapfv`));
