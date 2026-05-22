@@ -11,7 +11,7 @@ public import colormap;
 public import privates;
 public import screenint;
 
-extern _X_EXPORT DevPrivateKeyRec; micmapScrPrivateKeyRec;
+extern DevPrivateKeyRec micmapScrPrivateKeyRec;
 
 enum micmapScrPrivateKey = (&micmapScrPrivateKeyRec);
 
