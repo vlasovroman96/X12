@@ -36,39 +36,39 @@ enum GLAMOR_DEBUG_FALLBACK =                 1;
 enum GLAMOR_DEBUG_TEXTURE_DOWNLOAD =         2;
 enum GLAMOR_DEBUG_TEXTURE_DYNAMIC_UPLOAD =   3;
 
-enum string GLAMOR_PANIC(string _format_, ...) = `
-  do {							
-    LogMessageVerb(X_NONE, 0, "Glamor Fatal Error"	
-		   ~ " at %32s line %d: " _format_ ~ "\n",	
-		   __func__, __LINE__,			
-		   ##__VA_ARGS__ );			
-    exit(1);                                            
-  } while(0)`;
+enum string GLAMOR_PANIC(string _format_) = "";
+  // do {							
+  //   LogMessageVerb(X_NONE, 0, "Glamor Fatal Error"	
+	// 	   ~ " at %32s line %d: " _format_ ~ "\n",	
+	// 	   __func__, __LINE__,			
+	// 	   ##__VA_ARGS__ );			
+  //   exit(1);                                            
+  // } while(0)`;
 
-enum string __debug_output_message(string _format_, string _prefix_, ...) = `
-  LogMessageVerb(X_NONE, 0,				
-		 "%32s:\t" ` ~ _format_ ~ ` ,		
-		 /*_prefix_,*/				
-		 __func__,				
-		 ##__VA_ARGS__)`;
+enum string __debug_output_message(string _format_, string _prefix_) = "";
+  // LogMessageVerb(X_NONE, 0,				
+	// 	 "%32s:\t" ` ~ _format_ ~ ` ,		
+	// 	 /*_prefix_,*/				
+	// 	 __func__,				
+	// 	 ##__VA_ARGS__)`;
 
-enum string glamor_debug_output(string _level_, string _format_,...) = `
-  do {							
-    if (glamor_debug_level >= ` ~ _level_ ~ `)			
-      ` ~ __debug_output_message!(` ~ `_format_` ~ `,			
-			     `"Glamor debug"`,		
-			     `##``__VA_ARGS__`) ~ `;		
-  } while(0)`;
+enum string glamor_debug_output(string _level_, string _format_) = "";
+  // do {							
+  //   if (glamor_debug_level >= ` ~ _level_ ~ `)			
+  //     ` ~ __debug_output_message!(_format_,			
+	// 		     `"Glamor debug"`,		
+	// 		     `__VA_ARGS__`) ~ `;		
+  // } while(0)`;
 
-enum string glamor_fallback(string _format_,...) = `
-  do {							
-    if (glamor_debug_level >= GLAMOR_DEBUG_FALLBACK)	
-      ` ~ __debug_output_message!(` ~ `_format_` ~ `,			
-			     `"Glamor fallback"`,		
-			     `##``__VA_ARGS__`) ~ `;} while(0)`;
+enum string glamor_fallback(string _format_) = "";
+  // do {							
+  //   if (glamor_debug_level >= GLAMOR_DEBUG_FALLBACK)	
+  //     ` ~ __debug_output_message!(` ~ `_format_` ~ `,			
+	// 		     `"Glamor fallback"`,		
+	// 		     `##``__VA_ARGS__`) ~ `;} while(0)`;
 
-enum string DEBUGF(string str, ...) = `do {} while(0)`;
-//#define DEBUGF(str, ...) ErrorF(str, ##__VA_ARGS__)
+enum string DEBUGF(string str,) = `do {} while(0)`;
+//#define DEBUGF(str,) ErrorF(str, ##__VA_ARGS__)
 enum string DEBUGRegionPrint(string x) = `do {} while (0)`;
 //#define DEBUGRegionPrint RegionPrint
 
