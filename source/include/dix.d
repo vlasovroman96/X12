@@ -96,9 +96,9 @@ enum string REQUEST_FIXED_SIZE(string req, string n) = `
 
 alias TimeStampPtr = _TimeStamp*;
 
-extern _X_EXPORT[1] ClientPtr;
-extern _X_EXPORT serverClient;
-extern _X_EXPORT currentMaxClients;
+extern ClientPtr[1] ClientPtr;
+extern ClientPtr serverClient;
+extern int currentMaxClients;
 
 struct TimeStamp {
     CARD32 months;              /* really ~49.7 days */
@@ -106,9 +106,9 @@ struct TimeStamp {
 }
 
 /* dispatch.c */
-extern _X_EXPORT UpdateCurrentTime();
+extern int UpdateCurrentTime();
 
-extern _X_EXPORT UpdateCurrentTimeIf();
+extern int UpdateCurrentTimeIf();
 
 /*
  * @brief dereference a pixmap and destroy it when not used anymore
@@ -123,45 +123,45 @@ extern _X_EXPORT UpdateCurrentTimeIf();
  * @param pPixmap pointer to pixmap (PixmapPtr) that should be unref'ed
  * @param unused ignored, only for matching the resource destructor prototype
  */
-_X_EXPORT int dixDestroyPixmap(void* pPixmap, XID unused);
+int dixDestroyPixmap(void* pPixmap, XID unused);
 
 /* dixutils.c */
 
-extern _X_EXPORT dixLookupWindow(WindowPtr* result, XID id, ClientPtr client, Mask access_mode);
+extern int dixLookupWindow(WindowPtr* result, XID id, ClientPtr client, Mask access_mode);
 
-extern _X_EXPORT dixLookupDrawable(DrawablePtr* result, XID id, ClientPtr client, Mask type_mask, Mask access_mode);
+extern int dixLookupDrawable(DrawablePtr* result, XID id, ClientPtr client, Mask type_mask, Mask access_mode);
 
-extern _X_EXPORT dixLookupFontable(FontPtr* result, XID id, ClientPtr client, Mask access_mode);
+extern int dixLookupFontable(FontPtr* result, XID id, ClientPtr client, Mask access_mode);
 
-extern _X_EXPORT NoopDDA();
+extern int NoopDDA();
 
 alias ServerBlockHandlerProcPtr = void function(void* blockData, void* timeout);
 
 alias ServerWakeupHandlerProcPtr = void function(void* blockData, int result);
 
-extern _X_EXPORT RegisterBlockAndWakeupHandlers(ServerBlockHandlerProcPtr blockHandler, ServerWakeupHandlerProcPtr wakeupHandler, void* blockData);
+extern int RegisterBlockAndWakeupHandlers(ServerBlockHandlerProcPtr blockHandler, ServerWakeupHandlerProcPtr wakeupHandler, void* blockData);
 
-extern _X_EXPORT RemoveBlockAndWakeupHandlers(ServerBlockHandlerProcPtr blockHandler, ServerWakeupHandlerProcPtr wakeupHandler, void* blockData);
+extern int RemoveBlockAndWakeupHandlers(ServerBlockHandlerProcPtr blockHandler, ServerWakeupHandlerProcPtr wakeupHandler, void* blockData);
 
-extern _X_EXPORT QueueWorkProc(Bool function(ClientPtr clientUnused, void* closure) function_, ClientPtr client, void* closure);
+extern int QueueWorkProc(Bool function(ClientPtr clientUnused, void* closure) function_, ClientPtr client, void* closure);
 
 /* atom.c */
 
-extern _X_EXPORT MakeAtom(const(char)*, uint, Bool);
+extern int MakeAtom(const(char)*, uint, Bool);
 
-extern _X_EXPORT ValidAtom(Atom);
+extern int ValidAtom(Atom);
 
-extern const(_X_EXPORT)* NameForAtom(Atom);
+extern const(char*) NameForAtom(Atom);
 
 /* events.c */
 
-extern _X_EXPORT WriteEventsToClient(ClientPtr, int, xEventPtr);
+extern int WriteEventsToClient(ClientPtr, int, xEventPtr);
 
 /*
  *  ServerGrabCallback stuff
  */
 
-extern _X_EXPORT CallbackListPtr; ServerGrabCallback;
+extern CallbackListPtr ServerGrabCallback;
 
 enum ServerGrabState { SERVER_GRABBED, SERVER_UNGRABBED,
     CLIENT_PERVIOUS, CLIENT_IMPERVIOUS
@@ -181,7 +181,7 @@ struct ServerGrabInfoRec {
  *  EventCallback stuff
  */
 
-extern _X_EXPORT CallbackListPtr; EventCallback;
+extern CallbackListPtr EventCallback;
 
 struct EventInfoRec {
     ClientPtr client;
@@ -194,7 +194,7 @@ struct DeviceEventInfoRec {
     DeviceIntPtr device;
 }
 
-extern _X_EXPORT* lastGLContext;
+extern void* lastGLContext;
 
 /**
  * @brief get display string for given screen
@@ -205,6 +205,6 @@ extern _X_EXPORT* lastGLContext;
  * @param pScreen pointer to ScreenRec to query.
  * @return pointer to string, valid as long as the pScreen is, owned by DIX.
  */
-const(_X_EXPORT)* dixGetDisplayName(ScreenPtr* pScreen);
+const(char)* dixGetDisplayName(ScreenPtr* pScreen);
 
                           /* DIX_H */
