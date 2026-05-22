@@ -87,7 +87,7 @@ import gc;
 import pixman;
 
 version (REGION_DEBUG) {
-enum string assert(string expr) = `{ 
+enum string assert_(string expr) = `{ 
             CARD32* foo = null; 
             if (!(` ~ expr ~ `)) { 
                 ErrorF("Assertion failed file %s, line %d: %s\n", 
@@ -204,7 +204,7 @@ enum string NEWRECT(string pReg,string pNextRect,string nx1,string ny1,string nx
 	    return FALSE;						
 	` ~ pNextRect ~ ` = RegionTop(` ~ pReg ~ `);					
     }									
-    ` ~ ADDRECT!(` ~ `pNextRect` ~ `,` ~ `nx1` ~ `,` ~ `ny1` ~ `,` ~ `nx2` ~ `,` ~ `ny2` ~ `) ~ `;					
+    ` ~ ADDRECT!(pNextRect,nx1,ny1,nx2,ny2) ~ `;					
     ` ~ pReg ~ `.data.numRects++;						
     assert(` ~ pReg ~ `.data.numRects<=` ~ pReg ~ `.data.size);			
 }`;
@@ -516,7 +516,7 @@ enum string	AppendRegions(string newReg, string r, string rEnd) = `
 {									
     int newRects = void;							
     if ((newRects = ` ~ rEnd ~ ` - ` ~ r ~ `)) {					
-	` ~ RECTALLOC!(` ~ `newReg` ~ `, `newRects`) ~ `;					
+	` ~ RECTALLOC!(newReg, newRects) ~ `;					
 	memmove(cast(char*)RegionTop(` ~ newReg ~ `),cast(char*)` ~ r ~ `, 			
               newRects * BoxRec.sizeof);				
 	` ~ newReg ~ `.data.numRects += newRects;				
@@ -891,8 +891,8 @@ enum string MERGERECT(string r) = `
     }
     while (r1 != r1End && r2 != r2End) {
         if (r1.x1 < r2.x1)
-            mixin(MERGERECT!(`r1`))
-            else MERGERECT(r2);
+            mixin(MERGERECT!(`r1`));
+        else MERGERECT(r2);
     }
 
     /* Finish off whoever (if any) is left */
