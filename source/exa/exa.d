@@ -302,12 +302,12 @@ Bool ExaDoPrepareAccess(PixmapPtr pPixmap, int index)
     pExaScr.access[index].count = 1;
 
     if (!has_gpu_copy)
-        goto out;
+        goto out_;
 
     exaWaitSync(pScreen);
 
     if (pExaScr.info.PrepareAccess == null)
-        goto out;
+        goto out_;
 
     if (index >= EXA_PREPARE_AUX_DEST &&
         !(pExaScr.info.flags & EXA_SUPPORTS_PREPARE_AUX)) {
@@ -315,7 +315,7 @@ Bool ExaDoPrepareAccess(PixmapPtr pPixmap, int index)
             FatalError("Unsupported AUX indices used on a pinned pixmap.\n");
         exaMoveOutPixmap(pPixmap);
         ret = FALSE;
-        goto out;
+        goto out_;
     }
 
     if (!(*pExaScr.info.PrepareAccess) (pPixmap, index)) {
@@ -324,12 +324,12 @@ Bool ExaDoPrepareAccess(PixmapPtr pPixmap, int index)
             FatalError("Driver failed PrepareAccess on a pinned pixmap.\n");
         exaMoveOutPixmap(pPixmap);
         ret = FALSE;
-        goto out;
+        goto out_;
     }
 
     ret = TRUE;
 
- out:
+ out_:
     pExaScr.access[index].retval = ret;
     return ret;
 }
