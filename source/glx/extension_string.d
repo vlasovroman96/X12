@@ -50,7 +50,7 @@ enum string GLX(string n) = `"GLX_" # n, 4 + sizeof( # n ) - 1, CONCAT(n,_bit)`;
 enum string VER(string a,string b) = `` ~ a ~ `, ` ~ b ~ ``;
 enum Y =  1;
 enum N =  0;
-enum string EXT_ENABLED(string bit,string supported) = `(` ~ IS_SET!(` ~ `supported` ~ `, ` ~ `bit` ~ `) ~ `)`;
+enum string EXT_ENABLED(string bit,string supported) = `(` ~ IS_SET!(supported, bit) ~ `)`;
 
 struct extension_info {
     const(char*) name;
