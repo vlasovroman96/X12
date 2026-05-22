@@ -19,19 +19,19 @@ enum string wUseDefault(string w,string field,string def) = `((` ~ w ~ `).option
                                     (` ~ w ~ `).optional.` ~ field ~ ` 
                                  : ` ~ def ~ `)`;
 
-enum string wVisual(string w) = `` ~ wTrackParent!(` ~ `w` ~ `, `visual`) ~ ``;
-enum string wCursor(string w) = `((` ~ w ~ `).cursorIsNone ? None : ` ~ wTrackParent!(` ~ `w` ~ `, `cursor`) ~ `)`;
-enum string wColormap(string w) = `((` ~ w ~ `).drawable.class_ == InputOnly ? None : ` ~ wTrackParent!(` ~ `w` ~ `, `colormap`) ~ `)`;
-enum string wDontPropagateMask(string w) = `` ~ wUseDefault!(` ~ `w` ~ `, `dontPropagateMask`, `DontPropagateMasks[(` ~ w ~ `).dontPropagate]`) ~ ``;
-enum string wOtherEventMasks(string w) = `` ~ wUseDefault!(` ~ `w` ~ `, `otherEventMasks`, `0`) ~ ``;
-enum string wOtherClients(string w) = `` ~ wUseDefault!(` ~ `w` ~ `, `otherClients`, `null`) ~ ``;
-enum string wOtherInputMasks(string w) = `` ~ wUseDefault!(` ~ `w` ~ `, `inputMasks`, `null`) ~ ``;
-enum string wPassiveGrabs(string w) = `` ~ wUseDefault!(` ~ `w` ~ `, `passiveGrabs`, `null`) ~ ``;
-enum string wBackingBitPlanes(string w) = `` ~ wUseDefault!(` ~ `w` ~ `, `backingBitPlanes`, `~0L`) ~ ``;
-enum string wBackingPixel(string w) = `` ~ wUseDefault!(` ~ `w` ~ `, `backingPixel`, `0`) ~ ``;
-enum string wBoundingShape(string w) = `` ~ wUseDefault!(` ~ `w` ~ `, `boundingShape`, `null`) ~ ``;
-enum string wClipShape(string w) = `` ~ wUseDefault!(` ~ `w` ~ `, `clipShape`, `null`) ~ ``;
-enum string wInputShape(string w) = `` ~ wUseDefault!(` ~ `w` ~ `, `inputShape`, `null`) ~ ``;
+enum string wVisual(string w) = `` ~ wTrackParent!(w, `visual`) ~ ``;
+enum string wCursor(string w) = `((` ~ w ~ `).cursorIsNone ? None : ` ~ wTrackParent!(w, `cursor`) ~ `)`;
+enum string wColormap(string w) = `((` ~ w ~ `).drawable.class_ == InputOnly ? None : ` ~ wTrackParent!(w, `colormap`) ~ `)`;
+enum string wDontPropagateMask(string w) = `` ~ wUseDefault!(w, `dontPropagateMask`, `DontPropagateMasks[(` ~ w ~ `).dontPropagate]`) ~ ``;
+enum string wOtherEventMasks(string w) = `` ~ wUseDefault!(w, `otherEventMasks`, `0`) ~ ``;
+enum string wOtherClients(string w) = `` ~ wUseDefault!(w, `otherClients`, `null`) ~ ``;
+enum string wOtherInputMasks(string w) = `` ~ wUseDefault!(w, `inputMasks`, `null`) ~ ``;
+enum string wPassiveGrabs(string w) = `` ~ wUseDefault!(w, `passiveGrabs`, `null`) ~ ``;
+enum string wBackingBitPlanes(string w) = `` ~ wUseDefault!(w, `backingBitPlanes`, `~0L`) ~ ``;
+enum string wBackingPixel(string w) = `` ~ wUseDefault!(w, `backingPixel`, `0`) ~ ``;
+enum string wBoundingShape(string w) = `` ~ wUseDefault!(w, `boundingShape`, `null`) ~ ``;
+enum string wClipShape(string w) = `` ~ wUseDefault!(w, `clipShape`, `null`) ~ ``;
+enum string wInputShape(string w) = `` ~ wUseDefault!(w, `inputShape`, `null`) ~ ``;
 
 enum string SameBackground(string as, string a, string bs, string b) = `
     ((` ~ as ~ `) == (` ~ bs ~ `) && ((` ~ as ~ `) == None ||				
