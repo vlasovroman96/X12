@@ -165,7 +165,7 @@ void fbPushPixels(GCPtr pGC, PixmapPtr pBitmap, DrawablePtr pDrawable, int dx, i
     FbStip* stip = void;
     FbStride stipStride = void;
     int stipBpp = void;
-    _X_UNUSED int stipXoff = void, stipYoff = void;
+    int stipXoff = void, stipYoff = void;
 
     fbGetStipDrawable(&pBitmap.drawable, stip, stipStride, stipBpp, stipXoff,
                       stipYoff);
