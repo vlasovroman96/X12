@@ -42,7 +42,7 @@ public import privates;
  *      translation from client ids to server addresses.
  */
 
-extern _X_EXPORT CallbackListPtr; ClientStateCallback;
+extern CallbackListPtr ClientStateCallback;
 
 struct NewClientInfoRec {
     ClientPtr client;
@@ -115,17 +115,17 @@ struct _Client {
     int req_fds;
 }
 
-extern _X_EXPORT currentTime;
+extern TimeStamp currentTime;
 
-extern _X_EXPORT CompareTimeStamps(TimeStamp, TimeStamp);
+extern int CompareTimeStamps(TimeStamp, TimeStamp);
 
-extern _X_EXPORT ClientTimeToServerTime(CARD32);
+extern TimeStamp ClientTimeToServerTime(CARD32);
 
 /* proc vectors */
 
-extern  int(ProcVector*);
+extern  int*[256] ProcVector;
 
-extern  int(SwappedProcVector*);
+extern  int*[256] SwappedProcVector;
 
 /* fixme: still needed by (public) dix.h */
 extern ReplySwapPtr[256] ReplySwapVector;
