@@ -33,7 +33,7 @@ import core.stdc.config: c_long, c_ulong;
 
 import build.dix_config;
 import exa_priv;
-import deimos.X11.fonts/fontstruct;
+import deimos.X11.fonts.fontstruct;
 import dixfontstr;
 import exa;
 
@@ -460,7 +460,7 @@ Bool exaHWCopyNtoN(DrawablePtr pSrcDrawable, DrawablePtr pDstDrawable, GCPtr pGC
         reverse != upsidedown) {
         if (exaCopyNtoNTwoDir(pSrcDrawable, pDstDrawable, pGC, pbox, nbox,
                               dx, dy))
-            goto out;
+            goto out_;
         goto fallback;
     }
 
@@ -531,12 +531,12 @@ Bool exaHWCopyNtoN(DrawablePtr pSrcDrawable, DrawablePtr pDstDrawable, GCPtr pGC
     else
         goto fallback;
 
-    goto out;
+    goto out_;
 
  fallback:
     ret = FALSE;
 
- out:
+ out_:
     if (dstregion) {
         RegionUninit(dstregion);
         RegionDestroy(dstregion);
@@ -769,7 +769,7 @@ private void exaPolyFillRect(DrawablePtr pDrawable, GCPtr pGC, int nrect, xRecta
     RegionIntersect(pReg, pClip, pReg);
 
     if (!RegionNumRects(pReg)) {
-        goto out;
+        goto out_;
     }
 
     exaGetDrawableDeltas(pDrawable, pPixmap, &xoff, &yoff);
@@ -794,7 +794,7 @@ private void exaPolyFillRect(DrawablePtr pDrawable, GCPtr pGC, int nrect, xRecta
              exaFillRegionTiled(pDrawable, pReg, pGC.tile.pixmap, &pGC.patOrg,
                                 pGC.planemask, pGC.alu,
                                 pGC.clientClip != null))) {
-            goto out;
+            goto out_;
         }
     }
 
@@ -820,7 +820,7 @@ private void exaPolyFillRect(DrawablePtr pDrawable, GCPtr pGC, int nrect, xRecta
                                          pGC.planemask, pGC.fgPixel)) {
  fallback:
         ExaCheckPolyFillRect(pDrawable, pGC, nrect, prect);
-        goto out;
+        goto out_;
     }
 
     xorg = pDrawable.x;
@@ -892,7 +892,7 @@ private void exaPolyFillRect(DrawablePtr pDrawable, GCPtr pGC, int nrect, xRecta
     (*pExaScr.info.DoneSolid) (pPixmap);
     exaMarkSync(pDrawable.pScreen);
 
- out:
+ out_:
     RegionUninit(pReg);
     RegionDestroy(pReg);
 }
@@ -971,7 +971,7 @@ private Bool exaFillRegionSolid(DrawablePtr pDrawable, RegionPtr pRegion, Pixel 
     RegionTranslate(pRegion, xoff, yoff);
 
     if (pExaScr.fallback_counter || pExaPixmap.accel_blocked)
-        goto out;
+        goto out_;
 
     if (pExaScr.do_migration) {
         ExaMigrationRec[1] pixmaps = void;
@@ -1029,7 +1029,7 @@ private Bool exaFillRegionSolid(DrawablePtr pDrawable, RegionPtr pRegion, Pixel 
         ret = TRUE;
     }
 
- out:
+ out_:
     RegionTranslate(pRegion, -xoff, -yoff);
 
     return ret;
