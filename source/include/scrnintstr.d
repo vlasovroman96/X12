@@ -615,6 +615,6 @@ struct ScreenInfo {
     int height;                 /* total height of all screens together */
 }
 
-extern _X_EXPORT ScreenInfo; screenInfo;
+extern ScreenInfo screenInfo;
 
                           /* SCREENINTSTRUCT_H */
