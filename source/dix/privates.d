@@ -217,11 +217,11 @@ private Bool fixupScreens(FixupFunc fixup, uint bytes)
     DIX_FOR_EACH_SCREEN({
         if (!fixupOneScreen (walkScreen, fixup, bytes))
             return FALSE;
-    }){}
+    });
     DIX_FOR_EACH_GPU_SCREEN({
         if (!fixupOneScreen (walkScreen, fixup, bytes))
             return FALSE;
-    }){}
+    });
     return TRUE;
 }
 
@@ -255,7 +255,7 @@ private Bool fixupDefaultColormaps(FixupFunc fixup, uint bytes)
         if (cmap &&
             !fixup(&cmap.devPrivates, walkScreen.screenSpecificPrivates[PRIVATE_COLORMAP].offset, bytes))
             return FALSE;
-    }){}
+    });
     return TRUE;
 }
 
@@ -295,10 +295,10 @@ private void grow_screen_specific_set(DevPrivateType type, uint bytes)
     /* Update offsets for all screen-specific keys */
     DIX_FOR_EACH_SCREEN({
         grow_private_set(&walkScreen.screenSpecificPrivates[type], bytes);
-    }){}
+    });
     DIX_FOR_EACH_GPU_SCREEN({
         grow_private_set(&walkScreen.screenSpecificPrivates[type], bytes);
-    }){}
+    });
 }
 
 Bool dixRegisterPrivateKey(DevPrivateKey key, DevPrivateType type, uint size)
