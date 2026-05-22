@@ -96,7 +96,7 @@ struct _DRIWrappedFuncsRec {
     ClipNotifyProcPtr ClipNotify;
     AdjustFramePtr AdjustFrame;
 }alias DRIWrappedFuncsRec = _DRIWrappedFuncsRec;
-alias DRIWrappedFuncsPtr = *;
+alias DRIWrappedFuncsPtr = DRIWrappedFuncsRec*;
 
 /*
  * Prior to Xorg 6.8.99.8, the DRIInfoRec structure was implicitly versioned
@@ -183,100 +183,100 @@ struct _DRIInfoRec {
                                  * mapped by DDX driver or DRI */
 
 }alias DRIInfoRec = _DRIInfoRec;
-alias DRIInfoPtr = *;
+alias DRIInfoPtr = DRIInfoRec*;
 
-extern _X_EXPORT DRIOpenDRMMaster(ScrnInfoPtr pScrn, c_ulong sAreaSize, const(char)* busID, const(char)* drmDriverName);
+extern int DRIOpenDRMMaster(ScrnInfoPtr pScrn, c_ulong sAreaSize, const(char)* busID, const(char)* drmDriverName);
 
-extern _X_EXPORT DRIScreenInit(ScreenPtr pScreen, DRIInfoPtr pDRIInfo, int* pDRMFD);
+extern int DRIScreenInit(ScreenPtr pScreen, DRIInfoPtr pDRIInfo, int* pDRMFD);
 
-extern _X_EXPORT DRICloseScreen(ScreenPtr pScreen);
+extern int DRICloseScreen(ScreenPtr pScreen);
 
-extern _X_EXPORT DRIReset();
+extern int DRIReset();
 
-extern _X_EXPORT DRIQueryDirectRenderingCapable(ScreenPtr pScreen, Bool* isCapable);
+extern int DRIQueryDirectRenderingCapable(ScreenPtr pScreen, Bool* isCapable);
 
-extern _X_EXPORT DRIOpenConnection(ScreenPtr pScreen, drm_handle_t* hSAREA, char** busIdString);
+extern int DRIOpenConnection(ScreenPtr pScreen, drm_handle_t* hSAREA, char** busIdString);
 
-extern _X_EXPORT DRIAuthConnection(ScreenPtr pScreen, drm_magic_t magic);
+extern int DRIAuthConnection(ScreenPtr pScreen, drm_magic_t magic);
 
-extern _X_EXPORT DRICloseConnection(ScreenPtr pScreen);
+extern int DRICloseConnection(ScreenPtr pScreen);
 
-extern _X_EXPORT DRIGetClientDriverName(ScreenPtr pScreen, int* ddxDriverMajorVersion, int* ddxDriverMinorVersion, int* ddxDriverPatchVersion, char** clientDriverName);
+extern int DRIGetClientDriverName(ScreenPtr pScreen, int* ddxDriverMajorVersion, int* ddxDriverMinorVersion, int* ddxDriverPatchVersion, char** clientDriverName);
 
-extern _X_EXPORT DRICreateContext(ScreenPtr pScreen, VisualPtr visual, XID context, drm_context_t* pHWContext);
+extern int DRICreateContext(ScreenPtr pScreen, VisualPtr visual, XID context, drm_context_t* pHWContext);
 
-extern _X_EXPORT DRIDestroyContext(ScreenPtr pScreen, XID context);
+extern int DRIDestroyContext(ScreenPtr pScreen, XID context);
 
-extern _X_EXPORT DRIContextPrivDelete(void* pResource, XID id);
+extern int DRIContextPrivDelete(void* pResource, XID id);
 
-extern _X_EXPORT DRICreateDrawable(ScreenPtr pScreen, ClientPtr client, DrawablePtr pDrawable, drm_drawable_t* hHWDrawable);
+extern int DRICreateDrawable(ScreenPtr pScreen, ClientPtr client, DrawablePtr pDrawable, drm_drawable_t* hHWDrawable);
 
-extern _X_EXPORT DRIDestroyDrawable(ScreenPtr pScreen, ClientPtr client, DrawablePtr pDrawable);
+extern int DRIDestroyDrawable(ScreenPtr pScreen, ClientPtr client, DrawablePtr pDrawable);
 
-extern _X_EXPORT DRIDrawablePrivDelete(void* pResource, XID id);
+extern int DRIDrawablePrivDelete(void* pResource, XID id);
 
-extern _X_EXPORT DRIGetDrawableInfo(ScreenPtr pScreen, DrawablePtr pDrawable, uint* indx, uint* stamp, int* X, int* Y, int* W, int* H, int* numClipRects, drm_clip_rect_t** pClipRects, int* backX, int* backY, int* numBackClipRects, drm_clip_rect_t** pBackClipRects);
+extern int DRIGetDrawableInfo(ScreenPtr pScreen, DrawablePtr pDrawable, uint* indx, uint* stamp, int* X, int* Y, int* W, int* H, int* numClipRects, drm_clip_rect_t** pClipRects, int* backX, int* backY, int* numBackClipRects, drm_clip_rect_t** pBackClipRects);
 
-extern _X_EXPORT DRIGetDeviceInfo(ScreenPtr pScreen, drm_handle_t* hFrameBuffer, int* fbOrigin, int* fbSize, int* fbStride, int* devPrivateSize, void** pDevPrivate);
+extern int DRIGetDeviceInfo(ScreenPtr pScreen, drm_handle_t* hFrameBuffer, int* fbOrigin, int* fbSize, int* fbStride, int* devPrivateSize, void** pDevPrivate);
 
-extern _X_EXPORT DRIInfoPtr; DRICreateInfoRec(void);
+extern DRIInfoPtr DRICreateInfoRec(void);
 
-extern _X_EXPORT DRIDestroyInfoRec(DRIInfoPtr DRIInfo);
+extern int DRIDestroyInfoRec(DRIInfoPtr DRIInfo);
 
-extern _X_EXPORT DRIFinishScreenInit(ScreenPtr pScreen);
+extern int DRIFinishScreenInit(ScreenPtr pScreen);
 
-extern _X_EXPORT DRIWakeupHandler(void* wakeupData, int result);
+extern int DRIWakeupHandler(void* wakeupData, int result);
 
-extern _X_EXPORT DRIBlockHandler(void* blockData, void* timeout);
+extern int DRIBlockHandler(void* blockData, void* timeout);
 
-extern _X_EXPORT DRIDoWakeupHandler(ScreenPtr pScreen, int result);
+extern int DRIDoWakeupHandler(ScreenPtr pScreen, int result);
 
-extern _X_EXPORT DRIDoBlockHandler(ScreenPtr pScreen, void* timeout);
+extern int DRIDoBlockHandler(ScreenPtr pScreen, void* timeout);
 
-extern _X_EXPORT DRISwapContext(int drmFD, void* oldctx, void* newctx);
+extern int DRISwapContext(int drmFD, void* oldctx, void* newctx);
 
-extern _X_EXPORT* DRIGetContextStore(DRIContextPrivPtr context);
+extern int  DRIGetContextStore(DRIContextPrivPtr context);
 
-extern _X_EXPORT DRIWindowExposures(WindowPtr pWin, RegionPtr prgn);
+extern int DRIWindowExposures(WindowPtr pWin, RegionPtr prgn);
 
-extern _X_EXPORT DRICopyWindow(WindowPtr pWin, xPoint ptOldOrg, RegionPtr prgnSrc);
+extern int DRICopyWindow(WindowPtr pWin, xPoint ptOldOrg, RegionPtr prgnSrc);
 
-extern _X_EXPORT DRIClipNotify(WindowPtr pWin, int dx, int dy);
+extern int DRIClipNotify(WindowPtr pWin, int dx, int dy);
 
-extern _X_EXPORT DRIGetDrawableIndex(WindowPtr pWin);
+extern int DRIGetDrawableIndex(WindowPtr pWin);
 
-extern _X_EXPORT DRIPrintDrawableLock(ScreenPtr pScreen, char* msg);
+extern int DRIPrintDrawableLock(ScreenPtr pScreen, char* msg);
 
-extern _X_EXPORT DRILock(ScreenPtr pScreen, int flags);
+extern int DRILock(ScreenPtr pScreen, int flags);
 
-extern _X_EXPORT DRIUnlock(ScreenPtr pScreen);
+extern int DRIUnlock(ScreenPtr pScreen);
 
-extern _X_EXPORT* DRIGetWrappedFuncs(ScreenPtr pScreen);
+extern int  DRIGetWrappedFuncs(ScreenPtr pScreen);
 
-extern _X_EXPORT* DRIGetSAREAPrivate(ScreenPtr pScreen);
+extern int  DRIGetSAREAPrivate(ScreenPtr pScreen);
 
-extern _X_EXPORT unsigned; int DRIGetDrawableStamp(ScreenPtr pScreen, CARD32 drawable_index);
+extern int unsigned; int DRIGetDrawableStamp(ScreenPtr pScreen, CARD32 drawable_index);
 
-extern _X_EXPORT DRICreateContextPriv(ScreenPtr pScreen, drm_context_t* pHWContext, DRIContextFlags flags);
+extern int DRICreateContextPriv(ScreenPtr pScreen, drm_context_t* pHWContext, DRIContextFlags flags);
 
-extern _X_EXPORT DRICreateContextPrivFromHandle(ScreenPtr pScreen, drm_context_t hHWContext, DRIContextFlags flags);
+extern int DRICreateContextPrivFromHandle(ScreenPtr pScreen, drm_context_t hHWContext, DRIContextFlags flags);
 
-extern _X_EXPORT DRIDestroyContextPriv(DRIContextPrivPtr pDRIContextPriv);
+extern int DRIDestroyContextPriv(DRIContextPrivPtr pDRIContextPriv);
 
-extern _X_EXPORT DRIGetContext(ScreenPtr pScreen);
+extern int DRIGetContext(ScreenPtr pScreen);
 
-extern _X_EXPORT DRIQueryVersion(int* majorVersion, int* minorVersion, int* patchVersion);
+extern int DRIQueryVersion(int* majorVersion, int* minorVersion, int* patchVersion);
 
-extern _X_EXPORT DRIAdjustFrame(ScrnInfoPtr pScrn, int x, int y);
+extern int DRIAdjustFrame(ScrnInfoPtr pScrn, int x, int y);
 
-extern _X_EXPORT DRIMoveBuffersHelper(ScreenPtr pScreen, int dx, int dy, int* xdir, int* ydir, RegionPtr reg);
+extern int DRIMoveBuffersHelper(ScreenPtr pScreen, int dx, int dy, int* xdir, int* ydir, RegionPtr reg);
 
-extern _X_EXPORT DRIMasterFD(ScrnInfoPtr pScrn);
+extern int DRIMasterFD(ScrnInfoPtr pScrn);
 
-extern _X_EXPORT* DRIMasterSareaPointer(ScrnInfoPtr pScrn);
+extern int  DRIMasterSareaPointer(ScrnInfoPtr pScrn);
 
-extern _X_EXPORT DRIMasterSareaHandle(ScrnInfoPtr pScrn);
+extern int DRIMasterSareaHandle(ScrnInfoPtr pScrn);
 
-extern _X_EXPORT DRIGetTexOffsetFuncs(ScreenPtr pScreen, DRITexOffsetStartProcPtr* texOffsetStartFunc, DRITexOffsetFinishProcPtr* texOffsetFinishFunc);
+extern int DRIGetTexOffsetFuncs(ScreenPtr pScreen, DRITexOffsetStartProcPtr* texOffsetStartFunc, DRITexOffsetFinishProcPtr* texOffsetFinishFunc);
 
 
