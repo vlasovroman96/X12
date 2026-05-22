@@ -143,7 +143,7 @@ version (XINERAMA) {
             rc = dixLookupWindow(&pWin, win.info[walkScreenIdx].id, pClient, DixSetPropAccess);
             if (rc == Success)
                 setVRRMode(pWin, mode);
-        }){}
+        });
     }
     return;
 no_panoramix:
@@ -157,13 +157,19 @@ private void deliverPropertyNotifyEvent(WindowPtr pWin, int state, PropertyPtr p
 {
     xEvent event = void;
     UpdateCurrentTimeIf();
-    event = xEvent (
-        u:property:window: pWin.drawable.id,
-        u:property:state: state,
-        u:property:atom: pProp.propertyName,
-        u:property:time: currentTime.milliseconds,
-    );
-    event.u.u.type = PropertyNotify;
+    event = xEvent;
+    //  (
+        // u:property:window: pWin.drawable.id,
+    //     u:property:state: state,
+    //     u:property:atom: pProp.propertyName,
+    //     u:property:time: currentTime.milliseconds,
+    // );
+
+        event.u.property.window = pWin.drawable.id;
+        event.u.property.state = state;
+        event.u.property.atom = pProp.propertyName;
+        event.u.property.time = currentTime.milliseconds;
+        event.u.u.type = PropertyNotify;
 
     DeliverEvents(pWin, &event, 1, cast(WindowPtr) null);
 }
@@ -205,26 +211,26 @@ int ProcRotateProperties(ClientPtr client)
     saved = calloc(p.nAtoms, PropertyRec.sizeof);
     if (!props || !saved) {
         rc = BadAlloc;
-        goto out;
+        goto out_;
     }
 
     for (int i = 0; i < p.nAtoms; i++) {
         if (!ValidAtom(p.atoms[i])) {
             rc = BadAtom;
             client.errorValue = p.atoms[i];
-            goto out;
+            goto out_;
         }
         for (int j = i + 1; j < p.nAtoms; j++)
             if (p.atoms[j] == p.atoms[i]) {
                 rc = BadMatch;
-                goto out;
+                goto out_;
             }
 
         rc = dixLookupProperty(&pProp, pWin, p.atoms[i], p.client,
                                DixReadAccess | DixWriteAccess);
 
         if (rc != Success)
-            goto out;
+            goto out_;
 
         props[i] = pProp;
         saved[i] = *pProp;
@@ -249,7 +255,7 @@ int ProcRotateProperties(ClientPtr client)
             props[j].data = saved[i].data;
         }
     }
- out:
+ out_:
     free(saved);
     free(props);
     return rc;
