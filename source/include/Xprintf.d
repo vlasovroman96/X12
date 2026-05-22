@@ -56,7 +56,7 @@ version = _X_RESTRICT_KYWD;
  * on failure.
  */
 extern _X_EXPORT XNFasprintf(char** ret, const(char)* _X_RESTRICT_KYWD, ...);
-_X_ATTRIBUTE_PRINTF(2, 3);
-extern _X_EXPORT _X_ATTRIBUTE_VPRINTF();
+// _X_ATTRIBUTE_PRINTF(2, 3);
+// extern _X_EXPORT _X_ATTRIBUTE_VPRINTF();
 
                           /* XPRINTF_H */
