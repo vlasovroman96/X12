@@ -40,9 +40,11 @@ import singlesize;
 
 enum string __GLX_PAD(string x) = `(((` ~ x ~ `) + 3) & ~3)`;
 
-struct __GLXpixel3DHeader {
-    __GLX_PIXEL_3D_HDR;
-}
+// struct __GLXpixel3DHeader {
+//     __GLX_PIXEL_3D_HDR;
+// }
+
+alias _GLXpixel3DHeader = __GLX_PIXEL_3D_HDR;
 
 extern GLboolean __glXErrorOccured();
 extern void __glXClearErrorOccured();
