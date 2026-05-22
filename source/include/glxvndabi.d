@@ -64,7 +64,7 @@ public import xlibre_ptrtypes;
 
 public import scrnintstr;
 public import extnsionst;
-public import GL/glxproto;
+public import GL.glxproto;
 
 /*!
  * Current version of the ABI.
@@ -81,8 +81,7 @@ enum GLXSERVER_VENDOR_ABI_MAJOR_VERSION = 0;
 enum GLXSERVER_VENDOR_ABI_MINOR_VERSION = 1;
 
 version (none) {
-extern "C" {
-//! #endif
+extern(C) {
 
 /**
  * An opaque pointer representing a vendor library.
