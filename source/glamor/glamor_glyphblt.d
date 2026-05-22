@@ -40,7 +40,7 @@ private const(glamor_facet) glamor_facet_poly_glyph_blt = {
     name: "poly_glyph_blt",
     vs_vars: "in vec2 primitive;\n",
     vs_exec: ("       vec2 pos = vec2(0,0);\n"
-                GLAMOR_DEFAULT_POINT_SIZE
+                ~ GLAMOR_DEFAULT_POINT_SIZE~
                 GLAMOR_POS(gl_Position, primitive)),
 };
 
@@ -74,7 +74,7 @@ private Bool glamor_poly_glyph_blt_gl(DrawablePtr drawable, GCPtr gc, int start_
 
     BUG_RETURN_VAL(!pixmap_priv, FALSE);
 
-    glamor_pixmap_loop(pixmap_priv, box_index) {
+    glamor_pixmap_loop(pixmap_priv, box_index) ;{
         int x = void;
         int n = void;
         int num_points = void, max_points = void;
@@ -109,9 +109,10 @@ private Bool glamor_poly_glyph_blt_gl(DrawablePtr drawable, GCPtr gc, int start_
 
 static if (BITMAP_BIT_ORDER == MSBFirst) {
                         if (!(*glyph & (128 >> (xx & 7))))
-#else
                         if (!(*glyph & (1 << (xx & 7))))
+                            continue;
 }
+else
                             continue;
 
                         if (!RegionContainsPoint(clip, pt_x_i, pt_y_i, null))
@@ -214,10 +215,7 @@ private Bool glamor_push_pixels_gl(GCPtr gc, PixmapPtr bitmap, DrawablePtr drawa
         ubyte* bitmap_row = bitmap_data + yy * bitmap_stride;
         for (xx = 0; xx < w; xx++) {
 static if (BITMAP_BIT_ORDER == MSBFirst) {
-            if (bitmap_row[xx / 8] & (128 >> xx % 8) &&
-#else
-            if (bitmap_row[xx / 8] & (1 << xx % 8) &&
-#endif
+            if (bitmap_row[xx / 8] & (128 >> xx % 8) &&                
                 RegionContainsPoint(clip,
                                     x + xx,
                                     y + yy,
@@ -225,7 +223,19 @@ static if (BITMAP_BIT_ORDER == MSBFirst) {
                 *points++ = x + xx;
                 *points++ = y + yy;
                 num_points++;
-            }}
+            }
+}
+else {
+            if (bitmap_row[xx / 8] & (1 << xx % 8) &&
+                RegionContainsPoint(clip,
+                                    x + xx,
+                                    y + yy,
+                                    null)) {
+                *points++ = x + xx;
+                *points++ = y + yy;
+                num_points++;
+            }
+}
         }
     }
     glVertexAttribPointer(GLAMOR_VERTEX_POS, 2, GL_SHORT,
@@ -235,7 +245,7 @@ static if (BITMAP_BIT_ORDER == MSBFirst) {
 
     BUG_RETURN_VAL(!pixmap_priv, FALSE);
 
-    glamor_pixmap_loop(pixmap_priv, box_index) {
+    glamor_pixmap_loop(pixmap_priv, box_index); {
         if (!glamor_set_destination_drawable(drawable, box_index, FALSE, TRUE,
                                              prog.matrix_uniform, null, null))
             goto bail;
