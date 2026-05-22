@@ -36,7 +36,7 @@ import build.dix_config;
 
 import core.stdc.string;
 import core.stdc.assert_;
-import GL/glxtokens;
+import GL.glxtokens;
 import deimos.X11.extensions.presenttokens;
 
 import dix.dix_priv;
@@ -63,7 +63,7 @@ import xace;
 
 private char[4] GLXServerVendorName = "SGI";
 
-_X_HIDDEN int validGlxScreen(ClientPtr client, int screen, __GLXscreen** pGlxScreen, int* err)
+int validGlxScreen(ClientPtr client, int screen, __GLXscreen** pGlxScreen, int* err)
 {
     /*
      ** Check if screen exists.
@@ -79,7 +79,7 @@ _X_HIDDEN int validGlxScreen(ClientPtr client, int screen, __GLXscreen** pGlxScr
     return TRUE;
 }
 
-_X_HIDDEN int validGlxFBConfig(ClientPtr client, __GLXscreen* pGlxScreen, XID id, __GLXconfig** config, int* err)
+int validGlxFBConfig(ClientPtr client, __GLXscreen* pGlxScreen, XID id, __GLXconfig** config, int* err)
 {
     __GLXconfig* m = void;
 
@@ -140,7 +140,7 @@ private int validGlxFBConfigForWindow(ClientPtr client, __GLXconfig* config, Dra
     return TRUE;
 }
 
-_X_HIDDEN int validGlxContext(ClientPtr client, XID id, int access_mode, __GLXcontext** context, int* err)
+int validGlxContext(ClientPtr client, XID id, int access_mode, __GLXcontext** context, int* err)
 {
     /* no ghost contexts */
     if (id & SERVER_BIT) {
@@ -214,7 +214,7 @@ private int __glXdirectContextLoseCurrent(__GLXcontext* context)
     return GL_TRUE;
 }
 
-_X_HIDDEN __GLXcontext* __glXdirectContextCreate(__GLXscreen* screen, __GLXconfig* modes, __GLXcontext* shareContext)
+__GLXcontext* __glXdirectContextCreate(__GLXscreen* screen, __GLXconfig* modes, __GLXcontext* shareContext)
 {
     __GLXcontext* context = void;
 
@@ -1582,7 +1582,7 @@ private int DoQueryContext(__GLXclientState* cl, GLXContextID gcId)
         swapl(&reply.n);
     }
 
-    return X_SEND_REPLY_WITH_RPCBUF(client, reply, rpcbuf)
+    return X_SEND_REPLY_WITH_RPCBUF(client, reply, rpcbuf);
 }
 
 int __glXDisp_QueryContextInfoEXT(__GLXclientState* cl, GLbyte* pc)
@@ -2324,7 +2324,7 @@ int __glXDisp_ClientInfo(__GLXclientState* cl, GLbyte* pc)
     return Success;
 }
 
-import GL/glxtokens;
+import GL.glxtokens;
 
 void __glXsendSwapEvent(__GLXdrawable* drawable, int type, CARD64 ust, CARD64 msc, CARD32 sbc)
 {
