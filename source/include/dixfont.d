@@ -31,36 +31,36 @@ enum DIXFONT_H = 1;
 public import xlibre_ptrtypes;
 
 public import dix;
-public import deimos.X11.fonts/font;
-public import deimos.X11.fonts/fontstruct;
+public import deimos.X11.fonts.font;
+public import deimos.X11.fonts.fontstruct;
 
-extern _X_EXPORT SetDefaultFont(const(char)*);
+extern int SetDefaultFont(const(char)*);
 
-extern _X_EXPORT OpenFont(ClientPtr, XID, Mask, uint, const(char)*);
+extern int OpenFont(ClientPtr, XID, Mask, uint, const(char)*);
 
-extern _X_EXPORT CloseFont(void* pfont, XID fid);
+extern int CloseFont(void* pfont, XID fid);
 
-extern _X_EXPORT ListFonts(ClientPtr, ubyte*, uint, uint);
+extern int ListFonts(ClientPtr, ubyte*, uint, uint);
 
-extern _X_EXPORT PolyText(ClientPtr, DrawablePtr, GCPtr, ubyte*, ubyte*, int, int, int, XID);
+extern int PolyText(ClientPtr, DrawablePtr, GCPtr, ubyte*, ubyte*, int, int, int, XID);
 
-extern _X_EXPORT ImageText(ClientPtr, DrawablePtr, GCPtr, int, ubyte*, int, int, int, XID);
+extern int ImageText(ClientPtr, DrawablePtr, GCPtr, int, ubyte*, int, int, int, XID);
 
-extern _X_EXPORT SetFontPath(ClientPtr, int, ubyte*);
+extern int SetFontPath(ClientPtr, int, ubyte*);
 
-extern _X_EXPORT SetDefaultFontPath(const(char)*);
+extern int SetDefaultFontPath(const(char)*);
 
-extern _X_EXPORT DeleteClientFontStuff(ClientPtr);
+extern int DeleteClientFontStuff(ClientPtr);
 
 /* Quartz support on Mac OS X pulls in the QuickDraw
    framework whose InitFonts function conflicts here. */
 version (OSX) {
 enum InitFonts = Darwin_X_InitFonts;
 }
-extern _X_EXPORT InitFonts();
+extern int InitFonts();
 
-extern _X_EXPORT FreeFonts();
+extern int FreeFonts();
 
-extern _X_EXPORT GetGlyphs(FontPtr, c_ulong, ubyte*, FontEncoding, c_ulong*, CharInfoPtr*);
+extern int GetGlyphs(FontPtr, c_ulong, ubyte*, FontEncoding, c_ulong*, CharInfoPtr*);
 
 }                          /* DIXFONT_H */
