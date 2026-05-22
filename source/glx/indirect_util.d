@@ -30,8 +30,8 @@ import build.dix_config;
 import core.stdc.inttypes;
 import core.stdc.string;
 import deimos.X11.Xmd; // needs to be before glxproto.h
-import GL/gl;
-import GL/glxproto;
+import GL.gl;
+import GL.glxproto;
 
 import dix.dix_priv;
 import dix.request_priv;
