@@ -39,12 +39,12 @@ enum string GetHighWord(string x) = `((cast(int) (` ~ x ~ `)) >> 16)`;
 
 static if (IMAGE_BYTE_ORDER == MSBFirst) {
 enum string coordToInt(string x,string y) = `(((` ~ x ~ `) << 16) | ((` ~ y ~ `) & 0xffff))`;
-enum string intToX(string i) = `(` ~ GetHighWord!(` ~ `i` ~ `) ~ `)`;
+enum string intToX(string i) = `(` ~ GetHighWord!(i) ~ `)`;
 enum string intToY(string i) = `(cast(int) (cast(short) ` ~ i ~ `))`;
 } else {
 enum string coordToInt(string x,string y) = `(((` ~ y ~ `) << 16) | ((` ~ x ~ `) & 0xffff))`;
 enum string intToX(string i) = `(cast(int) (cast(short) (` ~ i ~ `)))`;
-enum string intToY(string i) = `(` ~ GetHighWord!(` ~ `i` ~ `) ~ `)`;
+enum string intToY(string i) = `(` ~ GetHighWord!(i) ~ `)`;
 }
 
 }                          /* _MICOORD_H_ */
