@@ -28,13 +28,13 @@ enum string DECLARE_HOOK_PROC(string NAME, string FIELD, string TYPE) = `\
         DeleteCallback(&pScreen->FIELD, (CallbackProcPtr)func, pScreen); \
     }`;
 
-mixin(DECLARE_HOOK_PROC!(`WindowDestroy`, `hookWindowDestroy`, `XorgScreenWindowDestroyProcPtr`))
-mixin(DECLARE_HOOK_PROC!(`WindowPosition`, `hookWindowPosition`, `XorgScreenWindowPositionProcPtr`))
-mixin(DECLARE_HOOK_PROC!(`Close`, `hookClose`, `XorgScreenCloseProcPtr`))
-mixin(DECLARE_HOOK_PROC!(`PostClose`, `hookPostClose`, `XorgScreenCloseProcPtr`))
-mixin(DECLARE_HOOK_PROC!(`PixmapDestroy`, `hookPixmapDestroy`, `XorgScreenPixmapDestroyProcPtr`))
+mixin(DECLARE_HOOK_PROC!(`WindowDestroy`, `hookWindowDestroy`, `XorgScreenWindowDestroyProcPtr`));
+mixin(DECLARE_HOOK_PROC!(`WindowPosition`, `hookWindowPosition`, `XorgScreenWindowPositionProcPtr`));
+mixin(DECLARE_HOOK_PROC!(`Close`, `hookClose`, `XorgScreenCloseProcPtr`));
+mixin(DECLARE_HOOK_PROC!(`PostClose`, `hookPostClose`, `XorgScreenCloseProcPtr`));
+mixin(DECLARE_HOOK_PROC!(`PixmapDestroy`, `hookPixmapDestroy`, `XorgScreenPixmapDestroyProcPtr`));
 mixin(DECLARE_HOOK_PROC!(`PostCreateResources`, `hookPostCreateResources`,
-                  `XorgScreenPostCreateResourcesProcPtr`))
+                  `XorgScreenPostCreateResourcesProcPtr`));
 
 int dixScreenRaiseWindowDestroy(WindowPtr pWin)
 {
