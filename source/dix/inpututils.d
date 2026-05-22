@@ -72,7 +72,8 @@ private int check_butmap_change(DeviceIntPtr dev, CARD8* map, int len, CARD32* e
 
 private void do_butmap_change(DeviceIntPtr dev, CARD8* map, int len, ClientPtr client)
 {
-    xEvent core_mn = { u:u:type: MappingNotify };
+    xEvent core_mn;
+    core_nm.u.u.type = MappingNotify ;
     deviceMappingNotify xi_mn = void;
 
     /* The map in ButtonClassRec refers to button numbers, whereas the
@@ -787,7 +788,7 @@ void update_desktop_dimensions()
         y1 = min(y1, walkScreen.y);
         x2 = max(x2, walkScreen.x + walkScreen.width);
         y2 = max(y2, walkScreen.y + walkScreen.height);
-    }){}
+    });
 
     screenInfo.x = x1;
     screenInfo.y = y1;
@@ -831,7 +832,7 @@ InputOption* input_option_new(InputOption* list, const(char)* key, const(char)* 
         return null;
 
     if (list) {
-        nt_list_for_each_entry(opt, list, list.next) {
+        nt_list_for_each_entry(opt, list, list.next); {
             if (strcmp(input_option_get_key(opt), key) == 0) {
                 input_option_set_value(opt, value);
                 return list;
@@ -860,7 +861,7 @@ InputOption* input_option_free_element(InputOption* list, const(char)* key)
 {
     InputOption* element = void;
 
-    nt_list_for_each_entry(element, list, list.next) {
+    nt_list_for_each_entry(element, list, list.next); {
         if (strcmp(input_option_get_key(element), key) == 0) {
             nt_list_del(element, list, InputOption, list.next);
 
@@ -878,7 +879,7 @@ void input_option_free_list(InputOption** opt)
 {
     InputOption* element = void, tmp = void;
 
-    nt_list_for_each_entry_safe(element, tmp, *opt, list.next) {
+    nt_list_for_each_entry_safe(element, tmp, *opt, list.next); {
         nt_list_del(element, *opt, InputOption, list.next);
 
         input_option_free(element);
@@ -895,7 +896,7 @@ InputOption* input_option_find(InputOption* list, const(char)* key)
 {
     InputOption* element = void;
 
-    nt_list_for_each_entry(element, list, list.next) {
+    nt_list_for_each_entry(element, list, list.next); {
         if (strcmp(input_option_get_key(element), key) == 0)
             return element;
     }
