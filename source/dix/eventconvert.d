@@ -1,4 +1,4 @@
-module eventconvert.c;
+module dix.eventconvert;
 @nogc nothrow:
 extern(C): __gshared:
 /*
@@ -118,7 +118,7 @@ int EventToCore(InternalEvent* event, xEvent** core_out, int* count_out)
          * present */
         if (!BitIsOn(e.valuators.mask, 0) && !BitIsOn(e.valuators.mask, 1)) {
             ret = BadMatch;
-            goto out;
+            goto out_;
         }
     }
         /* fallthrough */
@@ -131,7 +131,7 @@ int EventToCore(InternalEvent* event, xEvent** core_out, int* count_out)
 
         if (e.detail.key > 0xFF) {
             ret = BadMatch;
-            goto out;
+            goto out_;
         }
 
         core = cast(xEvent*) calloc(1, typeof(*core).sizeof);
@@ -179,7 +179,7 @@ int EventToCore(InternalEvent* event, xEvent** core_out, int* count_out)
         ret = BadImplementation;
     }
 
- out:
+ out_:
     *core_out = core;
     *count_out = count;
     return ret;
