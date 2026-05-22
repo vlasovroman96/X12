@@ -40,7 +40,7 @@ import glxserver;
 import glxutil;
 import unpack;
 import indirect_dispatch;
-import GL/gl;
+import GL.gl;
 import pixmapstr;
 import windowstr;
 import dixfontstr;
