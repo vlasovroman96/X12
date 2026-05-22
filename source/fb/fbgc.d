@@ -88,7 +88,7 @@ void fbPadPixmap(PixmapPtr pPixmap)
     int w = void;
     int stride = void;
     int bpp = void;
-    _X_UNUSED int xOff = void, yOff = void;
+    int xOff = void, yOff = void;
 
     fbGetDrawable(&pPixmap.drawable, bits, stride, bpp, xOff, yOff);
 
