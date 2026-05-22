@@ -36,7 +36,7 @@ private const(char)[43] dash_vs_vars = "in vec3 primitive;\n"
     ~ "out float dash_offset;\n";
 
 private const(char)[78] dash_vs_exec = "       dash_offset = primitive.z / dash_length;\n"
-    ~ "       vec2 pos = vec2(0,0);\n";
+    ~ "       vec2 pos = vec2(0,0);\n" ~
     GLAMOR_POS(gl_Position, primitive.xy);
 
 private const(char)[23] dash_fs_vars = "in float dash_offset;\n";
@@ -54,7 +54,7 @@ private const(char)[168] double_fs_exec = "       float pattern = texture(dash, 
 
 
 private const(glamor_facet) glamor_facet_on_off_dash_lines = {
-    version: 130,
+    c_version: 130,
     name: "poly_lines_on_off_dash",
     vs_vars: dash_vs_vars,
     vs_exec: dash_vs_exec,
@@ -64,7 +64,7 @@ private const(glamor_facet) glamor_facet_on_off_dash_lines = {
 };
 
 private const(glamor_facet) glamor_facet_double_dash_lines = {
-    version: 130,
+    c_version: 130,
     name: "poly_lines_double_dash",
     vs_vars: dash_vs_vars,
     vs_exec: dash_vs_exec,
@@ -208,7 +208,7 @@ private void glamor_dash_loop(DrawablePtr drawable, GCPtr gc, glamor_program* pr
 
     BUG_RETURN(!pixmap_priv);
 
-    glamor_pixmap_loop(pixmap_priv, box_index) {
+    glamor_pixmap_loop(pixmap_priv, box_index); {
         int nbox = RegionNumRects(gc.pCompositeClip);
         BoxPtr box = RegionRects(gc.pCompositeClip);
 
