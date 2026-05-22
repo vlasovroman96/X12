@@ -214,7 +214,7 @@ Bool exaModifyPixmapHeader_mixed(PixmapPtr pPixmap, int width, int height, int d
                                                 bitsPerPixel, devKind,
                                                 pPixData);
         if (ret == TRUE)
-            goto out;
+            goto out_;
     }
 
     swap(pExaScr, pScreen, ModifyPixmapHeader);
@@ -222,7 +222,7 @@ Bool exaModifyPixmapHeader_mixed(PixmapPtr pPixmap, int width, int height, int d
                                       bitsPerPixel, devKind, pPixData);
     swap(pExaScr, pScreen, ModifyPixmapHeader);
 
- out:
+ out_:
     if (has_gpu_copy) {
         pExaPixmap.fb_ptr = pPixmap.devPrivate.ptr;
         pExaPixmap.fb_pitch = pPixmap.devKind;
