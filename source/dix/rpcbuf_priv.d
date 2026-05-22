@@ -47,7 +47,7 @@ enum XLIBRE_RPCBUF_CHUNK_SIZE = 4096;
  * @return          TRUE if there (now) is enough room, FALSE on alloc failure
  */
 Bool x_rpcbuf_makeroom(x_rpcbuf_t* rpcbuf, size_t needed);
-    _X_ATTRIBUTE_NONNULL_ARG(1);
+    
 
 /*
  * clear rpcbuf and free all held memory.
@@ -55,7 +55,7 @@ Bool x_rpcbuf_makeroom(x_rpcbuf_t* rpcbuf, size_t needed);
  * @param rpcbuf    pointer to x_rpcbuf_t to operate on
  */
 void x_rpcbuf_clear(x_rpcbuf_t* rpcbuf);
-    _X_ATTRIBUTE_NONNULL_ARG(1);
+    
 
 /*
  * reset rpcbuf and clear memory, but doesn't free it.
@@ -66,7 +66,7 @@ void x_rpcbuf_clear(x_rpcbuf_t* rpcbuf);
  * @param rpcbuf    pointer to x_rpcbuf_t to operate on
  */
 void x_rpcbuf_reset(x_rpcbuf_t* rpcbuf);
-    _X_ATTRIBUTE_NONNULL_ARG(1);
+    
 
 /*
  * reserve a piece of buffer and move the buffer pointer forward.
@@ -83,7 +83,7 @@ void x_rpcbuf_reset(x_rpcbuf_t* rpcbuf);
  * @return          pointer to reserved region of NULL on allocation failure
  */
 void* x_rpcbuf_reserve(x_rpcbuf_t* rpcbuf, size_t needed);
-    _X_ATTRIBUTE_NONNULL_ARG(1);
+    
 
 /*
  * like x_rpcbuf_reserve(), but additionally clearing the reserved space.
@@ -100,7 +100,7 @@ void* x_rpcbuf_reserve(x_rpcbuf_t* rpcbuf, size_t needed);
  * @return          pointer to reserved region of NULL on allocation failure
  */
 void* x_rpcbuf_reserve0(x_rpcbuf_t* rpcbuf, size_t needed);
-    _X_ATTRIBUTE_NONNULL_ARG(1);
+    
 
 /*
  * write a plain C string to rpc buffer and pad it.
@@ -113,7 +113,7 @@ void* x_rpcbuf_reserve0(x_rpcbuf_t* rpcbuf, size_t needed);
  * @return          TRUE on success, FALSE on allocation failure
  */
 Bool x_rpcbuf_write_string_pad(x_rpcbuf_t* rpcbuf, const(char)* str);
-    _X_ATTRIBUTE_NONNULL_ARG(1);
+    
 
 /*
  * write a plain C string with terminating 0 to rpc buffer and pad it.
@@ -126,7 +126,7 @@ Bool x_rpcbuf_write_string_pad(x_rpcbuf_t* rpcbuf, const(char)* str);
  * @return          TRUE on success, FALSE on allocation failure
  */
 Bool x_rpcbuf_write_string_0t_pad(x_rpcbuf_t* rpcbuf, const(char)* str);
-    _X_ATTRIBUTE_NONNULL_ARG(1);
+    
 
 /*
  * write binary data to rpc buffer and pad it.
@@ -138,7 +138,7 @@ Bool x_rpcbuf_write_string_0t_pad(x_rpcbuf_t* rpcbuf, const(char)* str);
  * @param needed    string to plain C string
  * @return          TRUE on success, FALSE on allocation failure
  */
-Bool x_rpcbuf_write_binary_pad(x_rpcbuf_t* rpcbuf, const(void)* data, size_t count); _X_ATTRIBUTE_NONNULL_ARG(1);
+Bool x_rpcbuf_write_binary_pad(x_rpcbuf_t* rpcbuf, const(void)* data, size_t count); 
 
 /*
  * write a CARD8
@@ -152,7 +152,7 @@ Bool x_rpcbuf_write_binary_pad(x_rpcbuf_t* rpcbuf, const(void)* data, size_t cou
  * @return          TRUE on success, FALSE on allocation failure
  */
 Bool x_rpcbuf_write_CARD8(x_rpcbuf_t* rpcbuf, CARD8 value);
-    _X_ATTRIBUTE_NONNULL_ARG(1);
+    
 
 /*
  * write a CARD16 and do byte-swapping (when needed).
@@ -167,7 +167,7 @@ Bool x_rpcbuf_write_CARD8(x_rpcbuf_t* rpcbuf, CARD8 value);
  * @return          TRUE on success, FALSE on allocation failure
  */
 Bool x_rpcbuf_write_CARD16(x_rpcbuf_t* rpcbuf, CARD16 value);
-    _X_ATTRIBUTE_NONNULL_ARG(1);
+    
 
 /*
  * write a INT16 and do byte-swapping (when needed).
@@ -198,7 +198,7 @@ pragma(inline, true) private Bool x_rpcbuf_write_INT16(x_rpcbuf_t* rpcbuf, INT16
  * @return          TRUE on success, FALSE on allocation failure
  */
 Bool x_rpcbuf_write_CARD32(x_rpcbuf_t* rpcbuf, CARD32 value);
-    _X_ATTRIBUTE_NONNULL_ARG(1);
+    
 
 /*
  * write a INT32 and do byte-swapping (when needed).
@@ -229,7 +229,7 @@ pragma(inline, true) private Bool x_rpcbuf_write_INT32(x_rpcbuf_t* rpcbuf, INT32
  * @return          TRUE on success, FALSE on allocation failure
  */
 Bool x_rpcbuf_write_CARD64(x_rpcbuf_t* rpcbuf, CARD64 value);
-    _X_ATTRIBUTE_NONNULL_ARG(1);
+    
 
 /*
  * write array of CARD8s and do byte-swapping (when needed).
@@ -244,7 +244,7 @@ Bool x_rpcbuf_write_CARD64(x_rpcbuf_t* rpcbuf, CARD64 value);
  * @param count     number of elements in the array
  * @return          TRUE on success, FALSE on allocation failure
  */
-Bool x_rpcbuf_write_CARD8s(x_rpcbuf_t* rpcbuf, const(CARD8)* values, size_t count); _X_ATTRIBUTE_NONNULL_ARG(1);
+Bool x_rpcbuf_write_CARD8s(x_rpcbuf_t* rpcbuf, const(CARD8)* values, size_t count); 
 
 /*
  * write array of CARD16s and do byte-swapping (when needed).
@@ -260,7 +260,7 @@ Bool x_rpcbuf_write_CARD8s(x_rpcbuf_t* rpcbuf, const(CARD8)* values, size_t coun
  * @param count     number of elements in the array
  * @return          TRUE on success, FALSE on allocation failure
  */
-Bool x_rpcbuf_write_CARD16s(x_rpcbuf_t* rpcbuf, const(CARD16)* values, size_t count); _X_ATTRIBUTE_NONNULL_ARG(1);
+Bool x_rpcbuf_write_CARD16s(x_rpcbuf_t* rpcbuf, const(CARD16)* values, size_t count); 
 
 /*
  * write array of CARD32s and do byte-swapping (when needed).
@@ -276,7 +276,7 @@ Bool x_rpcbuf_write_CARD16s(x_rpcbuf_t* rpcbuf, const(CARD16)* values, size_t co
  * @param count     number of elements in the array
  * @return          TRUE on success, FALSE on allocation failure
  */
-Bool x_rpcbuf_write_CARD32s(x_rpcbuf_t* rpcbuf, const(CARD32)* values, size_t count); _X_ATTRIBUTE_NONNULL_ARG(1);
+Bool x_rpcbuf_write_CARD32s(x_rpcbuf_t* rpcbuf, const(CARD32)* values, size_t count); 
 
 /*
  * write array of INT32s and do byte-swapping (when needed).
@@ -311,7 +311,7 @@ pragma(inline, true) private Bool x_rpcbuf_write_INT32s(x_rpcbuf_t* rpcbuf, cons
  * @param count     number of elements in the array
  * @return          TRUE on success, FALSE on allocation failure
  */
-Bool x_rpcbuf_write_CARD64s(x_rpcbuf_t* rpcbuf, const(CARD64)* values, size_t count); _X_ATTRIBUTE_NONNULL_ARG(1);
+Bool x_rpcbuf_write_CARD64s(x_rpcbuf_t* rpcbuf, const(CARD64)* values, size_t count); 
 
 /*
  * retrieve number of 4-byte-units (padded) of data written in the buffer
