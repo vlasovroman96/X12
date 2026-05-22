@@ -255,7 +255,7 @@ extern int  DRIGetWrappedFuncs(ScreenPtr pScreen);
 
 extern int  DRIGetSAREAPrivate(ScreenPtr pScreen);
 
-extern int unsigned; int DRIGetDrawableStamp(ScreenPtr pScreen, CARD32 drawable_index);
+extern uint DRIGetDrawableStamp(ScreenPtr pScreen, CARD32 drawable_index);
 
 extern int DRICreateContextPriv(ScreenPtr pScreen, drm_context_t* pHWContext, DRIContextFlags flags);
 
