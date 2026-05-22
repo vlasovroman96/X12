@@ -71,7 +71,7 @@ private const(glamor_facet) glamor_facet_xv_planar_2 = {
     vs_vars: ("in vec2 position;\n"
                 ~ "in vec2 v_texcoord0;\n"
                 ~ "out vec2 tcs;\n"),
-    vs_exec: (GLAMOR_POS(gl_Position, position)
+    vs_exec: (GLAMOR_POS(gl_Position, position)~
                 "        tcs = v_texcoord0;\n"),
 
     fs_vars: ("uniform sampler2D y_sampler;\n"
@@ -101,7 +101,7 @@ private const(glamor_facet) glamor_facet_xv_planar_3 = {
     vs_vars: ("in vec2 position;\n"
                 ~ "in vec2 v_texcoord0;\n"
                 ~ "out vec2 tcs;\n"),
-    vs_exec: (GLAMOR_POS(gl_Position, position)
+    vs_exec: (GLAMOR_POS(gl_Position, position)~
                 "        tcs = v_texcoord0;\n"),
 
     fs_vars: ("uniform sampler2D y_sampler;\n"
@@ -132,7 +132,7 @@ private const(glamor_facet) glamor_facet_xv_uyvy = {
     vs_vars: ("in vec2 position;\n"
                 ~ "in vec2 v_texcoord0;\n"
                 ~ "out vec2 tcs;\n"),
-    vs_exec: (GLAMOR_POS(gl_Position, position)
+    vs_exec: (GLAMOR_POS(gl_Position, position)~
                 "        tcs = v_texcoord0;\n"),
 
     fs_vars: ("#ifdef GL_ES\n"
@@ -171,7 +171,7 @@ private const(glamor_facet) glamor_facet_xv_rgb_raw = {
     vs_vars: ("in vec2 position;\n"
                 ~ "in vec2 v_texcoord0;\n"
                 ~ "out vec2 tcs;\n"),
-    vs_exec: (GLAMOR_POS(gl_Position, position)
+    vs_exec: (GLAMOR_POS(gl_Position, position)~
                 "        tcs = v_texcoord0;\n"),
 
     fs_vars: ("uniform sampler2D sampler;\n"
@@ -574,7 +574,7 @@ void glamor_xv_render(glamor_port_private* port_priv, int id)
 
     /* Now draw our big triangle, clipped to each of the clip boxes. */
     BUG_RETURN(!pixmap_priv);
-    glamor_pixmap_loop(pixmap_priv, dst_box_index) {
+    glamor_pixmap_loop(pixmap_priv, dst_box_index); {
         int dst_off_x = void, dst_off_y = void;
 
         glamor_set_destination_drawable(port_priv.pDraw,
