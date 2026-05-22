@@ -38,7 +38,7 @@ import ptrveloc;
 import deimos.X11.Xatom;
 import os;
 
-import xserver-properties;
+import xserver_properties;
 
 /*****************************************************************************
  * Predictable pointer acceleration
@@ -74,11 +74,11 @@ import xserver-properties;
 
 /*#define PTRACCEL_DEBUGGING*/
 
-version (PTRACCEL_DEBUGGING) {
-enum string DebugAccelF(...) = `ErrorF("dix/ptraccel: " __VA_ARGS__)`;
-} else {
-//#define DebugAccelF(...)        /* */
-}
+// version (PTRACCEL_DEBUGGING) {
+// enum string DebugAccelF(...) = `ErrorF("dix/ptraccel: " __VA_ARGS__)`;
+// } else {
+// //#define DebugAccelF(...)        /* */
+// }
 
 /********************************
  *  Init/Uninit
@@ -530,7 +530,7 @@ private int GetDirection(int dx, int dy)
 
 /* convert offset (age) to array index */
 enum string TRACKER_INDEX(string s, string d) = `(((` ~ s ~ `).num_tracker + (` ~ s ~ `).cur_tracker - (` ~ d ~ `)) % (` ~ s ~ `).num_tracker)`;
-enum string TRACKER(string s, string d) = `&(` ~ s ~ `).tracker[` ~ TRACKER_INDEX!(` ~ `s` ~ `,` ~ `d` ~ `) ~ `]`;
+enum string TRACKER(string s, string d) = `&(` ~ s ~ `).tracker[` ~ TRACKER_INDEX!(s,d) ~ `]`;
 
 /**
  * Add the delta motion to each tracker, then reset the latest tracker to
