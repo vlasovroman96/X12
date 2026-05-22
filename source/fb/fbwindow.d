@@ -160,12 +160,13 @@ version (FB_ACCESS_WRAPPER) {} else {
                                      (pbox.x2 - pbox.x1),
                                      (pbox.y2 - pbox.y1), xor)) {
 //! #endif
-            fbSolid(dst + (pbox->y1 + dstYoff) * dstStride,
+            fbSolid(dst + (pbox.y1 + dstYoff) * dstStride,
                     dstStride,
                     (pbox.x1 + dstXoff) * dstBpp,
                     dstBpp,
                     (pbox.x2 - pbox.x1) * dstBpp,
                     pbox.y2 - pbox.y1, and, xor);
+
 version (FB_ACCESS_WRAPPER) {} else {}
         }
 }
