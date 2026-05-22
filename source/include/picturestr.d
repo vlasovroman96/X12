@@ -176,7 +176,7 @@ struct _PictFilterRec {
     PictFilterValidateParamsProcPtr ValidateParams;
     int width, height;
 }alias PictFilterRec = _PictFilterRec;
-alias PictFilterPtr = *;
+alias PictFilterPtr = PictFilterRec*;
 
 enum PictFilterNearest =	0;
 enum PictFilterBilinear =	1;
@@ -193,7 +193,7 @@ struct _PictFilterAliasRec {
     int alias_id;
     int filter_id;
 }alias PictFilterAliasRec = _PictFilterAliasRec;
-alias PictFilterAliasPtr = *;
+alias PictFilterAliasPtr = PictFilterAliasRec*;
 
 alias CreatePictureProcPtr = int function(PicturePtr pPicture);
 alias DestroyPictureProcPtr = void function(PicturePtr pPicture);
@@ -303,95 +303,95 @@ enum PICTURE_SCREEN_VERSION = 2;
 }alias PictureScreenRec = _PictureScreen;
 alias PictureScreenPtr = _PictureScreen*;
 
-extern _X_EXPORT DevPrivateKeyRec; PictureScreenPrivateKeyRec;
-extern _X_EXPORT DevPrivateKeyRec; PictureWindowPrivateKeyRec;
+extern DevPrivateKeyRec PictureScreenPrivateKeyRec;
+extern DevPrivateKeyRec PictureWindowPrivateKeyRec;
 
 enum string GetPictureScreen(string s) = `(cast(PictureScreenPtr)dixLookupPrivate(&(` ~ s ~ `).devPrivates, &PictureScreenPrivateKeyRec))`;
-enum string GetPictureScreenIfSet(string s) = `(dixPrivateKeyRegistered(&PictureScreenPrivateKeyRec) ? ` ~ GetPictureScreen!(` ~ `s` ~ `) ~ ` : null)`;
+enum string GetPictureScreenIfSet(string s) = `(dixPrivateKeyRegistered(&PictureScreenPrivateKeyRec) ? ` ~ GetPictureScreen!(s) ~ ` : null)`;
 enum string SetPictureScreen(string s,string p) = `dixSetPrivate(&(` ~ s ~ `).devPrivates, &PictureScreenPrivateKeyRec, ` ~ p ~ `)`;
 enum string GetPictureWindow(string w) = `(cast(PicturePtr)dixLookupPrivate(&(` ~ w ~ `).devPrivates, &PictureWindowPrivateKeyRec))`;
 enum string SetPictureWindow(string w,string p) = `dixSetPrivate(&(` ~ w ~ `).devPrivates, &PictureWindowPrivateKeyRec, ` ~ p ~ `)`;
 
-extern _X_EXPORT PictureWindowFormat(WindowPtr pWindow);
+extern int PictureWindowFormat(WindowPtr pWindow);
 
-extern _X_EXPORT PictureSetSubpixelOrder(ScreenPtr pScreen, int subpixel);
+extern int PictureSetSubpixelOrder(ScreenPtr pScreen, int subpixel);
 
-extern _X_EXPORT PictureGetSubpixelOrder(ScreenPtr pScreen);
+extern int PictureGetSubpixelOrder(ScreenPtr pScreen);
 
-extern _X_EXPORT PictureMatchVisual(ScreenPtr pScreen, int depth, VisualPtr pVisual);
+extern int PictureMatchVisual(ScreenPtr pScreen, int depth, VisualPtr pVisual);
 
-extern _X_EXPORT PictureMatchFormat(ScreenPtr pScreen, int depth, CARD32 format);
+extern int PictureMatchFormat(ScreenPtr pScreen, int depth, CARD32 format);
 
-extern _X_EXPORT PictureInit(ScreenPtr pScreen, PictFormatPtr formats, int nformats);
+extern int PictureInit(ScreenPtr pScreen, PictFormatPtr formats, int nformats);
 
-extern _X_EXPORT PictureGetFilterId(const(char)* filter, int len, Bool makeit);
+extern int PictureGetFilterId(const(char)* filter, int len, Bool makeit);
 
-extern _X_EXPORT* PictureGetFilterName(int id);
+extern int  PictureGetFilterName(int id);
 
-extern _X_EXPORT PictureAddFilter(ScreenPtr pScreen, const(char)* filter, PictFilterValidateParamsProcPtr ValidateParams, int width, int height);
+extern int PictureAddFilter(ScreenPtr pScreen, const(char)* filter, PictFilterValidateParamsProcPtr ValidateParams, int width, int height);
 
-extern _X_EXPORT PictureSetFilterAlias(ScreenPtr pScreen, const(char)* filter, const(char)* alias_);
+extern int PictureSetFilterAlias(ScreenPtr pScreen, const(char)* filter, const(char)* alias_);
 
-extern _X_EXPORT PictureSetDefaultFilters(ScreenPtr pScreen);
+extern int PictureSetDefaultFilters(ScreenPtr pScreen);
 
-extern _X_EXPORT PictureResetFilters(ScreenPtr pScreen);
+extern int PictureResetFilters(ScreenPtr pScreen);
 
-extern _X_EXPORT PictureFindFilter(ScreenPtr pScreen, char* name, int len);
+extern int PictureFindFilter(ScreenPtr pScreen, char* name, int len);
 
-extern _X_EXPORT SetPicturePictFilter(PicturePtr pPicture, PictFilterPtr pFilter, xFixed* params, int nparams);
+extern int SetPicturePictFilter(PicturePtr pPicture, PictFilterPtr pFilter, xFixed* params, int nparams);
 
-extern _X_EXPORT SetPictureFilter(PicturePtr pPicture, char* name, int len, xFixed* params, int nparams);
+extern int SetPictureFilter(PicturePtr pPicture, char* name, int len, xFixed* params, int nparams);
 
-extern _X_EXPORT PictureFinishInit();
+extern int PictureFinishInit();
 
-extern _X_EXPORT CreatePicture(Picture pid, DrawablePtr pDrawable, PictFormatPtr pFormat, Mask mask, XID* list, ClientPtr client, int* error);
+extern int CreatePicture(Picture pid, DrawablePtr pDrawable, PictFormatPtr pFormat, Mask mask, XID* list, ClientPtr client, int* error);
 
-extern _X_EXPORT ChangePicture(PicturePtr pPicture, Mask vmask, XID* vlist, DevUnion* ulist, ClientPtr client);
+extern int ChangePicture(PicturePtr pPicture, Mask vmask, XID* vlist, DevUnion* ulist, ClientPtr client);
 
-extern _X_EXPORT SetPictureClipRects(PicturePtr pPicture, int xOrigin, int yOrigin, int nRect, xRectangle* rects);
+extern int SetPictureClipRects(PicturePtr pPicture, int xOrigin, int yOrigin, int nRect, xRectangle* rects);
 
-extern _X_EXPORT SetPictureClipRegion(PicturePtr pPicture, int xOrigin, int yOrigin, RegionPtr pRegion);
+extern int SetPictureClipRegion(PicturePtr pPicture, int xOrigin, int yOrigin, RegionPtr pRegion);
 
-extern _X_EXPORT SetPictureTransform(PicturePtr pPicture, PictTransform* transform);
+extern int SetPictureTransform(PicturePtr pPicture, PictTransform* transform);
 
-extern _X_EXPORT ValidatePicture(PicturePtr pPicture);
+extern int ValidatePicture(PicturePtr pPicture);
 
-extern _X_EXPORT FreePicture(void* pPicture, XID pid);
+extern int FreePicture(void* pPicture, XID pid);
 
-extern _X_EXPORT CompositePicture(CARD8 op, PicturePtr pSrc, PicturePtr pMask, PicturePtr pDst, INT16 xSrc, INT16 ySrc, INT16 xMask, INT16 yMask, INT16 xDst, INT16 yDst, CARD16 width, CARD16 height);
+extern int CompositePicture(CARD8 op, PicturePtr pSrc, PicturePtr pMask, PicturePtr pDst, INT16 xSrc, INT16 ySrc, INT16 xMask, INT16 yMask, INT16 xDst, INT16 yDst, CARD16 width, CARD16 height);
 
-extern _X_EXPORT CompositeGlyphs(CARD8 op, PicturePtr pSrc, PicturePtr pDst, PictFormatPtr maskFormat, INT16 xSrc, INT16 ySrc, int nlist, GlyphListPtr lists, GlyphPtr* glyphs);
+extern int CompositeGlyphs(CARD8 op, PicturePtr pSrc, PicturePtr pDst, PictFormatPtr maskFormat, INT16 xSrc, INT16 ySrc, int nlist, GlyphListPtr lists, GlyphPtr* glyphs);
 
-extern _X_EXPORT CompositeRects(CARD8 op, PicturePtr pDst, xRenderColor* color, int nRect, xRectangle* rects);
+extern int CompositeRects(CARD8 op, PicturePtr pDst, xRenderColor* color, int nRect, xRectangle* rects);
 
-extern _X_EXPORT CompositeTrapezoids(CARD8 op, PicturePtr pSrc, PicturePtr pDst, PictFormatPtr maskFormat, INT16 xSrc, INT16 ySrc, int ntrap, xTrapezoid* traps);
+extern int CompositeTrapezoids(CARD8 op, PicturePtr pSrc, PicturePtr pDst, PictFormatPtr maskFormat, INT16 xSrc, INT16 ySrc, int ntrap, xTrapezoid* traps);
 
-extern _X_EXPORT CompositeTriangles(CARD8 op, PicturePtr pSrc, PicturePtr pDst, PictFormatPtr maskFormat, INT16 xSrc, INT16 ySrc, int ntriangles, xTriangle* triangles);
+extern int CompositeTriangles(CARD8 op, PicturePtr pSrc, PicturePtr pDst, PictFormatPtr maskFormat, INT16 xSrc, INT16 ySrc, int ntriangles, xTriangle* triangles);
 
-extern _X_EXPORT CompositeTriStrip(CARD8 op, PicturePtr pSrc, PicturePtr pDst, PictFormatPtr maskFormat, INT16 xSrc, INT16 ySrc, int npoints, xPointFixed* points);
+extern int CompositeTriStrip(CARD8 op, PicturePtr pSrc, PicturePtr pDst, PictFormatPtr maskFormat, INT16 xSrc, INT16 ySrc, int npoints, xPointFixed* points);
 
-extern _X_EXPORT CompositeTriFan(CARD8 op, PicturePtr pSrc, PicturePtr pDst, PictFormatPtr maskFormat, INT16 xSrc, INT16 ySrc, int npoints, xPointFixed* points);
+extern int CompositeTriFan(CARD8 op, PicturePtr pSrc, PicturePtr pDst, PictFormatPtr maskFormat, INT16 xSrc, INT16 ySrc, int npoints, xPointFixed* points);
 
-extern _X_EXPORT AddTraps(PicturePtr pPicture, INT16 xOff, INT16 yOff, int ntraps, xTrap* traps);
+extern int AddTraps(PicturePtr pPicture, INT16 xOff, INT16 yOff, int ntraps, xTrap* traps);
 
-extern _X_EXPORT CreateSolidPicture(Picture pid, xRenderColor* color, int* error);
+extern int CreateSolidPicture(Picture pid, xRenderColor* color, int* error);
 
-extern _X_EXPORT CreateLinearGradientPicture(Picture pid, xPointFixed* p1, xPointFixed* p2, int nStops, xFixed* stops, xRenderColor* colors, int* error);
+extern int CreateLinearGradientPicture(Picture pid, xPointFixed* p1, xPointFixed* p2, int nStops, xFixed* stops, xRenderColor* colors, int* error);
 
-extern _X_EXPORT CreateRadialGradientPicture(Picture pid, xPointFixed* inner, xPointFixed* outer, xFixed innerRadius, xFixed outerRadius, int nStops, xFixed* stops, xRenderColor* colors, int* error);
+extern int CreateRadialGradientPicture(Picture pid, xPointFixed* inner, xPointFixed* outer, xFixed innerRadius, xFixed outerRadius, int nStops, xFixed* stops, xRenderColor* colors, int* error);
 
-extern _X_EXPORT CreateConicalGradientPicture(Picture pid, xPointFixed* center, xFixed angle, int nStops, xFixed* stops, xRenderColor* colors, int* error);
+extern int CreateConicalGradientPicture(Picture pid, xPointFixed* center, xFixed angle, int nStops, xFixed* stops, xRenderColor* colors, int* error);
 
 /*
  * matrix.c
  */
 
-extern _X_EXPORT PictTransform_from_xRenderTransform(PictTransformPtr pict, xRenderTransform* render);
+extern int PictTransform_from_xRenderTransform(PictTransformPtr pict, xRenderTransform* render);
 
-extern _X_EXPORT xRenderTransform_from_PictTransform(xRenderTransform* render, PictTransformPtr pict);
+extern int xRenderTransform_from_PictTransform(xRenderTransform* render, PictTransformPtr pict);
 
-extern _X_EXPORT PictureTransformPoint(PictTransformPtr transform, PictVectorPtr vector);
+extern int PictureTransformPoint(PictTransformPtr transform, PictVectorPtr vector);
 
-extern _X_EXPORT PictureTransformPoint3d(PictTransformPtr transform, PictVectorPtr vector);
+extern int PictureTransformPoint3d(PictTransformPtr transform, PictVectorPtr vector);
 
                           /* _PICTURESTR_H_ */
