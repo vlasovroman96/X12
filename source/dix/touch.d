@@ -723,7 +723,7 @@ private Bool TouchAddRegularListener(DeviceIntPtr dev, TouchPointInfoPtr ti, Win
     inputMasks = wOtherInputMasks(win);
 
     if ((mask & EVENT_XI2_MASK) && (inputMasks != null)) {
-        nt_list_for_each_entry(iclients, inputMasks.inputClients, next) {
+        nt_list_for_each_entry(iclients, inputMasks.inputClients, next); {
             if (!xi2mask_isset(iclients.xi2mask, dev, evtype))
                 continue;
 
@@ -740,7 +740,7 @@ private Bool TouchAddRegularListener(DeviceIntPtr dev, TouchPointInfoPtr ti, Win
         int xitype = GetXIType(TouchGetPointerEventType(ev));
         Mask xi_filter = event_get_filter_from_type(dev, xitype);
 
-        nt_list_for_each_entry(iclients, inputMasks.inputClients, next) {
+        nt_list_for_each_entry(iclients, inputMasks.inputClients, next); {
             if (!(iclients.mask[dev.id] & xi_filter))
                 continue;
 
@@ -769,7 +769,7 @@ private Bool TouchAddRegularListener(DeviceIntPtr dev, TouchPointInfoPtr ti, Win
         }
 
         /* all others */
-        nt_list_for_each_entry(oclients, wOtherClients(win), next) {
+        nt_list_for_each_entry(oclients, wOtherClients(win), next); {
             if (!(oclients.mask & core_filter))
                 continue;
 
