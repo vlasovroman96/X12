@@ -192,7 +192,7 @@ private const(char)[35] vs_template = "%s"                                /* ver
     ~ "%s"                                /* prim vs_vars */
     ~ "%s"                                /* fill vs_vars */
     ~ "%s"                                /* location vs_vars */
-    GLAMOR_DECLARE_MATRIX
+    ~GLAMOR_DECLARE_MATRIX
     ~ "void main() {\n"
     ~ "%s"                                /* prim vs_exec, outputs 'pos' and gl_Position */
     ~ "%s"                                /* fill vs_exec */
@@ -202,7 +202,7 @@ private const(char)[41] fs_template = "%s"                                /* ver
     ~ "%s"                                /* exts */
     ~ "%s"                                /* prim fs_extensions */
     ~ "%s"                                /* fill fs_extensions */
-    GLAMOR_DEFAULT_PRECISION
+    ~GLAMOR_DEFAULT_PRECISION
     ~ "%s"                                /* in/out defines */
     ~ "%s"                                /* defines */
     ~ "%s"                                /* prim fs_vars */
