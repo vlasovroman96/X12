@@ -1,4 +1,4 @@
-module enterleave.c;
+module dix.enterleave;
 @nogc nothrow:
 extern(C): __gshared:
 /*
@@ -1210,7 +1210,7 @@ private void CoreFocusPointerRootNoneSwitch(DeviceIntPtr dev, WindowPtr A, Windo
 {
     DIX_FOR_EACH_SCREEN_XINERAMA({
         CoreFocusPointerRootNoneSwitchScr(walkScreen, dev, A, B, mode);
-    }){}
+    });
 }
 
 /**
@@ -1256,7 +1256,7 @@ private void CoreFocusToPointerRootOrNone(DeviceIntPtr dev, WindowPtr A, WindowP
 
     DIX_FOR_EACH_SCREEN_XINERAMA({
         CoreFocusToPointerRootOrNoneScr(walkScreen, dev, A, B, mode);
-    }){}
+    });
 }
 
 /**
@@ -1291,7 +1291,7 @@ private void CoreFocusFromPointerRootOrNone(DeviceIntPtr dev, WindowPtr A, Windo
 {
     DIX_FOR_EACH_SCREEN_XINERAMA({
         CoreFocusFromPointerRootOrNoneScr(walkScreen, dev, A, B, mode);
-    }){}
+    });
 
     WindowPtr root = B;                   /* get B's root window */
     while (root.parent)
@@ -1366,8 +1366,8 @@ private void DeviceFocusEvents(DeviceIntPtr dev, WindowPtr from, WindowPtr to, i
             }
             /* Notify all the roots */
             DIX_FOR_EACH_SCREEN_XINERAMA({
-                DeviceFocusEvent(dev, XI_FocusOut, mode, out_, walkScreen -> root);
-            }){}
+                DeviceFocusEvent(dev, XI_FocusOut, mode, out_, walkScreen.root);
+            });
         }
         else {
             if (WindowIsParent(from, sprite.win)) {
@@ -1384,8 +1384,8 @@ private void DeviceFocusEvents(DeviceIntPtr dev, WindowPtr from, WindowPtr to, i
 
         /* Notify all the roots */
         DIX_FOR_EACH_SCREEN_XINERAMA({
-            DeviceFocusEvent(dev, XI_FocusIn, mode, in_, walkScreen -> root);
-        }){}
+            DeviceFocusEvent(dev, XI_FocusIn, mode, in_, walkScreen.root);
+        });
 
         if (to == PointerRootWin) {
             DeviceFocusInEvents(dev, InputDevCurrentRootWindow(dev), sprite.win,
@@ -1404,8 +1404,8 @@ private void DeviceFocusEvents(DeviceIntPtr dev, WindowPtr from, WindowPtr to, i
             }
 
             DIX_FOR_EACH_SCREEN_XINERAMA({
-                DeviceFocusEvent(dev, XI_FocusOut, mode, out_, walkScreen -> root);
-            }){}
+                DeviceFocusEvent(dev, XI_FocusOut, mode, out_, walkScreen.root);
+            });
 
             if (to.parent != NullWindow)
                 DeviceFocusInEvents(dev, InputDevCurrentRootWindow(dev), to, mode,
