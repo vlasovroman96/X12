@@ -232,7 +232,7 @@ Bool PixmapStopDirtyTracking(DrawablePtr src, PixmapPtr secondary_dst)
     ScreenPtr screen = src.pScreen;
     PixmapDirtyUpdatePtr ent = void, safe = void;
 
-    xorg_list_for_each_entry_safe(ent, safe, &screen.pixmap_dirty_list, ent) {
+    xorg_list_for_each_entry_safe(ent, safe, &screen.pixmap_dirty_list, ent) ;{
         if (ent.src == src && ent.secondary_dst == secondary_dst) {
             if (ent.damage)
                 DamageDestroy(ent.damage);
