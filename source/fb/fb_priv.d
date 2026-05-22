@@ -30,7 +30,7 @@ void fbSetBits(FbStip* bits, int stride, FbStip data);
 
 } else {
 
-pragma(inline, true) private void fbValidateDrawable(DrawablePtr d) {}
+extern void fbValidateDrawable(DrawablePtr d) {}
 
 } /* FB_DEBUG */
 
