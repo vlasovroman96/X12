@@ -25,7 +25,7 @@ extern(C): __gshared:
  */
 import build.dix_config;
 
-import GL/glxtokens;
+import GL.glxtokens;
 
 import dix.dix_priv;
 
@@ -34,8 +34,8 @@ import glxext;
 import indirect_dispatch;
 import opaque;
 
-enum ALL_VALID_FLAGS = \
-    (GLX_CONTEXT_DEBUG_BIT_ARB | GLX_CONTEXT_FORWARD_COMPATIBLE_BIT_ARB \
+enum ALL_VALID_FLAGS = 
+    (GLX_CONTEXT_DEBUG_BIT_ARB | GLX_CONTEXT_FORWARD_COMPATIBLE_BIT_ARB 
      | GLX_CONTEXT_ROBUST_ACCESS_BIT_ARB);
 
 private Bool validate_GL_version(int major_version, int minor_version)
