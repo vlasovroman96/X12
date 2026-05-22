@@ -43,6 +43,6 @@ alias VTBroken = VTKind.VTBroken;
 /* union _MiValidate is now device dependent; see mivalidate.h for an example */
 alias ValidatePtr = _MiValidate*;
 
-enum UnmapValData = ((ValidatePtr)1);
+enum UnmapValData = cast(ValidatePtr)1;
 
                           /* VALIDATE_H */
