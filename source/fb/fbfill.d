@@ -75,15 +75,20 @@ void fbFill(DrawablePtr pDrawable, GCPtr pGC, int x, int y, int width, int heigh
 
     switch (pGC.fillStyle) {
     case FillSolid:
-version (FB_ACCESS_WRAPPER) {} else {
+version (FB_ACCESS_WRAPPER) {
+                fbSolid(dst + (y + dstYoff) * dstStride,
+                    dstStride,
+                    (x + dstXoff) * dstBpp,
+                    dstBpp, width * dstBpp, height, pPriv.and, pPriv.xor);
+} else {
         if (pPriv.and || !pixman_fill(cast(uint*) dst, dstStride, dstBpp,
                                        x + dstXoff, y + dstYoff,
                                        width, height, pPriv.xor))
-#endif
             fbSolid(dst + (y + dstYoff) * dstStride,
                     dstStride,
                     (x + dstXoff) * dstBpp,
                     dstBpp, width * dstBpp, height, pPriv.and, pPriv.xor);
+}
         break;
     case FillStippled:
     case FillOpaqueStippled:{
@@ -96,7 +101,7 @@ version (FB_ACCESS_WRAPPER) {} else {
             FbBits* stip = void;
             FbStride stipStride = void;
             int stipBpp = void;
-            _X_UNUSED int stipXoff = void, stipYoff = void;
+            int stipXoff = void, stipYoff = void;
 
             if (pGC.fillStyle == FillStippled)
                 alu = FbStipple1Rop(pGC.alu, pGC.fgPixel);
@@ -114,7 +119,7 @@ version (FB_ACCESS_WRAPPER) {} else {
             FbStip* stip = void;
             FbStride stipStride = void;
             int stipBpp = void;
-            _X_UNUSED int stipXoff = void, stipYoff = void;
+            int stipXoff = void, stipYoff = void;
             FbBits fgand = void, fgxor = void, bgand = void, bgxor = void;
 
             fgand = pPriv.and;
@@ -147,7 +152,7 @@ version (FB_ACCESS_WRAPPER) {} else {
         int tileBpp = void;
         int tileWidth = void;
         int tileHeight = void;
-        _X_UNUSED int tileXoff = void, tileYoff = void;
+        int tileXoff = void, tileYoff = void;
 
         fbGetDrawable(&pTile.drawable, tile, tileStride, tileBpp, tileXoff,
                       tileYoff);
@@ -169,7 +174,7 @@ version (FB_ACCESS_WRAPPER) {} else {
         fbFinishAccess(&pTile.drawable);
         break;
     }}
-    default: break;}
+    default: break;
     fbValidateDrawable(pDrawable);
     fbFinishAccess(pDrawable);
 }
@@ -210,11 +215,16 @@ void fbSolidBoxClipped(DrawablePtr pDrawable, RegionPtr pClip, int x1, int y1, i
         if (partY2 <= partY1)
             continue;
 
-version (FB_ACCESS_WRAPPER) {} else {
+version (FB_ACCESS_WRAPPER) {
+                fbSolid(dst + (partY1 + dstYoff) * dstStride,
+                    dstStride,
+                    (partX1 + dstXoff) * dstBpp,
+                    dstBpp,
+                    (partX2 - partX1) * dstBpp, (partY2 - partY1), and, xor);
+} else {
         if (and || !pixman_fill(cast(uint*) dst, dstStride, dstBpp,
                                 partX1 + dstXoff, partY1 + dstYoff,
                                 (partX2 - partX1), (partY2 - partY1), xor))
-}
             fbSolid(dst + (partY1 + dstYoff) * dstStride,
                     dstStride,
                     (partX1 + dstXoff) * dstBpp,
@@ -222,4 +232,5 @@ version (FB_ACCESS_WRAPPER) {} else {
                     (partX2 - partX1) * dstBpp, (partY2 - partY1), and, xor);
     }
     fbFinishAccess(pDrawable);
+}
 }
