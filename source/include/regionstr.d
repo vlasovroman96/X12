@@ -60,7 +60,7 @@ enum rgnOUT = 0;
 enum rgnIN =  1;
 enum rgnPART = 2;
 
-enum NullRegion = ((RegionPtr)0);
+enum NullRegion = cast(RegionPtr)0;
 
 /*
  *   clip region
@@ -70,8 +70,8 @@ alias RegDataRec = pixman_region16_data;
 alias RegDataPtr = pixman_region16_data*;
 
 extern _X_EXPORT RegionEmptyBox;
-extern _X_EXPORT RegDataRec; RegionEmptyData;
-extern _X_EXPORT RegDataRec; RegionBrokenData;
+extern RegDataRec RegionEmptyData;
+extern RegDataRec RegionBrokenData;
 pragma(inline, true) private Bool RegionNil(RegionPtr reg)
 {
     return ((reg).data && !(reg).data.numRects);
