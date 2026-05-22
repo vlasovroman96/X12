@@ -19,7 +19,7 @@ enum string SameClient(string obj,string client) = `
  * Resource IDs having that bit set still belonging to some client,
  * but are server-internal, thus invisible to clients.
  */
-enum SERVER_BIT =           (Mask)0x40000000        /* use illegal bit */;
+enum SERVER_BIT =           cast(Mask)0x40000000;       /* use illegal bit */;
 
 /* client field */
 enum RESOURCE_CLIENT_MASK =   ((((1u << ResourceClientBits())) - 1) << CLIENTOFFSET);
