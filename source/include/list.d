@@ -315,7 +315,7 @@ T* containerOf(T, string member)(void* ptr)
  * Alias of container_of
  */
 enum string xorg_list_entry(string ptr, string type, string member) = `
-    ` ~ container_of!(` ~ `ptr` ~ `, ` ~ `type` ~ `, ` ~ `member` ~ `) ~ ``;
+    ` ~ container_of!(ptr, type, member) ~ ``;
 
 /**
  * Retrieve the first list entry for the given list pointer.
@@ -330,7 +330,7 @@ enum string xorg_list_entry(string ptr, string type, string member) = `
  * @return A pointer to the first list element.
  */
 enum string xorg_list_first_entry(string ptr, string type, string member) = "
-    " ~ xorg_list_entry!("(" ~ ptr ~ ").next", " ~ "type" ~ ", " ~ "member" ~ ") ~ "";
+    " ~ xorg_list_entry!("(" ~ ptr ~ ").next", type, member) ~ "";
 
 /**
  * Retrieve the last list entry for the given listpointer.
@@ -345,7 +345,7 @@ enum string xorg_list_first_entry(string ptr, string type, string member) = "
  * @return A pointer to the last list element.
  */
 enum string xorg_list_last_entry(string ptr, string type, string member) = `
-    ` ~ xorg_list_entry!(`(` ~ ptr ~ `).prev`, ` ~ `type` ~ `, ` ~ `member` ~ `) ~ ``;
+    ` ~ xorg_list_entry!(`(` ~ ptr ~ `).prev`, type, member) ~ ``;
 
 alias __container_of(alias ptr, alias sample, alias member) = 
     container_of!(sapmle, member )(ptr);
@@ -527,7 +527,7 @@ enum string nt_list_append(string _entry, string _list, string _type, string _me
  */
 enum string nt_list_insert(string _entry, string _list, string _type, string _member) = `
     do {								
-	` ~ nt_list_append!(`(` ~ _list ~ `).` ~ _member ~ ``, ` ~ `_entry` ~ `, ` ~ `_type` ~ `, ` ~ `_member` ~ `) ~ `;	
+	` ~ nt_list_append!(`(` ~ _list ~ `).` ~ _member ~ ``, _entry, _type, _member) ~ `;	
 	(` ~ _list ~ `).` ~ _member ~ ` = ` ~ _entry ~ `;					
     } while (0)`;
 
@@ -555,11 +555,11 @@ enum string nt_list_del(string _entry, string _list, string _type, string _membe
 		} else {					
 		    _type* __prev = ` ~ _list ~ `;			
 		    while (__prev.` ~ _member ~ ` && __prev.` ~ _member ~ ` != __e)	
-			__prev = ` ~ nt_list_next!(`__prev`, ` ~ `_member` ~ `) ~ `;	
+			__prev = ` ~ nt_list_next!(`__prev`, _member) ~ `;	
 		    if (__prev.` ~ _member ~ `)			
 			__prev.` ~ _member ~ ` = __e.` ~ _member ~ `;		
 		}						
-		` ~ nt_list_init!(`__e`, ` ~ `_member` ~ `) ~ `;			
+		` ~ nt_list_init!(`__e`, _member) ~ `;			
 	} while(0)`;
 
 /**
