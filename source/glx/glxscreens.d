@@ -36,7 +36,7 @@ import build.dix_config;
 import dix.screen_hooks_priv;
 
 import core.stdc.string;
-import GL/glxtokens;
+import GL.glxtokens;
 
 import dix.colormap_priv;
 import include.extinit;
