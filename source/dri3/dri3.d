@@ -110,7 +110,7 @@ version (XINERAMA) {
     DIX_FOR_EACH_SCREEN({
         if (!dri3_screen_init(walkScreen, null))
             goto bail;
-    }){}
+    });
 
     dri3_syncobj_type = CreateNewResourceType(&dri3_syncobj_free, "DRI3Syncobj");
     if (!dri3_syncobj_type)
