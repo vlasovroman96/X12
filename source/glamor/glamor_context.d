@@ -25,7 +25,7 @@ extern(C): __gshared:
  */
 
  
-public import epoxy/egl;
+public import epoxy.egl;
 
 /**
  * @file glamor_context.h
