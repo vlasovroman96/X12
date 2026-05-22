@@ -71,7 +71,7 @@ enum M_UNDRAWABLE =	(M_UNDRAWABLE_WINDOW);
 enum PW_BACKGROUND = 0;
 enum PW_BORDER = 1;
 
-enum NullPixmap = ((PixmapPtr)0);
+enum NullPixmap = cast(PixmapPtr)0;
 
 alias DrawablePtr = _Drawable*;
 alias PixmapPtr = _Pixmap*;
@@ -87,7 +87,7 @@ enum string SamePixUnion(string a,string b,string isPixel) = `
     ((` ~ isPixel ~ `) ? (` ~ a ~ `).pixel == (` ~ b ~ `).pixel : (` ~ a ~ `).pixmap == (` ~ b ~ `).pixmap)`;
 
 enum string EqualPixUnion(string as, string a, string bs, string b) = `
-    ((` ~ as ~ `) == (` ~ bs ~ `) && (` ~ SamePixUnion! (` ~ `a` ~ `, ` ~ `b` ~ `, ` ~ `as` ~ `) ~ `))`;
+    ((` ~ as ~ `) == (` ~ bs ~ `) && (` ~ SamePixUnion! (a, b, as) ~ `))`;
 
 enum string OnScreenDrawable(string type) = `
 	(` ~ type ~ ` == DRAWABLE_WINDOW)`;
@@ -95,30 +95,30 @@ enum string OnScreenDrawable(string type) = `
 enum string WindowDrawable(string type) = `
 	((` ~ type ~ ` == DRAWABLE_WINDOW) || (` ~ type ~ ` == UNDRAWABLE_WINDOW))`;
 
-extern _X_EXPORT GetScratchPixmapHeader(ScreenPtr pScreen, int width, int height, int depth, int bitsPerPixel, int devKind, void* pPixData);
+extern int GetScratchPixmapHeader(ScreenPtr pScreen, int width, int height, int depth, int bitsPerPixel, int devKind, void* pPixData);
 
-extern _X_EXPORT FreeScratchPixmapHeader(PixmapPtr);
+extern int FreeScratchPixmapHeader(PixmapPtr);
 
-extern _X_EXPORT PixmapScreenInit(ScreenPtr);
+extern int PixmapScreenInit(ScreenPtr);
 
-extern _X_EXPORT AllocatePixmap(ScreenPtr, int);
+extern int AllocatePixmap(ScreenPtr, int);
 
-extern _X_EXPORT FreePixmap(PixmapPtr);
+extern int FreePixmap(PixmapPtr);
 
-extern _X_EXPORT PixmapShareToSecondary(PixmapPtr pixmap, ScreenPtr secondary);
+extern int PixmapShareToSecondary(PixmapPtr pixmap, ScreenPtr secondary);
 
-extern _X_EXPORT PixmapUnshareSecondaryPixmap(PixmapPtr secondary_pixmap);
+extern int PixmapUnshareSecondaryPixmap(PixmapPtr secondary_pixmap);
 
 enum HAS_DIRTYTRACKING_ROTATION = 1;
 enum HAS_DIRTYTRACKING_DRAWABLE_SRC = 1;
-extern _X_EXPORT PixmapStartDirtyTracking(DrawablePtr src, PixmapPtr slave_dst, int x, int y, int dst_x, int dst_y, Rotation rotation);
+extern int PixmapStartDirtyTracking(DrawablePtr src, PixmapPtr slave_dst, int x, int y, int dst_x, int dst_y, Rotation rotation);
 
-extern _X_EXPORT PixmapStopDirtyTracking(DrawablePtr src, PixmapPtr slave_dst);
+extern int PixmapStopDirtyTracking(DrawablePtr src, PixmapPtr slave_dst);
 
 /* helper function, drivers can do this themselves if they can do it more
    efficiently */
-extern _X_EXPORT PixmapSyncDirtyHelper(PixmapDirtyUpdatePtr dirty);
+extern int PixmapSyncDirtyHelper(PixmapDirtyUpdatePtr dirty);
 
-extern _X_EXPORT PixmapDirtyCopyArea(PixmapPtr dst, DrawablePtr src, int x, int y, int dst_x, int dst_y, RegionPtr dirty_region);
+extern int PixmapDirtyCopyArea(PixmapPtr dst, DrawablePtr src, int x, int y, int dst_x, int dst_y, RegionPtr dirty_region);
 
                           /* PIXMAP_H */
