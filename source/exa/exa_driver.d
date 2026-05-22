@@ -167,7 +167,7 @@ Bool exaModifyPixmapHeader_driver(PixmapPtr pPixmap, int width, int height, int 
             pExaPixmap.sys_pitch = pPixmap.devKind;
         }
         if (ret == TRUE)
-            goto out;
+            goto out_;
     }
 
     swap(pExaScr, pScreen, ModifyPixmapHeader);
@@ -175,7 +175,7 @@ Bool exaModifyPixmapHeader_driver(PixmapPtr pPixmap, int width, int height, int 
                                       bitsPerPixel, devKind, pPixData);
     swap(pExaScr, pScreen, ModifyPixmapHeader);
 
- out:
+ out_:
     /* Always NULL this, we don't want lingering pointers. */
     pPixmap.devPrivate.ptr = null;
 
