@@ -77,7 +77,7 @@ void GlxVendorExtensionReset(const(ExtensionEntry)* extEntry)
 
     // TODO: Do we allow the driver to destroy a vendor library handle from
     // here?
-    xorg_list_for_each_entry_safe(vendor, tempVendor, &GlxVendorList, entry) {
+    xorg_list_for_each_entry_safe(vendor, tempVendor, &GlxVendorList, entry); {
         if (vendor.glxvc.extensionCloseDown != null) {
             vendor.glxvc.extensionCloseDown(extEntry);
         }
@@ -89,7 +89,7 @@ void GlxVendorExtensionReset(const(ExtensionEntry)* extEntry)
     // XXX this used to be conditional on xf86ServerIsExiting, but it's
     // cleaner to just always create the vendor struct on every generation,
     // if nothing else so all ddxes get the same behavior.
-    xorg_list_for_each_entry_safe(vendor, tempVendor, &GlxVendorList, entry) {
+    xorg_list_for_each_entry_safe(vendor, tempVendor, &GlxVendorList, entry); {
         GlxDestroyVendor(vendor);
     }
 }
