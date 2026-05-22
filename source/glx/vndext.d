@@ -40,7 +40,7 @@ import dixstruct;
 import extnsionst;
 import glx_extinit;
 
-import GL/glxproto;
+import GL.glxproto;
 import vndservervendor;
 
 import dix.callback_priv;
@@ -101,7 +101,7 @@ private void GlxMappingReset()
             xglvSetScreenPrivate(walkScreen, null);
             free(priv);
         }
-    }){}
+    });
 }
 
 private Bool GlxMappingInit()
@@ -111,7 +111,7 @@ private Bool GlxMappingInit()
             GlxMappingReset();
             return FALSE;
         }
-    }){}
+    });
 
     idResource = CreateNewResourceType(&idResourceDeleteCallback,
                                        "GLXServerIDRes");
@@ -143,7 +143,7 @@ GlxClientPriv* GlxGetClientData(ClientPtr client)
             cl.vendors = cast(GlxServerVendor**) (cl + 1);
             DIX_FOR_EACH_SCREEN({
                 cl.vendors[walkScreenIdx] = GlxGetVendorForScreen(null, walkScreen);
-            }){}
+            });
             xglvSetClientPrivate(client, cl);
         }
     }
@@ -237,7 +237,7 @@ void GlxExtensionInit()
     DIX_FOR_EACH_SCREEN({
         if (GlxGetVendorForScreen(serverClient, walkScreen))
             return;
-    }){}
+    });
 
     extEntry.base = 0;
 }
