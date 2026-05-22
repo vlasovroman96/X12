@@ -37,30 +37,30 @@ enum string BitsMask(string x,string w) = `((FB_ALLONES << ((` ~ x ~ `) & FB_MAS
 
 enum string Mask(string x,string w) = `` ~ BitsMask!(`(` ~ x ~ `)*(` ~ w ~ `)`,`(` ~ w ~ `)`) ~ ``;
 
-enum string SelMask(string b,string n,string w) = `((((` ~ b ~ `) >> ` ~ n ~ `) & 1) * ` ~ Mask!(` ~ `n` ~ `,` ~ `w` ~ `) ~ `)`;
+enum string SelMask(string b,string n,string w) = `((((` ~ b ~ `) >> ` ~ n ~ `) & 1) * ` ~ Mask!(n,w) ~ `)`;
 
 enum string C1(string b,string w) = `
-    (` ~ SelMask!(` ~ `b` ~ `,`0`,` ~ `w` ~ `) ~ `)`;
+    (` ~ SelMask!(b,`0`,w) ~ `)`;
 
 enum string C2(string b,string w) = `
-    (` ~ SelMask!(` ~ `b` ~ `,`0`,` ~ `w` ~ `) ~ ` | 
-     ` ~ SelMask!(` ~ `b` ~ `,`1`,` ~ `w` ~ `) ~ `)`;
+    (` ~ SelMask!(b,`0`,w) ~ ` | 
+     ` ~ SelMask!(b,`1`,w) ~ `)`;
 
 enum string C4(string b,string w) = `
-    (` ~ SelMask!(` ~ `b` ~ `,`0`,` ~ `w` ~ `) ~ ` | 
-     ` ~ SelMask!(` ~ `b` ~ `,`1`,` ~ `w` ~ `) ~ ` | 
-     ` ~ SelMask!(` ~ `b` ~ `,`2`,` ~ `w` ~ `) ~ ` | 
-     ` ~ SelMask!(` ~ `b` ~ `,`3`,` ~ `w` ~ `) ~ `)`;
+    (` ~ SelMask!(b,`0`,w) ~ ` | 
+     ` ~ SelMask!(b,`1`,w) ~ ` | 
+     ` ~ SelMask!(b,`2`,w) ~ ` | 
+     ` ~ SelMask!(b,`3`,w) ~ `)`;
 
 enum string C8(string b,string w) = `
-    (` ~ SelMask!(` ~ `b` ~ `,`0`,` ~ `w` ~ `) ~ ` | 
-     ` ~ SelMask!(` ~ `b` ~ `,`1`,` ~ `w` ~ `) ~ ` | 
-     ` ~ SelMask!(` ~ `b` ~ `,`2`,` ~ `w` ~ `) ~ ` | 
-     ` ~ SelMask!(` ~ `b` ~ `,`3`,` ~ `w` ~ `) ~ ` | 
-     ` ~ SelMask!(` ~ `b` ~ `,`4`,` ~ `w` ~ `) ~ ` | 
-     ` ~ SelMask!(` ~ `b` ~ `,`5`,` ~ `w` ~ `) ~ ` | 
-     ` ~ SelMask!(` ~ `b` ~ `,`6`,` ~ `w` ~ `) ~ ` | 
-     ` ~ SelMask!(` ~ `b` ~ `,`7`,` ~ `w` ~ `) ~ `)`;
+    (` ~ SelMask!(b,`0`,w) ~ ` | 
+     ` ~ SelMask!(b,`1`,w) ~ ` | 
+     ` ~ SelMask!(b,`2`,w) ~ ` | 
+     ` ~ SelMask!(b,`3`,w) ~ ` | 
+     ` ~ SelMask!(b,`4`,w) ~ ` | 
+     ` ~ SelMask!(b,`5`,w) ~ ` | 
+     ` ~ SelMask!(b,`6`,w) ~ ` | 
+     ` ~ SelMask!(b,`7`,w) ~ `)`;
 
 private const(FbBits)[256] fbStipple8Bits = [
     mixin(C8!(`0`, `4`)), mixin(C8!(`1`, `4`)), mixin(C8!(`2`, `4`)), mixin(C8!(`3`, `4`)), mixin(C8!(`4`, `4`)), mixin(C8!(`5`, `4`)),
@@ -124,7 +124,7 @@ private const(FbBits)[2] fbStipple1Bits = [
 
 version (__clang__) {
 /* shift overflow is intentional */
-#pragma clang diagnostic ignored "-Wshift-overflow"
+// #pragma clang diagnostic ignored "-Wshift-overflow"
 }
 
 /*
@@ -148,14 +148,14 @@ version (__clang__) {
  *  rightShift = 8
  */
 
-enum LoadBits = {\
-    if (leftShift) { \
-	bitsRight = (src < srcEnd ? READ(src++) : 0); \
-	bits = (FbStipLeft (bitsLeft, leftShift) | \
-		FbStipRight(bitsRight, rightShift)); \
-	bitsLeft = bitsRight; \
-    } else \
-	bits = (src < srcEnd ? READ(src++) : 0); \
+enum LoadBits = {
+    if (leftShift) { 
+	bitsRight = (src < srcEnd ? READ(src++) : 0); 
+	bits = (FbStipLeft (bitsLeft, leftShift) | 
+		FbStipRight(bitsRight, rightShift)); 
+	bitsLeft = bitsRight; 
+    } else 
+	bits = (src < srcEnd ? READ(src++) : 0); 
 };
 
 void fbBltOne(FbStip* src, FbStride srcStride, int srcX, FbBits* dst, FbStride dstStride, int dstX, int dstBpp, int width, int height, FbBits fgand, FbBits fgxor, FbBits bgand, FbBits bgxor)
