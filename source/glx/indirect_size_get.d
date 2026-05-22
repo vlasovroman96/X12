@@ -32,17 +32,17 @@ private template HasVersion(string versionId) {
 import build.dix_config;
 
 import deimos.X11.Xfuncproto;
-import GL/gl;
+import GL.gl;
 import indirect_size_get;
 import glxserver;
 import indirect_util;
 import indirect_size;
 
-version (__GNUC__) {
-enum PURE = __attribute__((pure));
-} else {
-version = PURE;
-}
+// version (__GNUC__) {
+// enum PURE = __attribute__((pure));
+// } else {
+// version = PURE;
+// }
 
 static if (HasVersion!"__i386__" && HasVersion!"__GNUC__" && !HasVersion!"Windows") {
 enum FASTCALL = __attribute__((fastcall));
@@ -62,7 +62,7 @@ enum string ALIAS(string from,string to) = `\
 }
 
 
-_X_INTERNAL PURE; FASTCALL GLint __glCallLists_size(GLenum e)
+GLint __glCallLists_size(GLenum e)
 {
     switch (e) {
     case GL_BYTE:
@@ -85,7 +85,7 @@ _X_INTERNAL PURE; FASTCALL GLint __glCallLists_size(GLenum e)
     }
 }
 
-_X_INTERNAL PURE; FASTCALL GLint __glFogfv_size(GLenum e)
+GLint __glFogfv_size(GLenum e)
 {
     switch (e) {
     case GL_FOG_INDEX:
@@ -103,7 +103,7 @@ _X_INTERNAL PURE; FASTCALL GLint __glFogfv_size(GLenum e)
     }
 }
 
-_X_INTERNAL PURE; FASTCALL GLint __glLightfv_size(GLenum e)
+GLint __glLightfv_size(GLenum e)
 {
     switch (e) {
     case GL_SPOT_EXPONENT:
@@ -124,7 +124,7 @@ _X_INTERNAL PURE; FASTCALL GLint __glLightfv_size(GLenum e)
     }
 }
 
-_X_INTERNAL PURE; FASTCALL GLint __glLightModelfv_size(GLenum e)
+GLint __glLightModelfv_size(GLenum e)
 {
     switch (e) {
     case GL_LIGHT_MODEL_LOCAL_VIEWER:
@@ -139,7 +139,7 @@ _X_INTERNAL PURE; FASTCALL GLint __glLightModelfv_size(GLenum e)
     }
 }
 
-_X_INTERNAL PURE; FASTCALL GLint __glMaterialfv_size(GLenum e)
+GLint __glMaterialfv_size(GLenum e)
 {
     switch (e) {
     case GL_SHININESS:
@@ -157,7 +157,7 @@ _X_INTERNAL PURE; FASTCALL GLint __glMaterialfv_size(GLenum e)
     }
 }
 
-_X_INTERNAL PURE; FASTCALL GLint __glTexParameterfv_size(GLenum e)
+GLint __glTexParameterfv_size(GLenum e)
 {
     switch (e) {
     case GL_TEXTURE_MAG_FILTER:
@@ -212,7 +212,7 @@ _X_INTERNAL PURE; FASTCALL GLint __glTexParameterfv_size(GLenum e)
     }
 }
 
-_X_INTERNAL PURE; FASTCALL GLint __glTexEnvfv_size(GLenum e)
+GLint __glTexEnvfv_size(GLenum e)
 {
     switch (e) {
     case GL_ALPHA_SCALE:
@@ -248,7 +248,7 @@ _X_INTERNAL PURE; FASTCALL GLint __glTexEnvfv_size(GLenum e)
     }
 }
 
-_X_INTERNAL PURE; FASTCALL GLint __glTexGendv_size(GLenum e)
+GLint __glTexGendv_size(GLenum e)
 {
     switch (e) {
     case GL_TEXTURE_GEN_MODE:
@@ -261,7 +261,7 @@ _X_INTERNAL PURE; FASTCALL GLint __glTexGendv_size(GLenum e)
     }
 }
 
-_X_INTERNAL PURE; FASTCALL GLint __glMap1d_size(GLenum e)
+GLint __glMap1d_size(GLenum e)
 {
     switch (e) {
     case GL_MAP1_INDEX:
@@ -282,7 +282,7 @@ _X_INTERNAL PURE; FASTCALL GLint __glMap1d_size(GLenum e)
     }
 }
 
-_X_INTERNAL PURE; FASTCALL GLint __glMap2d_size(GLenum e)
+GLint __glMap2d_size(GLenum e)
 {
     switch (e) {
     case GL_MAP2_INDEX:
@@ -303,7 +303,7 @@ _X_INTERNAL PURE; FASTCALL GLint __glMap2d_size(GLenum e)
     }
 }
 
-_X_INTERNAL PURE; FASTCALL GLint __glGetBooleanv_size(GLenum e)
+GLint __glGetBooleanv_size(GLenum e)
 {
     switch (e) {
     case GL_CURRENT_INDEX:
@@ -822,7 +822,7 @@ _X_INTERNAL PURE; FASTCALL GLint __glGetBooleanv_size(GLenum e)
     }
 }
 
-_X_INTERNAL PURE; FASTCALL GLint __glGetTexParameterfv_size(GLenum e)
+GLint __glGetTexParameterfv_size(GLenum e)
 {
     switch (e) {
     case GL_TEXTURE_MAG_FILTER:
@@ -876,7 +876,7 @@ _X_INTERNAL PURE; FASTCALL GLint __glGetTexParameterfv_size(GLenum e)
     }
 }
 
-_X_INTERNAL PURE; FASTCALL GLint __glGetTexLevelParameterfv_size(GLenum e)
+GLint __glGetTexLevelParameterfv_size(GLenum e)
 {
     switch (e) {
     case GL_TEXTURE_WIDTH:
@@ -911,7 +911,7 @@ _X_INTERNAL PURE; FASTCALL GLint __glGetTexLevelParameterfv_size(GLenum e)
     }
 }
 
-_X_INTERNAL PURE; FASTCALL GLint __glGetPointerv_size(GLenum e)
+GLint __glGetPointerv_size(GLenum e)
 {
     switch (e) {
     case GL_DEBUG_CALLBACK_FUNCTION_ARB:
@@ -922,7 +922,7 @@ _X_INTERNAL PURE; FASTCALL GLint __glGetPointerv_size(GLenum e)
     }
 }
 
-_X_INTERNAL PURE; FASTCALL GLint __glColorTableParameterfv_size(GLenum e)
+GLint __glColorTableParameterfv_size(GLenum e)
 {
     switch (e) {
     case GL_COLOR_TABLE_SCALE:
@@ -933,7 +933,7 @@ _X_INTERNAL PURE; FASTCALL GLint __glColorTableParameterfv_size(GLenum e)
     }
 }
 
-_X_INTERNAL PURE; FASTCALL GLint __glGetColorTableParameterfv_size(GLenum e)
+GLint __glGetColorTableParameterfv_size(GLenum e)
 {
     switch (e) {
     case GL_COLOR_TABLE_FORMAT:
@@ -961,7 +961,7 @@ _X_INTERNAL PURE; FASTCALL GLint __glGetColorTableParameterfv_size(GLenum e)
     }
 }
 
-_X_INTERNAL PURE; FASTCALL GLint __glConvolutionParameterfv_size(GLenum e)
+GLint __glConvolutionParameterfv_size(GLenum e)
 {
     switch (e) {
     case GL_CONVOLUTION_BORDER_MODE:
@@ -979,7 +979,7 @@ _X_INTERNAL PURE; FASTCALL GLint __glConvolutionParameterfv_size(GLenum e)
     }
 }
 
-_X_INTERNAL PURE; FASTCALL GLint __glGetConvolutionParameterfv_size(GLenum e)
+GLint __glGetConvolutionParameterfv_size(GLenum e)
 {
     switch (e) {
     case GL_CONVOLUTION_BORDER_MODE:
@@ -1007,7 +1007,7 @@ _X_INTERNAL PURE; FASTCALL GLint __glGetConvolutionParameterfv_size(GLenum e)
     }
 }
 
-_X_INTERNAL PURE; FASTCALL GLint __glGetHistogramParameterfv_size(GLenum e)
+GLint __glGetHistogramParameterfv_size(GLenum e)
 {
     switch (e) {
     case GL_HISTOGRAM_WIDTH:
@@ -1024,7 +1024,7 @@ _X_INTERNAL PURE; FASTCALL GLint __glGetHistogramParameterfv_size(GLenum e)
     }
 }
 
-_X_INTERNAL PURE; FASTCALL GLint __glGetMinmaxParameterfv_size(GLenum e)
+GLint __glGetMinmaxParameterfv_size(GLenum e)
 {
     switch (e) {
     case GL_MINMAX_FORMAT:
@@ -1035,7 +1035,7 @@ _X_INTERNAL PURE; FASTCALL GLint __glGetMinmaxParameterfv_size(GLenum e)
     }
 }
 
-_X_INTERNAL PURE; FASTCALL GLint __glPointParameterfv_size(GLenum e)
+GLint __glPointParameterfv_size(GLenum e)
 {
     switch (e) {
     case GL_POINT_SIZE_MIN:
@@ -1059,7 +1059,7 @@ _X_INTERNAL PURE; FASTCALL GLint __glPointParameterfv_size(GLenum e)
     }
 }
 
-_X_INTERNAL PURE; FASTCALL GLint __glGetQueryObjectiv_size(GLenum e)
+GLint __glGetQueryObjectiv_size(GLenum e)
 {
     switch (e) {
     case GL_QUERY_RESULT_ARB:
@@ -1070,7 +1070,7 @@ _X_INTERNAL PURE; FASTCALL GLint __glGetQueryObjectiv_size(GLenum e)
     }
 }
 
-_X_INTERNAL PURE; FASTCALL GLint __glGetQueryiv_size(GLenum e)
+GLint __glGetQueryiv_size(GLenum e)
 {
     switch (e) {
     case GL_QUERY_COUNTER_BITS_ARB:
@@ -1082,7 +1082,7 @@ _X_INTERNAL PURE; FASTCALL GLint __glGetQueryiv_size(GLenum e)
     }
 }
 
-_X_INTERNAL PURE; FASTCALL GLint __glGetProgramivARB_size(GLenum e)
+GLint __glGetProgramivARB_size(GLenum e)
 {
     switch (e) {
     case GL_PROGRAM_LENGTH_ARB:
@@ -1134,7 +1134,7 @@ _X_INTERNAL PURE; FASTCALL GLint __glGetProgramivARB_size(GLenum e)
     }
 }
 
-_X_INTERNAL PURE; FASTCALL GLint __glGetFramebufferAttachmentParameteriv_size(GLenum e)
+GLint __glGetFramebufferAttachmentParameteriv_size(GLenum e)
 {
     switch (e) {
     case GL_FRAMEBUFFER_ATTACHMENT_COLOR_ENCODING:
@@ -1160,35 +1160,35 @@ _X_INTERNAL PURE; FASTCALL GLint __glGetFramebufferAttachmentParameteriv_size(GL
     }
 }
 
-mixin(ALIAS!(`Fogiv`, `Fogfv`))
-    mixin(ALIAS!(`Lightiv`, `Lightfv`))
-    mixin(ALIAS!(`LightModeliv`, `LightModelfv`))
-    mixin(ALIAS!(`Materialiv`, `Materialfv`))
-    mixin(ALIAS!(`TexParameteriv`, `TexParameterfv`))
-    mixin(ALIAS!(`TexEnviv`, `TexEnvfv`))
-    mixin(ALIAS!(`TexGenfv`, `TexGendv`))
-    mixin(ALIAS!(`TexGeniv`, `TexGendv`))
-    mixin(ALIAS!(`Map1f`, `Map1d`))
-    mixin(ALIAS!(`Map2f`, `Map2d`))
-    mixin(ALIAS!(`GetDoublev`, `GetBooleanv`))
-    mixin(ALIAS!(`GetFloatv`, `GetBooleanv`))
-    mixin(ALIAS!(`GetIntegerv`, `GetBooleanv`))
-    mixin(ALIAS!(`GetLightfv`, `Lightfv`))
-    mixin(ALIAS!(`GetLightiv`, `Lightfv`))
-    mixin(ALIAS!(`GetMaterialfv`, `Materialfv`))
-    mixin(ALIAS!(`GetMaterialiv`, `Materialfv`))
-    mixin(ALIAS!(`GetTexEnvfv`, `TexEnvfv`))
-    mixin(ALIAS!(`GetTexEnviv`, `TexEnvfv`))
-    mixin(ALIAS!(`GetTexGendv`, `TexGendv`))
-    mixin(ALIAS!(`GetTexGenfv`, `TexGendv`))
-    mixin(ALIAS!(`GetTexGeniv`, `TexGendv`))
-    mixin(ALIAS!(`GetTexParameteriv`, `GetTexParameterfv`))
-    mixin(ALIAS!(`GetTexLevelParameteriv`, `GetTexLevelParameterfv`))
-    mixin(ALIAS!(`ColorTableParameteriv`, `ColorTableParameterfv`))
-    mixin(ALIAS!(`GetColorTableParameteriv`, `GetColorTableParameterfv`))
-    mixin(ALIAS!(`ConvolutionParameteriv`, `ConvolutionParameterfv`))
-    mixin(ALIAS!(`GetConvolutionParameteriv`, `GetConvolutionParameterfv`))
-    mixin(ALIAS!(`GetHistogramParameteriv`, `GetHistogramParameterfv`))
-    mixin(ALIAS!(`GetMinmaxParameteriv`, `GetMinmaxParameterfv`))
-    mixin(ALIAS!(`PointParameteriv`, `PointParameterfv`))
-    mixin(ALIAS!(`GetQueryObjectuiv`, `GetQueryObjectiv`))
+mixin(ALIAS!(`Fogiv`, `Fogfv`));
+    mixin(ALIAS!(`Lightiv`, `Lightfv`));
+    mixin(ALIAS!(`LightModeliv`, `LightModelfv`));
+    mixin(ALIAS!(`Materialiv`, `Materialfv`));
+    mixin(ALIAS!(`TexParameteriv`, `TexParameterfv`));
+    mixin(ALIAS!(`TexEnviv`, `TexEnvfv`));
+    mixin(ALIAS!(`TexGenfv`, `TexGendv`));
+    mixin(ALIAS!(`TexGeniv`, `TexGendv`));
+    mixin(ALIAS!(`Map1f`, `Map1d`));
+    mixin(ALIAS!(`Map2f`, `Map2d`));
+    mixin(ALIAS!(`GetDoublev`, `GetBooleanv`));
+    mixin(ALIAS!(`GetFloatv`, `GetBooleanv`));
+    mixin(ALIAS!(`GetIntegerv`, `GetBooleanv`));
+    mixin(ALIAS!(`GetLightfv`, `Lightfv`));
+    mixin(ALIAS!(`GetLightiv`, `Lightfv`));
+    mixin(ALIAS!(`GetMaterialfv`, `Materialfv`));
+    mixin(ALIAS!(`GetMaterialiv`, `Materialfv`));
+    mixin(ALIAS!(`GetTexEnvfv`, `TexEnvfv`));
+    mixin(ALIAS!(`GetTexEnviv`, `TexEnvfv`));
+    mixin(ALIAS!(`GetTexGendv`, `TexGendv`));
+    mixin(ALIAS!(`GetTexGenfv`, `TexGendv`));
+    mixin(ALIAS!(`GetTexGeniv`, `TexGendv`));
+    mixin(ALIAS!(`GetTexParameteriv`, `GetTexParameterfv`));
+    mixin(ALIAS!(`GetTexLevelParameteriv`, `GetTexLevelParameterfv`));
+    mixin(ALIAS!(`ColorTableParameteriv`, `ColorTableParameterfv`));
+    mixin(ALIAS!(`GetColorTableParameteriv`, `GetColorTableParameterfv`));
+    mixin(ALIAS!(`ConvolutionParameteriv`, `ConvolutionParameterfv`));
+    mixin(ALIAS!(`GetConvolutionParameteriv`, `GetConvolutionParameterfv`));
+    mixin(ALIAS!(`GetHistogramParameteriv`, `GetHistogramParameterfv`));
+    mixin(ALIAS!(`GetMinmaxParameteriv`, `GetMinmaxParameterfv`));
+    mixin(ALIAS!(`PointParameteriv`, `PointParameterfv`));
+    mixin(ALIAS!(`GetQueryObjectuiv`, `GetQueryObjectiv`));
