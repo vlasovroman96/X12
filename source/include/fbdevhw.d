@@ -10,43 +10,43 @@ enum FBDEVHW_INTERLEAVED_PLANES =	2       /* Interleaved planes   */;
 enum FBDEVHW_TEXT =			3       /* Text/attributes      */;
 enum FBDEVHW_VGA_PLANES =		4       /* EGA/VGA planes       */;
 
-extern _X_EXPORT fbdevHWProbe(pci_device* pPci, const(char)* device, char** namep);
-extern _X_EXPORT fbdevHWInit(ScrnInfoPtr pScrn, pci_device* pPci, const(char)* device);
+extern int fbdevHWProbe(pci_device* pPci, const(char)* device, char** namep);
+extern int fbdevHWInit(ScrnInfoPtr pScrn, pci_device* pPci, const(char)* device);
 
-extern _X_EXPORT* fbdevHWGetName(ScrnInfoPtr pScrn);
-extern _X_EXPORT fbdevHWGetDepth(ScrnInfoPtr pScrn, int* fbbpp);
-extern _X_EXPORT fbdevHWGetLineLength(ScrnInfoPtr pScrn);
-extern _X_EXPORT fbdevHWGetType(ScrnInfoPtr pScrn);
-extern _X_EXPORT fbdevHWGetVidmem(ScrnInfoPtr pScrn);
+extern int* fbdevHWGetName(ScrnInfoPtr pScrn);
+extern int fbdevHWGetDepth(ScrnInfoPtr pScrn, int* fbbpp);
+extern int fbdevHWGetLineLength(ScrnInfoPtr pScrn);
+extern int fbdevHWGetType(ScrnInfoPtr pScrn);
+extern int fbdevHWGetVidmem(ScrnInfoPtr pScrn);
 
-extern _X_EXPORT* fbdevHWMapVidmem(ScrnInfoPtr pScrn);
-extern _X_EXPORT fbdevHWLinearOffset(ScrnInfoPtr pScrn);
-extern _X_EXPORT fbdevHWUnmapVidmem(ScrnInfoPtr pScrn);
-extern _X_EXPORT* fbdevHWMapMMIO(ScrnInfoPtr pScrn);
-extern _X_EXPORT fbdevHWUnmapMMIO(ScrnInfoPtr pScrn);
+extern int* fbdevHWMapVidmem(ScrnInfoPtr pScrn);
+extern int fbdevHWLinearOffset(ScrnInfoPtr pScrn);
+extern int fbdevHWUnmapVidmem(ScrnInfoPtr pScrn);
+extern int* fbdevHWMapMMIO(ScrnInfoPtr pScrn);
+extern int fbdevHWUnmapMMIO(ScrnInfoPtr pScrn);
 
-extern _X_EXPORT fbdevHWSetVideoModes(ScrnInfoPtr pScrn);
-extern _X_EXPORT fbdevHWUseBuildinMode(ScrnInfoPtr pScrn);
-extern _X_EXPORT fbdevHWModeInit(ScrnInfoPtr pScrn, DisplayModePtr mode);
-extern _X_EXPORT fbdevHWSave(ScrnInfoPtr pScrn);
-extern _X_EXPORT fbdevHWRestore(ScrnInfoPtr pScrn);
+extern int fbdevHWSetVideoModes(ScrnInfoPtr pScrn);
+extern int fbdevHWUseBuildinMode(ScrnInfoPtr pScrn);
+extern int fbdevHWModeInit(ScrnInfoPtr pScrn, DisplayModePtr mode);
+extern int fbdevHWSave(ScrnInfoPtr pScrn);
+extern int fbdevHWRestore(ScrnInfoPtr pScrn);
 
-extern _X_EXPORT fbdevHWLoadPalette(ScrnInfoPtr pScrn, int numColors, int* indices, LOCO* colors, VisualPtr pVisual);
+extern int fbdevHWLoadPalette(ScrnInfoPtr pScrn, int numColors, int* indices, LOCO* colors, VisualPtr pVisual);
 
-extern _X_EXPORT fbdevHWValidMode(ScrnInfoPtr pScrn, DisplayModePtr mode, Bool verbose, int flags);
-extern _X_EXPORT fbdevHWSwitchMode(ScrnInfoPtr pScrn, DisplayModePtr mode);
-extern _X_EXPORT fbdevHWAdjustFrame(ScrnInfoPtr pScrn, int x, int y);
-extern _X_EXPORT fbdevHWEnterVT(ScrnInfoPtr pScrn);
-extern _X_EXPORT fbdevHWLeaveVT(ScrnInfoPtr pScrn);
-extern _X_EXPORT fbdevHWDPMSSet(ScrnInfoPtr pScrn, int mode, int flags);
+extern int fbdevHWValidMode(ScrnInfoPtr pScrn, DisplayModePtr mode, Bool verbose, int flags);
+extern int fbdevHWSwitchMode(ScrnInfoPtr pScrn, DisplayModePtr mode);
+extern int fbdevHWAdjustFrame(ScrnInfoPtr pScrn, int x, int y);
+extern int fbdevHWEnterVT(ScrnInfoPtr pScrn);
+extern int fbdevHWLeaveVT(ScrnInfoPtr pScrn);
+extern int fbdevHWDPMSSet(ScrnInfoPtr pScrn, int mode, int flags);
 
-extern _X_EXPORT fbdevHWSaveScreen(ScreenPtr pScreen, int mode);
+extern int fbdevHWSaveScreen(ScreenPtr pScreen, int mode);
 
-extern _X_EXPORT xf86SwitchModeProc; *fbdevHWSwitchModeWeak(void);
-extern _X_EXPORT xf86AdjustFrameProc; *fbdevHWAdjustFrameWeak(void);
-extern _X_EXPORT xf86LeaveVTProc; *fbdevHWLeaveVTWeak(void);
-extern _X_EXPORT xf86ValidModeProc; *fbdevHWValidModeWeak(void);
-extern _X_EXPORT xf86DPMSSetProc; *fbdevHWDPMSSetWeak(void);
-extern _X_EXPORT xf86LoadPaletteProc; *fbdevHWLoadPaletteWeak(void);
+extern xf86SwitchModeProc *fbdevHWSwitchModeWeak(void);
+extern xf86AdjustFrameProc *fbdevHWAdjustFrameWeak(void);
+extern xf86LeaveVTProc *fbdevHWLeaveVTWeak(void);
+extern xf86ValidModeProc *fbdevHWValidModeWeak(void);
+extern xf86DPMSSetProc *fbdevHWDPMSSetWeak(void);
+extern xf86LoadPaletteProc *fbdevHWLoadPaletteWeak(void);
 
 
