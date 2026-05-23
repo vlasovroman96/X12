@@ -53,7 +53,7 @@ struct _XF86SurfaceRec {
     int* offsets;               /* in bytes from start of framebuffer */
     DevUnion devPrivate;
 }alias XF86SurfaceRec = _XF86SurfaceRec;
-alias XF86SurfacePtr = *;
+alias XF86SurfacePtr = XF86SurfaceRec*;
 
 alias PutVideoFuncPtr = int function(ScrnInfoPtr pScrn, short vid_x, short vid_y, short drw_x, short drw_y, short vid_w, short vid_h, short drw_w, short drw_h, RegionPtr clipBoxes, void* data, DrawablePtr pDraw);
 alias PutStillFuncPtr = int function(ScrnInfoPtr pScrn, short vid_x, short vid_y, short drw_x, short drw_y, short vid_w, short vid_h, short drw_w, short drw_h, RegionPtr clipBoxes, void* data, DrawablePtr pDraw);
@@ -85,13 +85,13 @@ struct _XF86VideoEncodingRec {
     ushort width, height;
     XvRationalRec rate;
 }alias XF86VideoEncodingRec = _XF86VideoEncodingRec;
-alias XF86VideoEncodingPtr = *;
+alias XF86VideoEncodingPtr = XF86VideoEncodingRec*;
 
 struct _XF86VideoFormatRec {
     char depth = 0;
     short class_;
 }alias XF86VideoFormatRec = _XF86VideoFormatRec;
-alias XF86VideoFormatPtr = *;
+alias XF86VideoFormatPtr = XF86VideoFormatRec*;
 
 alias XF86AttributeRec = XvAttributeRec;
 alias XF86AttributePtr = XvAttributeRec*;
@@ -122,7 +122,7 @@ struct _XF86VideoAdaptorRec {
     ReputImageFuncPtr ReputImage;       /* image/still */
     QueryImageAttributesFuncPtr QueryImageAttributes;
 }alias XF86VideoAdaptorRec = _XF86VideoAdaptorRec;
-alias XF86VideoAdaptorPtr = *;
+alias XF86VideoAdaptorPtr = XF86VideoAdaptorRec*;
 
 struct _XF86OffscreenImageRec {
     XF86ImagePtr image;
@@ -138,7 +138,7 @@ struct _XF86OffscreenImageRec {
     int num_attributes;
     XF86AttributePtr attributes;
 }alias XF86OffscreenImageRec = _XF86OffscreenImageRec;
-alias XF86OffscreenImagePtr = *;
+alias XF86OffscreenImagePtr = XF86OffscreenImageRec*;
 
 extern _X_EXPORT xf86XVScreenInit(ScreenPtr pScreen, XF86VideoAdaptorPtr* Adaptors, int num);
 
