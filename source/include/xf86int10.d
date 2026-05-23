@@ -44,7 +44,7 @@ struct _Xf86Int10InfoRec {
     pci_device* dev;
     pci_io_handle* io;
 }alias xf86Int10InfoRec = _Xf86Int10InfoRec;
-alias xf86Int10InfoPtr = *;
+alias xf86Int10InfoPtr = xf86Int10InfoRec*;
 
 struct _int10Mem {
     ubyte function(xf86Int10InfoPtr, int) rb;
@@ -62,7 +62,7 @@ struct _LegacyVGARec {
     ubyte save_vse;
     ubyte save_46e8;
 }alias legacyVGARec = _LegacyVGARec;
-alias legacyVGAPtr = *;
+alias legacyVGAPtr = legacyVGARec*;
 
 /* OS dependent functions */
 extern _X_EXPORT xf86InitInt10(int entityIndex);
@@ -122,7 +122,7 @@ extern _X_EXPORT MapCurrentInt10(xf86Int10InfoPtr pInt);
 extern _X_EXPORT xf86Int10ExecSetup(xf86Int10InfoPtr pInt);
 
 /* int.c */
-extern _X_EXPORT xf86Int10InfoPtr; Int10Current;
+extern xf86Int10InfoPtr Int10Current;
 
 version (_PC) {
 extern _X_EXPORT xf86Int10SaveRestoreBIOSVars(xf86Int10InfoPtr pInt, Bool save);
