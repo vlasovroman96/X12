@@ -72,7 +72,7 @@ extern _X_EXPORT xf86optionListDup(XF86OptionPtr opt);
 extern _X_EXPORT xf86optionListFree(XF86OptionPtr opt);
 extern _X_EXPORT* xf86optionName(XF86OptionPtr opt);
 extern _X_EXPORT* xf86optionValue(XF86OptionPtr opt);
-extern _X_EXPORT XF86OptionPtr; xf86newOption(char_ *name, char_ *value);
+extern XF86OptionPtr xf86newOption(char_ *name, char_ *value);
 extern _X_EXPORT xf86nextOption(XF86OptionPtr list);
 extern _X_EXPORT xf86findOption(XF86OptionPtr list, const(char)* name);
 extern const(_X_EXPORT)* xf86findOptionValue(XF86OptionPtr list, const(char)* name);
