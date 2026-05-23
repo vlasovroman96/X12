@@ -91,7 +91,7 @@ struct _VgaRegRec {
     ubyte numGraphics;  /* number of gfx registers, def=VGA_NUM_GFX */
     ubyte numAttribute; /* number of attr registers, def=VGA_NUM_ATTR */
 }alias vgaRegRec = _VgaRegRec;
-alias vgaRegPtr = *;
+alias vgaRegPtr = vgaRegRec*;
 
 alias vgaHWPtr = _vgaHWRec*;
 
@@ -185,10 +185,10 @@ extern _X_EXPORT vgaHWProtect(ScrnInfoPtr pScrn, Bool on);
 extern _X_EXPORT vgaHWSaveScreen(ScreenPtr pScreen, int mode);
 extern _X_EXPORT vgaHWBlankScreen(ScrnInfoPtr pScrn, Bool on);
 extern _X_EXPORT vgaHWSeqReset(vgaHWPtr hwp, Bool start);
-_X_EXPORT void vgaHWRestoreFonts(ScrnInfoPtr pScrnInfo, vgaRegPtr restore);
-_X_EXPORT void vgaHWRestore(ScrnInfoPtr pScrnInfo, vgaRegPtr restore, int flags);
-_X_EXPORT void vgaHWSaveFonts(ScrnInfoPtr pScrnInfo, vgaRegPtr save);
-_X_EXPORT void vgaHWSave(ScrnInfoPtr pScrnInfo, vgaRegPtr save, int flags);
+ void vgaHWRestoreFonts(ScrnInfoPtr pScrnInfo, vgaRegPtr restore);
+ void vgaHWRestore(ScrnInfoPtr pScrnInfo, vgaRegPtr restore, int flags);
+ void vgaHWSaveFonts(ScrnInfoPtr pScrnInfo, vgaRegPtr save);
+ void vgaHWSave(ScrnInfoPtr pScrnInfo, vgaRegPtr save, int flags);
 extern _X_EXPORT vgaHWInit(ScrnInfoPtr scrnp, DisplayModePtr mode);
 extern _X_EXPORT vgaHWCopyReg(vgaRegPtr dst, vgaRegPtr src);
 extern _X_EXPORT vgaHWGetHWRec(ScrnInfoPtr scrp);
@@ -206,7 +206,7 @@ extern _X_EXPORT vgaHWHBlankKGA(DisplayModePtr mode, vgaRegPtr regp, int nBits, 
 extern _X_EXPORT vgaHWVBlankKGA(DisplayModePtr mode, vgaRegPtr regp, int nBits, uint Flags);
 extern _X_EXPORT vgaHWAllocDefaultRegs(vgaRegPtr regp);
 
-extern _X_EXPORT DDC1SetSpeedProc; vgaHWddc1SetSpeedWeak(void);
+extern  DDC1SetSpeedProc vgaHWddc1SetSpeedWeak(void);
 extern _X_EXPORT xf86GetClocks(ScrnInfoPtr pScrn, int num, Bool function(ScrnInfoPtr, int) ClockFunc, void function(ScrnInfoPtr, Bool) ProtectRegs, void function(ScrnInfoPtr, Bool) BlankScreen, c_ulong vertsyncreg, int maskval, int knownclkindex, int knownclkvalue);
 
                           /* _VGAHW_H */
