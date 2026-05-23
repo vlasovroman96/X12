@@ -77,7 +77,7 @@ struct _XF86ConfFilesRec {
     char* file_comment;
     char* file_xkbdir;
 }alias XF86ConfFilesRec = _XF86ConfFilesRec;
-alias XF86ConfFilesPtr = *;
+alias XF86ConfFilesPtr = XF86ConfFilesRec*;
 
 /* Values for load_type */
 enum XF86_LOAD_MODULE =	0;
@@ -92,14 +92,14 @@ struct _XF86LoadRec {
     char* load_comment;
     int ignore;
 }alias XF86LoadRec = _XF86LoadRec;
-alias XF86LoadPtr = *;
+alias XF86LoadPtr = XF86LoadRec*;
 
 struct _XF86ConfModuleRec {
     XF86LoadPtr mod_load_lst;
     XF86LoadPtr mod_disable_lst;
     char* mod_comment;
 }alias XF86ConfModuleRec = _XF86ConfModuleRec;
-alias XF86ConfModulePtr = *;
+alias XF86ConfModulePtr = XF86ConfModuleRec*;
 
 enum CONF_IMPLICIT_KEYBOARD =	"Implicit Core Keyboard";
 
@@ -135,7 +135,7 @@ struct _XF86ConfModeLineRec {
     int ml_hskew;
     char* ml_comment;
 }alias XF86ConfModeLineRec = _XF86ConfModeLineRec;
-alias XF86ConfModeLinePtr = *;
+alias XF86ConfModeLinePtr = XF86ConfModeLineRec*;
 
 struct _XF86ConfVideoPortRec {
     GenericListRec list;
@@ -143,7 +143,7 @@ struct _XF86ConfVideoPortRec {
     XF86OptionPtr vp_option_lst;
     char* vp_comment;
 }alias XF86ConfVideoPortRec = _XF86ConfVideoPortRec;
-alias XF86ConfVideoPortPtr = *;
+alias XF86ConfVideoPortPtr = XF86ConfVideoPortRec*;
 
 struct _XF86ConfVideoAdaptorRec {
     GenericListRec list;
@@ -157,7 +157,7 @@ struct _XF86ConfVideoAdaptorRec {
     const(char)* va_fwdref;
     char* va_comment;
 }alias XF86ConfVideoAdaptorRec = _XF86ConfVideoAdaptorRec;
-alias XF86ConfVideoAdaptorPtr = *;
+alias XF86ConfVideoAdaptorPtr = XF86ConfVideoAdaptorRec*;
 
 enum CONF_MAX_HSYNC = 8;
 enum CONF_MAX_VREFRESH = 8;
@@ -176,14 +176,14 @@ struct _XF86ConfModesRec {
     XF86ConfModeLinePtr mon_modeline_lst;
     char* modes_comment;
 }alias XF86ConfModesRec = _XF86ConfModesRec;
-alias XF86ConfModesPtr = *;
+alias XF86ConfModesPtr = XF86ConfModesRec*;
 
 struct _XF86ConfModesLinkRec {
     GenericListRec list;
     const(char)* ml_modes_str;
     XF86ConfModesPtr ml_modes;
 }alias XF86ConfModesLinkRec = _XF86ConfModesLinkRec;
-alias XF86ConfModesLinkPtr = *;
+alias XF86ConfModesLinkPtr = XF86ConfModesLinkRec*;
 
 struct _XF86ConfMonitorRec {
     GenericListRec list;
@@ -204,7 +204,7 @@ struct _XF86ConfMonitorRec {
     XF86ConfModesLinkPtr mon_modes_sect_lst;
     char* mon_comment;
 }alias XF86ConfMonitorRec = _XF86ConfMonitorRec;
-alias XF86ConfMonitorPtr = *;
+alias XF86ConfMonitorPtr = XF86ConfMonitorRec*;
 
 enum CONF_MAXDACSPEEDS = 4;
 enum CONF_MAXCLOCKS =    128;
@@ -234,13 +234,13 @@ struct _XF86ConfDeviceRec {
     char* dev_comment;
     char* match_seat;
 }alias XF86ConfDeviceRec = _XF86ConfDeviceRec;
-alias XF86ConfDevicePtr = *;
+alias XF86ConfDevicePtr = XF86ConfDeviceRec*;
 
 struct _XF86ModeRec {
     GenericListRec list;
     const(char)* mode_name;
 }alias XF86ModeRec = _XF86ModeRec;
-alias XF86ModePtr = *;
+alias XF86ModePtr = XF86ModeRec*;
 
 struct _XF86ConfDisplayRec {
     GenericListRec list;
@@ -258,20 +258,20 @@ struct _XF86ConfDisplayRec {
     XF86OptionPtr disp_option_lst;
     char* disp_comment;
 }alias XF86ConfDisplayRec = _XF86ConfDisplayRec;
-alias XF86ConfDisplayPtr = *;
+alias XF86ConfDisplayPtr = XF86ConfDisplayRec*;
 
 struct _XF86ConfFlagsRec {
     XF86OptionPtr flg_option_lst;
     char* flg_comment;
 }alias XF86ConfFlagsRec = _XF86ConfFlagsRec;
-alias XF86ConfFlagsPtr = *;
+alias XF86ConfFlagsPtr = XF86ConfFlagsRec*;
 
 struct _XF86ConfAdaptorLinkRec {
     GenericListRec list;
     const(char)* al_adaptor_str;
     XF86ConfVideoAdaptorPtr al_adaptor;
 }alias XF86ConfAdaptorLinkRec = _XF86ConfAdaptorLinkRec;
-alias XF86ConfAdaptorLinkPtr = *;
+alias XF86ConfAdaptorLinkPtr = XF86ConfAdaptorLinkRec*;
 
 enum CONF_MAXGPUDEVICES = 4;
 struct _XF86ConfScreenRec {
@@ -296,7 +296,7 @@ struct _XF86ConfScreenRec {
     const(char)*[CONF_MAXGPUDEVICES] scrn_gpu_device_str;
     XF86ConfDevicePtr[CONF_MAXGPUDEVICES] scrn_gpu_devices;
 }alias XF86ConfScreenRec = _XF86ConfScreenRec;
-alias XF86ConfScreenPtr = *;
+alias XF86ConfScreenPtr = XF86ConfScreenRec*;
 
 struct _XF86ConfInputRec {
     GenericListRec list;
@@ -305,7 +305,7 @@ struct _XF86ConfInputRec {
     XF86OptionPtr inp_option_lst;
     char* inp_comment;
 }alias XF86ConfInputRec = _XF86ConfInputRec;
-alias XF86ConfInputPtr = *;
+alias XF86ConfInputPtr = XF86ConfInputRec*;
 
 struct _XF86ConfInputrefRec {
     GenericListRec list;
@@ -313,7 +313,7 @@ struct _XF86ConfInputrefRec {
     char* iref_inputdev_str;
     XF86OptionPtr iref_option_lst;
 }alias XF86ConfInputrefRec = _XF86ConfInputrefRec;
-alias XF86ConfInputrefPtr = *;
+alias XF86ConfInputrefPtr = XF86ConfInputrefRec*;
 
 struct xf86TriState {
     Bool set;
@@ -379,7 +379,7 @@ struct _XF86ConfInputClassRec {
     XF86OptionPtr option_lst;
     char* comment;
 }alias XF86ConfInputClassRec = _XF86ConfInputClassRec;
-alias XF86ConfInputClassPtr = *;
+alias XF86ConfInputClassPtr = XF86ConfInputClassRec*;
 
 struct _XF86ConfOutputClassRec {
     GenericListRec list;
@@ -392,7 +392,7 @@ struct _XF86ConfOutputClassRec {
     XF86OptionPtr option_lst;
     char* comment;
 }alias XF86ConfOutputClassRec = _XF86ConfOutputClassRec;
-alias XF86ConfOutputClassPtr = *;
+alias XF86ConfOutputClassPtr = XF86ConfOutputClassRec*;
 
 /* Values for adj_where */
 enum CONF_ADJ_OBSOLETE =	-1;
@@ -421,14 +421,14 @@ struct _XF86ConfAdjacencyRec {
     int adj_y;
     const(char)* adj_refscreen;
 }alias XF86ConfAdjacencyRec = _XF86ConfAdjacencyRec;
-alias XF86ConfAdjacencyPtr = *;
+alias XF86ConfAdjacencyPtr = XF86ConfAdjacencyRec*;
 
 struct _XF86ConfInactiveRec {
     GenericListRec list;
     const(char)* inactive_device_str;
     XF86ConfDevicePtr inactive_device;
 }alias XF86ConfInactiveRec = _XF86ConfInactiveRec;
-alias XF86ConfInactivePtr = *;
+alias XF86ConfInactivePtr = XF86ConfInactiveRec*;
 
 struct _XF86ConfLayoutRec {
     GenericListRec list;
@@ -440,7 +440,7 @@ struct _XF86ConfLayoutRec {
     char* match_seat;
     char* lay_comment;
 }alias XF86ConfLayoutRec = _XF86ConfLayoutRec;
-alias XF86ConfLayoutPtr = *;
+alias XF86ConfLayoutPtr = XF86ConfLayoutRec*;
 
 struct _XF86ConfVendSubRec {
     GenericListRec list;
@@ -449,7 +449,7 @@ struct _XF86ConfVendSubRec {
     XF86OptionPtr vs_option_lst;
     char* vs_comment;
 }alias XF86ConfVendSubRec = _XF86ConfVendSubRec;
-alias XF86ConfVendSubPtr = *;
+alias XF86ConfVendSubPtr = XF86ConfVendSubRec*;
 
 struct _XF86ConfVendorRec {
     GenericListRec list;
@@ -458,7 +458,7 @@ struct _XF86ConfVendorRec {
     XF86ConfVendSubPtr vnd_sub_lst;
     char* vnd_comment;
 }alias XF86ConfVendorRec = _XF86ConfVendorRec;
-alias XF86ConfVendorPtr = *;
+alias XF86ConfVendorPtr = XF86ConfVendorRec*;
 
 struct _XF86ConfDRIRec {
     const(char)* dri_group_name;
@@ -466,13 +466,13 @@ struct _XF86ConfDRIRec {
     int dri_mode;
     char* dri_comment;
 }alias XF86ConfDRIRec = _XF86ConfDRIRec;
-alias XF86ConfDRIPtr = *;
+alias XF86ConfDRIPtr = XF86ConfDRIRec*;
 
 struct _XF86ConfExtensionsRec {
     XF86OptionPtr ext_option_lst;
     char* extensions_comment;
 }alias XF86ConfExtensionsRec = _XF86ConfExtensionsRec;
-alias XF86ConfExtensionsPtr = *;
+alias XF86ConfExtensionsPtr = XF86ConfExtensionsRec*;
 
 struct _XF86ConfigRec {
     XF86ConfFilesPtr conf_files;
@@ -492,13 +492,13 @@ struct _XF86ConfigRec {
     XF86ConfExtensionsPtr conf_extensions;
     char* conf_comment;
 }alias XF86ConfigRec = _XF86ConfigRec;
-alias XF86ConfigPtr = *;
+alias XF86ConfigPtr = XF86ConfigRec*;
 
 struct _Xf86ConfigSymTabRec {
     int token;                  /* id of the token */
     const(char)* name;           /* pointer to the LOWERCASED name */
 }alias xf86ConfigSymTabRec = _Xf86ConfigSymTabRec;
-alias xf86ConfigSymTabPtr = *;
+alias xf86ConfigSymTabPtr = xf86ConfigSymTabRec*;
 
 /*
  * prototypes for public functions
