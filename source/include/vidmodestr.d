@@ -113,7 +113,7 @@ struct _VidModeRec {
     VidModeGetGammaRampProcPtr GetGammaRamp;
     VidModeGetGammaRampSizeProcPtr GetGammaRampSize;
 }alias VidModeRec = _VidModeRec;
-alias VidModePtr = *;
+alias VidModePtr = VidModeRec*;
 
 version (XF86VIDMODE) {
 void VidModeAddExtension(Bool allow_non_local);
