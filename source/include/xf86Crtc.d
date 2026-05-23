@@ -958,7 +958,7 @@ version (XFreeXDGA) {
 extern _X_EXPORT xf86DiDGAInit(ScreenPtr pScreen, c_ulong dga_address);
 
 /* this is the real function, used only internally */
-_X_INTERNAL Bool _xf86_di_dga_init_internal(ScreenPtr pScreen);
+Bool _xf86_di_dga_init_internal(ScreenPtr pScreen);
 
 /**
  * Re-initialize dga for this screen (as when the set of modes changes)
@@ -968,7 +968,7 @@ extern _X_EXPORT xf86DiDGAReInit(ScreenPtr pScreen);
 }
 
 /* This is the real function, used only internally */
-_X_INTERNAL Bool _xf86_di_dga_reinit_internal(ScreenPtr pScreen);
+Bool _xf86_di_dga_reinit_internal(ScreenPtr pScreen);
 
 /*
  * Set the subpixel order reported for the screen using
