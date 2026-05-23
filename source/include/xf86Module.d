@@ -46,10 +46,10 @@ public import deimos.X11.Xfuncproto;
 public import deimos.X11.Xdefs;
 public import deimos.X11.Xmd;
 
-enum NULL = ((void *)0);
+enum NULL = cast(void *)null;
 
 
-enum DEFAULT_LIST = ((char *)-1);
+enum DEFAULT_LIST = cast(byte*)-1;
 
 /* Built-in ABI classes.  These definitions must not be changed. */
 enum ABI_CLASS_NONE =		NULL;
@@ -171,8 +171,8 @@ extern _X_EXPORT* LoaderSymbolFromModule(void*, const(char)*);
 extern _X_EXPORT LoaderErrorMsg(const(char)*, const(char)*, int, int);
 
 /* deprecated, only kept for backwards compat w/ proprietary NVidia driver */
-extern _X_EXPORT Bool;  _X_DEPRECATED;
-extern _X_EXPORT _X_DEPRECATED;
+// extern  Bool  _X_DEPRECATED;
+// extern _X_EXPORT _X_DEPRECATED;
 
 alias ModuleSetupProc = void* function(void*, void*, int*, int*);
 alias ModuleTearDownProc = void function(void*);
@@ -230,7 +230,7 @@ enum string XF86_MODULE_VERSION_VIDEO(string _name, string _major, string _minor
     };`;
 
 enum string XF86_MODULE_DATA_INPUT(string _modname, string _setup, string _teardown, string _name, string _major, string _minor, string _patchlevel) = `
-    ` ~ XF86_MODULE_VERSION_INPUT!(` ~ `_name` ~ `, ` ~ `_major` ~ `, ` ~ `_minor` ~ `, ` ~ `_patchlevel` ~ `) ~ ` 
+    ` ~ XF86_MODULE_VERSION_INPUT!(_name, _major, _minor, _patchlevel) ~ ` 
     _X_EXPORT XF86ModuleData = { 
         vers: &modVersion, 
         setup: ` ~ _setup ~ `, 
@@ -238,7 +238,7 @@ enum string XF86_MODULE_DATA_INPUT(string _modname, string _setup, string _teard
     };`;
 
 enum string XF86_MODULE_DATA_VIDEO(string _modname, string _setup, string _teardown, string _name, string _major, string _minor, string _patchlevel) = `
-    ` ~ XF86_MODULE_VERSION_VIDEO!(` ~ `_name` ~ `, ` ~ `_major` ~ `, ` ~ `_minor` ~ `, ` ~ `_patchlevel` ~ `) ~ ` 
+    ` ~ XF86_MODULE_VERSION_VIDEO!(_name, _major, _minor, _patchlevel) ~ ` 
     _X_EXPORT XF86ModuleData = { 
         vers: &modVersion, 
         setup: ` ~ _setup ~ `, 
