@@ -66,7 +66,7 @@ enum WT_STOPWALKING =		0;
 enum WT_WALKCHILDREN =		1;
 enum WT_DONTWALKCHILDREN =	2;
 enum WT_NOMATCH = 3;
-enum NullWindow = ((WindowPtr) 0);
+enum NullWindow = cast(WindowPtr) 0;
 
 /* Forward declaration, we can't include input.h here */
 struct _DeviceIntRec;
@@ -114,13 +114,26 @@ extern _X_EXPORT ChangeWindowAttributes(WindowPtr, Mask, XID*, ClientPtr);
 
 extern _X_EXPORT ChangeWindowDeviceCursor(WindowPtr, _DeviceIntRec*, _Cursor*);
 
-extern _X_EXPORT struct; _Cursor* WindowGetDeviceCursor(WindowPtr, _DeviceIntRec*);
+extern _Cursor* WindowGetDeviceCursor(WindowPtr, _DeviceIntRec*);
 
 /* Quartz support on Mac OS X uses the HIToolbox
    framework whose GetWindowAttributes function conflicts here. */
 version (OSX) {
-enum string GetWindowAttributes(string w,string c,string x) = `Darwin_X_GetWindowAttributes(` ~ w ~ `,` ~ c ~ `,` ~ x ~ `)`;
-extern void Darwin_X_GetWindowAttributes(extern _X_EXPORT GetWindowAttributes(WindowPtr, ClientPtr, xGetWindowAttributesReply*));
+   extern void Darwin_X_GetWindowAttributes(
+                                             WindowPtr /*pWin */ ,
+                                             ClientPtr /*client */ ,
+                                             xGetWindowAttributesReply *
+                                             /* wa */ );
+   alias GetWindowAttributes = Darwin_X_GetWindowAttributes; 
+}
+else {
+
+   void GetWindowAttributes(
+                                             WindowPtr /*pWin */ ,
+                                             ClientPtr /*client */ ,
+                                             xGetWindowAttributesReply *
+                                             /* wa */ );
+}
 
 extern _X_EXPORT GravityTranslate(int, int, int, int, int, int, uint, int*, int*);
 
@@ -170,5 +183,4 @@ extern _X_EXPORT CreateClipShape(WindowPtr);
 
 extern _X_EXPORT SetRootClip(ScreenPtr pScreen, int enable);
 
-extern _X_EXPORT WindowGetVisual(WindowPtr);
-}                          /* WINDOW_H */
+extern _X_EXPORT WindowGetVisual(WindowPtr);                         /* WINDOW_H */
