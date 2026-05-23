@@ -58,9 +58,9 @@ enum ODEV_ATTRIB_MINOR =       6;
 /* kernel driver name */
 enum ODEV_ATTRIB_DRIVER =      7;
 
-_X_EXPORT char* _xf86_get_platform_device_attrib(xf86_platform_device* device, int attrib, int[0]* fake);
+char* _xf86_get_platform_device_attrib(xf86_platform_device* device, int attrib, int[0]* fake);
 
-_X_EXPORT int _xf86_get_platform_device_int_attrib(xf86_platform_device* device, int attrib, int[0]* fake);
+int _xf86_get_platform_device_int_attrib(xf86_platform_device* device, int attrib, int[0]* fake);
 
 /* Protect against a mismatch attribute type by generating a compiler
  * error using a negative array size when an incorrect attribute is
@@ -72,16 +72,16 @@ enum string _ODEV_ATTRIB_IS_STRING(string x) = `((` ~ x ~ `) == ODEV_ATTRIB_PATH
                                          (` ~ x ~ `) == ODEV_ATTRIB_BUSID ||    
                                          (` ~ x ~ `) == ODEV_ATTRIB_DRIVER)`;
 
-enum string _ODEV_ATTRIB_STRING_CHECK(string x) = `(cast(int[` ~ _ODEV_ATTRIB_IS_STRING!(` ~ `x` ~ `) ~ `-1]) 0)`;
+enum string _ODEV_ATTRIB_STRING_CHECK(string x) = `(cast(int[` ~ _ODEV_ATTRIB_IS_STRING!(x) ~ `-1]) 0)`;
 
-enum string xf86_get_platform_device_attrib(string device, string attrib) = `_xf86_get_platform_device_attrib(` ~ device ~ `,` ~ attrib ~ `,` ~ _ODEV_ATTRIB_STRING_CHECK!(` ~ `attrib` ~ `) ~ `)`;
+enum string xf86_get_platform_device_attrib(string device, string attrib) = `_xf86_get_platform_device_attrib(` ~ device ~ `,` ~ attrib ~ `,` ~ _ODEV_ATTRIB_STRING_CHECK!(attrib) ~ `)`;
 
 enum string _ODEV_ATTRIB_IS_INT(string x) = `((` ~ x ~ `) == ODEV_ATTRIB_FD || (` ~ x ~ `) == ODEV_ATTRIB_MAJOR || (` ~ x ~ `) == ODEV_ATTRIB_MINOR)`;
 enum string _ODEV_ATTRIB_INT_DEFAULT(string x) = `((` ~ x ~ `) == ODEV_ATTRIB_FD ? -1 : 0)`;
-enum string _ODEV_ATTRIB_DEFAULT_CHECK(string x,string def) = `(` ~ _ODEV_ATTRIB_INT_DEFAULT!(` ~ `x` ~ `) ~ ` == (` ~ def ~ `))`;
-enum string _ODEV_ATTRIB_INT_CHECK(string x,string def) = `(cast(int[` ~ _ODEV_ATTRIB_IS_INT!(` ~ `x` ~ `) ~ `*` ~ _ODEV_ATTRIB_DEFAULT_CHECK!(` ~ `x` ~ `,` ~ `def` ~ `) ~ `-1]) 0)`;
+enum string _ODEV_ATTRIB_DEFAULT_CHECK(string x,string def) = `(` ~ _ODEV_ATTRIB_INT_DEFAULT!(x) ~ ` == (` ~ def ~ `))`;
+enum string _ODEV_ATTRIB_INT_CHECK(string x,string def) = `(cast(int[` ~ _ODEV_ATTRIB_IS_INT!(x) ~ `*` ~ _ODEV_ATTRIB_DEFAULT_CHECK!(x,def) ~ `-1]) 0)`;
 
-enum string xf86_get_platform_device_int_attrib(string device, string attrib, string def) = `_xf86_get_platform_device_int_attrib(` ~ device ~ `,` ~ attrib ~ `,` ~ _ODEV_ATTRIB_INT_CHECK!(` ~ `attrib` ~ `,` ~ `def` ~ `) ~ `)`;
+enum string xf86_get_platform_device_int_attrib(string device, string attrib, string def) = `_xf86_get_platform_device_int_attrib(` ~ device ~ `,` ~ attrib ~ `,` ~ _ODEV_ATTRIB_INT_CHECK!(attrib,def) ~ `)`;
 
 extern _X_EXPORT xf86PlatformDeviceCheckBusID(xf86_platform_device* device, const(char)* busid);
 
