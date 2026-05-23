@@ -36,7 +36,7 @@ public import glxvndabi;
 
 enum GLXContextID = CARD32;
 enum GLXDrawable = CARD32;
-
-const(_X_EXPORT) GlxServerExports; *glvndGetExports(void);
+ 
+GlxServerExports *glvndGetExports(void);
 
  // VNDSERVER_H
