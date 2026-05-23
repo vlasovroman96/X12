@@ -46,12 +46,12 @@ extern _X_EXPORT xf86Depth;
 /* Other parameters */
 
 extern _X_EXPORT xf86InfoRec;
-extern _X_EXPORT serverLayoutRec; xf86ConfigLayout;
+extern serverLayoutRec xf86ConfigLayout;
 
 extern _X_EXPORT* xf86DriverList;
 extern _X_EXPORT xf86NumScreens;
 
-extern _X_EXPORT ScrnInfoPtr; *xf86GPUScreens;      /* List of pointers to ScrnInfoRecs */
+extern _ScrnInfoPtr *xf86GPUScreens;      /* List of pointers to ScrnInfoRecs */
 extern _X_EXPORT xf86NumGPUScreens;
 extern _X_EXPORT xf86DRMMasterFd;              /* Command line argument for DRM master file descriptor */
 enum DEFAULT_DPI =		96;
