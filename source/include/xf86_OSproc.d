@@ -143,5 +143,5 @@ extern _X_EXPORT xf86GARTCloseScreen(int screenNum);
    wrappers than to wrap each individual function called. */
 extern _X_EXPORT xf86InstallSIGIOHandler(int fd, void function(int, void*) f, void*);
 
-_XFUNCPROTOEND
+// _XFUNCPROTOEND
                           /* _XF86_OSPROC_H */
