@@ -46,12 +46,12 @@ public import deimos.X11.extensions.randr;
 /* General parameters */
 extern _X_EXPORT xorgHWAccess;
 
-extern _X_EXPORT DevPrivateKeyRec; xf86ScreenKeyRec;
+extern DevPrivateKeyRec xf86ScreenKeyRec;
 
 enum xf86ScreenKey = (&xf86ScreenKeyRec);
 
-extern _X_EXPORT ScrnInfoPtr; *xf86Screens;      /* List of pointers to ScrnInfoRecs */
-extern const(_X_EXPORT) unsigned; char[256] byte_reversed = 0;
+extern ScrnInfoPtr *xf86Screens;      /* List of pointers to ScrnInfoRecs */
+extern ubyte[256] byte_reversed = 0;
 
 enum string XF86SCRNINFO(string p) = `xf86ScreenToScrn(` ~ p ~ `)`;
 
@@ -68,7 +68,7 @@ extern _X_EXPORT xf86UnclaimPciSlot(pci_device*, GDevPtr dev);
 extern _X_EXPORT xf86ParsePciBusString(const(char)* busID, int* bus, int* device, int* func);
 extern _X_EXPORT xf86IsPrimaryPci(pci_device* pPci);
 extern _X_EXPORT xf86CheckPciMemBase(pci_device* pPci, memType base);
-extern _X_EXPORT struct; pci_device* xf86GetPciInfoForEntity(int entityIndex);
+extern pci_device* xf86GetPciInfoForEntity(int entityIndex);
 extern _X_EXPORT xf86MatchPciInstances(const(char)* driverName, int vendorID, SymTabPtr chipsets, PciChipsets* PCIchipsets, GDevPtr* devList, int numDevs, DriverPtr drvp, int** foundEntities);
 extern _X_EXPORT xf86ConfigPciEntity(ScrnInfoPtr pScrn, int scrnFlag, int entityIndex, PciChipsets* p_chip, void* dummy, EntityProc init, EntityProc enter, EntityProc leave, void* private_);
 }
@@ -114,7 +114,7 @@ extern _X_EXPORT xf86DPMSInit(ScreenPtr pScreen, DPMSSetProcPtr set, int flags);
 version (XFreeXDGA) {
 extern _X_EXPORT DGAInit(ScreenPtr pScreen, DGAFunctionPtr funcs, DGAModePtr modes, int num);
 extern _X_EXPORT DGAReInitModes(ScreenPtr pScreen, DGAModePtr modes, int num);
-extern _X_EXPORT xf86SetDGAModeProc; xf86SetDGAMode;
+extern xf86SetDGAModeProc xf86SetDGAMode;
 }
 
 /* xf86Events.c */
@@ -139,9 +139,7 @@ extern _X_EXPORT xf86SetDpi(ScrnInfoPtr pScrn, int x, int y);
 extern _X_EXPORT xf86SetBlackWhitePixels(ScreenPtr pScreen);
 extern _X_EXPORT xf86EnableDisableFBAccess(ScrnInfoPtr pScrn, Bool enable);
 extern _X_EXPORT xf86VDrvMsgVerb(int scrnIndex, MessageType type, int verb, const(char)* format, va_list args);
-_X_ATTRIBUTE_PRINTF(4, 0);
 extern _X_EXPORT xf86DrvMsgVerb(int scrnIndex, MessageType type, int verb, const(char)* format, ...);
-_X_ATTRIBUTE_PRINTF(4, 5);
 extern _X_EXPORT _X_ATTRIBUTE_PRINTF();
 extern _X_EXPORT _X_ATTRIBUTE_PRINTF();
 extern _X_EXPORT _X_ATTRIBUTE_PRINTF();
@@ -201,12 +199,12 @@ enum XF86_ALLOCATE_GPU_SCREEN = 1;
 
 /* only for backwards (source) compatibility */
 enum xf86MsgVerb = LogMessageVerb;
-enum string xf86Msg(string type, ...) = `LogMessageVerb(` ~ type ~ `, 1, __VA_ARGS__)`;
+enum string xf86Msg(string type, string arg) = `LogMessageVerb(` ~ type ~ `, 1, `~arg~`)`;
 
 /*
  * retrieve file descriptor to opened console device.
  * only for some legacy keyboard drivers (xf86-input-keyboard)
  */
-_X_EXPORT int xf86GetConsoleFd();
+int xf86GetConsoleFd();
 
                           /* _XF86_H */
