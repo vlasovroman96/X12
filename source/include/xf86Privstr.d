@@ -107,17 +107,17 @@ static if (HasVersion!"CSRG_BASED" || HasVersion!"__FreeBSD_kernel__") {
     Bool singleDriver;          /* Only the first successfully probed driver adds primary screens,
                                  * others may add GPU secondary screens only */
 }alias xf86InfoRec = _Xf86InfoRec;
-alias xf86InfoPtr = *;
+alias xf86InfoPtr = xf86InfoRec*;
 
 /* ISC's cc can't handle ~ of UL constants, so explicitly type cast them. */
-enum XLED1 =   ((unsigned long) 0x00000001);
-enum XLED2 =   ((unsigned long) 0x00000002);
-enum XLED3 =   ((unsigned long) 0x00000004);
-enum XLED4 =	((unsigned long) 0x00000008);
-enum XCAPS =   ((unsigned long) 0x20000000);
-enum XNUM =    ((unsigned long) 0x40000000);
-enum XSCR =    ((unsigned long) 0x80000000);
-enum XCOMP =	((unsigned long) 0x00008000);
+enum XLED1 =   cast(ulong) 0x00000001;
+enum XLED2 =   cast(ulong) 0x00000002;
+enum XLED3 =   cast(ulong) 0x00000004;
+enum XLED4 =	cast(ulong) 0x00000008;
+enum XCAPS =   cast(ulong) 0x20000000;
+enum XNUM =    cast(ulong) 0x40000000;
+enum XSCR =    cast(ulong) 0x80000000;
+enum XCOMP =	cast(ulong) 0x00008000;
 
 /* BSD console driver types (consType) */
 static if (HasVersion!"CSRG_BASED" || HasVersion!"__FreeBSD_kernel__") {
