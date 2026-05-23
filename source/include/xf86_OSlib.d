@@ -100,8 +100,8 @@ version (HAVE_SYS_VT_H) {
 version = HAS_USL_VTS;
 }
 version (HAS_USL_VTS) {
-public import sys/kd;
-public import sys/vt;
+public import sys.kd;
+public import sys.vt;
 }
 
 version = CLEARDTR_SUPPORT;
@@ -120,15 +120,15 @@ public import core.stdc.assert_;
 
 public import core.sys.posix.termios;
 version (__sparc__) {
-public import sys/param;
+public import sys.param;
 }
 
 public import core.stdc.errno;
 
 version (linux) {
 version = HAS_USL_VTS;
-public import sys/kd;
-public import sys/vt;
+public import sys.kd;
+public import sys.vt;
 enum LDGMAP = GIO_SCRNMAP;
 enum LDSMAP = PIO_SCRNMAP;
 enum LDNMAP = LDSMAP;
@@ -160,7 +160,7 @@ public import core.sys.posix.sys.types;
 static if (HasVersion!"__FreeBSD__" || HasVersion!"__FreeBSD_kernel__" || 
  HasVersion!"__NetBSD__" || HasVersion!"__OpenBSD__" || HasVersion!"__DragonFly__") {
 
-public import sys/param;
+public import sys.param;
 static if (HasVersion!"__FreeBSD_version" && !HasVersion!"__FreeBSD_kernel_version") {
 enum __FreeBSD_kernel_version = __FreeBSD_version;
 }
@@ -169,25 +169,25 @@ version (SYSCONS_SUPPORT) {
 version = COMPAT_SYSCONS;
 static if (HasVersion!"__FreeBSD__" || HasVersion!"__FreeBSD_kernel__" || HasVersion!"__DragonFly__") {
 static if (HasVersion!"__DragonFly__"  || (__FreeBSD_kernel_version >= 410000)) {
-public import sys/consio;
-public import sys/kbio;
+public import sys.consio;
+public import sys.kbio;
 } else {
-public import machine/console;
+public import machine.console;
 }                          /* FreeBSD 4.1 RELEASE or lator */
 } else {
-public import sys/console;
+public import sys.console;
 }
 }                          /* SYSCONS_SUPPORT */
 static if (HasVersion!"PCVT_SUPPORT" && !HasVersion!"__NetBSD__" && !HasVersion!"__OpenBSD__") {
 static if (!HasVersion!"SYSCONS_SUPPORT") {
       /* no syscons, so include pcvt specific header file */
 static if (HasVersion!"__FreeBSD__" || HasVersion!"__FreeBSD_kernel__") {
-public import machine/pcvt_ioctl;
+public import machine.pcvt_ioctl;
 } else {
-public import sys/pcvt_ioctl;
+public import sys.pcvt_ioctl;
 }                          /* __FreeBSD_kernel__ */
 } else {                           /* pcvt and syscons: hard-code the ID magic */
-enum VGAPCVTID = _IOWR('V',113, struct pcvtid);
+enum VGAPCVTID = _IOWR('V',113, pcvtid);
 struct pcvtid {
     char[16] name = 0;
     int rmajor, rminor;
@@ -195,14 +195,15 @@ struct pcvtid {
 }                          /* PCVT_SUPPORT && SYSCONS_SUPPORT */
 }                          /* PCVT_SUPPORT */
 version (WSCONS_SUPPORT) {
-public import dev/wscons/wsconsio;
-public import dev/wscons/wsdisplay_usl_io;
+public import dev.wscons.wsconsio;
+public import dev.wscons.wsdisplay_usl_io;
 }                          /* WSCONS_SUPPORT */
 static if (HasVersion!"__FreeBSD__" || HasVersion!"__FreeBSD_kernel__" || HasVersion!"__DragonFly__") {
-public import sys/mouse;
+public import sys.mouse;
 }
     /* Include these definitions in case ioctl_pc.h didn't get included */
-enum CONSOLE_X_BELL = _IOW('t',123,int[2]);
+enum CONSOLE_X_BELL = "";
+// _IOW('t',123,int[2]);
 
 
 version = CLEARDTR_SUPPORT;
@@ -234,7 +235,7 @@ enum MAXHOSTNAMELEN = 32;
 
 public import core.stdc.limits;
 
-enum MAP_FAILED = ((void *)-1);
+enum MAP_FAILED = cast(void *)-1;
 
 
 enum string SYSCALL(string call) = `while(((` ~ call ~ `) == -1) && (errno == EINTR)) {}`;
