@@ -126,7 +126,7 @@ extern _X_EXPORT xf86PostTouchEvent(DeviceIntPtr dev, uint touchid, ushort type,
 extern _X_EXPORT xf86PostGesturePinchEvent(DeviceIntPtr dev, ushort type, ushort num_touches, uint flags, double delta_x, double delta_y, double delta_unaccel_x, double delta_unaccel_y, double scale, double delta_angle);
 extern _X_EXPORT xf86PostGestureSwipeEvent(DeviceIntPtr dev, ushort type, ushort num_touches, uint flags, double delta_x, double delta_y, double delta_unaccel_x, double delta_unaccel_y);
 
-extern _X_EXPORT InputInfoPtr; xf86FirstLocalDevice(void);
+extern InputInfoPtr xf86FirstLocalDevice(void);
 extern _X_EXPORT xf86ScaleAxis(int Cx, int to_max, int to_min, int from_max, int from_min);
 extern _X_EXPORT xf86ProcessCommonOptions(InputInfoPtr pInfo, XF86OptionPtr options);
 extern _X_EXPORT xf86InitValuatorAxisStruct(DeviceIntPtr dev, int axnum, Atom label, int minval, int maxval, int resolution, int min_res, int max_res, int mode);
@@ -140,7 +140,7 @@ extern _X_EXPORT xf86AddInputDriver(InputDriverPtr driver, void* module_, int fl
 extern _X_EXPORT xf86DeleteInput(InputInfoPtr pInp, int flags);
 extern _X_EXPORT xf86MotionHistoryAllocate(InputInfoPtr pInfo);
 extern _X_EXPORT xf86IDrvMsgVerb(InputInfoPtr dev, MessageType type, int verb, const(char)* format, ...);
-_X_ATTRIBUTE_PRINTF(4, 5);
+// _X_ATTRIBUTE_PRINTF(4, 5);
 extern _X_EXPORT _X_ATTRIBUTE_PRINTF();
 
 /* xf86Option.c */
