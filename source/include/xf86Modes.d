@@ -80,7 +80,7 @@ extern _X_EXPORT xf86ValidateModesUserConfig(ScrnInfoPtr pScrn, DisplayModePtr m
 
 extern _X_EXPORT xf86GetMonitorModes(ScrnInfoPtr pScrn, XF86ConfMonitorPtr conf_monitor);
 
-extern _X_EXPORT DisplayModePtr; xf86GetDefaultModes(void);
+extern DisplayModePtr xf86GetDefaultModes(void);
 
 extern _X_EXPORT xf86SaveModeContents(DisplayModePtr intern, const(DisplayModeRec)* mode);
 
