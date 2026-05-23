@@ -51,7 +51,7 @@ struct _XF86MCSurfaceInfoRec {
     int flags;
     XF86MCImageIDList* compatible_subpictures;  /* can be null, if none */
 }alias XF86MCSurfaceInfoRec = _XF86MCSurfaceInfoRec;
-alias XF86MCSurfaceInfoPtr = *;
+alias XF86MCSurfaceInfoPtr = XF86MCSurfaceInfoRec*;
 
 /*
    xf86XvMCCreateContextProc
@@ -115,7 +115,7 @@ struct _XF86MCAdaptorRec {
     xf86XvMCCreateSubpictureProcPtr CreateSubpicture;
     xf86XvMCDestroySubpictureProcPtr DestroySubpicture;
 }alias XF86MCAdaptorRec = _XF86MCAdaptorRec;
-alias XF86MCAdaptorPtr = *;
+alias XF86MCAdaptorPtr = XF86MCAdaptorRec*;
 
 /*
    xf86XvMCScreenInit
@@ -128,7 +128,7 @@ alias XF86MCAdaptorPtr = *;
 
 extern _X_EXPORT xf86XvMCScreenInit(ScreenPtr pScreen, int num_adaptors, XF86MCAdaptorPtr* adaptors);
 
-extern _X_EXPORT XF86MCAdaptorPtr; xf86XvMCCreateAdaptorRec(void);
+extern XF86MCAdaptorPtr xf86XvMCCreateAdaptorRec(void);
 extern _X_EXPORT xf86XvMCDestroyAdaptorRec(XF86MCAdaptorPtr adaptor);
 
                           /* _XF86XVMC_H */
