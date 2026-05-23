@@ -87,7 +87,7 @@ struct _OptionInfoRec {
     ValueUnion value;
     Bool found;
 }alias OptionInfoRec = _OptionInfoRec;
-alias OptionInfoPtr = *;
+alias OptionInfoPtr = OptionInfoRec*;
 
 extern _X_EXPORT xf86SetIntOption(XF86OptionPtr optlist, const(char)* name, int deflt);
 extern _X_EXPORT xf86SetRealOption(XF86OptionPtr optlist, const(char)* name, double deflt);
