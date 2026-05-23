@@ -53,6 +53,6 @@ extern _X_EXPORT xf86SetDDCproperties(ScrnInfoPtr pScreen, xf86MonPtr DDC);
  * @param size          size of the EDID block (128 or larger for extended types)
  * @return              newly allocated xf86MonRec or NULL on failure
  */
-_X_EXPORT xf86MonPtr xf86ParseEDID(ScrnInfoPtr pScreen, ubyte* block, size_t size);
+xf86MonPtr xf86ParseEDID(ScrnInfoPtr pScreen, ubyte* block, size_t size);
 
 
