@@ -189,7 +189,7 @@ struct _XkbDeviceInfoRec {
     ProcessInputProc realInputProc;
     DeviceUnwrapProc unwrapProc;
 }alias xkbDeviceInfoRec = _XkbDeviceInfoRec;
-alias xkbDeviceInfoPtr = *;
+alias xkbDeviceInfoPtr = xkbDeviceInfoRec*;
 
 /***====================================================================***/
 
@@ -211,7 +211,7 @@ extern _X_EXPORT XkbFreeKeyboard(XkbDescPtr, uint, Bool);
  *
  * @return keysym map, or NULL if an error occurs
  */
-extern _X_EXPORT KeySymsPtr; XkbGetCoreMap(DeviceIntPtr  /* keybd */
+extern KeySymsPtr XkbGetCoreMap(DeviceIntPtr  /* keybd */
     );
 
 extern _X_EXPORT XkbApplyMappingChange(DeviceIntPtr, KeySymsPtr, KeyCode, CARD8, CARD8*, ClientPtr);
