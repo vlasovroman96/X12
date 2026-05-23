@@ -167,7 +167,7 @@ struct _MonRec {
     Bool reducedblanking;       /* Allow CVT reduced blanking modes? */
     int maxPixClock;            /* in kHz, like mode->Clock */
 }alias MonRec = _MonRec;
-alias MonPtr = *;
+alias MonPtr = MonRec*;
 
 /* the list of clock ranges */
 struct x_ClockRange {
@@ -205,7 +205,7 @@ alias GET_REQUIRED_HW_INTERFACES = xorgDriverFuncOp.GET_REQUIRED_HW_INTERFACES;
 alias SUPPORTS_SERVER_FDS = xorgDriverFuncOp.SUPPORTS_SERVER_FDS;
 
 
-alias xorgDriverFuncProc = ;
+alias xorgDriverFuncProc = Bool function(ScrnInfoPtr, xorgDriverFuncOp, void *);
 
 /* RR_GET_INFO, RR_SET_CONFIG */
 struct xorgRRConfig {
@@ -219,7 +219,7 @@ union _XorgRRRotation {
     short RRRotations;
     xorgRRConfig RRConfig;
 }alias xorgRRRotation = _XorgRRRotation;
-alias xorgRRRotationPtr = *;
+alias xorgRRRotationPtr = xorgRRRotation*;
 
 /* RR_GET_MODE_MM */
 struct _XorgRRModeMM {
@@ -229,7 +229,7 @@ struct _XorgRRModeMM {
     int mmWidth;
     int mmHeight;
 }alias xorgRRModeMM = _XorgRRModeMM;
-alias xorgRRModeMMPtr = *;
+alias xorgRRModeMMPtr = xorgRRModeMM*;
 
 /* GET_REQUIRED_HW_INTERFACES */
 enum HW_IO = 1;
@@ -356,7 +356,7 @@ struct _GDevRec {
     int irq;
     int screen;                 /* For multi-CRTC cards */
 }alias GDevRec = _GDevRec;
-alias GDevPtr = *;
+alias GDevPtr = GDevRec*;
 
 struct _DispRec {
     int frameX0;
@@ -372,7 +372,7 @@ struct _DispRec {
     const(char)** modes;
     void* options;
 }alias DispRec = _DispRec;
-alias DispPtr = *;
+alias DispPtr = DispRec*;
 
 struct _confxvportrec {
     const(char)* identifier;
@@ -604,13 +604,13 @@ struct _DGAModeRec {
     int reserved1;
     int reserved2;
 }alias DGAModeRec = _DGAModeRec;
-alias DGAModePtr = *;
+alias DGAModePtr = DGAModeRec*;
 
 struct _DGADeviceRec {
     DGAModePtr mode;
     PixmapPtr pPix;
 }alias DGADeviceRec = _DGADeviceRec;
-alias DGADevicePtr = *;
+alias DGADevicePtr = DGADeviceRec*;
 
 /*
  * Flags for driver Probe() functions.
@@ -623,24 +623,43 @@ enum PROBE_TRYHARD =	  0x02;
  * Driver entry point types
  */
 
-alias xf86ProbeProc = ;
-alias xf86PreInitProc = ;
-alias xf86ScreenInitProc = ;
-alias xf86SwitchModeProc = ;
-alias xf86AdjustFrameProc = ;
-alias xf86EnterVTProc = ;
-alias xf86LeaveVTProc = ;
-alias xf86FreeScreenProc = ;
-alias xf86ValidModeProc = ;
-alias xf86EnableDisableFBAccessProc = ;
-alias xf86SetDGAModeProc = ;
-alias xf86ChangeGammaProc = ;
-alias xf86PointerMovedProc = ;
-alias xf86PMEventProc = ;
-alias xf86DPMSSetProc = ;
-alias xf86LoadPaletteProc = ;
-alias xf86SetOverscanProc = ;
-alias xf86ModeSetProc = ;
+// alias xf86ProbeProc = ;
+// alias xf86PreInitProc = ;
+// alias xf86ScreenInitProc = ;
+// alias xf86SwitchModeProc = ;
+// alias xf86AdjustFrameProc = ;
+// alias xf86EnterVTProc = ;
+// alias xf86LeaveVTProc = ;
+// alias xf86FreeScreenProc = ;
+// alias xf86ValidModeProc = ;
+// alias xf86EnableDisableFBAccessProc = ;
+// alias xf86SetDGAModeProc = ;
+// alias xf86ChangeGammaProc = ;
+// alias xf86PointerMovedProc = ;
+// alias xf86PMEventProc = ;
+// alias xf86DPMSSetProc = ;
+// alias xf86LoadPaletteProc = ;
+// alias xf86SetOverscanProc = ;
+// alias xf86ModeSetProc = ;
+
+alias xf86ProbeProc = Bool function(DriverPtr, int);
+alias xf86PreInitProc = Bool function(ScrnInfoPtr, int);
+alias xf86ScreenInitProc = Bool function(ScreenPtr, int, char **);
+alias xf86SwitchModeProc = Bool function(ScrnInfoPtr, DisplayModePtr);
+alias xf86AdjustFrameProc = void function(ScrnInfoPtr, int, int);
+alias xf86EnterVTProc = Bool function(ScrnInfoPtr);
+alias xf86LeaveVTProc = void function(ScrnInfoPtr);
+alias xf86FreeScreenProc = void function(ScrnInfoPtr);
+alias xf86ValidModeProc = ModeStatus function(ScrnInfoPtr, DisplayModePtr, Bool, int);
+alias xf86EnableDisableFBAccessProc = void function(ScrnInfoPtr, Bool);
+alias xf86SetDGAModeProc = int function(ScrnInfoPtr, int, DGADevicePtr);
+alias xf86ChangeGammaProc = int function(ScrnInfoPtr, Gamma);
+alias xf86PointerMovedProc = void function(ScrnInfoPtr, int, int);
+alias xf86PMEventProc = Bool function(ScrnInfoPtr, pmEvent, Bool);
+alias xf86DPMSSetProc = void function(ScrnInfoPtr, int, int);
+alias xf86LoadPaletteProc = void function(ScrnInfoPtr, int, int *, LOCO *, VisualPtr);
+alias xf86SetOverscanProc = void function(ScrnInfoPtr, int);
+alias xf86ModeSetProc = void function(ScrnInfoPtr);
 
 /*
  * ScrnInfoRec
@@ -787,7 +806,7 @@ struct _DGAFunctionRec {
     void function(ScrnInfoPtr pScrn, int srcx, int srcy, int w, int h, int dstx, int dsty) BlitRect;
     void function(ScrnInfoPtr pScrn, int srcx, int srcy, int w, int h, int dstx, int dsty, c_ulong color) BlitTransRect;
 }alias DGAFunctionRec = _DGAFunctionRec;
-alias DGAFunctionPtr = *;
+alias DGAFunctionPtr = DGAFunctionRec*;
 
 struct _SymTabRec {
     int token;                  /* id of the token */
