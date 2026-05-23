@@ -179,8 +179,8 @@ struct XkbPtrAction {
 
 enum string	XkbPtrActionX(string a) = `(` ~ Xkb2CharsToInt!(`(` ~ a ~ `).high_XXX`,`(` ~ a ~ `).low_XXX`) ~ `)`;
 enum string	XkbPtrActionY(string a) = `(` ~ Xkb2CharsToInt!(`(` ~ a ~ `).high_YYY`,`(` ~ a ~ `).low_YYY`) ~ `)`;
-enum string	XkbSetPtrActionX(string a,string x) = `(` ~ XkbIntTo2Chars!(` ~ `x` ~ `,`(` ~ a ~ `).high_XXX`,`(` ~ a ~ `).low_XXX`) ~ `)`;
-enum string	XkbSetPtrActionY(string a,string y) = `(` ~ XkbIntTo2Chars!(` ~ `y` ~ `,`(` ~ a ~ `).high_YYY`,`(` ~ a ~ `).low_YYY`) ~ `)`;
+enum string	XkbSetPtrActionX(string a,string x) = `(` ~ XkbIntTo2Chars!(x,`(` ~ a ~ `).high_XXX`,`(` ~ a ~ `).low_XXX`) ~ `)`;
+enum string	XkbSetPtrActionY(string a,string y) = `(` ~ XkbIntTo2Chars!(y,`(` ~ a ~ `).high_YYY`,`(` ~ a ~ `).low_YYY`) ~ `)`;
 
 struct XkbPtrBtnAction {
     ubyte type;
@@ -654,7 +654,7 @@ struct _XkbDeviceInfo {
 alias XkbDeviceInfoPtr = _XkbDeviceInfo*;
 
 enum string	XkbXI_DevHasBtnActs(string d) = `((` ~ d ~ `).num_btns > 0 && (` ~ d ~ `).btn_acts)`;
-enum string	XkbXI_LegalDevBtn(string d,string b) = `(` ~ XkbXI_DevHasBtnActs!(` ~ `d` ~ `) ~ ` && (` ~ b ~ `) < (` ~ d ~ `).num_btns)`;
+enum string	XkbXI_LegalDevBtn(string d,string b) = `(` ~ XkbXI_DevHasBtnActs!(d) ~ ` && (` ~ b ~ `) < (` ~ d ~ `).num_btns)`;
 enum string	XkbXI_DevHasLeds(string d) = `((` ~ d ~ `).num_leds > 0 && (` ~ d ~ `).leds)`;
 
 struct _XkbDeviceLedChanges {
