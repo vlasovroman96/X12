@@ -23,7 +23,7 @@ struct _XvMCSurfaceInfoRec {
     int flags;
     XvMCImageIDList* compatible_subpictures;
 }alias XvMCSurfaceInfoRec = _XvMCSurfaceInfoRec;
-alias XvMCSurfaceInfoPtr = *;
+alias XvMCSurfaceInfoPtr = XvMCSurfaceInfoRec*;
 
 struct _XvMCContextRec {
     XID context_id;
@@ -37,7 +37,7 @@ struct _XvMCContextRec {
     void* port_priv;
     void* driver_priv;
 }alias XvMCContextRec = _XvMCContextRec;
-alias XvMCContextPtr = *;
+alias XvMCContextPtr = XvMCContextRec*;
 
 struct _XvMCSurfaceRec {
     XID surface_id;
@@ -45,7 +45,7 @@ struct _XvMCSurfaceRec {
     XvMCContextPtr context;
     void* driver_priv;
 }alias XvMCSurfaceRec = _XvMCSurfaceRec;
-alias XvMCSurfacePtr = *;
+alias XvMCSurfacePtr = XvMCSurfaceRec*;
 
 struct _XvMCSubpictureRec {
     XID subpicture_id;
@@ -58,7 +58,7 @@ struct _XvMCSubpictureRec {
     XvMCContextPtr context;
     void* driver_priv;
 }alias XvMCSubpictureRec = _XvMCSubpictureRec;
-alias XvMCSubpicturePtr = *;
+alias XvMCSubpicturePtr = XvMCSubpictureRec*;
 
 alias XvMCCreateContextProcPtr = int function(XvPortPtr port, XvMCContextPtr context, int* num_priv, CARD32** priv);
 
@@ -85,7 +85,7 @@ struct _XvMCAdaptorRec {
     XvMCCreateSubpictureProcPtr CreateSubpicture;
     XvMCDestroySubpictureProcPtr DestroySubpicture;
 }alias XvMCAdaptorRec = _XvMCAdaptorRec;
-alias XvMCAdaptorPtr = *;
+alias XvMCAdaptorPtr = XvMCAdaptorRec*;
 
 extern _X_EXPORT XvMCScreenInit(ScreenPtr pScreen, int num, XvMCAdaptorPtr adapt);
 
