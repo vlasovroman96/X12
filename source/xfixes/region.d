@@ -657,7 +657,7 @@ private int PanoramiXFixesSetGCClipRegion(ClientPtr client, xXFixesSetGCClipRegi
         result = SingleXFixesSetGCClipRegion(client, stuff);
         if (result != Success)
             break;
-    }){}
+    });
 
     return result;
 }
@@ -691,7 +691,7 @@ private int PanoramiXFixesSetWindowShapeRegion(ClientPtr client, xXFixesSetWindo
 
         if (result != Success)
             break;
-    }){}
+    });
 
     return result;
 }
@@ -725,7 +725,7 @@ private int PanoramiXFixesSetPictureClipRegion(ClientPtr client, xXFixesSetPictu
 
         if (result != Success)
             break;
-    }){}
+    });
 
     return result;
 }
