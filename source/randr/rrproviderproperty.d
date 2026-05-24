@@ -382,7 +382,7 @@ int ProcRRQueryProviderProperty(ClientPtr client)
     xRRQueryProviderPropertyReply reply = {
         pending: prop.is_pending,
         range: prop.range,
-        immutable: prop.immutable_
+        c_immutable: prop.immutable_
     };
 
     return X_SEND_REPLY_WITH_RPCBUF(client, reply, rpcbuf);
@@ -535,17 +535,17 @@ int ProcRRGetProviderProperty(ClientPtr client)
     c_ulong n = void, len = void, ind = void;
     RRProviderPtr provider = void;
 
-    if (stuff.delete)
+    if (stuff.c_delete)
         UpdateCurrentTime();
     VERIFY_RR_PROVIDER(stuff.provider, provider,
-                     stuff.delete ? DixWriteAccess : DixReadAccess);
+                     stuff.c_delete ? DixWriteAccess : DixReadAccess);
 
     if (!ValidAtom(stuff.property)) {
         client.errorValue = stuff.property;
         return BadAtom;
     }
-    if ((stuff.delete != xTrue) && (stuff.delete != xFalse)) {
-        client.errorValue = stuff.delete;
+    if ((stuff.c_delete != xTrue) && (stuff.c_delete != xFalse)) {
+        client.errorValue = stuff.c_delete;
         return BadValue;
     }
     if ((stuff.type != AnyPropertyType) && !ValidAtom(stuff.type)) {
@@ -564,7 +564,7 @@ int ProcRRGetProviderProperty(ClientPtr client)
     if (!prop)
         goto sendout;
 
-    if (prop.immutable_ && stuff.delete)
+    if (prop.immutable_ && stuff.c_delete)
         return BadAccess;
 
     prop_value = RRGetProviderProperty(provider, stuff.property, stuff.pending);
@@ -609,7 +609,7 @@ int ProcRRGetProviderProperty(ClientPtr client)
         reply.nItems = len / (prop_value.format / 8);
     reply.propertyType = prop_value.type;
 
-    if (stuff.delete && (reply.bytesAfter == 0)) {
+    if (stuff.c_delete && (reply.bytesAfter == 0)) {
         xRRProviderPropertyNotifyEvent event = {
             type: RREventBase + RRNotify,
             subCode: RRNotify_ProviderProperty,
@@ -642,7 +642,7 @@ int ProcRRGetProviderProperty(ClientPtr client)
         }
     }
 
-    if (stuff.delete && (reply.bytesAfter == 0)) {     /* delete the Property */
+    if (stuff.c_delete && (reply.bytesAfter == 0)) {     /* delete the Property */
         *prev = prop.next;
         RRDestroyProviderProperty(prop);
     }
