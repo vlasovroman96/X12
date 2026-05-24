@@ -45,7 +45,7 @@ import ospoll;
 import list;
 
 static if (!HAVE_OSPOLL && HasVersion!"HAVE_POLLSET_CREATE") {
-import sys/pollset;
+import sys.pollset;
 enum POLLSET =         1;
 enum HAVE_OSPOLL =     1;
 }
@@ -58,7 +58,7 @@ enum HAVE_OSPOLL =     1;
 }
 
 static if (!HAVE_OSPOLL && HasVersion!"HAVE_EPOLL_CREATE1") {
-import sys/epoll;
+import sys.epoll;
 enum EPOLL =           1;
 enum HAVE_OSPOLL =     1;
 }
@@ -167,7 +167,7 @@ private void ospoll_clean_deleted(ospoll* ospoll)
 {
     ospollfd* osfd = void, tmp = void;
 
-    xorg_list_for_each_entry_safe(osfd, tmp, &ospoll.deleted, deleted) {
+    xorg_list_for_each_entry_safe(osfd, tmp, &ospoll.deleted, deleted); {
         xorg_list_del(&osfd.deleted);
         free(osfd);
     }
