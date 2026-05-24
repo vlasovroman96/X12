@@ -50,12 +50,12 @@ SOFTWARE.
 
 import build.dix_config;
 
-import	X11/X;
-import	X11/Xmd;
-import	X11/Xproto;
+import	X11.X;
+import	X11.Xmd;
+import	X11.Xproto;
 import	misc;
-import	X11/fonts/fontstruct;
-import        X11/fonts/libxfont2;
+import	X11.fonts.fontstruct;
+import        X11.fonts.libxfont2;
 import	dixfontstr;
 import	gcstruct;
 import	windowstr;
@@ -63,6 +63,7 @@ import	scrnintstr;
 import	pixmap;
 import	servermd;
 import        mi;
+import dixfontstr.h;
 
 /*
     machine-independent glyph blt.
@@ -145,13 +146,17 @@ void miPolyGlyphBlt(DrawablePtr pDrawable, GCPtr pGC, int x, int y, uint nglyph,
             nbyGlyphWidth = GLYPHWIDTHBYTESPADDED(pci);
             nbyPadGlyph = BitmapBytePad(gWidth);
 
-            if (nbyGlyphWidth == nbyPadGlyph
-#if GLYPHPADBYTES != 4
-                && ((cast(int) pglyph) & 3) == 0
-#endif
-                ) {
-                pb = pglyph;
+            if (nbyGlyphWidth == nbyPadGlyph)
+static if(GLYPHPADBYTES != 4) {
+                if (((cast(int) pglyph) & 3) == 0){
+                    pb = pglyph;
+                }
+                else {}
+            pb = pglyph;
             }
+else {
+                pb = pglyph;
+}
             else {
                 for (i = 0, pb = pbits; i < gHeight;
                      i++, pb = pbits + (i * nbyPadGlyph))
