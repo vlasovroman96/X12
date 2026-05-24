@@ -26,7 +26,7 @@ void ddxGiveUp(ExitCode error);
 
 void ddxInputThreadInit();
 
-void OsVendorFatalError(const(char)* f, va_list args); _X_ATTRIBUTE_PRINTF(1, 0);
+void OsVendorFatalError(const(char)* f, va_list args);
 void OsVendorInit();
 
  /* _XSERVER_OS_DDX_PRIV_H */
