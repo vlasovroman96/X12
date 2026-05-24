@@ -976,7 +976,7 @@ private int ProcRenderAddGlyphs(ClientPtr client)
 
                 FreePicture(cast(void*) pSrc, 0);
                 FreeScratchPixmapHeader(pSrcPix);
-            }){}
+            });
 
             memcpy(glyph_new.glyph.sha1, glyph_new.sha1, 20);
         }
@@ -1260,7 +1260,7 @@ private CARD32[DITHER_DIM][DITHER_DIM] orderedDither = [
     [4, 2,],
 ];
 
-enum DITHER_SIZE =  ((sizeof orderedDither / sizeof orderedDither[0][0]) + 1);
+enum DITHER_SIZE =  ((orderedDither.sizeof / orderedDither[0][0].sizeof) + 1);
 
 private int ProcRenderCreateCursor(ClientPtr client)
 {
@@ -1437,7 +1437,7 @@ private int ProcRenderCreateCursor(ClientPtr client)
     }
 
 enum string GetByte(string p,string s) = `(((` ~ p ~ `) >> (` ~ s ~ `)) & 0xff)`;
-enum string GetColor(string p,string s) = `(` ~ GetByte!(` ~ `p` ~ `,` ~ `s` ~ `) ~ ` | (` ~ GetByte!(` ~ `p` ~ `,` ~ `s` ~ `) ~ ` << 8))`;
+enum string GetColor(string p,string s) = `(` ~ GetByte!(p,s) ~ ` | (` ~ GetByte!(p,s) ~ ` << 8))`;
 
     cm.width = width;
     cm.height = height;
@@ -1866,7 +1866,7 @@ enum string VERIFY_XIN_ALPHA(string pPicture, string pid, string client, string 
     if (` ~ pid ~ ` == None) 
 	` ~ pPicture ~ ` = 0; 
     else { 
-	` ~ VERIFY_XIN_PICTURE!(` ~ `pPicture` ~ `, ` ~ `pid` ~ `, ` ~ `client` ~ `, ` ~ `mode` ~ `) ~ `; 
+	` ~ VERIFY_XIN_PICTURE!(pPicture, pid, client, mode) ~ `; 
     } 
 } 
 `;
@@ -1897,7 +1897,7 @@ private int PanoramiXRenderCreatePicture(ClientPtr client, xRenderCreatePictureR
         result = SingleRenderCreatePicture(client, stuff);
         if (result != Success)
             break;
-    }){}
+    });
 
     if (result == Success)
         AddResource(newPict.info[0].id, XRT_PICTURE, newPict);
@@ -1918,7 +1918,7 @@ private int PanoramiXRenderChangePicture(ClientPtr client, xRenderChangePictureR
         result = SingleRenderChangePicture(client, stuff, pict.info[walkScreenIdx].id);
         if (result != Success)
             break;
-    }){}
+    });
 
     return result;
 }
@@ -1934,7 +1934,7 @@ private int PanoramiXRenderSetPictureClipRectangles(ClientPtr client, xRenderSet
         result = SingleRenderSetPictureClipRectangles(client, stuff, pict.info[walkScreenIdx].id);
         if (result != Success)
             break;
-    }){}
+    });
 
     return result;
 }
@@ -1951,7 +1951,7 @@ private int PanoramiXRenderSetPictureTransform(ClientPtr client, xRenderSetPictu
         result = SingleRenderSetPictureTransform(client, stuff);
         if (result != Success)
             break;
-    }){}
+    });
 
     return result;
 }
@@ -1968,7 +1968,7 @@ private int PanoramiXRenderSetPictureFilter(ClientPtr client, xRenderSetPictureF
         result = SingleRenderSetPictureFilter(client, stuff);
         if (result != Success)
             break;
-    }){}
+    });
 
     return result;
 }
@@ -1989,7 +1989,7 @@ private int PanoramiXRenderFreePicture(ClientPtr client)
         result = SingleRenderFreePicture(client);
         if (result != Success)
             break;
-    }){}
+    });
 
     /* Since ProcRenderFreePicture is using FreeResource, it will free
        our resource for us on the last pass through the loop above */
@@ -2030,7 +2030,7 @@ private int PanoramiXRenderComposite(ClientPtr client, xRenderCompositeReq* orig
         result = SingleRenderComposite(client, &sub_req);
         if (result != Success)
             break;
-    }){}
+    });
 
     return result;
 }
@@ -2067,7 +2067,7 @@ private int PanoramiXRenderCompositeGlyphs(ClientPtr client, xRenderCompositeGly
             result = SingleRenderCompositeGlyphs(client, stuff);
             if (result != Success)
                 break;
-        }){}
+        });
     }
 
     return result;
@@ -2107,7 +2107,7 @@ private int PanoramiXRenderFillRectangles(ClientPtr client, xRenderFillRectangle
             result = SingleRenderFillRectangles(client, stuff);
             if (result != Success)
                 break;
-        }){}
+        });
 
         free(extra);
     }
@@ -2164,7 +2164,7 @@ private int PanoramiXRenderTrapezoids(ClientPtr client, xRenderTrapezoidsReq* st
 
             if (result != Success)
                 break;
-        }){}
+        });
 
         free(extra);
     }
@@ -2217,7 +2217,7 @@ private int PanoramiXRenderTriangles(ClientPtr client, xRenderTrianglesReq* stuf
 
             if (result != Success)
                 break;
-        }){}
+        });
 
         free(extra);
     }
@@ -2266,7 +2266,7 @@ private int PanoramiXRenderTriStrip(ClientPtr client, xRenderTriStripReq* stuff)
 
             if (result != Success)
                 break;
-        }){}
+        });
 
         free(extra);
     }
@@ -2314,7 +2314,7 @@ private int PanoramiXRenderTriFan(ClientPtr client, xRenderTriFanReq* stuff)
 
             if (result != Success)
                 break;
-        }){}
+        });
 
         free(extra);
     }
@@ -2349,7 +2349,7 @@ private int PanoramiXRenderAddTraps(ClientPtr client, xRenderAddTrapsReq* stuff)
             result = SingleRenderAddTraps(client, stuff);
             if (result != Success)
                 break;
-        }){}
+        });
 
         free(extra);
     }
@@ -2374,7 +2374,7 @@ private int PanoramiXRenderCreateSolidFill(ClientPtr client, xRenderCreateSolidF
         result = SingleRenderCreateSolidFill(client, stuff);
         if (result != Success)
             break;
-    }){}
+    });
 
     if (result == Success)
         AddResource(newPict.info[0].id, XRT_PICTURE, newPict);
@@ -2401,7 +2401,7 @@ private int PanoramiXRenderCreateLinearGradient(ClientPtr client, xRenderCreateL
         result = SingleRenderCreateLinearGradient(client, stuff);
         if (result != Success)
             break;
-    }){}
+    });
 
     if (result == Success)
         AddResource(newPict.info[0].id, XRT_PICTURE, newPict);
@@ -2428,7 +2428,7 @@ private int PanoramiXRenderCreateRadialGradient(ClientPtr client, xRenderCreateR
         result = SingleRenderCreateRadialGradient(client, stuff);
         if (result != Success)
             break;
-    }){}
+    });
 
     if (result == Success)
         AddResource(newPict.info[0].id, XRT_PICTURE, newPict);
@@ -2455,7 +2455,7 @@ private int PanoramiXRenderCreateConicalGradient(ClientPtr client, xRenderCreate
         result = SingleRenderCreateConicalGradient(client, stuff);
         if (result != Success)
             break;
-    }){}
+    });
 
     if (result == Success)
         AddResource(newPict.info[0].id, XRT_PICTURE, newPict);
