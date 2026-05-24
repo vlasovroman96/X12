@@ -32,7 +32,7 @@ public import core.sys.posix.sys.types;
 alias string = const(char)*;
 alias const_uint8_p = const(ubyte)*;
 alias const_double_p = const(double)*;
-public import Xserver-dtrace;
+public import Xserver_dtrace;
 }
 
  /* XORG_PROBES_H */
