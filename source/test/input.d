@@ -52,9 +52,9 @@ import windowstr;
 import inputstr;
 import exglobals;
 import eventstr;
-import assert;
+// import assert;
 
-import tests-common;
+import tests_common;
 
 /**
  * Init a device with axes.

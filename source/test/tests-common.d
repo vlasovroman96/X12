@@ -1,4 +1,4 @@
-module tests-common.c;
+module test.tests_common;
 @nogc nothrow:
 extern(C): __gshared:
 import core.sys.posix.sys.types;
@@ -7,7 +7,7 @@ import core.stdc.stdlib;
 import core.stdc.stdio;
 import core.sys.posix.unistd;
 
-import tests-common;
+import tests_common;
 
 void run_test_in_child(const(testfunc_t)* function() suite, const(char)* funcname)
 {

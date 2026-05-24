@@ -10,7 +10,7 @@ import core.stdc.stdio;
 import hashtable;
 import resource;
 
-import tests-common;
+import tests_common;
 
 private void print_xid(void* ptr, void* v)
 {

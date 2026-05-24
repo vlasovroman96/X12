@@ -1,4 +1,4 @@
-module touch.c;
+module test.touch;
 @nogc nothrow:
 extern(C): __gshared:
 /**
@@ -33,9 +33,9 @@ import dix.atom_priv;
 import dix.input_priv;
 
 import inputstr;
-import assert;
+// import assert;
 import scrnintstr;
-import tests-common;
+import tests_common;
 
 private void free_device(DeviceIntPtr dev)
 {

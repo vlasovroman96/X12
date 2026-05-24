@@ -37,7 +37,7 @@ import misc;
 import scrnintstr;
 import dix;
 import dixstruct;
-import tests-common;
+import tests_common;
 
 private void dix_version_compare()
 {

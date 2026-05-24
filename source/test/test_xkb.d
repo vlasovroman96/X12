@@ -27,7 +27,7 @@ extern(C): __gshared:
 /* Test relies on assert() */
 import build.dix_config;
 
-import xkb-config;
+import xkb_config;
 
 import core.stdc.stdio;
 import core.stdc.stdlib;
@@ -45,11 +45,11 @@ import misc;
 import inputstr;
 import opaque;
 import property;
-import ...xkb.xkbgeom_priv;
+import xkb.xkbgeom_priv;
 import deimos.X11.extensions.XKMformat;
 import core.stdc.assert_;
 
-import tests-common;
+import tests_common;
 
 /**
  * Initialize an empty XkbRMLVOSet.

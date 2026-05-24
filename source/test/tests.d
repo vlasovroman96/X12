@@ -3,7 +3,7 @@ module tests.c;
 extern(C): __gshared:
 import core.stdc.string;
 import tests;
-import tests-common;
+import tests_common;
 
 int verbose = 0;
 

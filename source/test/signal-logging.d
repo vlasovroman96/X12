@@ -1,4 +1,4 @@
-module signal-logging.c;
+module test.signal_logging;
 @nogc nothrow:
 extern(C): __gshared:
 import core.stdc.config: c_long, c_ulong;
@@ -34,10 +34,10 @@ import core.sys.posix.unistd;
 import os.fmt;
 import os.log_priv;
 
-import assert;
+// import assert;
 import misc;
 
-import tests-common;
+import tests_common;
 
 struct number_format_test {
     ulong number;
@@ -119,8 +119,8 @@ double[10] float_tests = [ 0, 5, 0.1, 0.01, 5.2342, 10.2301,
                          -1, -2.00, -0.6023, -1203.30
                         ];
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Woverflow"
+// #pragma GCC diagnostic push
+// #pragma GCC diagnostic ignored "-Woverflow"
 
 private void number_formatting()
 {
@@ -159,12 +159,12 @@ private void number_formatting()
     for (i = 0; i < ARRAY_SIZE(float_tests.ptr); i++)
         assert(check_float_format_test(float_tests[i]));
 }
-#pragma GCC diagnostic pop
+// #pragma GCC diagnostic pop
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wformat-security"
-#pragma GCC diagnostic ignored "-Wformat"
-#pragma GCC diagnostic ignored "-Wformat-extra-args"
+// #pragma GCC diagnostic push
+// #pragma GCC diagnostic ignored "-Wformat-security"
+// #pragma GCC diagnostic ignored "-Wformat"
+// #pragma GCC diagnostic ignored "-Wformat-extra-args"
 private void logging_format()
 {
     const(char)* log_file_path = "/tmp/Xorg-logging-test.log";
@@ -404,7 +404,7 @@ version (__sun) { /* Solaris doesn't autoadd "0x" to %p format */
     unlink(log_file_path);
 
 }
-#pragma GCC diagnostic pop /* "-Wformat-security" */
+// #pragma GCC diagnostic pop /* "-Wformat-security" */
 
 const(testfunc_t)* signal_logging_test()
 {

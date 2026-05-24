@@ -41,9 +41,9 @@ import scrnintstr;
 import windowstr;
 import exevents;
 import xkbsrv;
-import xserver-properties;
+import xserver_properties;
 import syncsrv;
-import tests-common;
+import tests_common;
 
 /**
  */

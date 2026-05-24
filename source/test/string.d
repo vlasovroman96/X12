@@ -1,4 +1,4 @@
-module string.c;
+module test.string;
 @nogc nothrow:
 extern(C): __gshared:
 /*
@@ -34,14 +34,14 @@ import build.dix_config;
 
 import core.stdc.assert_;
 import os;
-import tests-common;
+import tests_common;
 
 /* Ensure we're testing our functions, even on platforms with libc versions */
 import core.stdc.string;
 enum strndup = my_strndup;
 char* strndup(const(char)* str, size_t n);
 
-import ...os.strndup;
+// import os.strndup;
 
 private void strndup_checks()
 {

@@ -1,4 +1,4 @@
-module simple-xinit.c;
+module simple_xinit.c;
 @nogc nothrow:
 extern(C): __gshared:
 /*
