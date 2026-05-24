@@ -62,19 +62,19 @@ struct _XvRationalRec {
     int numerator;
     int denominator;
 }alias XvRationalRec = _XvRationalRec;
-alias XvRationalPtr = *;
+alias XvRationalPtr = XvRationalRec*;
 
 struct _XvFormatRec {
     char depth = 0;
     c_ulong visual;
 }alias XvFormatRec = _XvFormatRec;
-alias XvFormatPtr = *;
+alias XvFormatPtr = XvFormatRec*;
 
 struct _XvGrabRec {
     c_ulong id;
     ClientPtr client;
 }alias XvGrabRec = _XvGrabRec;
-alias XvGrabPtr = *;
+alias XvGrabPtr = XvGrabRec*;
 
 alias XvPortNotifyPtr = _XvPortNotifyRec*;
 
@@ -85,7 +85,7 @@ struct _XvEncodingRec {
     ushort width, height;
     XvRationalRec rate;
 }alias XvEncodingRec = _XvEncodingRec;
-alias XvEncodingPtr = *;
+alias XvEncodingPtr = XvEncodingRec*;
 
 struct _XvAttributeRec {
     int flags;
@@ -123,7 +123,7 @@ struct _XvImageRec {
     char[32] component_order = 0;
     int scanline_order;
 }alias XvImageRec = _XvImageRec;
-alias XvImagePtr = *;
+alias XvImagePtr = XvImageRec*;
 
 struct _XvAdaptorRec {
     c_ulong base_id;
@@ -152,7 +152,7 @@ struct _XvAdaptorRec {
     int function(_XvPortRec*, XvImagePtr, CARD16*, CARD16*, int*, int*) ddQueryImageAttributes;
     DevUnion devPriv;
 }alias XvAdaptorRec = _XvAdaptorRec;
-alias XvAdaptorPtr = *;
+alias XvAdaptorPtr = XvAdaptorRec*;
 
 struct _XvPortRec {
     c_ulong id;
@@ -174,10 +174,10 @@ struct _XvScreenRec {
     void* _dummy2; // required in place of a removed field for ABI compatibility
     void* _dummy3; // required in place of a removed field for ABI compatibility
 }alias XvScreenRec = _XvScreenRec;
-alias XvScreenPtr = *;
+alias XvScreenPtr = XvScreenRec*;
 
 extern _X_EXPORT XvScreenInit(ScreenPtr);
-extern _X_EXPORT DevPrivateKey; XvGetScreenKey(void);
+extern DevPrivateKey XvGetScreenKey(void);
 extern _X_EXPORT unsigned; c_long XvGetRTPort();
 
                           /* XVDIX_H */
