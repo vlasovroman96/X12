@@ -86,7 +86,7 @@ struct _RecordContextRec {
     char[REPLY_BUF_SIZE] replyBuffer = 0;   /* buffered recorded protocol */
     int inFlush;                /*  are we inside RecordFlushReplyBuffer */
 }alias RecordContextRec = _RecordContextRec;
-alias RecordContextPtr = *;
+alias RecordContextPtr = RecordContextRec*;
 
 /*  RecordMinorOpRec - to hold minor opcode selections for extension requests
  *  and replies
@@ -100,7 +100,7 @@ union _RecordMinorOpRec {
         RecordSetPtr pMinOpSet; /*  minor opcode set for above major range */
     }_Major major;
 }alias RecordMinorOpRec = _RecordMinorOpRec;
-alias RecordMinorOpPtr = *;
+alias RecordMinorOpPtr = RecordMinorOpRec*;
 
 /*  RecordClientsAndProtocolRec, nicknamed RCAP - holds all the client and
  *  protocol selections passed in a single CreateContext or RegisterClients.
@@ -169,7 +169,7 @@ struct _RecordClientPrivateRec {
  */
     ProcFunctionPtr[256] recordVector;
 }alias RecordClientPrivateRec = _RecordClientPrivateRec;
-alias RecordClientPrivatePtr = *;
+alias RecordClientPrivatePtr = RecordClientPrivateRec*;
 
 private DevPrivateKeyRec RecordClientPrivateKeyRec;
 
@@ -180,7 +180,7 @@ enum RecordClientPrivateKey = (&RecordClientPrivateKeyRec);
  */
 enum string RecordClientPrivate(string _pClient) = `cast(RecordClientPrivatePtr) 
     dixLookupPrivate(&(` ~ _pClient ~ `).devPrivates, RecordClientPrivateKey)`;
-
+
 /***************************************************************************/
 
 /* global list of all contexts */
@@ -677,14 +677,14 @@ private void RecordADeliveredEventOrError(CallbackListPtr* pcbl, void* nulldata,
                 }
                 else if (pRCAP.pDeliveredEventSet) {
                     recordit = RecordIsMemberOfSet(pRCAP.pDeliveredEventSet,
-                                                   pev.u.u.type & 0177);
+                                                   pev.u.u.type & octal!"0177");
                 }
                 if (recordit) {
                     xEvent swappedEvent = void;
                     xEvent* pEvToRecord = pev;
 
                     if (pClient.swapped) {
-                        (*EventSwapVector[pev.u.u.type & 0177])
+                        (*EventSwapVector[pev.u.u.type & octal!"0177"])
                             (pev, &swappedEvent);
                         pEvToRecord = &swappedEvent;
 
@@ -703,7 +703,7 @@ private void RecordSendProtocolEvents(RecordClientsAndProtocolPtr pRCAP, RecordC
     int ev = void;                     /* event index */
 
     for (ev = 0; ev < count; ev++, pev++) {
-        if (RecordIsMemberOfSet(pRCAP.pDeviceEventSet, pev.u.u.type & 0177)) {
+        if (RecordIsMemberOfSet(pRCAP.pDeviceEventSet, pev.u.u.type & octal!"0177")) {
             xEvent swappedEvent = void;
             xEvent* pEvToRecord = pev;
 
@@ -728,7 +728,7 @@ version (XINERAMA) {
 } /* XINERAMA */
 
             if (pContext.pRecordingClient.swapped) {
-                (*EventSwapVector[pEvToRecord.u.u.type & 0177])
+                (*EventSwapVector[pEvToRecord.u.u.type & octal!"0177"])
                     (pEvToRecord, &swappedEvent);
                 pEvToRecord = &swappedEvent;
             }
@@ -1375,7 +1375,7 @@ struct _SetInfoRec {
     int offset;                 /* where to store set pointer rel. to start of RCAP */
     short first, last;          /* if for extension, major opcode interval */
 }alias SetInfoRec = _SetInfoRec;
-alias SetInfoPtr = *;
+alias SetInfoPtr = SetInfoRec*;
 
 /* These constant are used to index into an array of SetInfoRec. */
 enum { REQ,                     /* set info for requests */
@@ -1937,7 +1937,7 @@ struct _GetContextRangeInfoRec {
     int size;                   /* number of elements in pRanges, >= nRanges */
     int nRanges;                /* number of occupied element of pRanges */
 }alias GetContextRangeInfoRec = _GetContextRangeInfoRec;
-alias GetContextRangeInfoPtr = *;
+alias GetContextRangeInfoPtr = GetContextRangeInfoRec*;
 
 /* RecordAllocRanges
  *
