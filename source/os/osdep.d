@@ -106,7 +106,7 @@ void TimerInit();
 /* must be exported for backwards compatibility with legacy nvidia390,
  * not for use in maintained drivers
  */
-_X_EXPORT Bool TimerForce(OsTimerPtr);
+Bool TimerForce(OsTimerPtr);
 
 static if (HasVersion!"Windows" && ! HasVersion!"Cygwin") {
 public import deimos.X11.Xwinsock;
@@ -146,8 +146,8 @@ _X_EXPORT OsBlockSignals();
 _X_EXPORT OsReleaseSignals();
 
 void OsResetSignals();
-void OsAbort(); _X_NORETURN;
-void AbortServer(); _X_NORETURN;
+void OsAbort();
+void AbortServer();
 
 void MakeClientGrabPervious(ClientPtr client);
 void MakeClientGrabImpervious(ClientPtr client);
@@ -174,9 +174,9 @@ extern Bool NoListenAll;
  */
 void* XNFreallocarray(void* ptr, size_t nmemb, size_t size);
 
-static if mixin((__has_builtin!(`__builtin_popcountl`)) {)
-enum Ones = __builtin_popcountl;
-} else {
+// static if mixin((__has_builtin!(`__builtin_popcountl`)) {)
+// enum Ones = __builtin_popcountl;
+// } else {
 /*
  * Count the number of bits set to 1 in a 32-bit word.
  * Algorithm from MIT AI Lab Memo 239: "HAKMEM", ITEM 169.
@@ -186,9 +186,9 @@ pragma(inline, true) private int Ones(c_ulong mask)
 {
     c_ulong y = void;
 
-    y = (mask >> 1) & 033333333333;
-    y = mask - y - ((y >> 1) & 033333333333);
-    return (((y + (y >> 3)) & 030707070707) % 077);
+    y = (mask >> 1) & octal!"033333333333";
+    y = mask - y - ((y >> 1) & octal!"033333333333");
+    return (((y + (y >> 3)) & octal!"030707070707") % octal!"077");
 }
 }
 
@@ -221,5 +221,4 @@ extern sig_atomic_t inSignalContext;
 
 /* run timers that are expired at timestamp `now` */
 void DoTimers(CARD32 now);
-
-}                          /* _OSDEP_H_ */
+                   /* _OSDEP_H_ */
