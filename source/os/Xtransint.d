@@ -87,8 +87,8 @@ public import core.stdc.errno;
 
 version (Windows) {} else {
 public import core.sys.posix.sys.socket;
-public import netinet/in;
-public import arpa/inet;
+public import netinet.in_;
+public import arpa.inet;
 enum string ESET(string val) = `errno = ` ~ val ~ ``;
 enum string EGET() = `errno`;
 
@@ -182,16 +182,16 @@ struct Xtransport_table {
  * Flags for the flags member of Xtransport.
  */
 
-enum TRANS_ALIAS =	(1<<0)	/* record is an alias, don't create server */;
-enum TRANS_LOCAL =	(1<<1)	/* local transport */;
-enum TRANS_DISABLED =	(1<<2)	/* Don't open this one */;
-enum TRANS_NOLISTEN =  (1<<3)  /* Don't listen on this one */;
+enum TRANS_ALIAS =	(1<<0);	/* record is an alias, don't create server */;
+enum TRANS_LOCAL =	(1<<1);	/* local transport */;
+enum TRANS_DISABLED =	(1<<2);	/* Don't open this one */;
+enum TRANS_NOLISTEN =  (1<<3);  /* Don't listen on this one */;
 enum TRANS_NOUNLINK =	(1<<4)	/* Don't unlink transport endpoints */;
-enum TRANS_ABSTRACT =	(1<<5)	/* This previously meant that abstract sockets should be used available.  For security;
+enum TRANS_ABSTRACT =	(1<<5);	/* This previously meant that abstract sockets should be used available.  For security;
                                  * reasons, this_ is_ now; a no;-op on the; client side, but; it is_; still supported for servers.
                                  */
-enum TRANS_NOXAUTH =	(1<<6)	/* Don't verify authentication (because it's secure some other way at the OS layer) */;
-enum TRANS_RECEIVED =	(1<<7)  /* The fd for this has already been opened by someone else. */;
+enum TRANS_NOXAUTH =	(1<<6);	/* Don't verify authentication (because it's secure some other way at the OS layer) */;
+enum TRANS_RECEIVED =	(1<<7) ; /* The fd for this has already been opened by someone else. */;
 
 /* Flags to preserve when setting others */
 enum TRANS_KEEPFLAGS =	(TRANS_NOUNLINK|TRANS_ABSTRACT);
@@ -201,8 +201,8 @@ version (XTRANS_TRANSPORT_C) { /* only provide static function prototypes when
 
 version (__clang__) {
 /* Not all clients make use of all provided statics */
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wunused-function"
+// #pragma clang diagnostic push
+// #pragma clang diagnostic ignored "-Wunused-function"
 }
 
 version (UNIXCONN) {
@@ -210,7 +210,7 @@ private int trans_mkdir(const(char)*, int);
 } /* UNIXCONN */
 
 version (__clang__) {
-#pragma clang diagnostic pop
+// #pragma clang diagnostic pop
 }
 
 /*
