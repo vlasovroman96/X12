@@ -206,7 +206,7 @@ struct present_window_priv {
     xorg_list notifies;
 }
 
-enum PresentCrtcNeverSet =     ((RRCrtcPtr) 1);
+enum PresentCrtcNeverSet =     cast(RRCrtcPtr) 1;
 
 extern DevPrivateKeyRec present_window_private_key;
 
@@ -360,13 +360,13 @@ void present_vblank_scrap(present_vblank_ptr vblank);
 
 void present_vblank_destroy(present_vblank_ptr vblank);
 
-/* only for in-tree modesetting */ _X_EXPORT void present_check_flips(WindowPtr window);
+/* only for in-tree modesetting */ void present_check_flips(WindowPtr window);
 
 alias present_complete_notify_proc = void function(WindowPtr window, CARD8 kind, CARD8 mode, CARD32 serial, ulong ust, ulong msc);
 
-/* only for in-tree GLX module */ _X_EXPORT void present_register_complete_notify(present_complete_notify_proc proc);
+/* only for in-tree GLX module */ void present_register_complete_notify(present_complete_notify_proc proc);
 
-/* only for in-tree modesetting */ _X_EXPORT Bool present_can_window_flip(WindowPtr window);
+/* only for in-tree modesetting */ Bool present_can_window_flip(WindowPtr window);
 
 extern uint FakeScreenFps;
 
