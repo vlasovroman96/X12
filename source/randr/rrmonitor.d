@@ -204,7 +204,7 @@ private Bool RRMonitorInitList(ScreenPtr screen, RRMonitorListPtr mon_list, Bool
 
     /* Count the number of crtcs in this and any secondary screens */
     numCrtcs = pScrPriv.numCrtcs;
-    xorg_list_for_each_entry(secondary, &screen.secondary_list, secondary_head) {
+    xorg_list_for_each_entry(secondary, &screen.secondary_list, secondary_head); {
         rrScrPrivPtr pSecondaryPriv = void;
 
         if (!secondary.is_output_secondary)
@@ -226,7 +226,7 @@ private Bool RRMonitorInitList(ScreenPtr screen, RRMonitorListPtr mon_list, Bool
             mon_list.server_crtc[c] = pScrPriv.crtcs[sc];
     }
 
-    xorg_list_for_each_entry(secondary, &screen.secondary_list, secondary_head) {
+    xorg_list_for_each_entry(secondary, &screen.secondary_list, secondary_head); {
         rrScrPrivPtr pSecondaryPriv = void;
 
         if (!secondary.is_output_secondary)
@@ -473,7 +473,7 @@ int RRMonitorAdd(ClientPtr client, ScreenPtr screen, RRMonitorPtr monitor)
         return BadValue;
     }
 
-    xorg_list_for_each_entry(secondary, &screen.secondary_list, secondary_head) {
+    xorg_list_for_each_entry(secondary, &screen.secondary_list, secondary_head); {
         if (!secondary.is_output_secondary)
             continue;
 
