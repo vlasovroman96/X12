@@ -61,7 +61,7 @@ void miPaintWindow(WindowPtr pWin, RegionPtr prgn, int what);
 void miSourceValidate(DrawablePtr pDrawable, int x, int y, int w, int h, uint subWindowMode);
 
 /* only exported for modesetting, not for external drivers (yet) */
-_X_EXPORT Bool miCreateScreenResources(ScreenPtr pScreen);
+Bool miCreateScreenResources(ScreenPtr pScreen);
 
 int miShapedWindowIn(RegionPtr universe, RegionPtr bounding, BoxPtr rect, int x, int y);
 int miValidateTree(WindowPtr pParent, WindowPtr pChild, VTKind kind);
