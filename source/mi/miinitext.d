@@ -77,7 +77,7 @@ SOFTWARE.
 import build.dix_config;
 
 version (HAVE_XORG_CONFIG_H) {
-import xorg-config;
+import xorg_config;
 import xf86Extensions;
 }
 
@@ -91,85 +91,258 @@ version (DISABLE_EXT_MITSHM) {
 import miext.extinit_priv;
 
 import misc;
-import extension;
+import include.extension;
 import micmap;
 import os;
 import globals;
 
 import miinitext;
 
-/* List of built-in (statically linked) extensions */
-private const(ExtensionModule)[31] staticExtensions = [
-    {GEExtensionInit, "Generic Event Extension", null},
-    {ShapeExtensionInit, "SHAPE", &noShapeExtension},
-#ifdef CONFIG_MITSHM
-    {ShmExtensionInit, "MIT-SHM", &noMITShmExtension},
-#endif /* CONFIG_MITSHM */
-    {XInputExtensionInit, "XInputExtension", null},
-#ifdef XTEST
-    {XTestExtensionInit, "XTEST", &noTestExtensions},
-#endif
-    {BigReqExtensionInit, "BIG-REQUESTS", null},
-    {SyncExtensionInit, "SYNC", null},
-    {XkbExtensionInit, "XKEYBOARD", null},
-    {XCMiscExtensionInit, "XC-MISC", null},
-#ifdef XCSECURITY
-    {SecurityExtensionInit, "SECURITY", &noSecurityExtension},
-#endif
-#ifdef CONFIG_NAMESPACE
-    {NamespaceExtensionInit, "NAMESPACE", &noNamespaceExtension},
-#endif
-#ifdef XINERAMA
-    {PanoramiXExtensionInit, "XINERAMA", &noPanoramiXExtension},
-#endif /* XINERAMA */
-    /* must be before Render to layer DisplayCursor correctly */
-    {XFixesExtensionInit, "XFIXES", &noXFixesExtension},
-#ifdef XF86BIGFONT
-    {XFree86BigfontExtensionInit, "XFree86-Bigfont", &noXFree86BigfontExtension},
-#endif
-    {RenderExtensionInit, "RENDER", &noRenderExtension},
-#ifdef RANDR
-    {RRExtensionInit, "RANDR", &noRRExtension},
-#endif
-#ifndef DISABLE_EXT_COMPOSITE
-    {CompositeExtensionInit, "COMPOSITE", &noCompositeExtension},
-#endif
-    {DamageExtensionInit, "DAMAGE", &noDamageExtension},
-#ifdef SCREENSAVER
-    {ScreenSaverExtensionInit, "MIT-SCREEN-SAVER", &noScreenSaverExtension},
-#endif
-#ifdef DBE
-    {DbeExtensionInit, "DOUBLE-BUFFER", &noDbeExtension},
-#endif
-#ifdef XRECORD
-    {RecordExtensionInit, "RECORD", &noTestExtensions},
-#endif
-#ifdef DPMSExtension
-    {DPMSExtensionInit, "DPMS", &noDPMSExtension},
-#endif
-#ifdef PRESENT
-    {present_extension_init, "Present", null},
-#endif
-#ifdef DRI2
-    {DRI2ExtensionInit, DRI2_NAME, &noDRI2Extension},
-#endif
-#ifdef DRI3
-    {dri3_extension_init, "DRI3", null},
-#endif
-#ifdef RES
-    {ResExtensionInit, "X-Resource", &noResExtension},
-#endif
-#ifdef XV
-    {XvExtensionInit, "XVideo", &noXvExtension},
-    {XvMCExtensionInit, "XVideo-MotionCompensation", &noXvExtension},
-#endif
-#ifdef XSELINUX
-    {SELinuxExtensionInit, "SELinux", &noSELinuxExtension},
-#endif
-#ifdef GLXEXT
-    {GlxExtensionInit, "GLX", &noGlxExtension},
-#endif
-];
+
+ExtensionModule[] list;
+
+private immutable ExtensionModule[] staticExtensions =
+{
+
+    list ~= ExtensionModule(
+        GEExtensionInit,
+        "Generic Event Extension",
+        null
+    );
+
+    list ~= ExtensionModule(
+        ShapeExtensionInit,
+        "SHAPE",
+        &noShapeExtension
+    );
+
+    version (CONFIG_MITSHM)
+    {
+        list ~= ExtensionModule(
+            ShmExtensionInit,
+            "MIT-SHM",
+            &noMITShmExtension
+        );
+    }
+
+    list ~= ExtensionModule(
+        XInputExtensionInit,
+        "XInputExtension",
+        null
+    );
+
+    version (XTEST)
+    {
+        list ~= ExtensionModule(
+            XTestExtensionInit,
+            "XTEST",
+            &noTestExtensions
+        );
+    }
+
+    list ~= ExtensionModule(
+        BigReqExtensionInit,
+        "BIG-REQUESTS",
+        null
+    );
+
+    list ~= ExtensionModule(
+        SyncExtensionInit,
+        "SYNC",
+        null
+    );
+
+    list ~= ExtensionModule(
+        XkbExtensionInit,
+        "XKEYBOARD",
+        null
+    );
+
+    list ~= ExtensionModule(
+        XCMiscExtensionInit,
+        "XC-MISC",
+        null
+    );
+
+    version (XCSECURITY)
+    {
+        list ~= ExtensionModule(
+            SecurityExtensionInit,
+            "SECURITY",
+            &noSecurityExtension
+        );
+    }
+
+    version (CONFIG_NAMESPACE)
+    {
+        list ~= ExtensionModule(
+            NamespaceExtensionInit,
+            "NAMESPACE",
+            &noNamespaceExtension
+        );
+    }
+
+    version (XINERAMA)
+    {
+        list ~= ExtensionModule(
+            PanoramiXExtensionInit,
+            "XINERAMA",
+            &noPanoramiXExtension
+        );
+    }
+
+    list ~= ExtensionModule(
+        XFixesExtensionInit,
+        "XFIXES",
+        &noXFixesExtension
+    );
+
+    version (XF86BIGFONT)
+    {
+        list ~= ExtensionModule(
+            XFree86BigfontExtensionInit,
+            "XFree86-Bigfont",
+            &noXFree86BigfontExtension
+        );
+    }
+
+    list ~= ExtensionModule(
+        RenderExtensionInit,
+        "RENDER",
+        &noRenderExtension
+    );
+
+    version (RANDR)
+    {
+        list ~= ExtensionModule(
+            RRExtensionInit,
+            "RANDR",
+            &noRRExtension
+        );
+    }
+
+    version (DISABLE_EXT_COMPOSITE)
+    {
+        list ~= ExtensionModule(
+            CompositeExtensionInit,
+            "COMPOSITE",
+            &noCompositeExtension
+        );
+    }
+
+    list ~= ExtensionModule(
+        DamageExtensionInit,
+        "DAMAGE",
+        &noDamageExtension
+    );
+
+    version (SCREENSAVER)
+    {
+        list ~= ExtensionModule(
+            ScreenSaverExtensionInit,
+            "MIT-SCREEN-SAVER",
+            &noScreenSaverExtension
+        );
+    }
+
+    version (DBE)
+    {
+        list ~= ExtensionModule(
+            DbeExtensionInit,
+            "DOUBLE-BUFFER",
+            &noDbeExtension
+        );
+    }
+
+    version (XRECORD)
+    {
+        list ~= ExtensionModule(
+            RecordExtensionInit,
+            "RECORD",
+            &noTestExtensions
+        );
+    }
+
+    version (DPMSExtension)
+    {
+        list ~= ExtensionModule(
+            DPMSExtensionInit,
+            "DPMS",
+            &noDPMSExtension
+        );
+    }
+
+    version (PRESENT)
+    {
+        list ~= ExtensionModule(
+            present_extension_init,
+            "Present",
+            null
+        );
+    }
+
+    version (DRI2)
+    {
+        list ~= ExtensionModule(
+            DRI2ExtensionInit,
+            DRI2_NAME,
+            &noDRI2Extension
+        );
+    }
+
+    version (DRI3)
+    {
+        list ~= ExtensionModule(
+            dri3_extension_init,
+            "DRI3",
+            null
+        );
+    }
+
+    version (RES)
+    {
+        list ~= ExtensionModule(
+            ResExtensionInit,
+            "X-Resource",
+            &noResExtension
+        );
+    }
+
+    version (XV)
+    {
+        list ~= ExtensionModule(
+            XvExtensionInit,
+            "XVideo",
+            &noXvExtension
+        );
+
+        list ~= ExtensionModule(
+            XvMCExtensionInit,
+            "XVideo-MotionCompensation",
+            &noXvExtension
+        );
+    }
+
+    version (XSELINUX)
+    {
+        list ~= ExtensionModule(
+            SELinuxExtensionInit,
+            "SELinux",
+            &noSELinuxExtension
+        );
+    }
+
+    version (GLXEXT)
+    {
+        list ~= ExtensionModule(
+            GlxExtensionInit,
+            "GLX",
+            &noGlxExtension
+        );
+    }
+
+    return list;
+}();
 
 void ListStaticExtensions()
 {
