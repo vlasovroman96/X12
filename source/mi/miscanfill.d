@@ -130,7 +130,7 @@ struct BRESINFO {
 }
 
 enum string BRESINITPGONSTRUCT(string dmaj, string min1, string min2, string bres) = `
-	` ~ BRESINITPGON!(` ~ `dmaj` ~ `, ` ~ `min1` ~ `, ` ~ `min2` ~ `, `` ~ bres ~ `.minor`, `` ~ bres ~ `.d`, 
+	` ~ BRESINITPGON!(dmaj, min1, min2, `` ~ bres ~ `.minor`, `` ~ bres ~ `.d`, 
                      `` ~ bres ~ `.m`, `` ~ bres ~ `.m1`, `` ~ bres ~ `.incr1`, `` ~ bres ~ `.incr2`) ~ ``;
 
 enum string BRESINCRPGONSTRUCT(string bres) = `
