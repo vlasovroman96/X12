@@ -81,7 +81,7 @@ private void RRClientCallback(CallbackListPtr* list, void* closure, void* data)
             pTimes[walkScreenIdx].setTime = pScrPriv.lastSetTime;
             pTimes[walkScreenIdx].configTime = pScrPriv.lastConfigTime;
         }
-    }){}
+    });
 }
 
 private void RRCloseScreen(CallbackListPtr* pcbl, ScreenPtr pScreen, void* unused)
@@ -92,7 +92,7 @@ private void RRCloseScreen(CallbackListPtr* pcbl, ScreenPtr pScreen, void* unuse
 
     dixScreenUnhookClose(pScreen, RRCloseScreen);
 
-    xorg_list_for_each_entry_safe(lease, next, &pScrPriv.leases, list)
+    xorg_list_for_each_entry_safe(lease, next, &pScrPriv.leases, list);
         RRTerminateLease(lease);
     for (j = pScrPriv.numCrtcs - 1; j >= 0; j--)
         RRCrtcDestroy(pScrPriv.crtcs[j]);
@@ -469,7 +469,7 @@ private int TellChanged(WindowPtr pWin, void* value)
                     RRDeliverCrtcEvent(client, pWin, crtc);
             }
 
-            xorg_list_for_each_entry(iter, &pScreen.secondary_list, secondary_head) {
+            xorg_list_for_each_entry(iter, &pScreen.secondary_list, secondary_head); {
                 if (!iter.is_output_secondary)
                     continue;
 
@@ -491,7 +491,7 @@ private int TellChanged(WindowPtr pWin, void* value)
                     RRDeliverOutputEvent(client, pWin, output);
             }
 
-            xorg_list_for_each_entry(iter, &pScreen.secondary_list, secondary_head) {
+            xorg_list_for_each_entry(iter, &pScreen.secondary_list, secondary_head); {
                 if (!iter.is_output_secondary)
                     continue;
 
@@ -506,7 +506,7 @@ private int TellChanged(WindowPtr pWin, void* value)
         }
 
         if (pRREvent.mask & RRProviderChangeNotifyMask) {
-            xorg_list_for_each_entry(iter, &pScreen.secondary_list, secondary_head) {
+            xorg_list_for_each_entry(iter, &pScreen.secondary_list, secondary_head); {
                 pSecondaryScrPriv = rrGetScrPriv(iter);
                 if (pSecondaryScrPriv.provider.changed)
                     RRDeliverProviderEvent(client, pWin, pSecondaryScrPriv.provider);
@@ -576,7 +576,7 @@ void RRTellChanged(ScreenPtr pScreen)
     if (!primary.root)
         return;
 
-    xorg_list_for_each_entry(iter, &primary.secondary_list, secondary_head) {
+    xorg_list_for_each_entry(iter, &primary.secondary_list, secondary_head); {
         pSecondaryScrPriv = rrGetScrPriv(iter);
 
         if (!iter.is_output_secondary)
@@ -606,7 +606,7 @@ void RRTellChanged(ScreenPtr pScreen)
         for (i = 0; i < pScrPriv.numCrtcs; i++)
             pScrPriv.crtcs[i].changed = FALSE;
 
-        xorg_list_for_each_entry(iter, &primary.secondary_list, secondary_head) {
+        xorg_list_for_each_entry(iter, &primary.secondary_list, secondary_head); {
             pSecondaryScrPriv = rrGetScrPriv(iter);
             pSecondaryScrPriv.provider.changed = FALSE;
             if (iter.is_output_secondary) {
