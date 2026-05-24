@@ -86,7 +86,7 @@ void busfault_check()
 
     busfaulted = FALSE;
 
-    xorg_list_for_each_entry_safe(busfault, tmp, &busfaults, list) {
+    xorg_list_for_each_entry_safe(busfault, tmp, &busfaults, list) ;{
         if (!busfault.valid)
             (*busfault.notify)(busfault.context);
     }
@@ -102,17 +102,17 @@ private void busfault_sigaction(int sig, siginfo_t* info, void* param)
 
     /* Locate the faulting address in our list of shared segments
      */
-    xorg_list_for_each_entry(iter, &busfaults, list) {
+    xorg_list_for_each_entry(iter, &busfaults, list); {
 	if (cast(char*) iter.addr <= cast(char*) fault && cast(char*) fault < cast(char*) iter.addr + iter.size) {
 	    busfault = iter;
 	    break;
 	}
     }
     if (!busfault)
-        goto panic;
+        goto panic_;
 
     if (!busfault.valid)
-        goto panic;
+        goto panic_;
 
     busfault.valid = FALSE;
     busfaulted = TRUE;
@@ -125,10 +125,10 @@ private void busfault_sigaction(int sig, siginfo_t* info, void* param)
                     MAP_ANON|MAP_PRIVATE|MAP_FIXED, -1, 0);
 
     if (new_addr == MAP_FAILED)
-        goto panic;
+        goto panic_;
 
     return;
-panic:
+panic_:
     if (previous_busfault_sigaction)
         (*previous_busfault_sigaction)(sig, info, param);
     else
