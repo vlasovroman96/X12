@@ -15,7 +15,7 @@ extern int auditTrailLevel;
 
 void FreeAuditTimer();
 
-void AuditF(const(char)* f, ...); _X_ATTRIBUTE_PRINTF(1, 2);
-void VAuditF(const(char)* f, va_list args); _X_ATTRIBUTE_VPRINTF(1, 0);
+void AuditF(const(char)* f, ...);
+void VAuditF(const(char)* f, va_list args);
 
  /* _XSERVER_OS_AUDIT_H */
