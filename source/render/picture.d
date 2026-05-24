@@ -736,7 +736,7 @@ PicturePtr CreatePicture(Picture pid, DrawablePtr pDrawable, PictFormatPtr pForm
     *error = XaceHookResourceAccess(client, pid, PictureType, pPicture,
                       X11_RESTYPE_PIXMAP, pDrawable, DixCreateAccess | DixSetAttrAccess);
     if (*error != Success)
-        goto out;
+        goto out_;
 
     if (pDrawable.type == DRAWABLE_PIXMAP) {
         ++(cast(PixmapPtr) pDrawable).refcnt;
@@ -755,7 +755,7 @@ PicturePtr CreatePicture(Picture pid, DrawablePtr pDrawable, PictFormatPtr pForm
         *error = Success;
     if (*error == Success)
         *error = (*ps.CreatePicture) (pPicture);
- out:
+ out_:
     if (*error != Success) {
         FreePicture(pPicture, cast(XID) 0);
         pPicture = 0;
@@ -1015,7 +1015,7 @@ int ChangePicture(PicturePtr pPicture, Mask vmask, XID* vlist, DevUnion* ulist, 
         case CPRepeat:
         {
             uint newr = void;
-            newr = mixin(NEXT_VAL!(`unsigned` `int`));
+            newr = mixin(NEXT_VAL!(`uint`));
 
             if (newr <= RepeatReflect) {
                 pPicture.repeat = (newr != RepeatNone);
@@ -1130,7 +1130,7 @@ int ChangePicture(PicturePtr pPicture, Mask vmask, XID* vlist, DevUnion* ulist, 
         case CPGraphicsExposure:
         {
             uint newe = void;
-            newe = mixin(NEXT_VAL!(`unsigned` `int`));
+            newe = mixin(NEXT_VAL!(`uint`));
 
             if (newe <= xTrue)
                 pPicture.graphicsExposures = newe;
@@ -1143,7 +1143,7 @@ int ChangePicture(PicturePtr pPicture, Mask vmask, XID* vlist, DevUnion* ulist, 
         case CPSubwindowMode:
         {
             uint news = void;
-            news = mixin(NEXT_VAL!(`unsigned` `int`));
+            news = mixin(NEXT_VAL!(`uint`));
 
             if (news == ClipByChildren || news == IncludeInferiors)
                 pPicture.subWindowMode = news;
@@ -1156,7 +1156,7 @@ int ChangePicture(PicturePtr pPicture, Mask vmask, XID* vlist, DevUnion* ulist, 
         case CPPolyEdge:
         {
             uint newe = void;
-            newe = mixin(NEXT_VAL!(`unsigned` `int`));
+            newe = mixin(NEXT_VAL!(`uint`));
 
             if (newe == PolyEdgeSharp || newe == PolyEdgeSmooth)
                 pPicture.polyEdge = newe;
@@ -1169,7 +1169,7 @@ int ChangePicture(PicturePtr pPicture, Mask vmask, XID* vlist, DevUnion* ulist, 
         case CPPolyMode:
         {
             uint newm = void;
-            newm = mixin(NEXT_VAL!(`unsigned` `int`));
+            newm = mixin(NEXT_VAL!(`uint`));
 
             if (newm == PolyModePrecise || newm == PolyModeImprecise)
                 pPicture.polyMode = newm;
@@ -1187,7 +1187,7 @@ int ChangePicture(PicturePtr pPicture, Mask vmask, XID* vlist, DevUnion* ulist, 
         {
             uint newca = void;
 
-            newca = mixin(NEXT_VAL!(`unsigned` `int`));
+            newca = mixin(NEXT_VAL!(`uint`));
 
             if (newca <= xTrue)
                 pPicture.componentAlpha = newca;
