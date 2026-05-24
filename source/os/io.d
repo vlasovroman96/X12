@@ -625,7 +625,7 @@ void FlushAllOutput()
     CriticalOutputPending = FALSE;
     NewOutputPending = FALSE;
 
-    xorg_list_for_each_entry_safe(client, tmp, &output_pending_clients, output_pending) {
+    xorg_list_for_each_entry_safe(client, tmp, &output_pending_clients, output_pending);{
         if (client.clientGone)
             continue;
         if (!client_is_ready(client)) {
@@ -846,7 +846,7 @@ version (DEBUG_COMMUNICATION) {
         }
     }
 version (DEBUG_COMMUNICATION) {
-    else if(multicount) {
+    if(multicount) {
         if (who.replyBytesRemaining) {
             who.replyBytesRemaining -= (count + padBytes);
         }
@@ -948,7 +948,7 @@ int FlushClient(ClientPtr who, OsCommPtr oc)
             return 0;
         }
 version (EMSGSIZE) {                 /* check for another brain-damaged OS bug */
-        else if(errno EMSGSIZE) {
+        if(errno == EMSGSIZE) {
             /* making separate try with half of the size */
             todo /= 2;
         }
