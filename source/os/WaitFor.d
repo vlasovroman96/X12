@@ -115,7 +115,7 @@ pragma(inline, true) private OsTimerPtr first_timer()
     /* inline xorg_list_is_empty which can't handle volatile */
     if (timers.next == &timers)
         return null;
-    return xorg_list_first_entry(&timers, struct _OsTimerRec, list);
+    return xorg_list_first_entry(&timers, _OsTimerRec, list);
 }
 
 /*
@@ -252,7 +252,7 @@ private void CheckAllTimers()
  start:
     now = GetTimeInMillis();
 
-    xorg_list_for_each_entry(timer, &timers, list) {
+    xorg_list_for_each_entry(timer, &timers, list); {
         if (timer.expires - now > timer.delta + 250) {
             DoTimer(timer, now);
             goto start;
@@ -319,7 +319,7 @@ OsTimerPtr TimerSet(OsTimerPtr timer, int flags, CARD32 millis, OsTimerCallback 
     input_lock();
 
     /* Sort into list */
-    xorg_list_for_each_entry(existing, &timers, list)
+    xorg_list_for_each_entry(existing, &timers, list);
         if (cast(int) (existing.expires - millis) > 0)
             break;
     /* This even works at the end of the list -- existing->list will be timers */
@@ -372,7 +372,7 @@ void TimerInit()
         xorg_list_init(cast(xorg_list*) &timers);
     }
 
-    xorg_list_for_each_entry_safe(timer, tmp, &timers, list) {
+    xorg_list_for_each_entry_safe(timer, tmp, &timers, list); {
         xorg_list_del(&timer.list);
         free(timer);
     }
@@ -396,11 +396,13 @@ private CARD32 NextDPMSTimeout(INT32 timeout)
      */
     switch (DPMSPowerLevel) {
     case DPMSModeOn:
-         case = void; DPMSModeStandby:
-        mixin(DPMS_CHECK_TIMEOUT!(`DPMSSuspendTime`))
+        DPMS_CHECKTIMEOUT!(`DPMSStandbyTime`);
+
+    case DPMSModeStandby:
+        mixin(DPMS_CHECK_TIMEOUT!(`DPMSSuspendTime`));
         /* fallthrough */
     case DPMSModeSuspend:
-        DPMS_CHECK_TIMEOUT(DPMSOffTime)
+        DPMS_CHECK_TIMEOUT(DPMSOffTime);
         /* fallthrough */
     default:                   /* DPMSModeOff */
         return 0;
@@ -419,9 +421,9 @@ version (DPMSExtension) {
      * have the same timeout as a higher one.
      */
     if (DPMSEnabled) {
-        mixin(DPMS_CHECK_MODE!(`DPMSModeOff`, `DPMSOffTime`))
-            mixin(DPMS_CHECK_MODE!(`DPMSModeSuspend`, `DPMSSuspendTime`))
-            mixin(DPMS_CHECK_MODE!(`DPMSModeStandby`, `DPMSStandbyTime`))
+        mixin(DPMS_CHECK_MODE!(`DPMSModeOff`, `DPMSOffTime`));
+            mixin(DPMS_CHECK_MODE!(`DPMSModeSuspend`, `DPMSSuspendTime`));
+            mixin(DPMS_CHECK_MODE!(`DPMSModeStandby`, `DPMSStandbyTime`));
 
             nextTimeout = NextDPMSTimeout(timeout);
     }
@@ -492,12 +494,14 @@ version (DPMSExtension) {
 version (SCREENSAVER) {
     if (timeout && !screenSaverSuspended) {
 //! #else
-    if (timeout) {
-//! #endif
-        ScreenSaverTimer = TimerSet(ScreenSaverTimer, 0, timeout,
-                                    ScreenSaverTimeoutExpire, null);
+        if (timeout) {
+    //! #endif
+            ScreenSaverTimer = TimerSet(ScreenSaverTimer, 0, timeout,
+                                        ScreenSaverTimeoutExpire, null);
+        }
+        else if (ScreenSaverTimer) {
+            FreeScreenSaverTimer();
+        }
     }
-    else if (ScreenSaverTimer) {
-        FreeScreenSaverTimer();
-    }}
+}
 }
