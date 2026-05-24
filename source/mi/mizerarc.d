@@ -363,7 +363,7 @@ enum string Pixelate(string xval,string yval) = `
 	pts++; 
     }`;
 
-enum string DoPix(string idx,string xval,string yval) = `if (mask & (1 << ` ~ idx ~ `)) ` ~ Pixelate!(` ~ `xval` ~ `, ` ~ `yval` ~ `) ~ `;`;
+enum string DoPix(string idx,string xval,string yval) = `if (mask & (1 << ` ~ idx ~ `)) ` ~ Pixelate!(xval, yval) ~ `;`;
 
 private DDXPointPtr miZeroArcPts(xArc* arc, DDXPointPtr pts)
 {
@@ -399,7 +399,7 @@ private DDXPointPtr miZeroArcPts(xArc* arc, DDXPointPtr pts)
             mixin(Pixelate!(`xorghn + y`, `yorgh - x`));
             mixin(Pixelate!(`xorghn + y`, `yorgh + x`));
             mixin(Pixelate!(`xorghp - y`, `yorgh + x`));
-            MIARCCIRCLESTEP(;
+            MIARCCIRCLESTEP({}
                 );
         }
         if (x > 1 && pts[-1].x == pts[-5].x && pts[-1].y == pts[-5].y)
@@ -409,20 +409,19 @@ private DDXPointPtr miZeroArcPts(xArc* arc, DDXPointPtr pts)
     }
     else if (do360) {
         while (y < info.h || x < info.w) {
-            MIARCOCTANTSHIFT(;
+            MIARCOCTANTSHIFT({}
                 );
             mixin(Pixelate!(`info.xorg + x`, `info.yorg + y`));
             mixin(Pixelate!(`info.xorgo - x`, `info.yorg + y`));
             mixin(Pixelate!(`info.xorgo - x`, `info.yorgo - y`));
             mixin(Pixelate!(`info.xorg + x`, `info.yorgo - y`));
-            MIARCSTEP(;
-                      ,;
+            MIARCSTEP({}, {}
                 );
         }
     }
     else {
         while (y < info.h || x < info.w) {
-            MIARCOCTANTSHIFT(;
+            MIARCOCTANTSHIFT({}
                 );
             if ((x == info.start.x) || (y == info.start.y)) {
                 mask = info.start.mask;
@@ -436,8 +435,7 @@ private DDXPointPtr miZeroArcPts(xArc* arc, DDXPointPtr pts)
                 mask = info.end.mask;
                 info.end = info.altend;
             }
-            MIARCSTEP(;
-                      ,;
+            MIARCSTEP({}, {}
                 );
         }
     }
@@ -488,7 +486,7 @@ private void miZeroArcDashPts(GCPtr pGC, xArc* arc, DashInfo* dinfo, DDXPointPtr
         info.end = info.altend;
     }
     while (y < info.h || x < info.w) {
-        MIARCOCTANTSHIFT(;
+        MIARCOCTANTSHIFT({}
             );
         if ((x == info.firstx) || (y == info.firsty))
             startPt = arcPts[startseg];
@@ -504,8 +502,8 @@ private void miZeroArcDashPts(GCPtr pGC, xArc* arc, DashInfo* dinfo, DDXPointPtr
             mask = info.end.mask;
             info.end = info.altend;
         }
-        MIARCSTEP(;
-                  ,;
+        MIARCSTEP({}
+                  ,{}
             );
     }
     if ((x == info.firstx) || (y == info.firsty))
