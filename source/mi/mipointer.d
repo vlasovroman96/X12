@@ -51,9 +51,9 @@ in this Software without prior written authorization from The Open Group.
 
 import build.dix_config;
 
-import   X11/X;
-import   X11/Xmd;
-import   X11/Xproto;
+import   X11.X;
+import   X11.Xmd;
+import   X11.Xproto;
 
 import   dix.cursor_priv;
 import   dix.dix_priv;
@@ -85,13 +85,13 @@ struct _MiPointerRec {
     int devx, devy;             /* sprite position */
     Bool generateEvent;         /* generate an event during warping? */
 }alias miPointerRec = _MiPointerRec;
-alias miPointerPtr = *;
+alias miPointerPtr = miPointerRec*;
 
 DevPrivateKeyRec miPointerScreenKeyRec;
 
 enum string GetScreenPrivate(string s) = `(cast(miPointerScreenPtr) 
     dixLookupPrivate(&(` ~ s ~ `).devPrivates, miPointerScreenKey))`;
-enum string SetupScreen(string s) = `miPointerScreenPtr pScreenPriv = ` ~ GetScreenPrivate!(` ~ `s` ~ `) ~ `;`;
+enum string SetupScreen(string s) = `miPointerScreenPtr pScreenPriv = ` ~ GetScreenPrivate!(s) ~ `;`;
 
 DevPrivateKeyRec miPointerPrivKeyRec;
 
@@ -384,11 +384,26 @@ void miPointerWarpCursor(DeviceIntPtr pDev, ScreenPtr pScreen, int x, int y)
     /* Don't call USFS if we use Xinerama, otherwise the root window is
      * updated to the second screen, and we never receive any events.
      * (FDO bug #18668) */
-    if (changedScreen
-#ifdef XINERAMA
-        && noPanoramiXExtension
-#endif /* XINERAMA */
-        ) {
+version(XINERAMA) {
+if (changedScreen && noPanoramiXExtension) {
+                DeviceIntPtr master = GetMaster(pDev, MASTER_POINTER);
+                /* Hack for CVE-2023-5380: if we're moving
+                * screens PointerWindows[] keeps referring to the
+                * old window. If that gets destroyed we have a UAF
+                * bug later. Only happens when jumping from a window
+                * to the root window on the other screen.
+                * Enter/Leave events are incorrect for that case but
+                * too niche to fix.
+                */
+                LeaveWindow(pDev);
+                if (master)
+                    LeaveWindow(master);
+                UpdateSpriteForScreen(pDev, pScreen);
+        }
+
+}
+else {
+    if (changedScreen) {
             DeviceIntPtr master = GetMaster(pDev, MASTER_POINTER);
             /* Hack for CVE-2023-5380: if we're moving
              * screens PointerWindows[] keeps referring to the
@@ -403,6 +418,7 @@ void miPointerWarpCursor(DeviceIntPtr pDev, ScreenPtr pScreen, int x, int y)
                 LeaveWindow(master);
             UpdateSpriteForScreen(pDev, pScreen);
     }
+}
 }
 
 /**
