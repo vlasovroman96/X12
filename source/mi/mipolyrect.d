@@ -111,38 +111,38 @@ enum string MAXUBOUND(string dst,string eqn) = `bound_tmp = ` ~ eqn ~ `;
                     t.width = width;
                 }
                 else {
-                    mixin(MINBOUND!(`t.x`, `x - offset1`))
-                        mixin(MAXUBOUND!(`t.width`, `width + offset2`))
+                    mixin(MINBOUND!(`t.x`, `x - offset1`));
+                        mixin(MAXUBOUND!(`t.width`, `width + offset2`));
                 }
                 if (width == 0) {
                     t.y = y;
                     t.height = height;
                 }
                 else {
-                    mixin(MINBOUND!(`t.y`, `y - offset1`))
-                        mixin(MAXUBOUND!(`t.height`, `height + offset2`))
+                    mixin(MINBOUND!(`t.y`, `y - offset1`));
+                        mixin(MAXUBOUND!(`t.height`, `height + offset2`));
                 }
                 t++;
             }
             else {
-                mixin(MINBOUND!(`t.x`, `x - offset1`))
-                    mixin(MINBOUND!(`t.y`, `y - offset1`))
-                    mixin(MAXUBOUND!(`t.width`, `width + offset2`))
+                mixin(MINBOUND!(`t.x`, `x - offset1`));
+                    mixin(MINBOUND!(`t.y`, `y - offset1`));
+                    mixin(MAXUBOUND!(`t.width`, `width + offset2`));
                     t.height = offset2;
                 t++;
-                mixin(MINBOUND!(`t.x`, `x - offset1`))
-                    mixin(MAXBOUND!(`t.y`, `y + offset3`));
+                mixin(MINBOUND!(`t.x`, `x - offset1`));
+                    mixin(MAXBOUND!(`t.y`, `y + offset3`));;
                 t.width = offset2;
                 t.height = height - offset2;
                 t++;
                 mixin(MAXBOUND!(`t.x`, `x + width - offset1`));
-                mixin(MAXBOUND!(`t.y`, `y + offset3`))
+                mixin(MAXBOUND!(`t.y`, `y + offset3`));
                     t.width = offset2;
                 t.height = height - offset2;
                 t++;
-                mixin(MINBOUND!(`t.x`, `x - offset1`))
-                    mixin(MAXBOUND!(`t.y`, `y + height - offset1`))
-                    mixin(MAXUBOUND!(`t.width`, `width + offset2`))
+                mixin(MINBOUND!(`t.x`, `x - offset1`));
+                    mixin(MAXBOUND!(`t.y`, `y + height - offset1`));
+                    mixin(MAXUBOUND!(`t.width`, `width + offset2`));
                     t.height = offset2;
                 t++;
             }
@@ -156,7 +156,7 @@ enum string MAXUBOUND(string dst,string eqn) = `bound_tmp = ` ~ eqn ~ `;
             rect[0].x = pR.x;
             rect[0].y = pR.y;
 
-            mixin(MAXBOUND!(`rect[1].x`, `pR.x + cast(int) pR.width`))
+            mixin(MAXBOUND!(`rect[1].x`, `pR.x + cast(int) pR.width`));
                 rect[1].y = rect[0].y;
 
             rect[2].x = rect[1].x;
