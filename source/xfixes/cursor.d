@@ -289,7 +289,7 @@ private int GetBit(ubyte* line, int x)
     return 0;
 }
 
-void _X_COLD SXFixesCursorNotifyEvent(xXFixesCursorNotifyEvent* from, xXFixesCursorNotifyEvent* to)
+void SXFixesCursorNotifyEvent(xXFixesCursorNotifyEvent* from, xXFixesCursorNotifyEvent* to)
 {
     to.type = from.type;
     cpswaps(from.sequenceNumber, to.sequenceNumber);
@@ -503,7 +503,7 @@ struct _ReplaceCursorLookupRec {
     CursorPtr pNew;
     void* closure;
 }alias ReplaceCursorLookupRec = _ReplaceCursorLookupRec;
-alias ReplaceCursorLookupPtr = *;
+alias ReplaceCursorLookupPtr = ReplaceCursorLookupRec*;
 
 private const(RESTYPE)[3] CursorRestypes = [
     X11_RESTYPE_WINDOW,
@@ -897,7 +897,7 @@ Bool XFixesCursorInit()
         dixScreenHookClose(walkScreen, &CursorScreenClose);
         mixin(Wrap!(`cs`, `walkScreen`, `DisplayCursor`, `CursorDisplayCursor`));
         cs.pCursorHideCounts = null;
-    }){}
+    });
 
     CursorClientType = CreateNewResourceType(&CursorFreeClient,
                                              "XFixesCursorClient");
