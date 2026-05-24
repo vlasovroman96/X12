@@ -90,7 +90,7 @@ struct SpanGroup {
 
 /* Rops which must use span groups */
 enum string miSpansCarefulRop(string rop) = `(((` ~ rop ~ `) & 0xc) == 0x8 || ((` ~ rop ~ `) & 0x3) == 0x2)`;
-enum string miSpansEasyRop(string rop) = `(!` ~ miSpansCarefulRop!(` ~ `rop` ~ `) ~ `)`;
+enum string miSpansEasyRop(string rop) = `(!` ~ miSpansCarefulRop!(rop) ~ `)`;
 
 /*
 
