@@ -35,7 +35,7 @@ in this Software without prior written authorization from The Open Group.
 
 import build.dix_config;
 
-import   X11/X;
+import   X11.X;
 
 import   dix.dix_priv;
 import   dix.gc_priv;
@@ -74,7 +74,7 @@ struct _MiDCBufferRec {
     PixmapPtr pSave;
     PicturePtr pRootPicture;
 }alias miDCBufferRec = _MiDCBufferRec;
-alias miDCBufferPtr = *;
+alias miDCBufferPtr = miDCBufferRec*;
 
 enum string miGetDCDevice(string dev, string screen) = `
  ((DevHasCursor(` ~ dev ~ `)) ? 
@@ -91,7 +91,7 @@ struct _MiDCScreenRec {
     PicturePtr pPicture;
     CursorPtr pCursor;
 }alias miDCScreenRec = _MiDCScreenRec;
-alias miDCScreenPtr = *;
+alias miDCScreenPtr = miDCScreenRec*;
 
 enum string miGetDCScreen(string s) = `(cast(miDCScreenPtr)(dixLookupPrivate(&(` ~ s ~ `).devPrivates, miDCScreenKey)))`;
 
@@ -461,7 +461,7 @@ bool miDCDeviceInitialize(DeviceIntPtr pDev, ScreenPtr pScreen)
 failure:
         miDCDeviceCleanup(pDev, walkScreen);
         return FALSE;
-    }){}
+    });
 
     return TRUE;
 }
@@ -492,5 +492,5 @@ void miDCDeviceCleanup(DeviceIntPtr pDev, ScreenPtr pScreen)
         dixDestroyPixmap(pBuffer.pSave, 0);
         free(pBuffer);
         dixSetScreenPrivate(&pDev.devPrivates, miDCDeviceKey, walkScreen, null);
-    }){}
+    });
 }
