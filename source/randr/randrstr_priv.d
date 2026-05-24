@@ -97,7 +97,7 @@ enum string VERIFY_RR_LEASE(string id, string ptr, string a) = `
     }`;
 
 enum string GetRRClient(string pClient) = `(cast(RRClientPtr)dixLookupPrivate(&(` ~ pClient ~ `).devPrivates, RRClientPrivateKey))`;
-enum string rrClientPriv(string pClient) = `RRClientPtr pRRClient = ` ~ GetRRClient!(` ~ `pClient` ~ `) ~ `;`;
+enum string rrClientPriv(string pClient) = `RRClientPtr pRRClient = ` ~ GetRRClient!(pClient) ~ `;`;
 
 void RRConstrainCursorHarder(DeviceIntPtr, ScreenPtr, int, int*, int*);
 
