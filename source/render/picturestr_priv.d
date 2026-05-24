@@ -30,7 +30,7 @@ enum string VERIFY_ALPHA(string pPicture, string pid, string client, string mode
     if (` ~ pid ~ ` == None) 
 	` ~ pPicture ~ ` = 0; 
     else { 
-	` ~ VERIFY_PICTURE!(` ~ `pPicture` ~ `, ` ~ `pid` ~ `, ` ~ `client` ~ `, ` ~ `mode` ~ `) ~ `; 
+	` ~ VERIFY_PICTURE!(pPicture, pid, client, mode) ~ `; 
     } 
 } 
 `;
