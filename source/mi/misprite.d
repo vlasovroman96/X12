@@ -34,10 +34,10 @@ in this Software without prior written authorization from The Open Group.
 
 import build.dix_config;
 
-import   X11/X;
-import   X11/Xproto;
-import   X11/fonts/font;
-import   X11/fonts/fontstruct;
+import   X11.X;
+import   X11.Xproto;
+import   X11.fonts.font;
+import   X11.fonts.fontstruct;
 
 import   dix.colormap_priv;
 import   dix.dix_priv;
@@ -68,7 +68,7 @@ struct _MiCursorInfoRec {
     Bool checkPixels;           /* check colormap collision */
     ScreenPtr pScreen;
 }alias miCursorInfoRec = _MiCursorInfoRec;
-alias miCursorInfoPtr = *;
+alias miCursorInfoPtr = miCursorInfoRec*;
 
 /*
  * per screen information
@@ -96,7 +96,7 @@ struct _MiSpriteScreenRec {
     Bool damageRegistered;
     int numberOfCursors;
 }alias miSpriteScreenRec = _MiSpriteScreenRec;
-alias miSpriteScreenPtr = *;
+alias miSpriteScreenPtr = miSpriteScreenRec*;
 
 enum SOURCE_COLOR =	0;
 enum MASK_COLOR =	1;
@@ -498,20 +498,20 @@ private void miSpriteStoreColors(ColormapPtr pMap, int ndef, xColorItem* pdef)
 enum string MaskMatch(string a,string b,string mask) = `(((` ~ a ~ `) & (pVisual.` ~ mask ~ `)) == ((` ~ b ~ `) & (pVisual.` ~ mask ~ `)))`;
 
 enum string UpdateDAC(string dev, string plane,string dac,string mask) = `{
-    if (` ~ MaskMatch! (`` ~ dev ~ `.colors[` ~ plane ~ `].pixel`,`pdef[i].pixel`,` ~ `mask` ~ `) ~ `) {
+    if (` ~ MaskMatch! (`` ~ dev ~ `.colors[` ~ plane ~ `].pixel`,`pdef[i].pixel`,mask) ~ `) {
 	` ~ dev ~ `.colors[` ~ plane ~ `].` ~ dac ~ ` = pdef[i].` ~ dac ~ `; 
 	updated = 1; 
     } 
 }`;
 
 enum string CheckDirect(string dev, string plane) = `
-	    ` ~ UpdateDAC!(` ~ `dev` ~ `, ` ~ `plane` ~ `,`red`,`redMask`) ~ ` 
-	    ` ~ UpdateDAC!(` ~ `dev` ~ `, ` ~ `plane` ~ `,`green`,`greenMask`) ~ ` 
-	    ` ~ UpdateDAC!(` ~ `dev` ~ `, ` ~ `plane` ~ `,`blue`,`blueMask`) ~ ``;
+	    ` ~ UpdateDAC!(dev, plane,`red`,`redMask`) ~ ` 
+	    ` ~ UpdateDAC!(dev, plane,`green`,`greenMask`) ~ ` 
+	    ` ~ UpdateDAC!(dev, plane,`blue`,`blueMask`) ~ ``;
 
             for (i = 0; i < ndef; i++) {
-                mixin(CheckDirect!(`pPriv`, `SOURCE_COLOR`))
-                    mixin(CheckDirect!(`pPriv`, `MASK_COLOR`))
+                mixin(CheckDirect!(`pPriv`, `SOURCE_COLOR`));
+                    mixin(CheckDirect!(`pPriv`, `MASK_COLOR`));
             }
         }
         else {
