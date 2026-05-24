@@ -234,7 +234,7 @@ private void FreeGlyphPicture(GlyphPtr glyph)
         PictureScreenPtr ps = GetPictureScreenIfSet(walkScreen);
         if (ps)
             (*ps.UnrealizeGlyph) (walkScreen, glyph);
-    }){}
+    });
 }
 
 void FreeGlyph(GlyphPtr glyph, int format)
@@ -352,7 +352,7 @@ GlyphPtr AllocateGlyph(xGlyphInfo* gi, int fdepth)
                 goto bail;
             }
         }
-    }){}
+    });
 
     return glyph;
 
