@@ -29,7 +29,7 @@ import core.sys.posix.unistd;
 import present.present_priv;
 
 version (DRI3) {
-import sys/eventfd;
+import sys.eventfd;
 } /* DRI3 */
 
 /*
@@ -129,8 +129,12 @@ version (DRI3) {
         int fence_fd = screen_priv.flush_fenced(window);
         vblank.release_syncobj.import_fence(vblank.release_syncobj,
                                               vblank.release_point, fence_fd);
-    } else
-} /* DRI3 */
+    } else     {
+        screen_priv.flush(window);
+        present_pixmap_idle(vblank.pixmap, vblank.window, vblank.serial, vblank.idle_fence);
+    }
+} 
+else/* DRI3 */
     {
         screen_priv.flush(window);
         present_pixmap_idle(vblank.pixmap, vblank.window, vblank.serial, vblank.idle_fence);
