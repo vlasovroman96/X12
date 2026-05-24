@@ -51,8 +51,8 @@ import window;
 import deimos.X11.extensions.panoramiXproto;
 import globals;
 
-enum TRACE = LogMessageVerb(X_NONE, 10, "TRACE " __FILE__ ":%s", __func__);
-enum string DEBUG_LOG(...) = `LogMessageVerb(X_NONE, 3, __VA_ARGS__);`;
+enum TRACE = LogMessageVerb(X_NONE, 10, "TRACE " ~ __FILE__ ~":%s", __func__);
+enum string DEBUG_LOG(__VA_ARGS__) = `LogMessageVerb(X_NONE, 3, `~__VA_ARGS__~`);`;
 
 Bool noPseudoramiXExtension = FALSE;
 extern Bool noRRXineramaExtension;
