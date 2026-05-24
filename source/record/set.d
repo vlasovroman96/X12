@@ -96,9 +96,9 @@ struct _BitVectorSet {
     int maxMember;
     /* followed by the bit vector itself */
 }alias BitVectorSet = _BitVectorSet;
-alias BitVectorSetPtr = *;
+alias BitVectorSetPtr = BitVectorSetPtr*;
 
-enum BITS_PER_LONG = (sizeof(unsigned long) * 8);
+enum BITS_PER_LONG = ulong.sizeof * 8;
 
 private void BitVectorDestroySet(RecordSetPtr pSet)
 {
@@ -173,7 +173,7 @@ private RecordSetIteratePtr BitVectorIterateSet(RecordSetPtr pSet, RecordSetIter
 
     b = BitVectorFindBit(pSet, b, FALSE);
     pInterval.last = (b < 0) ? (cast(BitVectorSetPtr) pSet).maxMember : b - 1;
-    return cast(RecordSetIteratePtr) (long) (pInterval.last + 1);
+    return cast(RecordSetIteratePtr)(pInterval.last + 1);
 }
 
 private RecordSetOperations BitVectorSetOperations = {
@@ -236,7 +236,7 @@ struct _IntervalListSet {
     int nIntervals;
     /* followed by the intervals (RecordSetInterval) */
 }alias IntervalListSet = _IntervalListSet;
-alias IntervalListSetPtr = *;
+alias IntervalListSetPtr = IntervalListSet*;
 
 private void IntervalListDestroySet(RecordSetPtr pSet)
 {
