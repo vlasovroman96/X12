@@ -59,7 +59,7 @@ import core.stdc.ctype;
 import core.stdc.stdlib;
 import core.stdc.string;
 version (HAVE_SYSTEMD_DAEMON) {
-import systemd/sd-daemon;
+import systemd.sd_daemon;
 }
 
 import os.ossock;
@@ -87,17 +87,46 @@ static if (HasVersion!"IPv6" && !HasVersion!"AF_INET6") {
 static assert(0, "Cannot build IPv6 support without AF_INET6");
 }
 
-private Xtransport_table[6] Xtransports = [
-    { &_XSERVTransSocketTCPFuncs,	TRANS_SOCKET_TCP_INDEX },
-#if defined(IPv6)
-    { &_XSERVTransSocketINET6Funcs,	TRANS_SOCKET_INET6_INDEX },
-#endif /* IPv6 */
-    { &_XSERVTransSocketINETFuncs,	TRANS_SOCKET_INET_INDEX },
-#if defined(UNIXCONN)
-    { &_XSERVTransSocketLocalFuncs,	TRANS_SOCKET_LOCAL_INDEX },
-    { &_XSERVTransSocketUNIXFuncs,	TRANS_SOCKET_UNIX_INDEX },
-#endif /* UNIXCONN */
-];
+private Xtransport_table[] buildTransports()
+{
+    Xtransport_table[] arr;
+
+    arr ~= Xtransport_table(
+        &_XSERVTransSocketTCPFuncs,
+        TRANS_SOCKET_TCP_INDEX
+    );
+
+    version (IPv6)
+    {
+        arr ~= Xtransport_table(
+            &_XSERVTransSocketINET6Funcs,
+            TRANS_SOCKET_INET6_INDEX
+        );
+    }
+
+    arr ~= Xtransport_table(
+        &_XSERVTransSocketINETFuncs,
+        TRANS_SOCKET_INET_INDEX
+    );
+
+    version (UNIXCONN)
+    {
+        arr ~= Xtransport_table(
+            &_XSERVTransSocketLocalFuncs,
+            TRANS_SOCKET_LOCAL_INDEX
+        );
+
+        arr ~= Xtransport_table(
+            &_XSERVTransSocketUNIXFuncs,
+            TRANS_SOCKET_UNIX_INDEX
+        );
+    }
+
+    return arr;
+}
+
+private immutable Xtransport_table[] Xtransports =
+    buildTransports();
 
 enum NUMTRANS =	(sizeof(Xtransports)/sizeof(Xtransport_table));
 
@@ -151,18 +180,20 @@ version (HAVE_STRCASECMP) {} else {
 
     for (uint i = 0; i < NUMTRANS; i++)
     {
-version (HAVE_STRCASECMP) {} else {
-	if (!strcmp (protobuf.ptr, Xtransports[i].transport.TransName))
-#else
-	if (!strcasecmp (protocol, Xtransports[i].transport.TransName))
-}
+version (HAVE_STRCASECMP) {
+    if (!strcmp (protobuf.ptr, Xtransports[i].transport.TransName)) {
+        return Xtransports[i].transport;
+    }
+} else {
+	if (!strcasecmp (protocol, Xtransports[i].transport.TransName)) {
 	    return Xtransports[i].transport;
     }
-
+}
     return null;
+    }
 }
 
-private int _XSERVTransParseAddress(const(char)* address, char** protocol, char** host, char** port)
+int _XSERVTransParseAddress(const(char)* address, char** protocol, char** host, char** port)
 
 {
     /*
@@ -187,6 +218,11 @@ private int _XSERVTransParseAddress(const(char)* address, char** protocol, char*
 
     prmsg (3,"ParseAddress(%s)\n", address);
 
+    enum string HAVE_LAUNCHD_STR = `    if(!strncmp(address,"local//",7)) {
+        _protocol="local";
+        _host="";
+        _port=address+6;
+    } else`;
     /* First, check for AF_UNIX socket paths */
     if (address[0] == '/') {
         _protocol = "local";
@@ -195,11 +231,7 @@ private int _XSERVTransParseAddress(const(char)* address, char** protocol, char*
     } else
 version (HAVE_LAUNCHD) {
     /* launchd sockets will look like 'local//tmp/launch-XgkNns/:0' */
-    if(!strncmp(address,"local//",7)) {
-        _protocol="local";
-        _host="";
-        _port=address+6;
-    } else
+    mixin(HAVE_LAUNCHD_STR);
 }
     if (!strncmp(address, "unix:", 5)) {
         _protocol = "local";
@@ -292,9 +324,10 @@ version (HAVE_LAUNCHD) {
         xhostname(&hn);
         _host = hn.name;
     }
+
 version (IPv6) {
     /* hostname in IPv6 [numeric_addr]:0 form? */
-    else if ( (_host_len > 3) &&
+    enum IPv6_STR = `else if ( (_host_len > 3) &&
       ((strcmp(_protocol, "tcp") == 0) || (strcmp(_protocol, "inet6") == 0))
       && (_host_buf[0] == '[') && (_host_buf[_host_len - 1] == ']') ) {
 	sockaddr_in6 sin6 = void;
@@ -310,7 +343,9 @@ version (IPv6) {
 	    /* It's not, restore it just in case some other code can use it. */
 	    _host_buf[_host_len - 1] = ']';
 	}
-    }
+    }`;
+
+    mixin(IPv6_STR);
 }
 
 
@@ -874,8 +909,9 @@ version (IPv6) {
 version (XQUARTZ_EXPORTS_LAUNCHD_FD) {
     fprintf(stderr, "Launchd socket fd: %d\n", xquartz_launchd_fd);
     if(xquartz_launchd_fd != -1) {
-        if((ciptr = _XSERVTransReopenCOTSServer(TRANS_SOCKET_LOCAL_INDEX,
-                                           xquartz_launchd_fd, getenv("DISPLAY"))))==null)
+        auto ciptr = _XSERVTransReopenCOTSServer(TRANS_SOCKET_LOCAL_INDEX,
+                                           xquartz_launchd_fd, getenv("DISPLAY"));
+        if(ciptr is null)
             fprintf(stderr,"Got NULL while trying to Reopen launchd port\n");
         else
             temp_ciptrs[(*count_ret)++] = ciptr;
