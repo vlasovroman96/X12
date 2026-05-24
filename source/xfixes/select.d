@@ -127,8 +127,8 @@ private Bool CheckSelectionCallback()
     return TRUE;
 }
 
-enum SelectionAllEvents = (XFixesSetSelectionOwnerNotifyMask |\
-			    XFixesSelectionWindowDestroyNotifyMask |\
+enum SelectionAllEvents = (XFixesSetSelectionOwnerNotifyMask |
+			    XFixesSelectionWindowDestroyNotifyMask |
 			    XFixesSelectionClientCloseNotifyMask);
 
 int ProcXFixesSelectSelectionInput(ClientPtr client)
@@ -219,7 +219,7 @@ int ProcXFixesSelectSelectionInput(ClientPtr client)
     return Success;
 }
 
-void _X_COLD SXFixesSelectionNotifyEvent(xXFixesSelectionNotifyEvent* from, xXFixesSelectionNotifyEvent* to)
+void SXFixesSelectionNotifyEvent(xXFixesSelectionNotifyEvent* from, xXFixesSelectionNotifyEvent* to)
 {
     to.type = from.type;
     cpswaps(from.sequenceNumber, to.sequenceNumber);

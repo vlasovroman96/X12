@@ -1,4 +1,4 @@
-module region.c;
+module xfixes.region;
 @nogc nothrow:
 extern(C): __gshared:
 /*
