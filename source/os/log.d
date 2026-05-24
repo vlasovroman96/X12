@@ -113,7 +113,7 @@ import xf86bigfontsrv;
 }
 
 version (__clang__) {
-#pragma clang diagnostic ignored "-Wformat-nonliteral"
+// #pragma clang diagnostic ignored "-Wformat-nonliteral"
 }
 
 /* Default logging parameters. */
@@ -138,9 +138,13 @@ private Bool needBuffer = TRUE;
 version (OSX) {
 private char[4096] __crashreporter_info_buff__ = 0;
 
-private const(char)* __crashreporter_info__; __attribute__ ((__used__)) =
-    &__crashreporter_info_buff__[0];
-asm_(".desc ___crashreporter_info__, 0x10");
+// private const(char)* __crashreporter_info__; __attribute__ ((__used__)) =
+    __gshared const(char)* __crashreporter_info__;
+
+    static this()
+    {
+        __crashreporter_info__ = &__crashreporter_info_buff__[0];
+    }
 }
 
 /* Prefix strings for log messages. */
@@ -169,8 +173,8 @@ private size_t strlen_sigsafe(const(char)* s)
  * an old file out of the way, but it doesn't actually open the file,
  * since it may be used for renaming a file we're already logging to.
  */
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wformat-nonliteral"
+// #pragma GCC diagnostic push
+// #pragma GCC diagnostic ignored "-Wformat-nonliteral"
 
 private char* LogFilePrep(const(char)* fname, const(char)* backup, const(char)* idstring)
 {
@@ -210,7 +214,7 @@ private char* LogFilePrep(const(char)* fname, const(char)* backup, const(char)* 
 
     return logFileName;
 }
-#pragma GCC diagnostic pop
+// #pragma GCC diagnostic pop
 
 pragma(inline, true) private void doLogSync() {
 version (Windows) {} else {
@@ -436,12 +440,12 @@ private int parse_length_modifier(const(char)* format, size_t len, int* flags_re
                 length_modifier |= LMOD_SIZET;
                 break;
             default:
-                goto out;
+                goto out_;
         }
         idx++;
     }
 
-out:
+out_:
     *flags_return = length_modifier;
     return idx;
 }
@@ -518,7 +522,7 @@ private int vpnprintf(char* string, int size_in, const(char)* f, va_list args)
 
         switch (f[f_idx]) {
         case 's':
-            string_arg = va_arg(args, char_*);
+            string_arg = va_arg!(char*)(args);
 
             if (string_arg) {
                 for (i = 0; string_arg[i] != 0 && s_idx < size - 1 && s_idx < precision; i++)
@@ -528,9 +532,9 @@ private int vpnprintf(char* string, int size_in, const(char)* f, va_list args)
 
         case 'u':
             if (length_modifier & LMOD_LONGLONG)
-                ui = va_arg(args, unsigned long long);
+                ui = va_arg!(ulong)(args);
             else if (length_modifier & LMOD_LONG)
-                ui = va_arg(args, unsigned long);
+                ui = va_arg!(ulong)(args);
             else if (length_modifier & LMOD_SIZET)
                 ui = va_arg!size_t(args);
             else
@@ -545,7 +549,7 @@ private int vpnprintf(char* string, int size_in, const(char)* f, va_list args)
         case 'i':
         case 'd':
             if (length_modifier & LMOD_LONGLONG)
-                si = va_arg(args, long long);
+                si = va_arg!long(args);
             else if (length_modifier & LMOD_LONG)
                 si = va_arg!long(args);
             else if (length_modifier & LMOD_SIZET)
@@ -564,7 +568,7 @@ private int vpnprintf(char* string, int size_in, const(char)* f, va_list args)
             string[s_idx++] = '0';
             if (s_idx < size - 1)
                 string[s_idx++] = 'x';
-            ui = cast(uintptr_t)va_arg(args, void*);
+            ui = cast(uintptr_t)va_arg!void*(args);
             FormatUInt64Hex(ui, number.ptr);
             p_len = strlen_sigsafe(number.ptr);
 
@@ -575,9 +579,9 @@ private int vpnprintf(char* string, int size_in, const(char)* f, va_list args)
         case 'x':
         case 'X': // not actually upper case, but at least accepting '%X'
             if (length_modifier & LMOD_LONGLONG)
-                ui = va_arg(args, unsigned long long);
+                ui = va_arg!long(args);
             else if (length_modifier & LMOD_LONG)
-                ui = va_arg(args, unsigned long);
+                ui = va_arg!long(args);
             else if (length_modifier & LMOD_SIZET)
                 ui = va_arg!size_t(args);
             else
@@ -611,7 +615,7 @@ private int vpnprintf(char* string, int size_in, const(char)* f, va_list args)
             break;
         default:
             BUG_WARN_MSG(f[f_idx], "Unsupported printf directive '%c'\n", f[f_idx]);
-            va_arg(args, char_*);
+            va_arg!char*(args);
             string[s_idx++] = '%';
             if (s_idx < size - 1)
                 string[s_idx++] = f[f_idx];
@@ -794,9 +798,6 @@ void LogMessage(MessageType type, const(char)* format, ...)
     va_end(ap);
 }
 
-
-_X_ATTRIBUTE_PRINTF(3, 0)
-_X_ATTRIBUTE_PRINTF(5, 0);
 
 private void LogVHdrMessageVerb(MessageType type, int verb, const(char)* msg_format, va_list msg_args, const(char)* hdr_format, va_list hdr_args)
 {
