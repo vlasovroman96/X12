@@ -52,11 +52,15 @@ import core.sys.posix.dlfcn;
 
 private void print_registers(int frame, unw_cursor_t cursor)
 {
-    struct _Regs {
-        const(char)* name = void;
-        int regnum = void;
-    }const(_Regs)[17] regs = [
-#if UNW_TARGET_X86_64
+    struct _Regs
+    {
+        const(char)* name;
+        int regnum;
+    }
+
+version (UNW_TARGET_X86_64)
+{
+    const _Regs[16] regs = [
         { "rax", UNW_X86_64_RAX },
         { "rbx", UNW_X86_64_RBX },
         { "rcx", UNW_X86_64_RCX },
@@ -73,10 +77,17 @@ private void print_registers(int frame, unw_cursor_t cursor)
         { "r13", UNW_X86_64_R13 },
         { "r14", UNW_X86_64_R14 },
         { "r15", UNW_X86_64_R15 },
-#endif
     ];
-    const(int) num_regs = regs.sizeof / typeof(*regs).sizeof;
-    int ret = void, i = void;
+}
+else
+{
+    const _Regs[] regs = [];
+}
+
+    const int num_regs = cast(int) regs.length;
+
+    int ret;
+    int i;
 
     if (num_regs == 0)
         return;
@@ -87,6 +98,7 @@ private void print_registers(int frame, unw_cursor_t cursor)
      */
     frame++;
     ret = unw_step(&cursor);
+
     if (ret < 0) {
         ErrorF("unw_step failed: %s [%d]\n", unw_strerror(ret), ret);
         return;
@@ -96,17 +108,23 @@ private void print_registers(int frame, unw_cursor_t cursor)
     ErrorF("Registers at frame #%d:\n", frame);
 
     for (i = 0; i < num_regs; i++) {
-        unw_word_t val = void;
+        unw_word_t val;
+
         ret = unw_get_reg(&cursor, regs[i].regnum, &val);
+
         if (ret < 0) {
             ErrorF("unw_get_reg(%s) failed: %s [%d]\n",
-                          regs[i].name, unw_strerror(ret), ret);
-        } else {
-            ErrorF("  %s: 0x%" PRIxPTR ~ "\n", regs[i].name, val);
+                   regs[i].name,
+                   unw_strerror(ret),
+                   ret);
+        }
+        else {
+            ErrorF("  %s: 0x%" ~ PRIxPTR ~ "\n",
+                   regs[i].name,
+                   val);
         }
     }
 }
-
 void xorg_backtrace()
 {
     unw_cursor_t cursor = void, signal_cursor = void;
@@ -240,7 +258,7 @@ version (HAVE_WALKCONTEXT) {   /* Solaris 9 & later */
 import core.sys.posix.ucontext;
 import core.stdc.signal;
 import core.sys.posix.dlfcn;
-import sys/elf;
+import sys.elf;
 
 version (_LP64) {
 enum ElfSym = Elf64_Sym;
@@ -368,8 +386,7 @@ version (HAVE_PSTACK) {
 /* First try fork/exec of pstack - otherwise fall back to walkcontext
    pstack is preferred since it can print names of non-exported functions */
 
-    if (xorg_backtrace_pstack() < 0)
-#endif
+    if (HAVE_PSTACK && xorg_backtrace_pstack() < 0)
     {
 version (HAVE_WALKCONTEXT) {
         ucontext_t u = void;
@@ -377,9 +394,11 @@ version (HAVE_WALKCONTEXT) {
 
         if (getcontext(&u) == 0)
             walkcontext(&u, &xorg_backtrace_frame, &depth);
-        else
+        else 
+        ErrorF("Failed to get backtrace info: %s\n", strerror(errno));
 }
-            ErrorF("Failed to get backtrace info: %s\n", strerror(errno));
+else 
+        ErrorF("Failed to get backtrace info: %s\n", strerror(errno));
     }
     ErrorF("\n");}
 }
