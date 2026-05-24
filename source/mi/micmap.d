@@ -51,7 +51,7 @@ enum MIN_TRUE_DEPTH =  6;
 enum StaticGrayMask =  (1 << StaticGray);
 enum GrayScaleMask =   (1 << GrayScale);
 
-enum ALL_VISUALS =     (StaticGrayMask|GrayScaleMask|StaticColorMask|\
+enum ALL_VISUALS =     (StaticGrayMask|GrayScaleMask|StaticColorMask|
                          PseudoColorMask|TrueColorMask|DirectColorMask);
 enum LARGE_VISUALS =   (TrueColorMask|DirectColorMask);
 enum SMALL_VISUALS =   (StaticGrayMask|GrayScaleMask|StaticColorMask|PseudoColorMask);
@@ -217,7 +217,7 @@ int miExpandDirectColors(ColormapPtr pmap, int ndef, xColorItem* indefs, xColorI
             red = indefs.pixel & pVisual.redMask;
             for (green = 0; green <= maxgreen; green += stepgreen) {
                 for (blue = 0; blue <= maxblue; blue += stepblue) {
-                    AddElement(DoRed)
+                    AddElement(DoRed);
                 }
             }
         }
@@ -225,7 +225,7 @@ int miExpandDirectColors(ColormapPtr pmap, int ndef, xColorItem* indefs, xColorI
             green = indefs.pixel & pVisual.greenMask;
             for (red = 0; red <= maxred; red += stepred) {
                 for (blue = 0; blue <= maxblue; blue += stepblue) {
-                    AddElement(DoGreen)
+                    AddElement(DoGreen);
                 }
             }
         }
@@ -233,7 +233,7 @@ int miExpandDirectColors(ColormapPtr pmap, int ndef, xColorItem* indefs, xColorI
             blue = indefs.pixel & pVisual.blueMask;
             for (red = 0; red <= maxred; red += stepred) {
                 for (green = 0; green <= maxgreen; green += stepgreen) {
-                    AddElement(DoBlue)
+                    AddElement(DoBlue);
                 }
             }
         }
@@ -286,14 +286,14 @@ Bool miCreateDefColormap(ScreenPtr pScreen)
 
 enum string _RZ(string d) = `((` ~ d ~ ` + 2) / 3)`;
 enum string _RS(string d) = `0`;
-enum string _RM(string d) = `((1U << ` ~ _RZ!(` ~ `d` ~ `) ~ `) - 1)`;
-enum string _GZ(string d) = `((` ~ d ~ ` - ` ~ _RZ!(` ~ `d` ~ `) ~ ` + 1) / 2)`;
+enum string _RM(string d) = `((1U << ` ~ _RZ!(d) ~ `) - 1)`;
+enum string _GZ(string d) = `((` ~ d ~ ` - ` ~ _RZ!(d) ~ ` + 1) / 2)`;
 enum string _GS(string d) = `_RZ(` ~ d ~ `)`;
-enum string _GM(string d) = `(((1U << ` ~ _GZ!(` ~ `d` ~ `) ~ `) - 1) << ` ~ _GS!(` ~ `d` ~ `) ~ `)`;
-enum string _BZ(string d) = `(` ~ d ~ ` - ` ~ _RZ!(` ~ `d` ~ `) ~ ` - ` ~ _GZ!(` ~ `d` ~ `) ~ `)`;
-enum string _BS(string d) = `(` ~ _RZ!(` ~ `d` ~ `) ~ ` + ` ~ _GZ!(` ~ `d` ~ `) ~ `)`;
-enum string _BM(string d) = `(((1U << ` ~ _BZ!(` ~ `d` ~ `) ~ `) - 1) << ` ~ _BS!(` ~ `d` ~ `) ~ `)`;
-enum string _CE(string d) = `(1U << ` ~ _RZ!(` ~ `d` ~ `) ~ `)`;
+enum string _GM(string d) = `(((1U << ` ~ _GZ!(d) ~ `) - 1) << ` ~ _GS!(d) ~ `)`;
+enum string _BZ(string d) = `(` ~ d ~ ` - ` ~ _RZ!(d) ~ ` - ` ~ _GZ!(d) ~ `)`;
+enum string _BS(string d) = `(` ~ _RZ!(d) ~ ` + ` ~ _GZ!(d) ~ `)`;
+enum string _BM(string d) = `(((1U << ` ~ _BZ!(d) ~ `) - 1) << ` ~ _BS!(d) ~ `)`;
+enum string _CE(string d) = `(1U << ` ~ _RZ!(d) ~ `)`;
 
 struct _miVisuals {
     _miVisuals* next;
