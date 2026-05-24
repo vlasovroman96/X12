@@ -38,9 +38,10 @@ import os.osdep;
 
 import swaprep;
 import mipointer;
+import include.clang;
 
 /* xFixed is just `int`, so better check whether it's really 32bit */
-__size_assert(xFixed, CARD32.sizeof);
+static assert(xFixed.sizeof, CARD32.sizeof);
 
 RESTYPE RRCrtcType = 0;
 
@@ -343,7 +344,7 @@ private void RRComputeContiguity(ScreenPtr pScreen)
     int* reachable = cast(int*) calloc(n, int.sizeof);
 
     if (!reachable)
-        goto out;
+        goto out_;
 
     /* Find first enabled CRTC and start search for reachable CRTCs from it */
     for (i = 0; i < n; ++i) {
@@ -356,11 +357,11 @@ private void RRComputeContiguity(ScreenPtr pScreen)
     /* Check that all enabled CRTCs were marked as reachable */
     for (i = 0; i < n; ++i)
         if (pScrPriv.crtcs[i].mode && !reachable[i])
-            goto out;
+            goto out_;
 
     discontiguous = FALSE;
 
- out:
+ out_:
     free(reachable);
     pScrPriv.discontiguous = discontiguous;
 }
@@ -639,7 +640,7 @@ private Bool rrCheckPixmapBounding(ScreenPtr pScreen, RRCrtcPtr rr_crtc, Rotatio
         RegionUnion(&total_region, &total_region, &new_crtc_region);
     }
 
-    xorg_list_for_each_entry(secondary, &pScreen.secondary_list, secondary_head) {
+    xorg_list_for_each_entry(secondary, &pScreen.secondary_list, secondary_head); {
         rrScrPrivPtr secondary_priv = rrGetScrPriv(secondary);
 
         if (!secondary.is_output_secondary)
@@ -780,8 +781,45 @@ static if (RANDR_12_INTERFACE) {
             ret = (*pScrPriv.rrCrtcSet) (pScreen, crtc, mode, x, y,
                                           rotation, numOutputs, outputs);
         }
-        else
+        else{
+            if (pScrPriv.rrSetConfig) {
+                RRScreenSize size = void;
+                RRScreenRate rate = void;
+
+                if (!mode) {
+                    RRCrtcNotify(crtc, null, x, y, rotation, null, 0, null);
+                    ret = TRUE;
+                }
+                else {
+                    size.width = mode.mode.width;
+                    size.height = mode.mode.height;
+                    if (outputs[0].mmWidth && outputs[0].mmHeight) {
+                        size.mmWidth = outputs[0].mmWidth;
+                        size.mmHeight = outputs[0].mmHeight;
+                    }
+                    else {
+                        size.mmWidth = pScreen.mmWidth;
+                        size.mmHeight = pScreen.mmHeight;
+                    }
+                    size.nRates = 1;
+                    rate.rate = RRVerticalRefresh(&mode.mode);
+                    size.pRates = &rate;
+                    ret =
+                        (*pScrPriv.rrSetConfig) (pScreen, rotation, rate.rate,
+                                                  &size);
+                    /*
+                     * Old 1.0 interface tied screen size to mode size
+                     */
+                    if (ret) {
+                        RRCrtcNotify(crtc, mode, x, y, rotation, null, 1,
+                                     outputs);
+                        RRScreenSizeNotify(pScreen);
+                    }
+                }
+            }
+        }
 }
+else
         {
             if (pScrPriv.rrSetConfig) {
                 RRScreenSize size = void;
@@ -864,7 +902,7 @@ private int RRCrtcDestroyResource(void* value, XID pid)
         int i = void;
         RRLeasePtr lease = void, next = void;
 
-        xorg_list_for_each_entry_safe(lease, next, &pScrPriv.leases, list) {
+        xorg_list_for_each_entry_safe(lease, next, &pScrPriv.leases, list); {
             int c = void;
             for (c = 0; c < lease.numCrtcs; c++) {
                 if (lease.crtcs[c] == crtc) {
@@ -973,7 +1011,7 @@ Bool RRCrtcExists(ScreenPtr pScreen, RRCrtcPtr findCrtc)
     if (RRCrtcInScreen(pScreen, findCrtc))
         return TRUE;
 
-    xorg_list_for_each_entry(secondary, &pScreen.secondary_list, secondary_head) {
+    xorg_list_for_each_entry(secondary, &pScreen.secondary_list, secondary_head); {
         if (!secondary.is_output_secondary)
             continue;
         if (RRCrtcInScreen(secondary, findCrtc))
@@ -1818,7 +1856,7 @@ void RRConstrainCursorHarder(DeviceIntPtr pDev, ScreenPtr pScreen, int mode, int
     if (ret == TRUE)
         return;
 
-    xorg_list_for_each_entry(secondary, &pScreen.secondary_list, secondary_head) {
+    xorg_list_for_each_entry(secondary, &pScreen.secondary_list, secondary_head); {
         if (!secondary.is_output_secondary)
             continue;
 
@@ -1832,7 +1870,7 @@ void RRConstrainCursorHarder(DeviceIntPtr pDev, ScreenPtr pScreen, int mode, int
     if (ret == TRUE)
         return;
 
-    xorg_list_for_each_entry(secondary, &pScreen.secondary_list, secondary_head) {
+    xorg_list_for_each_entry(secondary, &pScreen.secondary_list, secondary_head); {
         if (!secondary.is_output_secondary)
             continue;
 
