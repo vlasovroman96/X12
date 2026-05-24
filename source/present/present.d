@@ -99,7 +99,7 @@ void present_pixmap_idle(PixmapPtr pixmap, WindowPtr window, CARD32 serial, pres
     if (present_fence)
         present_fence_set_triggered(present_fence);
     if (window) {
-        DebugPresent(("\ti %08" PRIx32 ~ "\n", pixmap ? pixmap.drawable.id : 0));
+        DebugPresent(("\ti %08"~ PRIx32 ~ "\n", pixmap ? pixmap.drawable.id : 0));
         present_send_idle_notify(window, serial, pixmap, present_fence);
     }
 }
@@ -217,7 +217,8 @@ int present_pixmap(WindowPtr window, PixmapPtr pixmap, CARD32 serial, RegionPtr 
     ScreenPtr screen = window.drawable.pScreen;
     present_screen_priv_ptr screen_priv = present_screen_priv(screen);
 
-    return screen_priv.present_pixmap(window,
+version(DRI3) {
+        return screen_priv.present_pixmap(window,
                                        pixmap,
                                        serial,
                                        valid,
@@ -227,12 +228,28 @@ int present_pixmap(WindowPtr window, PixmapPtr pixmap, CARD32 serial, RegionPtr 
                                        target_crtc,
                                        wait_fence,
                                        idle_fence,
-#ifdef DRI3
                                        acquire_syncobj,
                                        release_syncobj,
                                        acquire_point,
                                        release_point,
-#endif /* DRI3 */
+                                       options,
+                                       window_msc,
+                                       divisor,
+                                       remainder,
+                                       notifies,
+                                       num_notifies);
+}
+else {
+        return screen_priv.present_pixmap(window,
+                                       pixmap,
+                                       serial,
+                                       valid,
+                                       update,
+                                       x_off,
+                                       y_off,
+                                       target_crtc,
+                                       wait_fence,
+                                       idle_fence,
                                        options,
                                        window_msc,
                                        divisor,
@@ -243,6 +260,7 @@ int present_pixmap(WindowPtr window, PixmapPtr pixmap, CARD32 serial, RegionPtr 
 
 int present_notify_msc(WindowPtr window, CARD32 serial, ulong target_msc, ulong divisor, ulong remainder)
 {
+    version(DRI3) {
     return present_pixmap(window,
                           null,
                           serial,
@@ -250,9 +268,20 @@ int present_notify_msc(WindowPtr window, CARD32 serial, ulong target_msc, ulong 
                           0, 0,
                           null,
                           null, null,
-#ifdef DRI3
                           null, null, 0, 0,
-#endif /* DRI3 */
                           divisor == 0 ? PresentOptionAsync : 0,
                           target_msc, divisor, remainder, null, 0);
+    }
+    else {
+            return present_pixmap(window,
+                          null,
+                          serial,
+                          null, null,
+                          0, 0,
+                          null,
+                          null, null,
+                          divisor == 0 ? PresentOptionAsync : 0,
+                          target_msc, divisor, remainder, null, 0);
+    }
+    }
 }
