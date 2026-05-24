@@ -93,7 +93,7 @@ Equipment Corporation.
   */
 import build.dix_config;
 
-import    X11/X;
+import    X11.X;
 
 import dix.window_priv;
 import mi.mi_priv;
