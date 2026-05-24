@@ -203,7 +203,7 @@ int InputThreadRegisterDev(int fd, NotifyFdProcPtr readInputProc, void* readInpu
     input_lock();
 
     dev = null;
-    xorg_list_for_each_entry(old, &inputThreadInfo.devs, node) {
+    xorg_list_for_each_entry(old, &inputThreadInfo.devs, node); {
         if (old.fd == fd && old.state != device_state_removed) {
             dev = old;
             break;
@@ -262,7 +262,7 @@ int InputThreadUnregisterDev(int fd)
     }
 
     input_lock();
-    xorg_list_for_each_entry(dev, &inputThreadInfo.devs, node)
+    xorg_list_for_each_entry(dev, &inputThreadInfo.devs, node);
         if (dev.fd == fd) {
             found_device = TRUE;
             break;
@@ -341,7 +341,7 @@ version (HAVE_PTHREAD_SETNAME_NP_WITH_TID) {
 
             input_lock();
             inputThreadInfo.changed = FALSE;
-            xorg_list_for_each_entry_safe(dev, tmp, &inputThreadInfo.devs, node) {
+            xorg_list_for_each_entry_safe(dev, tmp, &inputThreadInfo.devs, node); {
                 switch (dev.state) {
                 case device_state_added:
                     ospoll_add(inputThreadInfo.fds, dev.fd,
@@ -497,7 +497,7 @@ void InputThreadFini()
     input_force_unlock();
     pthread_join(inputThreadInfo.thread, null);
 
-    xorg_list_for_each_entry_safe(dev, next, &inputThreadInfo.devs, node) {
+    xorg_list_for_each_entry_safe(dev, next, &inputThreadInfo.devs, node); {
         ospoll_remove(inputThreadInfo.fds, dev.fd);
         free(dev);
     }
