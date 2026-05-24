@@ -60,9 +60,9 @@ version = XTRANS_TRANSPORT_C;  /* used to flag Xtransint.h that it's being used
 import Xtransint;
 
 version (__clang__) {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wformat-nonliteral"
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+// #pragma clang diagnostic push
+// #pragma clang diagnostic ignored "-Wformat-nonliteral"
+// #pragma clang diagnostic ignored "-Wdeprecated-declarations"
 }
 
 import Xtranssock;
@@ -70,5 +70,5 @@ import Xtrans;
 import Xtransutil;
 
 version (__clang__) {
-#pragma clang diagnostic pop
+// #pragma clang diagnostic pop
 }
