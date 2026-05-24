@@ -113,8 +113,8 @@ void LockServer()
     len += strlen(tmppath) + strlen(port.ptr) + strlen(LOCK_SUFFIX) + 1;
     if (len > LockFile.sizeof)
         FatalError("Display name `%s' is too long\n", port.ptr);
-    cast(void) sprintf(tmp.ptr, "%s" LOCK_TMP_PREFIX ~ "%s" LOCK_SUFFIX, tmppath, port.ptr);
-    cast(void) sprintf(LockFile.ptr, "%s" LOCK_PREFIX ~ "%s" LOCK_SUFFIX, tmppath, port.ptr);
+    cast(void) sprintf(tmp.ptr, "%s" ~LOCK_TMP_PREFIX ~ "%s"~ LOCK_SUFFIX, tmppath, port.ptr);
+    cast(void) sprintf(LockFile.ptr, "%s"~ LOCK_PREFIX ~ "%s"~ LOCK_SUFFIX, tmppath, port.ptr);
 
     /*
      * Create a temporary file containing our PID.  Attempt three times
@@ -124,7 +124,7 @@ void LockServer()
     i = 0;
     do {
         i++;
-        lfd = open(tmp.ptr, O_CREAT | O_EXCL | O_WRONLY, 0644);
+        lfd = open(tmp.ptr, O_CREAT | O_EXCL | O_WRONLY, octal!"0644");
         if (lfd < 0)
             sleep(2);
         else
@@ -135,7 +135,7 @@ void LockServer()
         i = 0;
         do {
             i++;
-            lfd = open(tmp.ptr, O_CREAT | O_EXCL | O_WRONLY, 0644);
+            lfd = open(tmp.ptr, O_CREAT | O_EXCL | O_WRONLY, octal!"0644");
             if (lfd < 0)
                 sleep(2);
             else
@@ -147,7 +147,7 @@ void LockServer()
     snprintf(pid_str.ptr, pid_str.sizeof, "%10lu\n", cast(c_ulong) getpid());
     if (write(lfd, pid_str.ptr, 11) != 11)
         FatalError("Could not write pid to lock file in %s\n", tmp.ptr);
-    cast(void) fchmod(lfd, 0444);
+    cast(void) fchmod(lfd, octal!"0444");
     cast(void) close(lfd);
 
     /*
