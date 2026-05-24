@@ -58,12 +58,12 @@ SOFTWARE.
 
 import build.dix_config;
 
-import	X11/X;
-import	X11/Xmd;
-import	X11/Xproto;
+import	X11.X;
+import	X11.Xmd;
+import	X11.Xproto;
 import	misc;
 import	gcstruct;
-import	X11/fonts/fontstruct;
+import	X11.fonts.fontstruct;
 import	dixfontstr;
 import	mi;
 
