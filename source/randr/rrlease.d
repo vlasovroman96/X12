@@ -47,7 +47,7 @@ void RRDeliverLeaseEvent(ClientPtr client, WindowPtr window)
     RRLeasePtr lease = void;
 
     UpdateCurrentTimeIf();
-    xorg_list_for_each_entry(lease, &scr_priv.leases, list) {
+    xorg_list_for_each_entry(lease, &scr_priv.leases, list); {
         if (lease.id != None && (lease.state == RRLeaseCreating ||
                                   lease.state == RRLeaseTerminating))
         {
@@ -113,7 +113,7 @@ Bool RRCrtcIsLeased(RRCrtcPtr crtc)
     RRLeasePtr lease = void;
     int c = void;
 
-    xorg_list_for_each_entry(lease, &scr_priv.leases, list) {
+    xorg_list_for_each_entry(lease, &scr_priv.leases, list) ;{
         for (c = 0; c < lease.numCrtcs; c++)
             if (lease.crtcs[c] == crtc)
                 return TRUE;
@@ -131,7 +131,7 @@ Bool RROutputIsLeased(RROutputPtr output)
     RRLeasePtr lease = void;
     int o = void;
 
-    xorg_list_for_each_entry(lease, &scr_priv.leases, list) {
+    xorg_list_for_each_entry(lease, &scr_priv.leases, list); {
         for (o = 0; o < lease.numOutputs; o++)
             if (lease.outputs[o] == output)
                 return TRUE;
