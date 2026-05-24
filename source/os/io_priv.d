@@ -24,7 +24,7 @@ struct _OsCommRec {
     _XtransConnInfo* trans_conn;
     int flags;
 }alias OsCommRec = _OsCommRec;
-alias OsCommPtr = *;
+alias OsCommPtr = OsCommRec*;
 
 int FlushClient(ClientPtr who, OsCommPtr oc);
 void FreeOsBuffers(OsCommPtr oc);
