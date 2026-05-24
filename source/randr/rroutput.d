@@ -369,7 +369,7 @@ private int RROutputDestroyResource(void* value, XID pid)
         int i = void;
         RRLeasePtr lease = void, next = void;
 
-        xorg_list_for_each_entry_safe(lease, next, &pScrPriv.leases, list) {
+        xorg_list_for_each_entry_safe(lease, next, &pScrPriv.leases, list); {
             int o = void;
             for (o = 0; o < lease.numOutputs; o++) {
                 if (lease.outputs[o] == output) {
@@ -580,7 +580,7 @@ int ProcRRSetOutputPrimary(ClientPtr client)
 
         xorg_list_for_each_entry(secondary,
                                  &pWin.drawable.pScreen.secondary_list,
-                                 secondary_head) {
+                                 secondary_head); {
             if (secondary.is_output_secondary)
                 RRSetPrimaryOutput(secondary, rrGetScrPriv(secondary), output);
         }
