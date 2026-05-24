@@ -32,7 +32,7 @@ struct _MiOverlayValDataRec {
     RegionPtr borderVisible;
     xPoint oldAbsCorner;
 }alias miOverlayValDataRec = _MiOverlayValDataRec;
-alias miOverlayValDataPtr = *;
+alias miOverlayValDataPtr = miOverlayValDataRec*;
 
 struct _TreeRec {
     WindowPtr pWin;
@@ -51,7 +51,7 @@ alias miOverlayTreePtr = _TreeRec*;
 struct _MiOverlayWindowRec {
     miOverlayTreePtr tree;
 }alias miOverlayWindowRec = _MiOverlayWindowRec;
-alias miOverlayWindowPtr = *;
+alias miOverlayWindowPtr = miOverlayWindowRec*;
 
 struct _MiOverlayScreenRec {
     CreateWindowProcPtr CreateWindow;
@@ -63,7 +63,7 @@ struct _MiOverlayScreenRec {
     Bool underlayMarked;
     Bool copyUnderlay;
 }alias miOverlayScreenRec = _MiOverlayScreenRec;
-alias miOverlayScreenPtr = *;
+alias miOverlayScreenPtr = miOverlayScreenRec*;
 
 private DevPrivateKeyRec miOverlayWindowKeyRec;
 
@@ -102,10 +102,10 @@ enum string MIOVERLAY_GET_SCREEN_PRIVATE(string pScreen) = `(cast(miOverlayScree
 enum string MIOVERLAY_GET_WINDOW_PRIVATE(string pWin) = `(cast(miOverlayWindowPtr) 
 	dixLookupPrivate(&(` ~ pWin ~ `).devPrivates, miOverlayWindowKey))`;
 enum string MIOVERLAY_GET_WINDOW_TREE(string pWin) = `
-	(` ~ MIOVERLAY_GET_WINDOW_PRIVATE!(` ~ `pWin` ~ `) ~ `.tree)`;
+	(` ~ MIOVERLAY_GET_WINDOW_PRIVATE!(pWin) ~ `.tree)`;
 
 enum string IN_UNDERLAY(string w) = `MIOVERLAY_GET_WINDOW_TREE(` ~ w ~ `)`;
-enum string IN_OVERLAY(string w) = `!` ~ MIOVERLAY_GET_WINDOW_TREE!(` ~ `w` ~ `) ~ ``;
+enum string IN_OVERLAY(string w) = `!` ~ MIOVERLAY_GET_WINDOW_TREE!(w) ~ ``;
 
 enum string MARK_OVERLAY(string w) = `miMarkWindow(` ~ w ~ `)`;
 enum string MARK_UNDERLAY(string w) = `MarkUnderlayWindow(` ~ w ~ `)`;
