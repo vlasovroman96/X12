@@ -75,8 +75,8 @@ import procfs;
 }
 
 version (__OpenBSD__) {
-import sys/param;
-import sys/sysctl;
+import sys.param;
+import sys.sysctl;
 import core.sys.posix.sys.types;
 
 import kvm;
@@ -84,14 +84,14 @@ import core.stdc.limits;
 }
 
 static if (HasVersion!"__DragonFly__" || HasVersion!"__FreeBSD__") {
-import sys/sysctl;
+import sys.sysctl;
 import core.stdc.errno;
 }
 
 version (OSX) {
-import dispatch/dispatch;
+import dispatch.dispatch;
 import core.stdc.errno;
-import sys/sysctl;
+import sys.sysctl;
 }
 
 import os.auth;
@@ -170,8 +170,8 @@ version (OSX) {
     {
         static dispatch_once_t once;
         static int argmax;
-        dispatch_once(&once, ^{
-            int mib[2];
+        dispatch_once(&once, {
+            int[2] mib;
             size_t len = void;
 
             mib[0] = CTL_KERN;
@@ -182,7 +182,7 @@ version (OSX) {
                 ErrorF("Unable to dynamically determine kern.argmax, using ARG_MAX (%d)\n", ARG_MAX);
                 argmax = ARG_MAX;
             }
-        }){}
+        });
 
         int[3] mib = void;
         size_t len = argmax;
@@ -368,10 +368,11 @@ version (OSX) {
     if (snprintf(path.ptr, path.sizeof, "/proc/%d/cmdline", pid) < 0)
         return;
     fd = open(path.ptr, O_RDONLY);
-    if (fd < 0)
 version (__sun) {
+    if(fd < 0)
         goto fallback;
 } else {
+    if(fd < 0)
         return;
 }
 
