@@ -298,7 +298,7 @@ int AnimCursorCreate(CursorPtr* cursors, CARD32* deltas, int ncursor, CursorPtr*
     DIX_FOR_EACH_SCREEN({
         if (!mixin(GetAnimCurScreen!(`walkScreen`)))
             return BadImplementation;
-    }){}
+    });
 
     for (i = 0; i < ncursor; i++)
         if (mixin(IsAnimCur!(`cursors[i]`)))
