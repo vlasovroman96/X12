@@ -22,23 +22,23 @@ struct _GlyphRefRec {
     CARD32 signature;
     GlyphPtr glyph;
 }alias GlyphRefRec = _GlyphRefRec;
-alias GlyphRefPtr = *;
+alias GlyphRefPtr = GlyphRefRec*;
 
-enum DeletedGlyph =	((GlyphPtr) 1);
+enum DeletedGlyph =	cast(GlyphPtr) 1;
 
 struct _GlyphHashSetRec {
     CARD32 entries;
     CARD32 size;
     CARD32 rehash;
 }alias GlyphHashSetRec = _GlyphHashSetRec;
-alias GlyphHashSetPtr = *;
+alias GlyphHashSetPtr = GlyphHashSetRec*;
 
 struct _GlyphHashRec {
     GlyphRefPtr table;
     GlyphHashSetPtr hashSet;
     CARD32 tableEntries;
 }alias GlyphHashRec = _GlyphHashRec;
-alias GlyphHashPtr = *;
+alias GlyphHashPtr = GlyphHashRec*;
 
 struct _GlyphSetRec {
     CARD32 refcnt;
@@ -47,7 +47,7 @@ struct _GlyphSetRec {
     GlyphHashRec hash;
     PrivateRec* devPrivates;
 }alias GlyphSetRec = _GlyphSetRec;
-alias GlyphSetPtr = *;
+alias GlyphSetPtr = GlyphSetRec*;
 
 enum string GlyphSetGetPrivate(string pGlyphSet,string k) = `
     dixLookupPrivate(&(` ~ pGlyphSet ~ `).devPrivates, ` ~ k ~ `)`;
