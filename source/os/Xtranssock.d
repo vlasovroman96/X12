@@ -90,8 +90,8 @@ version (Windows) {} else {
 version (UNIXCONN) {
 import core.sys.posix.sys.un;
 import core.sys.posix.sys.socket;
-import netinet/in;
-import arpa/inet;
+import netinet.in_;
+import arpa.inet;
 }
 
 version (UNIXCONN) {
@@ -102,13 +102,13 @@ import deimos.X11.Xos_r;
 
 version (NO_TCP_H) {} else {
 static if (HasVersion!"linux" || HasVersion!"__GLIBC__") {
-import sys/param;
+import sys.param;
 } /* osf */
 static if (HasVersion!"__NetBSD__" || HasVersion!"__OpenBSD__" || HasVersion!"__FreeBSD__" || HasVersion!"__DragonFly__") {
-import sys/param;
-import machine/endian;
+import sys.param;
+import machine.endian;
 } /* __NetBSD__ || __OpenBSD__ || __FreeBSD__ || __DragonFly__ */
-import netinet/tcp;
+import netinet.tcp;
 } /* !NO_TCP_H */
 
 import core.sys.posix.sys.ioctl;
@@ -132,6 +132,8 @@ enum EINTR = WSAEINTR;
 version = X_INCLUDE_NETDB_H;
 version = XOS_USE_MTSAFE_NETDBAPI;
 import deimos.X11.Xos_r;
+import core.sys.posix.netinet.tcp;
+import build.dix_config;
 } /* WIN32 */
 
 static if (HasVersion!"SO_DONTLINGER" && HasVersion!"SO_LINGER") {
@@ -186,20 +188,80 @@ struct Sockettrans2dev {
  *  unix    UNIX Domain Sockets (same host only)
  *  local   Platform preferred local connection method
  */
-private Sockettrans2dev[8] Sockettrans2devtab = [
-    {"inet",AF_INET,SOCK_STREAM,SOCK_DGRAM,0},
-#ifndef IPv6
-    {"tcp",AF_INET,SOCK_STREAM,SOCK_DGRAM,0},
-#else /* IPv6 */
-    {"tcp",AF_INET6,SOCK_STREAM,SOCK_DGRAM,0},
-    {"tcp",AF_INET,SOCK_STREAM,SOCK_DGRAM,0}, /* fallback */
-    {"inet6",AF_INET6,SOCK_STREAM,SOCK_DGRAM,0},
-#endif
-#ifdef UNIXCONN
-    {"unix",AF_UNIX,SOCK_STREAM,SOCK_DGRAM,0},
-    {"local",AF_UNIX,SOCK_STREAM,SOCK_DGRAM,0},
-#endif /* UNIXCONN */
-];
+private Sockettrans2dev[] buildSocketTransports()
+{
+    Sockettrans2dev[] arr;
+
+    arr ~= Sockettrans2dev(
+        "inet",
+        AF_INET,
+        SOCK_STREAM,
+        SOCK_DGRAM,
+        0
+    );
+
+    version (IPv6)
+    {
+        arr ~= Sockettrans2dev(
+            "tcp",
+            AF_INET6,
+            SOCK_STREAM,
+            SOCK_DGRAM,
+            0
+        );
+
+        // IPv4 fallback
+        arr ~= Sockettrans2dev(
+            "tcp",
+            AF_INET,
+            SOCK_STREAM,
+            SOCK_DGRAM,
+            0
+        );
+
+        arr ~= Sockettrans2dev(
+            "inet6",
+            AF_INET6,
+            SOCK_STREAM,
+            SOCK_DGRAM,
+            0
+        );
+    }
+    else
+    {
+        arr ~= Sockettrans2dev(
+            "tcp",
+            AF_INET,
+            SOCK_STREAM,
+            SOCK_DGRAM,
+            0
+        );
+    }
+
+    version (UNIXCONN)
+    {
+        arr ~= Sockettrans2dev(
+            "unix",
+            AF_UNIX,
+            SOCK_STREAM,
+            SOCK_DGRAM,
+            0
+        );
+
+        arr ~= Sockettrans2dev(
+            "local",
+            AF_UNIX,
+            SOCK_STREAM,
+            SOCK_DGRAM,
+            0
+        );
+    }
+
+    return arr;
+}
+
+private immutable Sockettrans2dev[] Sockettrans2devtab =
+    buildSocketTransports();
 
 enum NUMSOCKETFAMILIES = (sizeof(Sockettrans2devtab)/sizeof(Sockettrans2dev));
 
@@ -378,12 +440,10 @@ version (Windows) {
 	return null;
     }
 
-version (TCP_NODELAY) {
+version(TCP_NODELAY) {
+    version (IPv6) {
     if (Sockettrans2devtab[i].family == AF_INET
-#ifdef IPv6
-      || Sockettrans2devtab[i].family == AF_INET6
-#endif
-    )
+      || Sockettrans2devtab[i].family == AF_INET6)
     {
 	/*
 	 * turn off TCP coalescence for INET sockets
@@ -393,7 +453,21 @@ version (TCP_NODELAY) {
 	setsockopt (ciptr.fd, IPPROTO_TCP, TCP_NODELAY,
 	    cast(char*) &tmp, int.sizeof);
     }
+    }
+    else {
+    if (Sockettrans2devtab[i].family == AF_INET)
+    {
+	/*
+	 * turn off TCP coalescence for INET sockets
+	 */
+
+	int tmp = 1;
+	setsockopt (ciptr.fd, IPPROTO_TCP, TCP_NODELAY,
+	    cast(char*) &tmp, int.sizeof);
+    }
+    }
 }
+
 
     /*
      * Some systems provide a really small default buffer size for
@@ -455,7 +529,7 @@ version (SOCK_MAXADDRLEN) {
 
     ciptr.fd = fd;
 
-    addrlen = portlen + offsetof(struct sockaddr, sa_data);
+    addrlen = portlen + offsetof(sockaddr, sa_data);
     if ((addr = cast(sockaddr*) calloc (1, addrlen)) == null) {
 	prmsg (1, "SocketReopen: malloc(addr) failed\n");
 	free (ciptr);
@@ -534,21 +608,34 @@ private XtransConnInfo _XSERVTransSocketOpenCOTSServer(Xtransport* thistrans, co
      * Using this prevents the bind() check for an existing server listening
      * on the same port, but it is required for other reasons.
      */
-version (SO_REUSEADDR) {
 
-    /*
-     * SO_REUSEADDR only applied to AF_INET && AF_INET6
-     */
 
+
+version(SO_REUSEADDR) {
+    version (IPv6) {
     if (Sockettrans2devtab[i].family == AF_INET
-#ifdef IPv6
-      || Sockettrans2devtab[i].family == AF_INET6
-#endif
-    )
+      || Sockettrans2devtab[i].family == AF_INET6)
     {
+	/*
+	 * turn off TCP coalescence for INET sockets
+	 */
+
 	int one = 1;
 	setsockopt (ciptr.fd, SOL_SOCKET, SO_REUSEADDR,
 		    cast(char*) &one, int.sizeof);
+    }
+    }
+    else {
+    if (Sockettrans2devtab[i].family == AF_INET)
+    {
+	/*
+	 * turn off TCP coalescence for INET sockets
+	 */
+
+	int one = 1;
+	setsockopt (ciptr.fd, SOL_SOCKET, SO_REUSEADDR,
+		    cast(char*) &one, int.sizeof);
+    }
     }
 }
 version (IPV6_V6ONLY) {
@@ -630,71 +717,98 @@ version (HAVE_ABSTRACT_SOCKETS) {
 }
 }
 
-private int _XSERVTransSocketCreateListener(XtransConnInfo ciptr, sockaddr* sockname, int socknamelen, uint flags)
+private int _XSERVTransSocketCreateListener(
+    XtransConnInfo ciptr,
+    sockaddr* sockname,
+    int socknamelen,
+    uint flags
+)
 {
     SOCKLEN_T namelen = socknamelen;
     int fd = ciptr.fd;
-    int retry = void;
 
-    prmsg (3, "SocketCreateListener(%p,%d)\n", cast(void*) ciptr, fd);
+    bool inetFamily =
+        Sockettrans2devtab[ciptr.index].family == AF_INET;
 
-    if (Sockettrans2devtab[ciptr.index].family == AF_INET
-#ifdef IPv6
-      || Sockettrans2devtab[ciptr.index].family == AF_INET6
-#endif
-	)
-	retry = 20;
-    else
-	retry = 0;
-
-    while (bind (fd, sockname, namelen) < 0)
+    version (IPv6)
     {
-	if (errno == EADDRINUSE) {
-	    if (flags & ADDR_IN_USE_ALLOWED)
-		break;
-	    else
-		return TRANS_ADDR_IN_USE;
-	}
+        inetFamily |=
+            Sockettrans2devtab[ciptr.index].family == AF_INET6;
+    }
 
-	if (retry-- == 0) {
-	    prmsg (1, "SocketCreateListener: failed to bind listener\n");
+    int retry = inetFamily ? 20 : 0;
+
+    prmsg(3, "SocketCreateListener(%p,%d)\n",
+        cast(void*) ciptr,
+        fd);
+
+    while (bind(fd, sockname, namelen) < 0)
+    {
+        if (errno == EADDRINUSE)
+        {
+            if (flags & ADDR_IN_USE_ALLOWED)
+                break;
+
+            return TRANS_ADDR_IN_USE;
+        }
+
+        if (retry-- == 0)
+        {
+            prmsg(1,
+                "SocketCreateListener: failed to bind listener\n");
+
             ossock_close(fd);
-	    return TRANS_CREATE_LISTENER_FAILED;
-	}
-version (SO_REUSEADDR) {
-	sleep (1);
-} else {
-	sleep (10);
-} /* SO_REUSEDADDR */
+
+            return TRANS_CREATE_LISTENER_FAILED;
+        }
+
+        version (SO_REUSEADDR)
+        {
+            sleep(1);
+        }
+        else
+        {
+            sleep(10);
+        }
     }
 
-    if (Sockettrans2devtab[ciptr.index].family == AF_INET
-#ifdef IPv6
-      || Sockettrans2devtab[ciptr.index].family == AF_INET6
-#endif
-	) {
-version (SO_DONTLINGER) {
-	setsockopt (fd, SOL_SOCKET, SO_DONTLINGER, cast(char*) null, 0);
-} else {
-version (SO_LINGER) {
+    if (inetFamily)
     {
-	static int[2] linger = [ 0, 0 ];
-	setsockopt (fd, SOL_SOCKET, SO_LINGER,
-		cast(char*) linger, linger.sizeof);
-    }
-}
-}
-}
+        version (SO_DONTLINGER)
+        {
+            setsockopt(
+                fd,
+                SOL_SOCKET,
+                SO_DONTLINGER,
+                cast(char*) null,
+                0
+            );
+        }
+        else version (SO_LINGER)
+        {
+            static int[2] linger = [0, 0];
 
-    if (listen (fd, BACKLOG) < 0)
+            setsockopt(
+                fd,
+                SOL_SOCKET,
+                SO_LINGER,
+                cast(char*) linger.ptr,
+                linger.sizeof
+            );
+        }
+    }
+
+    if (listen(fd, BACKLOG) < 0)
     {
-	prmsg (1, "SocketCreateListener: listen() failed\n");
+        prmsg(1,
+            "SocketCreateListener: listen() failed\n");
+
         ossock_close(fd);
-	return TRANS_CREATE_LISTENER_FAILED;
+
+        return TRANS_CREATE_LISTENER_FAILED;
     }
 
-    /* Set a flag to indicate that this connection is a listener */
-
+    // Mark as listener
     ciptr.flags = 1 | (ciptr.flags & TRANS_KEEPFLAGS);
 
     return 0;
@@ -840,9 +954,9 @@ version (HAVE_ABSTRACT_SOCKETS) {
 
 version (UNIX_DIR) {
 version (HAS_STICKY_DIR_BIT) {
-    mode = 01777;
+    mode = octal!"01777";
 } else {
-    mode = 0777;
+    mode = octal!"0777";
 }
     if (!abstract_ && trans_mkdir(UNIX_DIR, mode) == -1) {
 	prmsg (1, "SocketUNIXCreateListener: mkdir(%s) failed, errno = %d\n",
@@ -871,12 +985,12 @@ version (BSD44SOCKETS) {
 static if (HasVersion!"BSD44SOCKETS" || HasVersion!"SUN_LEN") {
     namelen = SUN_LEN(&sockname);
 } else {
-    namelen = strlen(sockname.sun_path) + offsetof(struct sockaddr_un, sun_path);
+    namelen = strlen(sockname.sun_path) + offsetof(sockaddr_un, sun_path);
 }
 
     if (abstract_) {
 	sockname.sun_path[0] = '\0';
-	namelen = offsetof(struct sockaddr_un, sun_path) + 1 + strlen(&sockname.sun_path[1]);
+	namelen = offsetof(sockaddr_un, sun_path) + 1 + strlen(&sockname.sun_path[1]);
     }
     else
 	unlink (sockname.sun_path);
@@ -940,20 +1054,20 @@ version (HAVE_ABSTRACT_SOCKETS) {
     if (!abstract_ && (
 	stat (unsock.sun_path, &statb) == -1 ||
         ((statb.st_mode & S_IFMT) !=
-#if !defined(S_IFSOCK)
-	  		S_IFIFO
-} else {
+// #if !defined(S_IFSOCK)
+// 	  		S_IFIFO
+// } else {
 			S_IFSOCK
-}
+// }
 				)))
     {
 	int oldUmask = umask (0);
 
 version (UNIX_DIR) {
 version (HAS_STICKY_DIR_BIT) {
-	mode = 01777;
+	mode = octal!"01777";
 } else {
-	mode = 0777;
+	mode = octal!"0777";
 }
         if (trans_mkdir(UNIX_DIR, mode) == -1) {
             prmsg (1, "SocketUNIXResetListener: mkdir(%s) failed, errno = %d\n",
@@ -995,8 +1109,10 @@ version (HAS_STICKY_DIR_BIT) {
 
     return status;
 }
+}
 
-} /* UNIXCONN */
+
+/* UNIXCONN */
 
 
 private XtransConnInfo _XSERVTransSocketINETAccept(XtransConnInfo ciptr)
@@ -1402,9 +1518,9 @@ private int _XSERVTransSocketINETClose(XtransConnInfo ciptr)
 
 private const(char)*[3] tcp_nolisten = [
 	"inet",
-#ifdef IPv6
+// #ifdef IPv6
 	"inet6",
-#endif
+// #endif
 	null
 ];
 
@@ -1421,10 +1537,10 @@ private Xtransport _XSERVTransSocketTCPFuncs = {
 	_XSERVTransSocketINETAccept,
 	_XSERVTransSocketRead,
 	_XSERVTransSocketWrite,
-#if XTRANS_SEND_FDS
+// #if XTRANS_SEND_FDS
 	_XSERVTransSocketSendFdInvalid,
 	_XSERVTransSocketRecvFdInvalid,
-#endif
+// #endif
 	_XSERVTransSocketDisconnect,
 	_XSERVTransSocketINETClose,
 	_XSERVTransSocketINETClose,
@@ -1443,10 +1559,10 @@ private Xtransport _XSERVTransSocketINETFuncs = {
 	_XSERVTransSocketINETAccept,
 	_XSERVTransSocketRead,
 	_XSERVTransSocketWrite,
-#if XTRANS_SEND_FDS
+// #if XTRANS_SEND_FDS
 	_XSERVTransSocketSendFdInvalid,
 	_XSERVTransSocketRecvFdInvalid,
-#endif
+// #endif
 	_XSERVTransSocketDisconnect,
 	_XSERVTransSocketINETClose,
 	_XSERVTransSocketINETClose,
@@ -1466,10 +1582,10 @@ private Xtransport _XSERVTransSocketINET6Funcs = {
 	_XSERVTransSocketINETAccept,
 	_XSERVTransSocketRead,
 	_XSERVTransSocketWrite,
-#if XTRANS_SEND_FDS
+// #if XTRANS_SEND_FDS
 	_XSERVTransSocketSendFdInvalid,
 	_XSERVTransSocketRecvFdInvalid,
-#endif
+// #endif
 	_XSERVTransSocketDisconnect,
 	_XSERVTransSocketINETClose,
 	_XSERVTransSocketINETClose,
@@ -1480,11 +1596,11 @@ version (UNIXCONN) {
 private Xtransport _XSERVTransSocketLocalFuncs = {
 	/* Socket Interface */
 	"local",
-#ifdef HAVE_ABSTRACT_SOCKETS
+// #ifdef HAVE_ABSTRACT_SOCKETS
 	TRANS_ABSTRACT,
-#else
-	0,
-#endif
+// #else
+	// 0,
+// #endif
 	null,
 	_XSERVTransSocketOpenCOTSServer,
 	_XSERVTransSocketReopenCOTSServer,
@@ -1494,10 +1610,10 @@ private Xtransport _XSERVTransSocketLocalFuncs = {
 	_XSERVTransSocketUNIXAccept,
 	_XSERVTransSocketRead,
 	_XSERVTransSocketWrite,
-#if XTRANS_SEND_FDS
+// #if XTRANS_SEND_FDS
 	_XSERVTransSocketSendFd,
 	_XSERVTransSocketRecvFd,
-#endif
+// #endif
 	_XSERVTransSocketDisconnect,
 	_XSERVTransSocketUNIXClose,
 	_XSERVTransSocketUNIXCloseForCloning,
@@ -1508,11 +1624,11 @@ private const(char)*[2] unix_nolisten = [ "local" , null ];
 private Xtransport _XSERVTransSocketUNIXFuncs = {
 	/* Socket Interface */
 	"unix",
-#if !defined(HAVE_ABSTRACT_SOCKETS)
+// #if !defined(HAVE_ABSTRACT_SOCKETS)
         TRANS_ALIAS,
-#else
-	0,
-#endif
+// #else
+	// 0,
+// #endif
 	unix_nolisten,
 	_XSERVTransSocketOpenCOTSServer,
 	_XSERVTransSocketReopenCOTSServer,
@@ -1522,10 +1638,10 @@ private Xtransport _XSERVTransSocketUNIXFuncs = {
 	_XSERVTransSocketUNIXAccept,
 	_XSERVTransSocketRead,
 	_XSERVTransSocketWrite,
-#if XTRANS_SEND_FDS
+// #if XTRANS_SEND_FDS
 	_XSERVTransSocketSendFd,
 	_XSERVTransSocketRecvFd,
-#endif
+// #endif
 	_XSERVTransSocketDisconnect,
 	_XSERVTransSocketUNIXClose,
 	_XSERVTransSocketUNIXCloseForCloning,
