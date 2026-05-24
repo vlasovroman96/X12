@@ -69,7 +69,7 @@ import deimos.X11.Xdmcp;
 private XdmAuthKeyRec privateKey;
 private char[21] XdmAuthenticationName = "XDM-AUTHENTICATION-1";
 
-enum XdmAuthenticationNameLen = (sizeof XdmAuthenticationName - 1);
+enum XdmAuthenticationNameLen = (XdmAuthenticationName.sizeof - 1);
 private XdmAuthKeyRec global_rho;
 
 private Bool XdmAuthenticationValidator(ARRAY8Ptr privateData, ARRAY8Ptr incomingData, xdmOpCode packet_type)
@@ -159,7 +159,7 @@ void XdmAuthenticationInit(const(char)* cookie, int cookie_len)
                                 cast(AddAuthorFunc) XdmAuthenticationAddAuth);
 }
 
-}                          /* XDMCP */
+}                        /* XDMCP */
 
 /* XDM-AUTHORIZATION-1 */
 struct _XdmAuthorization {
@@ -325,11 +325,15 @@ version (XDMCP) {
             key_bits[0] = '\0';
         }
         else
-}
         {
             rho_bits = cast(ubyte*) data;
             key_bits = cast(ubyte*) (data + 8);
         }
+}
+else {
+    rho_bits = cast(ubyte*) data;
+    key_bits = cast(ubyte*) (data + 8);
+}
         break;
 version (XDMCP) {
     case 8:                    /* auth from XDMCP is 8 bytes long */
