@@ -1,4 +1,4 @@
-module client_priv.h;
+module os.client_priv;
 @nogc nothrow:
 extern(C): __gshared:
 import core.stdc.config: c_long, c_ulong;
@@ -54,10 +54,10 @@ void CreateWellKnownSockets();
 void CloseWellKnownConnections();
 
 // exported for nvidia driver
-_X_EXPORT void SetCriticalOutputPending();
+void SetCriticalOutputPending();
 
 /* exported only for DRI module, but should not be used by external drivers */
-_X_EXPORT void ResetCurrentRequest(_Client* client);
+void ResetCurrentRequest(_Client* client);
 
 /* stuff for ReplyCallback */
 extern CallbackListPtr ReplyCallback;
