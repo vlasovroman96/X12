@@ -30,9 +30,9 @@ import os.Xtrans;
 import deimos.X11.Xos;
 
 static if (!HasVersion!"Windows") {
-import sys/param;
+import sys.param;
 import core.sys.posix.sys.socket;
-import netinet/in;
+import netinet.in_;
 import core.sys.posix.netdb;
 }
 
@@ -95,26 +95,26 @@ private addrinfo* mgrAddrFirst;
 
 version (IPv6) {
 
-enum SOCKADDR_TYPE =		struct sockaddr_storage;
+alias SOCKADDR_TYPE = sockaddr_storage;
 enum string SOCKADDR_FAMILY(string s) = `(cast(sockaddr*)&(` ~ s ~ `)).sa_family`;
 
 version (BSD44SOCKETS) {
 enum string SOCKLEN_FIELD(string s) = `(cast(sockaddr*)&(` ~ s ~ `)).sa_len`;
-enum SOCKLEN_TYPE = 		unsigned char;
+alias SOCKLEN_TYPE = 		ubyte;
 } else {
-enum SOCKLEN_TYPE = 		unsigned int;
+alias SOCKLEN_TYPE = 		uint;
 }
 
 } else {
 
-enum SOCKADDR_TYPE =		struct sockaddr_in;
+alias SOCKADDR_TYPE = sockaddr_in;
 enum string SOCKADDR_FAMILY(string s) = `(` ~ s ~ `).sin_family`;
 
 version (BSD44SOCKETS) {
 enum string SOCKLEN_FIELD(string s) = `(` ~ s ~ `).sin_len`;
-enum SOCKLEN_TYPE =		unsigned char;
+alias SOCKLEN_TYPE =		ubyte;
 } else {
-enum SOCKLEN_TYPE =		size_t;
+alias SOCKLEN_TYPE =		size_t;
 }
 
 }
@@ -436,19 +436,18 @@ void XdmcpRegisterConnection(int type, const(char)* address, int addrlen)
             if (mixin(SOCKADDR_FAMILY!(`FromAddress`)) == AF_INET) {
                 fromAddr = &(cast(sockaddr_in*) &FromAddress).sin_addr;
             }
-static if (HasVersion!"IPv6"
-            else if ((SOCKADDR_FAMILY(FromAddress) == AF_INET6) &&
+static if (HasVersion!"IPv6")
+            if ((SOCKADDR_FAMILY(FromAddress) == AF_INET6) &&
                      IN6_IS_ADDR_V4MAPPED(&
-                                          ((struct sockaddr_in6 *)
-                                           &FromAddress)->sin6_addr)) {
-                fromAddr) { =
+                                (cast(sockaddr_in6 *)&FromAddress).sin6_addr)) {
+                fromAddr =
                     &(cast(sockaddr_in6*) &FromAddress).sin6_addr.
                     s6_addr[12];
             }
 }
         }
 version (IPv6) {
-        else if(addrlen in6_addr)) {
+        if(addrlen == in6_addr) {
             if (mixin(SOCKADDR_FAMILY!(`FromAddress`)) == AF_INET6) {
                 fromAddr = &(cast(sockaddr_in6*) &FromAddress).sin6_addr;
             }
@@ -464,7 +463,6 @@ version (IPv6) {
         if (!fromAddr || memcmp(regAddr, fromAddr, regAddrlen) != 0) {
             return;
         }
-    }
     if (ConnectionAddresses.length + 1 == 256)
         return;
     newAddress = calloc(addrlen, CARD8.sizeof);
@@ -858,7 +856,7 @@ version (IPv6) {
     if ((xdmcpSocket = socket(AF_INET, SOCK_DGRAM, 0)) < 0)
         XdmcpWarning("UDP socket creation failed");
 version (SO_BROADCAST) {
-    else if (setsockopt &soopts,
+    if (setsockopt(xdmcpSocket, SOL_SOCKET, SO_BROADCAST, &soopts,
                         sizeof) < 0)
         XdmcpWarning("UDP set broadcast socket-option failed");
 }                          /* SO_BROADCAST */
@@ -869,7 +867,8 @@ version (SO_BROADCAST) {
     if (mixin(SOCKADDR_FAMILY!(`FromAddress`)) == AF_INET)
         socketfd = xdmcpSocket;
 version (IPv6) {
-    else if( AF_INET6);
+    if(SOCKADDR_FAMILY(FromAddress) == AF_INET6)
+        socketfd = xdmcpSocket6;
 }
     if (socketfd >= 0) {
         if (bind(socketfd, cast(sockaddr*) &FromAddress,
@@ -929,7 +928,7 @@ version (IPv6) {
                        sockaddr_in.sizeof);
     }
 version (IPv6) {
-    else if(multicast) {
+    if(multicast) {
         multicastinfo* mcl = void;
         addrinfo* ai = void;
 
@@ -1266,9 +1265,14 @@ private void XdmcpWarning(const(char)* str)
     ErrorF("XDMCP warning: %s\n", str);
 }
 
-private void get_addr_by_name(const(char)* argtype, const(char)* namestr, int port, int socktype, SOCKADDR_TYPE* addr, SOCKLEN_TYPE* HAVE_GETADDRINFO); private void struct; addrinfo** aip; addrinfo struct; addrinfo **aifirstp
-#endif
-    )
+private void get_addr_by_name(const(char)* argtype, 
+        const(char)* namestr, 
+        int port, 
+        int socktype, 
+        SOCKADDR_TYPE* addr, 
+        SOCKLEN_TYPE* HAVE_GETADDRINFO, 
+        addrinfo** aip,
+        addrinfo *aifirstp)
 {
 version (HAVE_GETADDRINFO) {
     addrinfo* ai;
@@ -1350,9 +1354,8 @@ private void get_manager_by_name(int argc, char** argv, int i)
 
     get_addr_by_name(argv[i], argv[i + 1], xdm_udp_port, SOCK_DGRAM,
                      &ManagerAddress, &ManagerAddressLen
-#if defined(HAVE_GETADDRINFO)
+
                      , &mgrAddr, &mgrAddrFirst
-//! #endif
         );
 }
 
@@ -1366,9 +1369,7 @@ version (HAVE_GETADDRINFO) {
         FatalError("Xserver: missing -from host name in command line\n");
     }
     get_addr_by_name("-from", argv[i], 0, 0, &FromAddress, &FromAddressLen
-#if defined(HAVE_GETADDRINFO)
                      , &ai, &aifirst
-//! #endif
         );
 version (HAVE_GETADDRINFO) {
     if (aifirst != null)
