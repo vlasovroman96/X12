@@ -87,13 +87,13 @@ import core.sys.posix.sys.stat;
 version (Windows) {} else {
 import core.sys.posix.sys.socket;
 
-import netinet/in;
-import arpa/inet;
+import netinet.in_;
+import arpa.inet;
 version (CSRG_BASED) {
-import sys/param;
+import sys.param;
 }
-import netinet/tcp;
-import arpa/inet;
+import netinet.tcp;
+import arpa.inet;
 }
 version (Windows) {} else {
 import core.sys.posix.sys.uio;
@@ -123,7 +123,7 @@ alias zoneid_t = int;
 }
 
 version (HAVE_SYSTEMD_DAEMON) {
-import systemd/sd-daemon;
+import systemd.sd_daemon;
 }
 
 version (XDMCP) {
@@ -487,7 +487,13 @@ const(char)* ClientAuthorized(ClientPtr client, uint proto_n, char* auth_proto, 
             CheckAuthorization(proto_n, auth_proto, string_n, auth_string,
                                client, &reason);
     }
-
+    bool dtrace2;
+    static if(HasVersion!"XSERVER_DTRACE") {
+        dtrace2 = (auditTrailLevel > 1) || XSERVER_CLIENT_AUTH_ENABLED();
+    }
+    else {
+        dtrace2 = auditTrailLevel;
+    }
     if (auth_id == cast(XID) ~0L) {
         if (_XSERVTransGetPeerAddr(trans_conn, &family, &fromlen, &from) != -1) {
             if (InvalidHost(cast(sockaddr*) from, fromlen, client))
@@ -495,11 +501,13 @@ const(char)* ClientAuthorized(ClientPtr client, uint proto_n, char* auth_proto, 
                           fromlen, proto_n, auth_proto, auth_id);
             else {
                 auth_id = cast(XID) 0;
+                bool dtrace;
 version (XSERVER_DTRACE) {
-                if ((auditTrailLevel > 1) || XSERVER_CLIENT_AUTH_ENABLED())
-#else
-                if (auditTrailLevel > 1)
+                dtrace = (auditTrailLevel > 1) || XSERVER_CLIENT_AUTH_ENABLED();
+}else{
+                dtrace = (auditTrailLevel > 1);
 }
+                if(dtrace) 
                     AuthAudit(client, TRUE,
                               cast(sockaddr*) from, fromlen,
                               proto_n, auth_proto, auth_id);
@@ -515,11 +523,7 @@ version (XSERVER_DTRACE) {
                 return "Client is not authorized to connect to Server";
         }
     }
-version (XSERVER_DTRACE) {
-    else if ((auditTrailLevel > 1) || XSERVER_CLIENT_AUTH_ENABLED())
-} else {
-    else if(auditTrailLevel);
-}
+    else if (dtrace2)
     {
         if (_XSERVTransGetPeerAddr(trans_conn, &family, &fromlen, &from) != -1) {
             AuthAudit(client, TRUE, cast(sockaddr*) from, fromlen,
