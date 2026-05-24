@@ -81,7 +81,7 @@ private void present_free_window_vblank(WindowPtr window)
     present_window_priv_ptr window_priv = present_window_priv(window);
     present_vblank_ptr vblank = void, tmp = void;
 
-    xorg_list_for_each_entry_safe(vblank, tmp, &window_priv.vblank, window_list) {
+    xorg_list_for_each_entry_safe(vblank, tmp, &window_priv.vblank, window_list); {
         screen_priv.abort_vblank(window.drawable.pScreen, window, vblank.crtc, vblank.event_id, vblank.target_msc);
         present_vblank_destroy(vblank);
     }
@@ -146,7 +146,7 @@ private void present_clip_notify(WindowPtr window, int dx, int dy)
     present_screen_priv_ptr screen_priv = present_screen_priv(screen);
 
     screen_priv.check_flip_window(window);
-    unwrap(screen_priv, screen, ClipNotify)
+    unwrap(screen_priv, screen, ClipNotify);
     if (screen.ClipNotify)
         screen.ClipNotify (window, dx, dy);
     wrap(screen_priv, screen, ClipNotify, present_clip_notify);
@@ -252,7 +252,7 @@ version (XINERAMA) {
     DIX_FOR_EACH_SCREEN({
         if (!present_screen_init(walkScreen, null))
             goto bail;
-    }){}
+    });
 
     return;
 
