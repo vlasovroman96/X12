@@ -264,7 +264,7 @@ static if (!HasVersion!"Windows" && !HasVersion!"Cygwin") {
 	 * is != 0: fail as we may not be able to meet them.
 	 */
 	if (geteuid() != 0) {
-	    if (mode & 01000) {
+	    if (mode & octal!"01000") {
 		prmsg(1, "mkdir: ERROR: euid != 0,"
 		      ~ "directory %s will not be created.\n",
 		      path);
@@ -283,14 +283,14 @@ version (Windows) {} else {
 	    }
 //! #else
 	if (mkdir(path) == 0) {
-//! #endif
+// ! #endif
 	} else {
 	    prmsg(1, "mkdir: ERROR: Cannot create %s\n",
 		  path);
 	    return -1;
 	}
 
-	return 0;}
+	return 0;
 
     } else {
 	if (S_ISDIR(buf.st_mode)) {
@@ -308,7 +308,7 @@ version (Windows) {} else {
 	     * required, just a mode that isn't more permissive than the
 	     * one requested.
 	     */
-	    if ((~mode) & 0077 & buf.st_mode)
+	    if ((~mode) & octal!"0077" & buf.st_mode)
 		updateMode = 1;
 
 	    /*
@@ -316,7 +316,7 @@ version (Windows) {} else {
 	     * be able to create sockets. Therefore warn if mode
 	     * cannot be fixed.
 	     */
-	    if ((~buf.st_mode) & 0022 & mode) {
+	    if ((~buf.st_mode) & octal!"0022" & mode) {
 		updateMode = 1;
 		status |= WARN_NO_ACCESS;
 	    }
@@ -325,9 +325,9 @@ version (Windows) {} else {
 	     * If 'sticky' bit is requested fail if owner isn't root
 	     * as we assume the caller makes certain security implications
 	     */
-	    if (mode & 01000) {
+	    if (mode & octal!"01000") {
 		status |= FAIL_IF_NOT_ROOT;
-		if (!(buf.st_mode & 01000)) {
+		if (!(buf.st_mode & octal!"01000")) {
 		    status |= FAIL_IF_NOMODE;
 		    updateMode = 1;
 		}
@@ -393,3 +393,5 @@ static if (!HasVersion!"__APPLE_CC__" && !HasVersion!"Cygwin") {
     return -1;
 }
 } /* UNIXCONN */
+}
+}
