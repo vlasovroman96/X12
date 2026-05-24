@@ -65,7 +65,7 @@ import core.stdc.signal;
    Sigh... We really need a prototype for this to know it is stdcall,
    but #include-ing <windows.h> here is not a good idea...
 */
-__stdcall unsigned long GetTickCount(){}
+ulong GetTickCount(){}
 }
 
 static if (HasVersion!"Windows" && !HasVersion!"Cygwin") {
@@ -86,7 +86,7 @@ import core.sys.posix.libgen;
 
 import input;
 import dixfont;
-import deimos.X11.fonts/libxfont2;
+import deimos.X11.fonts.libxfont2;
 import osdep;
 
 version (XDMCP) {
@@ -139,6 +139,7 @@ version = X_INCLUDE_NETDB_H;
 import deimos.X11.Xos_r;
 
 import core.stdc.errno;
+import dpms.c;
 
 Bool CoreDump;
 
@@ -223,7 +224,7 @@ version (CLOCK_MONOTONIC_COARSE) {
             (tp.tv_nsec / 1000) <= 1000 &&
             clock_gettime(CLOCK_MONOTONIC_COARSE, &tp) == 0)
             clockid = CLOCK_MONOTONIC_COARSE;
-        else
+        // else
 }
         if (clock_gettime(CLOCK_MONOTONIC, &tp) == 0)
             clockid = CLOCK_MONOTONIC;
@@ -383,15 +384,15 @@ private int VerifyDisplayName(const(char)* d)
 }
 
 private const(char)*[4] defaultNoListenList = [
-#ifndef LISTEN_TCP
+// #ifndef LISTEN_TCP
     "tcp",
-#endif
-#ifndef LISTEN_UNIX
+// #endif
+// #ifndef LISTEN_UNIX
     "unix",
-#endif
-#ifndef LISTEN_LOCAL
+// #endif
+// #ifndef LISTEN_LOCAL
     "local",
-#endif
+// #endif
     null
 ];
 
@@ -512,8 +513,10 @@ static if (!HasVersion!"Windows" || !HasVersion!"Windows") {
                 UseMsg();
         }
 version (DPMSExtension) {
-        else if(strcmp);
-        else if = TRUE;
+        if(strcmp(argv[i], "dpms") == 0) {}
+
+        else if (strcmp(argv[i], "dpms") == 0)
+            DPMSDisabledSwitch = TRUE;
 }
         else if (strcmp(argv[i], "-deferglyphs") == 0) {
             if (++i >= argc || !xfont2_parse_glyph_caching_mode(argv[i]))
@@ -545,19 +548,26 @@ version (DPMSExtension) {
             UseMsg();
             exit(0);
         }
-        else if (strcmp function(skip)
+        else if (strcmp(argv[i], "+iglx") == 0)
+            enableIndirectGLX = TRUE;
+        else if (strcmp(argv[i], "-iglx") == 0)
+            enableIndirectGLX = FALSE;
+        else if ((skip = XkbProcessArguments(argc, argv, i)) != 0) {
+            if (skip > 0)
                 i += skip - 1;
             else
                 UseMsg();
         }
-#ifdef LOCK_SERVER
-        else if (strcmp && !defined(__CYGWIN__)
+version( LOCK_SERVER) {
+        if (strcmp && __CYGWIN__) {
             if (getuid != 0)
                 ErrorF
                     ("Warning: the -nolock option can only be used by root\n");
-            else #endif DisableServerLock();
+            else 
+                DisableServerLock();
         }
-//! #endif
+    }
+
         else if ( strcmp( argv[i], "-maxclients") == 0)
         {
             if (++i < argc) {
@@ -692,7 +702,7 @@ version (DPMSExtension) {
             }
         }
 version (CONFIG_NAMESPACE) {
-        else if (strcmp(argv[i], "-namespace") == 0) {
+        if (strcmp(argv[i], "-namespace") == 0) {
             if (++i < argc) {
                 namespaceConfigFile = argv[i];
                 noNamespaceExtension = FALSE;
@@ -702,7 +712,7 @@ version (CONFIG_NAMESPACE) {
         }
 }
 version (XINERAMA) {
-        else if (strcmp(argv[i], "+xinerama") == 0) {
+        if (strcmp(argv[i], "+xinerama") == 0) {
             noPanoramiXExtension = FALSE;
         }
         else if (strcmp (argv[i], "-xinerama") == 0) {
@@ -711,7 +721,7 @@ version (XINERAMA) {
         else if (strcmp(argv[i], "-disablexineramaextension") == 0) {
             PanoramiXExtensionDisabledHack = TRUE;
         }
-#endif /* XINERAMA */
+// #endif /* XINERAMA */
         else if (strcmp(argv[i], "-I") == 0) {
             /* ignore all remaining arguments */
             break;
@@ -719,16 +729,16 @@ version (XINERAMA) {
         else if (strncmp(argv[i], "tty", 3) == 0) {
             /* init supplies us with this useless information */
         }
-#ifdef XDMCP
-        else if ((skip = XdmcpOptions(argc, argv, i)) != i) {
+version(XDMCP)
+        if ((skip = XdmcpOptions(argc, argv, i)) != i) {
             i = skip - 1;
         }
 }
         else if (strcmp(argv[i], "-dumbSched") == 0) {
             InputThreadEnable = FALSE;
-#ifdef HAVE_SETITIMER
+version(HAVE_SETITIMER)
             SmartScheduleSignalEnable = FALSE;
-#endif
+
         }
         else if (strcmp(argv[i], "-schedInterval") == 0) {
             if (++i < argc) {
@@ -773,9 +783,13 @@ version (XINERAMA) {
             else
                 UseMsg();
         }
-#ifdef CONFIG_SYSLOG
-        else if (ProcessCmdLineMultiInt(argc, argv, &i, "-syslogverbose", &xorgSyslogVerbosity));
-#endif
+        
+version(CONFIG_SYSLOG) {
+        if (ProcessCmdLineMultiInt(argc, argv, &i, "-syslogverbose", &xorgSyslogVerbosity))
+        {}
+        // else{}
+}
+// #endif
         else {
             ErrorF("Unrecognized option: %s\n", argv[i]);
             UseMsg();
@@ -789,9 +803,9 @@ version (XINERAMA) {
 int
 set_font_authorizations(char **authorizations, int *authlen, void *client)
 {
-#define AUTHORIZATION_NAME "hp-hostname-1"
-    private char* result = null;
-    private char* p = null;
+enum AUTHORIZATION_NAME = "hp-hostname-1";
+    char* result = null;
+    char* p = null;
 
     if (p == null) {
         uint len;
@@ -1308,10 +1322,13 @@ void CheckUserParameters(int argc, char** argv, char** envp)
     BadCode bad = NotBad;
     int i = 0, j = void;
     char* a = null;
+    bool chk;
 
 static if (CHECK_EUID) {
-    if (PrivsElevated())
-#endif
+    chk = true;
+}
+// #endif
+    if (chk && PrivsElevated())
     {
         /* Check each argv[] */
         for (i = 1; i < argc; i++) {
@@ -1376,7 +1393,7 @@ static if (CHECK_EUID) {
         ErrorF("Unknown error\n");
         break;
     }
-    FatalError("X server aborted because of unsafe environment\n");}
+    FatalError("X server aborted because of unsafe environment\n");
 }
 
 /*
@@ -1386,8 +1403,8 @@ static if (CHECK_EUID) {
  */
 
 version (USE_PAM) {
-import security/pam_appl;
-import security/pam_misc;
+import security.pam_appl;
+import security.pam_misc;
 import core.sys.posix.pwd;
 }                          /* USE_PAM */
 
@@ -1471,4 +1488,4 @@ version (XF86BIGFONT) {
     if (CoreDump)
         OsAbort();
     exit(1);
-}}
+}
