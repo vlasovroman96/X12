@@ -36,8 +36,8 @@ from The Open Group.
 
 import build.dix_config;
 
-import   X11/X;
-import   X11/Xauth;
+import   X11.X;
+import   X11.Xauth;
 import   misc;
 import   osdep;
 import   dixstruct;
@@ -45,7 +45,7 @@ import   core.sys.posix.sys.types;
 import   core.sys.posix.sys.stat;
 import   core.stdc.errno;
 version (Windows) {
-import    X11/Xw32defs;
+import    X11.Xw32defs;
 }
 import   core.stdc.stdlib;       /* for arc4random_buf() */
 
@@ -68,27 +68,42 @@ struct protocol {
     AuthGenCFunc Generate;
 }
 
-private protocol[3] protocols = [
-    {
-        name: XAUTH_PROTO_MIT,
-        Add: MitAddCookie,
-        Check: MitCheckCookie,
-        Reset: MitResetCookie,
-        FromID: MitFromID,
-        Remove: MitRemoveCookie,
-        Generate: MitGenerateCookie
-    },
-#ifdef HASXDMAUTH
-    {
-        name: XAUTH_PROTO_XDM,
-        Add: XdmAddCookie,
-        Check: XdmCheckCookie,
-        Reset: XdmResetCookie,
-        FromID: XdmFromID,
-        Remove: XdmRemoveCookie,
-    },
-#endif
-];
+version (HASXDMAUTH)
+{
+    private static protocol[2] protocols = [
+        {
+            name: XAUTH_PROTO_MIT,
+            Add: MitAddCookie,
+            Check: MitCheckCookie,
+            Reset: MitResetCookie,
+            FromID: MitFromID,
+            Remove: MitRemoveCookie,
+            Generate: MitGenerateCookie
+        },
+        {
+            name: XAUTH_PROTO_XDM,
+            Add: XdmAddCookie,
+            Check: XdmCheckCookie,
+            Reset: XdmResetCookie,
+            FromID: XdmFromID,
+            Remove: XdmRemoveCookie,
+        },
+    ];
+}
+else
+{
+    private static protocol[1] protocols = [
+        {
+            name: XAUTH_PROTO_MIT,
+            Add: MitAddCookie,
+            Check: MitCheckCookie,
+            Reset: MitResetCookie,
+            FromID: MitFromID,
+            Remove: MitRemoveCookie,
+            Generate: MitGenerateCookie
+        },
+    ];
+}
 
 enum NUM_AUTHORIZATION =  ARRAY_SIZE(protocols);
 
