@@ -455,7 +455,7 @@ int ProcRRQueryOutputProperty(ClientPtr client)
     xRRQueryOutputPropertyReply reply = {
         pending: prop.is_pending,
         range: prop.range,
-        immutable: prop.immutable_
+        immutable_: prop.immutable_
     };
 
     return X_SEND_REPLY_WITH_RPCBUF(client, reply, rpcbuf);
@@ -616,17 +616,17 @@ int ProcRRGetOutputProperty(ClientPtr client)
     c_ulong n = void, ind = void;
     RROutputPtr output = void;
 
-    if (stuff.delete)
+    if (stuff.c_delete)
         UpdateCurrentTime();
     VERIFY_RR_OUTPUT(stuff.output, output,
-                     stuff.delete ? DixWriteAccess : DixReadAccess);
+                     stuff.c_delete ? DixWriteAccess : DixReadAccess);
 
     if (!ValidAtom(stuff.property)) {
         client.errorValue = stuff.property;
         return BadAtom;
     }
-    if ((stuff.delete != xTrue) && (stuff.delete != xFalse)) {
-        client.errorValue = stuff.delete;
+    if ((stuff.c_delete != xTrue) && (stuff.c_delete != xFalse)) {
+        client.errorValue = stuff.c_delete;
         return BadValue;
     }
     if ((stuff.type != AnyPropertyType) && !ValidAtom(stuff.type)) {
@@ -645,7 +645,7 @@ int ProcRRGetOutputProperty(ClientPtr client)
     if (!prop)
         goto sendout;
 
-    if (prop.immutable_ && stuff.delete)
+    if (prop.immutable_ && stuff.c_delete)
         return BadAccess;
 
     prop_value = RRGetOutputProperty(output, stuff.property, stuff.pending);
@@ -685,7 +685,7 @@ int ProcRRGetOutputProperty(ClientPtr client)
         reply.nItems = len / (prop_value.format / 8);
     reply.propertyType = prop_value.type;
 
-    if (stuff.delete && (reply.bytesAfter == 0)) {
+    if (stuff.c_delete && (reply.bytesAfter == 0)) {
         xRROutputPropertyNotifyEvent event = {
             type: RREventBase + RRNotify,
             subCode: RRNotify_OutputProperty,
@@ -722,7 +722,7 @@ sendout:
         swapl(&reply.nItems);
     }
 
-    if (prop && stuff.delete && (reply.bytesAfter == 0)) {     /* delete the Property */
+    if (prop && stuff.c_delete && (reply.bytesAfter == 0)) {     /* delete the Property */
         *prev = prop.next;
         RRDestroyOutputProperty(prop);
     }
