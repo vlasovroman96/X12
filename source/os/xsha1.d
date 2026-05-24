@@ -80,7 +80,7 @@ int x_sha1_final(void* ctx, ubyte* result)
 
 } else version (HAVE_SHA1_IN_COMMONCRYPTO) {        /* Use CommonCrypto for SHA1 */
 
-import CommonCrypto/CommonDigest;
+import CommonCrypto.CommonDigest;
 
 void* x_sha1_init()
 {
@@ -150,8 +150,8 @@ int x_sha1_final(void* ctx, ubyte* result)
 
 } else version (HAVE_SHA1_IN_LIBNETTLE) {   /* Use libnettle for SHA1 */
 
-import nettle/sha1;
-import nettle/version;
+import nettle.sha1;
+import nettle.version_;
 
 void* x_sha1_init()
 {
@@ -250,16 +250,16 @@ int x_sha1_final(void* ctx, ubyte* result)
 
 } else {                           /* Use OpenSSL's libcrypto */
 
-import openssl/opensslv;
+import openssl.opensslv;
 static if (OPENSSL_VERSION_MAJOR >= 3) {
 version = USE_EVP;
 }
 
 version (USE_EVP) {
-import openssl/evp;
+import openssl.evp;
 } else {
 import core.stdc.stddef;             /* buggy openssl/sha.h wants size_t */
-import openssl/sha;
+import openssl.sha;
 }
 
 version (USE_EVP) {
