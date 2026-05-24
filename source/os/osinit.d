@@ -100,57 +100,120 @@ OsSigWrapperPtr OsRegisterSigWrapper(OsSigWrapperPtr newSigWrapper)
  * OsSigHandler --
  *    Catch unexpected signals and exit or continue cleanly.
  */
-static if (!HasVersion!"Windows" || HasVersion!"Cygwin") {
-static void
-version (SA_SIGINFO) {
- signo, siginfo_t; * sip, void *unused)
-} else {
-OsSigHandler(int signo)
-}
+version (Win32)
 {
-version (RTLD_DI_SETSIGNAL) {
-enum SIGNAL_FOR_RTLD_ERROR = SIGQUIT;
-    if (signo == SIGNAL_FOR_RTLD_ERROR) {
-        const(char)* dlerr = dlerror();
+}
+else
+{
 
-        if (dlerr)
-            LogMessageVerb(X_ERROR, 1, "Dynamic loader error: %s\n", dlerr);
-    }
-}                          /* RTLD_DI_SETSIGNAL */
+version (SA_SIGINFO)
+{
+    static void OsSigHandler(int signo, siginfo_t* sip, void* unused)
+    {
+        version (RTLD_DI_SETSIGNAL)
+        {
+            enum SIGNAL_FOR_RTLD_ERROR = SIGQUIT;
 
-    if (OsSigWrapper != null) {
-        if (OsSigWrapper(signo) == 0) {
-            /* ddx handled signal and wants us to continue */
-            return;
+            if (signo == SIGNAL_FOR_RTLD_ERROR) {
+                const(char)* dlerr = dlerror();
+
+                if (dlerr !is null) {
+                    LogMessageVerb(
+                        X_ERROR,
+                        1,
+                        "Dynamic loader error: %s\n",
+                        dlerr
+                    );
+                }
+            }
         }
-    }
 
-    /* log, cleanup, and abort */
-    xorg_backtrace();
+        if (OsSigWrapper !is null) {
+            if (OsSigWrapper(signo) == 0)
+                return;
+        }
 
-version (SA_SIGINFO) {
-    if (sip.si_code == SI_USER) {
-        ErrorF("Received signal %u sent by process %u, uid %u\n", signo,
-               sip.si_pid, sip.si_uid);
+        xorg_backtrace();
+
+        if (sip !is null) {
+            if (sip.si_code == SI_USER) {
+                ErrorF(
+                    "Received signal %u sent by process %u, uid %u\n",
+                    signo,
+                    sip.si_pid,
+                    sip.si_uid
+                );
+            }
+            else {
+                final switch (signo) {
+                    case SIGSEGV:
+                    case SIGBUS:
+                    case SIGILL:
+                    case SIGFPE:
+                        ErrorF(
+                            "%s at address %p\n",
+                            strsignal(signo),
+                            sip.si_addr
+                        );
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+        }
+
+        if (signo != SIGQUIT)
+            CoreDump = TRUE;
+
+        FatalError(
+            "Caught signal %d (%s). Server aborting\n",
+            signo,
+            strsignal(signo)
+        );
     }
-    else {
-        switch (signo) {
-        case SIGSEGV:
-        case SIGBUS:
-        case SIGILL:
-        case SIGFPE:
-            ErrorF("%s at address %p\n", strsignal(signo), sip.si_addr);
-        default: break;}
+}
+else
+{
+    static void OsSigHandler(int signo)
+    {
+        version (RTLD_DI_SETSIGNAL)
+        {
+            enum SIGNAL_FOR_RTLD_ERROR = SIGQUIT;
+
+            if (signo == SIGNAL_FOR_RTLD_ERROR) {
+                const(char)* dlerr = dlerror();
+
+                if (dlerr !is null) {
+                    LogMessageVerb(
+                        X_ERROR,
+                        1,
+                        "Dynamic loader error: %s\n",
+                        dlerr
+                    );
+                }
+            }
+        }
+
+        if (OsSigWrapper !is null) {
+            if (OsSigWrapper(signo) == 0)
+                return;
+        }
+
+        xorg_backtrace();
+
+        if (signo != SIGQUIT)
+            CoreDump = TRUE;
+
+        FatalError(
+            "Caught signal %d (%s). Server aborting\n",
+            signo,
+            strsignal(signo)
+        );
     }
 }
 
-    if (signo != SIGQUIT)
-        CoreDump = TRUE;
-
-    FatalError("Caught signal %d (%s). Server aborting\n",
-               signo, strsignal(signo));
 }
-} /* !WIN32 || __CYGWIN__ */
 
 void OsInit()
 {
@@ -166,9 +229,9 @@ static if (!HasVersion!"Windows" || HasVersion!"Cygwin") {
             SIGSYS,
             SIGXCPU,
             SIGXFSZ,
-#ifdef SIGEMT
+// #ifdef SIGEMT
             SIGEMT,
-#endif
+// #endif
             0 /* must be last */
         ];
         sigemptyset(&act.sa_mask);
