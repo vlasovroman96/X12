@@ -1,4 +1,4 @@
-module xserver-properties.h;
+module include.xserver_properties;
 @nogc nothrow:
 extern(C): __gshared:
 /*
