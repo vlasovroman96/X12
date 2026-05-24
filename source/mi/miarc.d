@@ -1000,7 +1000,7 @@ void miWideArc(DrawablePtr pDraw, GCPtr pGC, int narcs, xArc* parcs)
 
     polyArcs = miComputeArcs(parcs, narcs, pGC);
     if (!polyArcs)
-        goto out;
+        goto out_;
 
     cap[0] = cap[1] = 0;
     join[0] = join[1] = 0;
@@ -1095,7 +1095,7 @@ void miWideArc(DrawablePtr pDraw, GCPtr pGC, int narcs, xArc* parcs)
     }
     miFreeArcs(polyArcs, pGC);
 
-out:
+out_:
     if (fTricky) {
         dixDestroyPixmap(cast(PixmapPtr) pDrawTo, 0);
         FreeScratchGC(pGCTo);
@@ -1756,7 +1756,7 @@ enum DASH_MAP_SIZE =	91;
 enum string dashIndexToAngle(string di) = `(((cast(double) (` ~ di ~ `)) * 90.0) / (cast(double) DASH_MAP_SIZE - 1))`;
 enum string xAngleToDashIndex(string xa) = `(((cast(c_long) (` ~ xa ~ `)) * (DASH_MAP_SIZE - 1)) / (90 * 64))`;
 enum string dashIndexToXAngle(string di) = `(((cast(c_long) (` ~ di ~ `)) * (90 * 64)) / (DASH_MAP_SIZE - 1))`;
-enum dashXAngleStep =	(((double) (90 * 64)) / ((double) (DASH_MAP_SIZE - 1)));
+enum dashXAngleStep =	((cast(double) (90 * 64)) / (cast(double) (DASH_MAP_SIZE - 1)));
 
 struct dashMap {
     double[DASH_MAP_SIZE] map = 0;
