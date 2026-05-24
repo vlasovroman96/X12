@@ -31,7 +31,7 @@ extern(C): __gshared:
 
  
 version (XORG_VERSION_CURRENT) {} else {
-static assert
+// static assert
 }
 
 enum string XORG_VERSION_NUMERIC(string major,string minor,string patch,string snap,string dummy) = `
