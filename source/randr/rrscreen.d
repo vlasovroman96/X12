@@ -77,17 +77,29 @@ private void RREditConnectionInfo(ScreenPtr pScreen)
 void RRSendConfigNotify(ScreenPtr pScreen)
 {
     WindowPtr pWin = pScreen.root;
-    xEvent event = {
-        u:configureNotify:window: pWin.drawable.id,
-        u:configureNotify:aboveSibling: None,
+    // xEvent event = {
+    //     u:configureNotify:window: pWin.drawable.id,
+    //     u:configureNotify:aboveSibling: None,
+
+    // /* XXX xinerama stuff ? */
+
+    //     u:configureNotify:width: pWin.drawable.width,
+    //     u:configureNotify:height: pWin.drawable.height,
+    //     u:configureNotify:borderWidth: wBorderWidth(pWin),
+    //     u:configureNotify:override: pWin.overrideRedirect
+    // };
+        xEvent event;
+        event.configureNotify.window = pWin.drawable.id,
+        event.configureNotify.aboveSibling = None,
 
     /* XXX xinerama stuff ? */
 
-        u:configureNotify:width: pWin.drawable.width,
-        u:configureNotify:height: pWin.drawable.height,
-        u:configureNotify:borderWidth: wBorderWidth(pWin),
-        u:configureNotify:override: pWin.overrideRedirect
-    };
+        event.configureNotify.width = pWin.drawable.width,
+        event.configureNotify.height = pWin.drawable.height,
+        event.configureNotify.borderWidth = wBorderWidth(pWin),
+        event.configureNotify.c_override = pWin.overrideRedirect;
+    // };
+
     event.u.u.type = ConfigureNotify;
     DeliverEvents(pWin, &event, 1, NullWindow);
 }
@@ -387,7 +399,7 @@ private int rrGetMultiScreenResources(ClientPtr client, Bool query, ScreenPtr pS
 
     mixin(update_totals!(`pScreen`, `pScrPriv`));
 
-    xorg_list_for_each_entry(iter, &pScreen.secondary_list, secondary_head) {
+    xorg_list_for_each_entry(iter, &pScreen.secondary_list, secondary_head); {
         if (!iter.is_output_secondary)
             continue;
 
@@ -446,7 +458,7 @@ private int rrGetMultiScreenResources(ClientPtr client, Bool query, ScreenPtr pS
     }
     mixin(update_arrays!(`pScreen`, `pScrPriv`, `primary_crtc`, `has_primary`));
 
-    xorg_list_for_each_entry(iter, &pScreen.secondary_list, secondary_head) {
+    xorg_list_for_each_entry(iter, &pScreen.secondary_list, secondary_head); {
         if (!iter.is_output_secondary)
             continue;
 
