@@ -331,7 +331,7 @@ int SetPictureFilter(PicturePtr pPicture, char* name, int len, xFixed* params, i
             PictFilterPtr pScreenFilter = PictureFindFilter(walkScreen, name, len);
             if (!pScreenFilter || pScreenFilter.id != pFilter.id)
                 return BadMatch;
-        }){}
+        });
     }
     return SetPicturePictFilter(pPicture, pFilter, params, nparams);
 }
