@@ -89,7 +89,7 @@ private Bool present_check_flip(RRCrtcPtr crtc, WindowPtr window, PixmapPtr pixm
     /* Ask the driver for permission. Do this now to see if there's TearFree. */
     if (screen_priv.info.version_ >= 1 && screen_priv.info.check_flip2) {
         if (!(*screen_priv.info.check_flip2) (crtc, window, pixmap, sync_flip, &tmp_reason)) {
-            DebugPresent(("\td %08" PRIx32 ~ " -> %08" PRIx32 ~ "\n", window.drawable.id, pixmap ? pixmap.drawable.id : 0));
+            DebugPresent("\td %08" ~ PRIx32 ~ " -> %08" ~PRIx32 ~ "\n", window.drawable.id, pixmap ? pixmap.drawable.id : 0);
             /* It's fine to return now unless the page flip failure reason is
              * PRESENT_FLIP_REASON_BUFFER_FORMAT; we must only output that
              * reason if all the other checks pass.
@@ -102,7 +102,7 @@ private Bool present_check_flip(RRCrtcPtr crtc, WindowPtr window, PixmapPtr pixm
         }
     } else if (screen_priv.info.check_flip) {
         if (!(*screen_priv.info.check_flip) (crtc, window, pixmap, sync_flip)) {
-            DebugPresent(("\td %08" PRIx32 ~ " -> %08" PRIx32 ~ "\n", window.drawable.id, pixmap ? pixmap.drawable.id : 0));
+            DebugPresent(("\td %08" ~PRIx32 ~ " -> %08" ~PRIx32 ~ "\n", window.drawable.id, pixmap ? pixmap.drawable.id : 0));
             return FALSE;
         }
     }
@@ -235,7 +235,7 @@ private void present_flip_try_ready(ScreenPtr screen)
 {
     present_vblank_ptr vblank = void;
 
-    xorg_list_for_each_entry(vblank, &present_flip_queue, event_queue) {
+    xorg_list_for_each_entry(vblank, &present_flip_queue, event_queue); {
         if (vblank.queued) {
             present_re_execute(vblank);
             return;
@@ -314,7 +314,7 @@ private void present_unflip(ScreenPtr screen)
     present_restore_screen_pixmap(screen);
 
     screen_priv.unflip_event_id = ++present_scmd_event_id;
-    DebugPresent(("u %" PRIu64 ~ "\n", screen_priv.unflip_event_id));
+    DebugPresent(("u %"~ PRIu64 ~ "\n", screen_priv.unflip_event_id));
     (*screen_priv.info.unflip) (screen, screen_priv.unflip_event_id);
 }
 
@@ -323,7 +323,7 @@ private void present_flip_notify(present_vblank_ptr vblank, ulong ust, ulong crt
     ScreenPtr screen = vblank.screen;
     present_screen_priv_ptr screen_priv = present_screen_priv(screen);
 
-    DebugPresent(("\tn %" PRIu64 ~ " %p %" PRIu64 ~ " %" PRIu64 ~ ": %08" PRIx32 ~ " -> %08" PRIx32 ~ "\n",
+    DebugPresent(("\tn %"~ PRIu64 ~ " %p %" ~PRIu64 ~ " %" ~PRIu64 ~ ": %08" ~PRIx32 ~ " -> %08" ~PRIx32 ~ "\n",
                   vblank.event_id, vblank, vblank.exec_msc, vblank.target_msc,
                   vblank.pixmap ? vblank.pixmap.drawable.id : 0,
                   vblank.window ? vblank.window.drawable.id : 0));
@@ -362,15 +362,15 @@ void present_event_notify(ulong event_id, ulong ust, ulong msc)
 
     if (!event_id)
         return;
-    DebugPresent(("\te %" PRIu64 ~ " ust %" PRIu64 ~ " msc %" PRIu64 ~ "\n", event_id, ust, msc));
-    xorg_list_for_each_entry(vblank, &present_exec_queue, event_queue) {
+    DebugPresent(("\te %" ~PRIu64 ~ " ust %" ~PRIu64 ~ " msc %" ~PRIu64 ~ "\n", event_id, ust, msc));
+    xorg_list_for_each_entry(vblank, &present_exec_queue, event_queue); {
         long match = event_id - vblank.event_id;
         if (match == 0) {
             present_execute(vblank, ust, msc);
             return;
         }
     }
-    xorg_list_for_each_entry(vblank, &present_flip_queue, event_queue) {
+    xorg_list_for_each_entry(vblank, &present_flip_queue, event_queue); {
         if (vblank.event_id == event_id) {
             if (vblank.queued)
                 present_execute(vblank, ust, msc);
@@ -384,13 +384,13 @@ void present_event_notify(ulong event_id, ulong ust, ulong msc)
         present_screen_priv_ptr screen_priv = present_screen_priv(walkScreen);
 
         if (event_id == screen_priv.unflip_event_id) {
-            DebugPresent(("\tun %" PRIu64 ~ "\n", event_id));
+            DebugPresent(("\tun %"~ PRIu64 ~ "\n", event_id));
             screen_priv.unflip_event_id = 0;
             present_flip_idle(walkScreen);
             present_flip_try_ready(walkScreen);
             return;
         }
-    }){}
+    });
 }
 
 /*
@@ -435,7 +435,7 @@ private void present_check_flip_window(WindowPtr window)
     }
 
     /* Now check any queued vblanks */
-    xorg_list_for_each_entry(vblank, &window_priv.vblank, window_list) {
+    xorg_list_for_each_entry(vblank, &window_priv.vblank, window_list); {
         if (vblank.queued && vblank.flip && !present_check_flip(vblank.crtc, window, vblank.pixmap, vblank.sync_flip, null, 0, 0, &reason)) {
             vblank.flip = FALSE;
             /* Don't spuriously flag this as a TearFree presentation */
@@ -527,7 +527,7 @@ private void present_execute(present_vblank_ptr vblank, ulong ust, ulong crtc_ms
 
     if (vblank.flip && vblank.pixmap && vblank.window) {
         if (screen_priv.flip_pending || screen_priv.unflip_event_id) {
-            DebugPresent(("\tr %" PRIu64 ~ " %p (pending %p unflip %" PRIu64 ~ ")\n",
+            DebugPresent(("\tr %"~ PRIu64 ~ " %p (pending %p unflip %"~ PRIu64 ~ ")\n",
                           vblank.event_id, vblank,
                           screen_priv.flip_pending, screen_priv.unflip_event_id));
             xorg_list_del(&vblank.event_queue);
@@ -547,7 +547,7 @@ private void present_execute(present_vblank_ptr vblank, ulong ust, ulong crtc_ms
 
         if (vblank.flip) {
 
-            DebugPresent(("\tf %" PRIu64 ~ " %p %" PRIu64 ~ ": %08" PRIx32 ~ " -> %08" PRIx32 ~ "\n",
+            DebugPresent(("\tf %" ~PRIu64 ~ " %p %"~ PRIu64 ~ ": %08"~ PRIx32 ~ " -> %08"~ PRIx32 ~ "\n",
                           vblank.event_id, vblank, crtc_msc,
                           vblank.pixmap.drawable.id, vblank.window.drawable.id));
 
@@ -592,7 +592,7 @@ private void present_execute(present_vblank_ptr vblank, ulong ust, ulong crtc_ms
             vblank.flip = FALSE;
             vblank.exec_msc = vblank.target_msc;
         }
-        DebugPresent(("\tc %p %" PRIu64 ~ ": %08" PRIx32 ~ " -> %08" PRIx32 ~ "\n",
+        DebugPresent(("\tc %p %" ~PRIu64 ~ ": %08" ~PRIx32 ~ " -> %08" ~PRIx32 ~ "\n",
                       vblank, crtc_msc, vblank.pixmap.drawable.id, vblank.window.drawable.id));
         if (screen_priv.flip_pending) {
 
@@ -744,7 +744,7 @@ version (DRI3) {
      */
 
     if (!update && pixmap) {
-        xorg_list_for_each_entry_safe(vblank, tmp, &window_priv.vblank, window_list) {
+        xorg_list_for_each_entry_safe(vblank, tmp, &window_priv.vblank, window_list); {
 
             if (!vblank.pixmap)
                 continue;
@@ -766,28 +766,47 @@ version (DRI3) {
         }
     }
 
-    vblank = present_vblank_create(window,
-                                   pixmap,
-                                   serial,
-                                   valid,
-                                   update,
-                                   x_off,
-                                   y_off,
-                                   target_crtc,
-                                   wait_fence,
-                                   idle_fence,
-#ifdef DRI3
-                                   acquire_syncobj,
-                                   release_syncobj,
-                                   acquire_point,
-                                   release_point,
-#endif /* DRI3 */
-                                   options,
-                                   screen_priv.info ? screen_priv.info.capabilities : 0,
-                                   notifies,
-                                   num_notifies,
-                                   target_msc,
-                                   crtc_msc);
+    uint inf = screen_priv.info ? screen_priv.info.capabilities : 0;
+    version(DRI3) {
+        vblank = present_vblank_create(window,
+                                    pixmap,
+                                    serial,
+                                    valid,
+                                    update,
+                                    x_off,
+                                    y_off,
+                                    target_crtc,
+                                    wait_fence,
+                                    idle_fence,
+                                    acquire_syncobj,
+                                    release_syncobj,
+                                    acquire_point,
+                                    release_point,
+                                    options,
+                                    inf,
+                                    notifies,
+                                    num_notifies,
+                                    target_msc,
+                                    crtc_msc);
+    }
+    else {
+        vblank = present_vblank_create(window,
+                                pixmap,
+                                serial,
+                                valid,
+                                update,
+                                x_off,
+                                y_off,
+                                target_crtc,
+                                wait_fence,
+                                idle_fence,
+                                options,
+                                inf,
+                                notifies,
+                                num_notifies,
+                                target_msc,
+                                crtc_msc);
+    }
 
     if (!vblank)
         return BadAlloc;
@@ -830,7 +849,7 @@ private void present_scmd_abort_vblank(ScreenPtr screen, WindowPtr window, RRCrt
         (*screen_priv.info.abort_vblank) (crtc, event_id, msc);
     }
 
-    xorg_list_for_each_entry(vblank, &present_exec_queue, event_queue) {
+    xorg_list_for_each_entry(vblank, &present_exec_queue, event_queue) ;{
         long match = event_id - vblank.event_id;
         if (match == 0) {
             xorg_list_del(&vblank.event_queue);
@@ -838,7 +857,7 @@ private void present_scmd_abort_vblank(ScreenPtr screen, WindowPtr window, RRCrt
             return;
         }
     }
-    xorg_list_for_each_entry(vblank, &present_flip_queue, event_queue) {
+    xorg_list_for_each_entry(vblank, &present_flip_queue, event_queue) ;{
         if (vblank.event_id == event_id) {
             xorg_list_del(&vblank.event_queue);
             vblank.queued = FALSE;
