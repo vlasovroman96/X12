@@ -60,7 +60,7 @@ struct _MiScreenInitParmsRec {
     int xsize;
     int ysize;
 }alias miScreenInitParmsRec = _MiScreenInitParmsRec;
-alias miScreenInitParmsPtr = *;
+alias miScreenInitParmsPtr = miScreenInitParmsRec*;
 
 enum DEFAULTZEROLINEBIAS = (OCTANT2 | OCTANT3 | OCTANT4 | OCTANT5);
 
