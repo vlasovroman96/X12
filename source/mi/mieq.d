@@ -38,12 +38,12 @@ in this Software without prior written authorization from The Open Group.
 
 import build.dix_config;
 
-import   X11/X;
-import   X11/Xmd;
-import   X11/Xproto;
-import   X11/extensions/XI;
-import   X11/extensions/XIproto;
-import   X11/extensions/geproto;
+import   X11.X;
+import   X11.Xmd;
+import   X11.Xproto;
+import   X11.extensions.XI;
+import   X11.extensions.XIproto;
+import   X11.extensions.geproto;
 
 import   dix.cursor_priv;
 import   dix.dix_priv;
@@ -549,14 +549,20 @@ void mieqProcessInputEvents()
 
         master = (dev) ? GetMaster(dev, MASTER_ATTACHED) : null;
 
-        if (screenIsSaved == SCREEN_SAVER_ON)
-            dixSaveScreens(serverClient, SCREEN_SAVER_OFF, ScreenSaverReset);
 version (DPMSExtension) {
-        else if(DPMSPowerLevel DPMSModeOn);
+        if (screenIsSaved == SCREEN_SAVER_ON) {
+            dixSaveScreens(serverClient, SCREEN_SAVER_OFF, ScreenSaverReset);
+        }
+        else if(DPMSPowerLevel == DPMSModeOn) {
             SetScreenSaverTimer();
+        }
 
         if (DPMSPowerLevel != DPMSModeOn)
             DPMSSet(serverClient, DPMSModeOn);
+}
+else {
+     if (screenIsSaved == SCREEN_SAVER_ON)
+            dixSaveScreens(serverClient, SCREEN_SAVER_OFF, ScreenSaverReset);
 }
 
         mieqProcessDeviceEvent(dev, &event, screen);
