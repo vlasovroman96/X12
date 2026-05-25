@@ -1,4 +1,4 @@
-module xkb-procs.h;
+module xkb.xkb_procs.h;
 @nogc nothrow:
 extern(C): __gshared:
  
