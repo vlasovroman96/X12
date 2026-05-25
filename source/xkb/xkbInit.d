@@ -34,7 +34,7 @@ THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 import build.dix_config;
 
-import xkb-config;
+import xkb_config;
 
 import core.stdc.stdio;
 import core.stdc.stdlib;
@@ -720,7 +720,6 @@ static if (!HasVersion!"Windows" && !HasVersion!"Cygwin") {
                 return -1;
             }
             else
-}
             {
                 if (strlen(argv[i]) < PATH_MAX) {
                     XkbBaseDirectory = argv[i];
@@ -731,6 +730,17 @@ static if (!HasVersion!"Windows" && !HasVersion!"Cygwin") {
                     return -1;
                 }
             }
+}
+else {
+                if (strlen(argv[i]) < PATH_MAX) {
+                    XkbBaseDirectory = argv[i];
+                    return 2;
+                }
+                else {
+                    LogMessage(X_ERROR, "-xkbdir pathname too long\n");
+                    return -1;
+                }
+}
         }
         else {
             return -1;
