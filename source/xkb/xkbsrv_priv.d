@@ -43,15 +43,15 @@ enum string XkbSetCauseKey(string c,string k,string e) = `{ (` ~ c ~ `).kc= (` ~
 enum string XkbSetCauseReq(string c,string j,string n,string cl) = `{ (` ~ c ~ `).kc= (` ~ c ~ `).event= 0,
                                   (` ~ c ~ `).mjr= (` ~ j ~ `),(` ~ c ~ `).mnr= (` ~ n ~ `);
                                   (` ~ c ~ `).client= (` ~ cl ~ `); }`;
-enum string XkbSetCauseCoreReq(string c,string e,string cl) = `` ~ XkbSetCauseReq!(` ~ `c` ~ `,` ~ `e` ~ `,`0`,` ~ `cl` ~ `) ~ ``;
-enum string XkbSetCauseXkbReq(string c,string e,string cl) = `` ~ XkbSetCauseReq!(` ~ `c` ~ `,`XkbReqCode`,` ~ `e` ~ `,` ~ `cl` ~ `) ~ ``;
-enum string XkbSetCauseUnknown(string c) = `` ~ XkbSetCauseKey!(` ~ `c` ~ `,`0`,`0`) ~ ``;
+enum string XkbSetCauseCoreReq(string c,string e,string cl) = `` ~ XkbSetCauseReq!(c,e,`0`,cl) ~ ``;
+enum string XkbSetCauseXkbReq(string c,string e,string cl) = `` ~ XkbSetCauseReq!(c,`XkbReqCode`,e,cl) ~ ``;
+enum string XkbSetCauseUnknown(string c) = `` ~ XkbSetCauseKey!(c,`0`,`0`) ~ ``;
 
 enum XkbSLI_IsDefault =        (1L<<0);
 enum XkbSLI_HasOwnState =      (1L<<1);
 
 enum XkbAX_KRGMask =    (XkbSlowKeysMask|XkbBounceKeysMask);
-enum XkbAllFilteredEventsMask = \
+enum XkbAllFilteredEventsMask = 
         (XkbAccessXKeysMask|XkbRepeatKeysMask|XkbMouseKeysAccelMask|XkbAX_KRGMask);
 
 /*
@@ -73,8 +73,8 @@ enum _XkbStateNotifyInProgress =       (1<<0);
  * statement in this function". lovely.
  */
 enum string _XkbErrCode2(string a,string b) = `(cast(XID)(((cast(uint)(` ~ a ~ `))<<24)|((` ~ b ~ `)&0xffffff)))`;
-enum string _XkbErrCode3(string a,string b,string c) = `` ~ _XkbErrCode2!(` ~ `a` ~ `,`((cast(uint)(` ~ b ~ `))<<16)|(` ~ c ~ `)`) ~ ``;
-enum string _XkbErrCode4(string a,string b,string c,string d) = `` ~ _XkbErrCode3!(` ~ `a` ~ `,` ~ `b` ~ `,`(((cast(uint)(` ~ c ~ `))<<8)|(` ~ d ~ `))`) ~ ``;
+enum string _XkbErrCode3(string a,string b,string c) = `` ~ _XkbErrCode2!(a,`((cast(uint)(` ~ b ~ `))<<16)|(` ~ c ~ `)`) ~ ``;
+enum string _XkbErrCode4(string a,string b,string c,string d) = `` ~ _XkbErrCode3!(a,b,`(((cast(uint)(` ~ c ~ `))<<8)|(` ~ d ~ `))`) ~ ``;
 
 enum string WRAP_PROCESS_INPUT_PROC(string device, string oldprocs, string proc, string unwrapproc) = `
         ` ~ device ~ `.public_.processInputProc = ` ~ proc ~ `; 
