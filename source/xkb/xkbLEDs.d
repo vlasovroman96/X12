@@ -444,7 +444,7 @@ void XkbForceUpdateDeviceLEDs(DeviceIntPtr dev)
 
     if (InputDevIsMaster(dev)) {
         master = dev;
-        nt_list_for_each_entry(dev, inputInfo.devices, next) {
+        nt_list_for_each_entry(dev, inputInfo.devices, next); {
             if (!dev.key || GetMaster(dev, MASTER_KEYBOARD) != master)
                 continue;
 
