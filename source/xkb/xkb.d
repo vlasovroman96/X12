@@ -49,7 +49,7 @@ import xkb.xkbsrv_priv;
 import misc;
 import inputstr;
 import extnsionst;
-import xkb-procs;
+import xkb.xkb_procs;
 import include.protocol_versions;
 
 
@@ -72,13 +72,13 @@ enum string	CHK_DEVICE(string dev, string id, string client, string access_mode,
 }`;
 
 enum string	CHK_KBD_DEVICE(string dev, string id, string client, string mode) = `
-    ` ~ CHK_DEVICE!(` ~ `dev` ~ `, ` ~ `id` ~ `, ` ~ `client` ~ `, ` ~ `mode` ~ `, `_XkbLookupKeyboard`) ~ ``;
+    ` ~ CHK_DEVICE!(dev, id, client, mode, `_XkbLookupKeyboard`) ~ ``;
 enum string	CHK_LED_DEVICE(string dev, string id, string client, string mode) = `
-    ` ~ CHK_DEVICE!(` ~ `dev` ~ `, ` ~ `id` ~ `, ` ~ `client` ~ `, ` ~ `mode` ~ `, `_XkbLookupLedDevice`) ~ ``;
+    ` ~ CHK_DEVICE!(dev, id, client, mode, `_XkbLookupLedDevice`) ~ ``;
 enum string	CHK_BELL_DEVICE(string dev, string id, string client, string mode) = `
-    ` ~ CHK_DEVICE!(` ~ `dev` ~ `, ` ~ `id` ~ `, ` ~ `client` ~ `, ` ~ `mode` ~ `, `_XkbLookupBellDevice`) ~ ``;
+    ` ~ CHK_DEVICE!(dev, id, client, mode, `_XkbLookupBellDevice`) ~ ``;
 enum string	CHK_ANY_DEVICE(string dev, string id, string client, string mode) = `
-    ` ~ CHK_DEVICE!(` ~ `dev` ~ `, ` ~ `id` ~ `, ` ~ `client` ~ `, ` ~ `mode` ~ `, `_XkbLookupAnyDevice`) ~ ``;
+    ` ~ CHK_DEVICE!(dev, id, client, mode, `_XkbLookupAnyDevice`) ~ ``;
 
 enum string	CHK_ATOM_ONLY2(string a,string ev,string er) = `{
 	if (((` ~ a ~ `)==None)||(!ValidAtom((` ~ a ~ `)))) {
@@ -87,7 +87,7 @@ enum string	CHK_ATOM_ONLY2(string a,string ev,string er) = `{
 	}
 }`;
 enum string	CHK_ATOM_ONLY(string a) = `
-	` ~ CHK_ATOM_ONLY2!(` ~ `a` ~ `,`client.errorValue`,`BadAtom`) ~ ``;
+	` ~ CHK_ATOM_ONLY2!(a,`client.errorValue`,`BadAtom`) ~ ``;
 
 enum string	CHK_ATOM_OR_NONE3(string a,string ev,string er,string ret) = `{
 	if (((` ~ a ~ `)!=None)&&(!ValidAtom((` ~ a ~ `)))) {
@@ -103,7 +103,7 @@ enum string	CHK_ATOM_OR_NONE2(string a,string ev,string er) = `{
 	}
 }`;
 enum string	CHK_ATOM_OR_NONE(string a) = `
-	` ~ CHK_ATOM_OR_NONE2!(` ~ `a` ~ `,`client.errorValue`,`BadAtom`) ~ ``;
+	` ~ CHK_ATOM_OR_NONE2!(a,`client.errorValue`,`BadAtom`) ~ ``;
 
 enum string	CHK_MASK_LEGAL3(string err,string mask,string legal,string ev,string er,string ret) = `{
 	if ((` ~ mask ~ `)&(~(` ~ legal ~ `))) { 
@@ -119,7 +119,7 @@ enum string	CHK_MASK_LEGAL2(string err,string mask,string legal,string ev,string
 	}
 }`;
 enum string	CHK_MASK_LEGAL(string err,string mask,string legal) = `
-	` ~ CHK_MASK_LEGAL2!(` ~ `err` ~ `,` ~ `mask` ~ `,` ~ `legal` ~ `,`client.errorValue`,`BadValue`) ~ ``;
+	` ~ CHK_MASK_LEGAL2!(err,mask,legal,`client.errorValue`,`BadValue`) ~ ``;
 
 enum string	CHK_MASK_MATCH(string err,string affect,string value) = `{
 	if ((` ~ value ~ `)&(~(` ~ affect ~ `))) { 
@@ -144,7 +144,7 @@ enum string	CHK_KEY_RANGE2(string err,string first,string num,string x,string ev
 	}
 }`;
 enum string	CHK_KEY_RANGE(string err,string first,string num,string x) = `
-	` ~ CHK_KEY_RANGE2!(` ~ `err` ~ `,` ~ `first` ~ `,` ~ `num` ~ `,` ~ `x` ~ `,`client.errorValue`,`BadValue`) ~ ``;
+	` ~ CHK_KEY_RANGE2!(err,first,num,x,`client.errorValue`,`BadValue`) ~ ``;
 
 enum string	CHK_REQ_KEY_RANGE2(string err,string first,string num,string r,string ev,string er) = `{
 	if ((cast(uint)(` ~ first ~ `)+(` ~ num ~ `)-1)>(` ~ r ~ `).maxKeyCode) {
@@ -157,7 +157,7 @@ enum string	CHK_REQ_KEY_RANGE2(string err,string first,string num,string r,strin
 	}
 }`;
 enum string	CHK_REQ_KEY_RANGE(string err,string first,string num,string r) = `
-	` ~ CHK_REQ_KEY_RANGE2!(` ~ `err` ~ `,` ~ `first` ~ `,` ~ `num` ~ `,` ~ `r` ~ `,`client.errorValue`,`BadValue`) ~ ``;
+	` ~ CHK_REQ_KEY_RANGE2!(err,first,num,r,`client.errorValue`,`BadValue`) ~ ``;
 
 private Bool _XkbCheckRequestBounds(ClientPtr client, void* stuff, void* from, void* to) {
     char* cstuff = cast(char*)stuff;
@@ -317,7 +317,7 @@ int ProcXkbSelectEvents(ClientPtr client)
             CARD8* c8 = void;
             CARD16* c16 = void;
             CARD32* c32 = void;
-        }_From from = void;  to = void;
+        }_From from = void,  to = void;
         uint bit = void, ndx = void, maskLeft = void, dataLeft = void, size = void;
 
         from.c8 = cast(CARD8*) &stuff[1];
