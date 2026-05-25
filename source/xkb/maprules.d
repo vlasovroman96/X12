@@ -229,7 +229,7 @@ struct _XkbRF_MultiDefsRec {
     const(char)*[XkbNumKbdGroups + 1] variant;
     const(char)* options;
 }alias XkbRF_MultiDefsRec = _XkbRF_MultiDefsRec;
-alias XkbRF_MultiDefsPtr = *;
+alias XkbRF_MultiDefsPtr = XkbRF_MultiDefsRec*;
 
 enum NDX_BUFF_SIZE =	4;
 
