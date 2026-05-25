@@ -103,7 +103,8 @@ private void XkbSendLegacyMapNotify(DeviceIntPtr kbd, CARD16 xkb_event, CARD16 c
             continue;
 
         if (keymap_changed) {
-            xEvent core_mn = { u:u:type: MappingNotify };
+            xEvent core_mn;
+            core_mn.u.u.type = MappingNotify ;
             core_mn.u.mappingNotify.request = MappingKeyboard;
 
             /* Clip the keycode range to what the client knows about, so it
@@ -121,11 +122,10 @@ private void XkbSendLegacyMapNotify(DeviceIntPtr kbd, CARD16 xkb_event, CARD16 c
             WriteEventsToClient(clients[i], 1, &core_mn);
         }
         if (modmap_changed) {
-            xEvent core_mn = {
-                u:mappingNotify:request: MappingModifier,
-                u:mappingNotify:firstKeyCode: 0,
-                u:mappingNotify:count: 0
-            };
+            xEvent core_mn;
+                core_nm.u.mappingNotify.request = MappingModifier;
+                core_nm.u.mappingNotify.firstKeyCode = 0;
+                core_nm.u.mappingNotify.count = 0;
             core_mn.u.u.type = MappingNotify;
             WriteEventsToClient(clients[i], 1, &core_mn);
         }
