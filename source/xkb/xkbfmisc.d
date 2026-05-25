@@ -150,7 +150,7 @@ private Bool XkbWriteSectionFromName(FILE* file, const(char)* sectionName, const
 }
 
 enum string	NEED_DESC(string n) = `((!` ~ n ~ `)||((` ~ n ~ `)[0]=='+')||((` ~ n ~ `)[0]=='|')||(strchr((` ~ n ~ `),'%')))`;
-enum string	COMPLETE(string n) = `((` ~ n ~ `)&&(!` ~ NEED_DESC!(` ~ `n` ~ `) ~ `))`;
+enum string	COMPLETE(string n) = `((` ~ n ~ `)&&(!` ~ NEED_DESC!(n) ~ `))`;
 
 /* ARGSUSED */
 private void _AddIncl(FILE* file, XkbDescPtr xkb, Bool topLevel, Bool showImplicit, int index, void* priv)
