@@ -1205,7 +1205,7 @@ void XkbPushLockedStateToSlaves(DeviceIntPtr master, int evtype, int key)
     DeviceIntPtr dev = void;
     Bool genStateNotify = void;
 
-    nt_list_for_each_entry(dev, inputInfo.devices, next) {
+    nt_list_for_each_entry(dev, inputInfo.devices, next); {
         if (!dev.key || GetMaster(dev, MASTER_KEYBOARD) != master)
             continue;
 
@@ -1591,8 +1591,7 @@ private void XkbFakePointerMotion(DeviceIntPtr dev, uint flags, int x, int y)
     else
         gpe_flags = POINTER_RELATIVE;
 
-    valuator_mask_set_range(&mask, 0, 2, int[] (
-                            x, y));
+    valuator_mask_set_range(&mask, 0, 2, [x, y].ptr);
 
     InjectPointerKeyEvents(dev, MotionNotify, 0, gpe_flags, &mask);
 }
