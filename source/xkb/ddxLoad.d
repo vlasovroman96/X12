@@ -29,7 +29,7 @@ THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 import build.dix_config;
 
-import xkb-config;
+import xkb_config;
 
 import core.stdc.stdio;
 import core.stdc.stdlib;
@@ -185,11 +185,14 @@ version (Windows) {} else {
         /* Now write to xkbcomp */
         (*callback)(out_, userdata);
 
-version (Windows) {} else {
-        if (Pclose(out_) == 0)
-#else
-        if (fclose(out_) == 0 && system(buf) >= 0)
-#endif
+        int cls;
+
+version (Windows) {
+        cls = Pclose(out_);
+
+} else {
+    cls = fclose(out_) == 0 && system(buf) >= 0;
+        if (cls)
         {
             if (xkbDebugFlags)
                 DebugF("[xkb] xkb executes: %s\n", buf);
@@ -303,14 +306,15 @@ private FILE* XkbDDXOpenConfigFile(const(char)* mapName, char* fileNameRtrn, int
     char[PATH_MAX] xkm_output_dir = 0;
     FILE* file = void;
 
+
     buf[0] = '\0';
     if (mapName != null) {
         OutputDirectory(xkm_output_dir.ptr, xkm_output_dir.sizeof);
-        if ((XkbBaseDirectory != null) && (xkm_output_dir[0] != '/')
-#ifdef WIN32
-            && (!isalpha(xkm_output_dir[0]) || xkm_output_dir[1] != ':')
-#endif
-            ) {
+            bool cond = (XkbBaseDirectory != null) && (xkm_output_dir[0] != '/');
+version(WIN32) {
+            cond = cond && (!isalpha(xkm_output_dir[0]) || xkm_output_dir[1] != ':');
+}
+        if (cond) {
             if (snprintf(buf.ptr, PATH_MAX, "%s/%s%s.xkm", XkbBaseDirectory,
                          xkm_output_dir.ptr, mapName) >= PATH_MAX)
                 buf[0] = '\0';
