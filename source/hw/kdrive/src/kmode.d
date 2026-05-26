@@ -1,3 +1,6 @@
+module kmode.c;
+@nogc nothrow:
+extern(C): __gshared:
 /*
  * Copyright 1999 SuSE, Inc.
  *
@@ -21,10 +24,14 @@
  * Author:  Keith Packard, SuSE, Inc.
  */
 
-#include <kdrive-config.h>
-#include "kdrive.h"
+import kdrive_config;
+import kdrive;
+import include.clang;
 
-const KdMonitorTiming kdMonitorTimings[] = {
+enum MONITOR_TIMING_DEFAULT = 9;
+
+
+const(KdMonitorTiming)[46] kdMonitorTimings = [
     /*  H       V       Hz      KHz */
     /*  FP      BP      BLANK   POLARITY */
 
@@ -86,7 +93,7 @@ const KdMonitorTiming kdMonitorTimings[] = {
      1, 21, 25, KdSyncPositive, /* 75.000 */
      },
     /* DEFAULT */
-#define MONITOR_TIMING_DEFAULT	9
+// #define MONITOR_TIMING_DEFAULT	9
     {800, 600, 72, 50000,       /* VESA */
      56, 64, 240, KdSyncPositive,       /* 48.077 */
      37, 23, 66, KdSyncPositive,        /* 72.188 */
@@ -208,10 +215,10 @@ const KdMonitorTiming kdMonitorTimings[] = {
      1, 46, 50, KdSyncPositive, /* 60.000 */
      },
 
-#if 0
+// #if 0
     {1800, 1012, 75},
     {1906, 1072, 68},
-#endif
+// #endif
 
     /* 1856x1392 modes */
     {1856, 1392, 85, 330500,    /* ADDED */
@@ -240,24 +247,22 @@ const KdMonitorTiming kdMonitorTimings[] = {
      128, 244, 680, KdSyncNegative,     /* 90.000 */
      1, 56, 60, KdSyncPositive, /* 60.000 */
      },
-};
+];
 
-#define NUM_MONITOR_TIMINGS (sizeof kdMonitorTimings/sizeof kdMonitorTimings[0])
+enum NUM_MONITOR_TIMINGS = (kdMonitorTimings.sizeof / kdMonitorTimings[0].sizeof);
 
-const int kdNumMonitorTimings = NUM_MONITOR_TIMINGS;
+const(int) kdNumMonitorTimings = NUM_MONITOR_TIMINGS;
 
-const KdMonitorTiming *
-KdFindMode(KdScreenInfo * screen,
-           Bool (*supported) (KdScreenInfo *, const KdMonitorTiming *))
+const(KdMonitorTiming)* KdFindMode(KdScreenInfo* screen, Bool function(KdScreenInfo*, const(KdMonitorTiming)*) supported)
 {
-    int i;
-    const KdMonitorTiming *t;
+    int i = void;
+    const(KdMonitorTiming)* t = void;
 
     for (i = 0, t = kdMonitorTimings; i < NUM_MONITOR_TIMINGS; i++, t++) {
         if ((*supported) (screen, t) &&
-            t->horizontal == screen->width &&
-            t->vertical == screen->height &&
-            (!screen->rate || t->rate <= screen->rate)) {
+            t.horizontal == screen.width &&
+            t.vertical == screen.height &&
+            (!screen.rate || t.rate <= screen.rate)) {
             return t;
         }
     }
@@ -265,112 +270,101 @@ KdFindMode(KdScreenInfo * screen,
     return &kdMonitorTimings[MONITOR_TIMING_DEFAULT];
 }
 
-static const KdMonitorTiming *
-kdFindPrevSize(const KdMonitorTiming * old)
+private const(KdMonitorTiming)* kdFindPrevSize(const(KdMonitorTiming)* old)
 {
-    const KdMonitorTiming *new, *prev;
+    const(KdMonitorTiming)* new_ = void, prev = void;
 
-    if (old == kdMonitorTimings)
+    if (old == kdMonitorTimings.ptr)
         return 0;
-    new = old;
+    new_ = old;
     /*
      * Search for the previous size
      */
-    while (new != kdMonitorTimings) {
-        new--;
-        if (new->horizontal != old->horizontal &&
-            new->vertical != old->vertical) {
+    while (new_ != kdMonitorTimings.ptr) {
+        new_--;
+        if (new_.horizontal != old.horizontal &&
+            new_.vertical != old.vertical) {
             break;
         }
     }
     /*
      * Match the refresh rate (<=)
      */
-    while (new != kdMonitorTimings) {
-        prev = new - 1;
-        if (prev->horizontal == new->horizontal &&
-            prev->vertical == new->vertical && prev->rate > old->rate) {
+    while (new_ != kdMonitorTimings.ptr) {
+        prev = new_ - 1;
+        if (prev.horizontal == new_.horizontal &&
+            prev.vertical == new_.vertical && prev.rate > old.rate) {
             break;
         }
-        new--;
+        new_--;
     }
-    return new;
+    return new_;
 }
 
-Bool
-KdTuneMode(KdScreenInfo * screen,
-           Bool (*usable) (KdScreenInfo *),
-           Bool (*supported) (KdScreenInfo *, const KdMonitorTiming *))
+Bool KdTuneMode(KdScreenInfo* screen, Bool function(KdScreenInfo*) usable, Bool function(KdScreenInfo*, const(KdMonitorTiming)*) supported)
 {
-    const KdMonitorTiming *t;
+    const(KdMonitorTiming)* t = void;
 
     while (!(*usable) (screen)) {
         /*
          * Fix requested depth and geometry until it works
          */
-        if (screen->fb.depth > 16)
-            screen->fb.depth = 16;
-        else if (screen->fb.depth > 8)
-            screen->fb.depth = 8;
+        if (screen.fb.depth > 16)
+            screen.fb.depth = 16;
+        else if (screen.fb.depth > 8)
+            screen.fb.depth = 8;
         else {
             t = kdFindPrevSize(KdFindMode(screen, supported));
             if (!t)
                 return FALSE;
-            screen->width = t->horizontal;
-            screen->height = t->vertical;
-            screen->rate = t->rate;
+            screen.width = t.horizontal;
+            screen.height = t.vertical;
+            screen.rate = t.rate;
         }
     }
     return TRUE;
 }
 
-#ifdef RANDR
-Bool
-KdRandRGetInfo(ScreenPtr pScreen,
-               int randr,
-               Bool (*supported) (ScreenPtr pScreen, const KdMonitorTiming *))
+version (RANDR) {
+Bool KdRandRGetInfo(ScreenPtr pScreen, int randr, Bool function(ScreenPtr pScreen, const(KdMonitorTiming)*) supported)
 {
     KdScreenPriv(pScreen);
-    KdScreenInfo *screen = pScreenPriv->screen;
-    int i;
-    const KdMonitorTiming *t;
+    KdScreenInfo* screen = pScreenPriv.screen;
+    int i = void;
+    const(KdMonitorTiming)* t = void;
 
     for (i = 0, t = kdMonitorTimings; i < NUM_MONITOR_TIMINGS; i++, t++) {
         if ((*supported) (pScreen, t)) {
-            RRScreenSizePtr pSize;
+            RRScreenSizePtr pSize = void;
 
             pSize = RRRegisterSize(pScreen,
-                                   t->horizontal,
-                                   t->vertical,
-                                   screen->width_mm, screen->height_mm);
+                                   t.horizontal,
+                                   t.vertical,
+                                   screen.width_mm, screen.height_mm);
             if (!pSize)
                 return FALSE;
-            if (!RRRegisterRate(pScreen, pSize, t->rate))
+            if (!RRRegisterRate(pScreen, pSize, t.rate))
                 return FALSE;
-            if (t->horizontal == screen->width &&
-                t->vertical == screen->height && t->rate == screen->rate)
-                RRSetCurrentConfig(pScreen, randr, t->rate, pSize);
+            if (t.horizontal == screen.width &&
+                t.vertical == screen.height && t.rate == screen.rate)
+                RRSetCurrentConfig(pScreen, randr, t.rate, pSize);
         }
     }
 
     return TRUE;
 }
 
-const KdMonitorTiming *
-KdRandRGetTiming(ScreenPtr pScreen,
-                 Bool (*supported) (ScreenPtr pScreen,
-                                    const KdMonitorTiming *),
-                 int rate, RRScreenSizePtr pSize)
+const(KdMonitorTiming)* KdRandRGetTiming(ScreenPtr pScreen, Bool function(ScreenPtr pScreen, const(KdMonitorTiming)*) supported, int rate, RRScreenSizePtr pSize)
 {
-    int i;
-    const KdMonitorTiming *t;
+    int i = void;
+    const(KdMonitorTiming)* t = void;
 
     for (i = 0, t = kdMonitorTimings; i < NUM_MONITOR_TIMINGS; i++, t++) {
-        if (t->horizontal == pSize->width &&
-            t->vertical == pSize->height &&
-            t->rate == rate && (*supported) (pScreen, t))
+        if (t.horizontal == pSize.width &&
+            t.vertical == pSize.height &&
+            t.rate == rate && (*supported) (pScreen, t))
             return t;
     }
     return 0;
 }
-#endif
+}

@@ -1,3 +1,6 @@
+module kshadow.c;
+@nogc nothrow:
+extern(C): __gshared:
 /*
  * Copyright © 1999 Keith Packard
  *
@@ -20,59 +23,54 @@
  * PERFORMANCE OF THIS SOFTWARE.
  */
 
-#include <kdrive-config.h>
-#include "kdrive.h"
+import kdrive_config;
+import kdrive;
 
-Bool
-KdShadowFbAlloc(KdScreenInfo * screen, Bool rotate)
+Bool KdShadowFbAlloc(KdScreenInfo* screen, Bool rotate)
 {
-    int paddedWidth;
-    void *buf;
-    int width = rotate ? screen->height : screen->width;
-    int height = rotate ? screen->width : screen->height;
-    int bpp = screen->fb.bitsPerPixel;
+    int paddedWidth = void;
+    void* buf = void;
+    int width = rotate ? screen.height : screen.width;
+    int height = rotate ? screen.width : screen.height;
+    int bpp = screen.fb.bitsPerPixel;
 
     /* use fb computation for width */
-    paddedWidth = ((width * bpp + FB_MASK) >> FB_SHIFT) * sizeof(FbBits);
+    paddedWidth = ((width * bpp + FB_MASK) >> FB_SHIFT) * FbBits.sizeof;
     buf = calloc(paddedWidth, height);
     if (!buf)
         return FALSE;
-    if (screen->fb.shadow)
-        free(screen->fb.frameBuffer);
-    screen->fb.shadow = TRUE;
-    screen->fb.frameBuffer = buf;
-    screen->fb.byteStride = paddedWidth;
-    screen->fb.pixelStride = paddedWidth * 8 / bpp;
+    if (screen.fb.shadow)
+        free(screen.fb.frameBuffer);
+    screen.fb.shadow = TRUE;
+    screen.fb.frameBuffer = buf;
+    screen.fb.byteStride = paddedWidth;
+    screen.fb.pixelStride = paddedWidth * 8 / bpp;
     return TRUE;
 }
 
-void
-KdShadowFbFree(KdScreenInfo * screen)
+void KdShadowFbFree(KdScreenInfo* screen)
 {
-    if (screen->fb.shadow) {
-        free(screen->fb.frameBuffer);
-        screen->fb.frameBuffer = 0;
-        screen->fb.shadow = FALSE;
+    if (screen.fb.shadow) {
+        free(screen.fb.frameBuffer);
+        screen.fb.frameBuffer = 0;
+        screen.fb.shadow = FALSE;
     }
 }
 
-Bool
-KdShadowSet(ScreenPtr pScreen, int randr, ShadowUpdateProc update,
-            ShadowWindowProc window)
+Bool KdShadowSet(ScreenPtr pScreen, int randr, ShadowUpdateProc update, ShadowWindowProc window)
 {
     KdScreenPriv(pScreen);
-    KdScreenInfo *screen = pScreenPriv->screen;
+    KdScreenInfo* screen = pScreenPriv.screen;
 
-    shadowRemove(pScreen, pScreen->GetScreenPixmap(pScreen));
-    if (screen->fb.shadow) {
-        return shadowAdd(pScreen, pScreen->GetScreenPixmap(pScreen),
+    shadowRemove(pScreen, pScreen.GetScreenPixmap(pScreen));
+    if (screen.fb.shadow) {
+        return shadowAdd(pScreen, pScreen.GetScreenPixmap(pScreen),
                          update, window, randr, 0);
     }
     return TRUE;
 }
 
-void
-KdShadowUnset(ScreenPtr pScreen)
+void KdShadowUnset(ScreenPtr pScreen)
 {
-    shadowRemove(pScreen, pScreen->GetScreenPixmap(pScreen));
+    shadowRemove(pScreen, pScreen.GetScreenPixmap(pScreen));
 }
