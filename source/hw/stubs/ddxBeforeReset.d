@@ -5,7 +5,7 @@ extern(C): __gshared:
  *
  * Copyright © 2024 Enrico Weigelt, metux IT consult <info@metux.net>
  */
-import dix-config;
+import dix_config;
 
 import os.ddx_priv;
 

@@ -1,3 +1,6 @@
+module InitInput.c;
+@nogc nothrow:
+extern(C): __gshared:
 /*
 
 Copyright 1993, 1998  The Open Group
@@ -26,69 +29,65 @@ from The Open Group.
 
 */
 
-#include <dix-config.h>
+import dix_config;
 
-#include <X11/X.h>
-#include <X11/Xproto.h>
-#include <X11/Xos.h>
-#include <X11/keysym.h>
+import X11.X;
+import X11.Xproto;
+import X11.Xos;
+import X11.keysym;
 
-#include "dix/dix_priv.h"
-#include "dix/input_priv.h"
-#include "mi/mi_priv.h"
+import dix.dix_priv;
+import dix.input_priv;
+import mi.mi_priv;
 
-#include "scrnintstr.h"
-#include "inputstr.h"
-#include "mipointer.h"
-#include "xkbsrv.h"
-#include "xserver-properties.h"
-#include "exevents.h"
+import scrnintstr;
+import inputstr;
+import mipointer;
+import xkbsrv;
+import xserver_properties;
+import exevents;
 
-void
-ProcessInputEvents(void)
+void ProcessInputEvents()
 {
     mieqProcessInputEvents();
 }
 
-void
-DDXRingBell(int volume, int pitch, int duration)
+void DDXRingBell(int volume, int pitch, int duration)
 {
 }
 
-#define VFB_MIN_KEY 8
-#define VFB_MAX_KEY 255
+enum VFB_MIN_KEY = 8;
+enum VFB_MAX_KEY = 255;
 
-static int
-vfbKeybdProc(DeviceIntPtr pDevice, int onoff)
+private int vfbKeybdProc(DeviceIntPtr pDevice, int onoff)
 {
-    DevicePtr pDev = (DevicePtr) pDevice;
+    DevicePtr pDev = cast(DevicePtr) pDevice;
 
     switch (onoff) {
     case DEVICE_INIT:
-        InitKeyboardDeviceStruct(pDevice, NULL, NULL, NULL);
+        InitKeyboardDeviceStruct(pDevice, null, null, null);
         break;
     case DEVICE_ON:
-        pDev->on = TRUE;
+        pDev.on = TRUE;
         break;
     case DEVICE_OFF:
-        pDev->on = FALSE;
+        pDev.on = FALSE;
         break;
     case DEVICE_CLOSE:
         break;
-    }
+    default: break;}
     return Success;
 }
 
-static int
-vfbMouseProc(DeviceIntPtr pDevice, int onoff)
+private int vfbMouseProc(DeviceIntPtr pDevice, int onoff)
 {
-#define NBUTTONS 13
-#define NAXES 2
+enum NBUTTONS = 13;
+enum NAXES = 2;
 
-    BYTE map[NBUTTONS + 1];
-    DevicePtr pDev = (DevicePtr) pDevice;
-    Atom btn_labels[NBUTTONS] = { 0 };
-    Atom axes_labels[NAXES] = { 0 };
+    BYTE[NBUTTONS + 1] map = void;
+    DevicePtr pDev = cast(DevicePtr) pDevice;
+    Atom[NBUTTONS] btn_labels = 0;
+    Atom[NAXES] axes_labels = 0;
 
     switch (onoff) {
     case DEVICE_INIT:
@@ -113,45 +112,41 @@ vfbMouseProc(DeviceIntPtr pDevice, int onoff)
         axes_labels[0] = XIGetKnownProperty(AXIS_LABEL_PROP_REL_X);
         axes_labels[1] = XIGetKnownProperty(AXIS_LABEL_PROP_REL_Y);
 
-        InitPointerDeviceStruct(pDev, map, NBUTTONS, btn_labels,
-                                (PtrCtrlProcPtr) NoopDDA,
-                                GetMotionHistorySize(), NAXES, axes_labels);
+        InitPointerDeviceStruct(pDev, map.ptr, NBUTTONS, btn_labels.ptr,
+                                cast(PtrCtrlProcPtr) NoopDDA,
+                                GetMotionHistorySize(), NAXES, axes_labels.ptr);
         break;
 
     case DEVICE_ON:
-        pDev->on = TRUE;
+        pDev.on = TRUE;
         break;
 
     case DEVICE_OFF:
-        pDev->on = FALSE;
+        pDev.on = FALSE;
         break;
 
     case DEVICE_CLOSE:
         break;
-    }
+    default: break;}
     return Success;
 
-#undef NBUTTONS
-#undef NAXES
 }
 
-void
-InitInput(int argc, char *argv[])
+void InitInput(int argc, char** argv)
 {
-    DeviceIntPtr p, k;
-    Atom xiclass;
+    DeviceIntPtr p = void, k = void;
+    Atom xiclass = void;
 
-    p = AddInputDevice(serverClient, vfbMouseProc, TRUE);
-    k = AddInputDevice(serverClient, vfbKeybdProc, TRUE);
+    p = AddInputDevice(serverClient, &vfbMouseProc, TRUE);
+    k = AddInputDevice(serverClient, &vfbKeybdProc, TRUE);
     xiclass = dixAddAtom(XI_MOUSE);
     AssignTypeAndName(p, xiclass, "Xvfb mouse");
     xiclass = dixAddAtom(XI_KEYBOARD);
     AssignTypeAndName(k, xiclass, "Xvfb keyboard");
-    (void) mieqInit();
+    cast(void) mieqInit();
 }
 
-void
-CloseInput(void)
+void CloseInput()
 {
     mieqFini();
 }
