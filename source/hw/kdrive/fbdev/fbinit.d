@@ -1,3 +1,6 @@
+module fbinit.c;
+@nogc nothrow:
+extern(C): __gshared:
 /*
  * Copyright © 1999 Keith Packard
  *
@@ -20,75 +23,70 @@
  * PERFORMANCE OF THIS SOFTWARE.
  */
 
-#include <kdrive-config.h>
-#include "fbdev.h"
+import kdrive_config;
+import fbdev;
 
-#include "os/cmdline.h"
-#include "os/ddx_priv.h"
+import os.cmdline;
+import os.ddx_priv;
 
-#include <string.h>
+import core.stdc.string;
 
-static FbScreenConf *fbCurrScreen = NULL;
+private FbScreenConf* fbCurrScreen = null;
 
-void
-InitCard(char *name)
+void InitCard(char* name)
 {
-    fbCurrScreen = XNFalloc(sizeof(*fbCurrScreen));
-    *fbCurrScreen = (FbScreenConf) {
-                                    .fbdevDevicePath = NULL,
-                                    .fbDisableShadow = FALSE,
-#ifdef GLAMOR
-                                    .fbdev_glvnd_provider = NULL,
+    fbCurrScreen = XNFalloc(typeof(*fbCurrScreen).sizeof);
+    // *fbCurrScreen = FbScreenConf (
+    fbCurrScreen.fbdevDevicePath = null;
+    fbCurrScreen.fbDisableShadow = FALSE;
+version(GLAMOR) {
+    fbCurrScreen.fbdev_glvnd_provider = null;
 
-                                    .fbdev_dri_path = NULL,
-                                    .fbdev_auto_dri3 = FALSE,
-                                    .fbdev_drm_master = FALSE,
+    fbCurrScreen.fbdev_dri_path = null;
+    fbCurrScreen.fbdev_auto_dri3 = FALSE;
+    fbCurrScreen.fbdev_drm_master = FALSE;
 
-                                    .es_allowed = TRUE,
-                                    .force_es = FALSE,
+    fbCurrScreen.es_allowed = TRUE;
+    fbCurrScreen.force_es = FALSE;
 
-                                    .fbGlamorAllowed = TRUE,
-                                    .fbForceGlamor = FALSE,
-#ifdef XV
-                                    .fbXVAllowed = TRUE,
-#endif
-#endif
-                                   };
+    fbCurrScreen.fbGlamorAllowed = TRUE;
+    fbCurrScreen.fbForceGlamor = FALSE;
+}
+version(XV) {
+    .fbXVAllowed = TRUE;
+}
+// #endif
+                                //    );
 
     KdCardInfoAdd(&fbdevFuncs, fbCurrScreen);
 }
 
-#if INPUTTHREAD
+static if (INPUTTHREAD) {
 /** This function is called in Xserver/os/inputthread.c when starting
     the input thread. */
-void
-ddxInputThreadInit(void)
+void ddxInputThreadInit()
 {
 }
-#endif
+}
 
-void
-InitOutput(int argc, char **argv)
+void InitOutput(int argc, char** argv)
 {
     KdInitOutput(argc, argv);
 }
 
-void
-InitInput(int argc, char **argv)
+void InitInput(int argc, char** argv)
 {
     KdOsAddInputDrivers();
     KdAddConfigInputDrivers();
     KdInitInput();
 }
 
-void
-CloseInput(void)
+void CloseInput()
 {
     KdCloseInput();
 }
 
-void
-ddxUseMsg(void)
+void ddxUseMsg()
 {
     KdUseMsg();
     ErrorF("\nXfbdev Device Usage:\n");
@@ -115,24 +113,23 @@ ddxUseMsg(void)
     ErrorF("\n");
 }
 
-int
-ddxProcessArgument(int argc, char **argv, int i)
+int ddxProcessArgument(int argc, char** argv, int i)
 {
     if (!fbCurrScreen || !strcmp(argv[i], "-screen")) {
         /* Put each screen on a separate card */
         int implicit_first_screen = !fbCurrScreen;
-        InitCard(NULL);
+        InitCard(null);
         if (implicit_first_screen) {
             /* This is what KdInitOutput would have done */
-            KdCardInfo *card = KdCardInfoLast();
-            KdScreenInfo *screen = KdScreenInfoAdd(card);
-            KdParseScreen(screen, NULL);
+            KdCardInfo* card = KdCardInfoLast();
+            KdScreenInfo* screen = KdScreenInfoAdd(card);
+            KdParseScreen(screen, null);
         }
     }
 
     if (!strcmp(argv[i], "-fb")) {
         if (i + 1 < argc) {
-            fbCurrScreen->fbdevDevicePath = argv[i + 1];
+            fbCurrScreen.fbdevDevicePath = argv[i + 1];
             return 2;
         }
         UseMsg();
@@ -140,24 +137,24 @@ ddxProcessArgument(int argc, char **argv, int i)
     }
 
     if (!strcmp(argv[i], "-noshadow")) {
-        fbCurrScreen->fbDisableShadow = TRUE;
+        fbCurrScreen.fbDisableShadow = TRUE;
         return 1;
     }
 
-#ifdef GLAMOR
+version (GLAMOR) {
     if (!strcmp(argv[i], "-glamor")) {
-        fbCurrScreen->fbForceGlamor = TRUE;
+        fbCurrScreen.fbForceGlamor = TRUE;
         return 1;
     }
 
     if (!strcmp(argv[i], "-noglamor")) {
-        fbCurrScreen->fbGlamorAllowed = FALSE;
+        fbCurrScreen.fbGlamorAllowed = FALSE;
         return 1;
     }
 
     if (!strcmp(argv[i], "-glvendor")) {
         if (i + 1 < argc) {
-            fbCurrScreen->fbdev_glvnd_provider = strdup(argv[i + 1]);
+            fbCurrScreen.fbdev_glvnd_provider = strdup(argv[i + 1]);
             return 2;
         }
         UseMsg();
@@ -167,68 +164,68 @@ ddxProcessArgument(int argc, char **argv, int i)
     if (!strcmp(argv[i], "-dri")) {
         if (i + 1 < argc) {
             if (argv[i + 1][0] == '-' || !strcmp(argv[i + 1], "auto")) {
-                fbCurrScreen->fbdev_auto_dri3 = TRUE;
+                fbCurrScreen.fbdev_auto_dri3 = TRUE;
             } else {
-                fbCurrScreen->fbdev_dri_path = strdup(argv[i + 1]);
+                fbCurrScreen.fbdev_dri_path = strdup(argv[i + 1]);
             }
             return 2;
         } else {
-            fbCurrScreen->fbdev_auto_dri3 = TRUE;
+            fbCurrScreen.fbdev_auto_dri3 = TRUE;
             return 1;
         }
     }
 
     if (!strcmp(argv[i], "-drm-master")) {
-        fbCurrScreen->fbdev_drm_master = TRUE;
+        fbCurrScreen.fbdev_drm_master = TRUE;
         return 1;
     }
 
     if (!strcmp(argv[i], "-force-gl")) {
-        fbCurrScreen->es_allowed = FALSE;
+        fbCurrScreen.es_allowed = FALSE;
         return 1;
     }
 
     if (!strcmp(argv[i], "-force-es")) {
-        fbCurrScreen->force_es = TRUE;
+        fbCurrScreen.force_es = TRUE;
         return 1;
     }
 
-#ifdef XV
+version (XV) {
     if (!strcmp(argv[i], "-noxv")) {
-        fbCurrScreen->fbXVAllowed = FALSE;
+        fbCurrScreen.fbXVAllowed = FALSE;
         return 1;
     }
-#endif
-#endif
+}
+}
 
     return KdProcessArgument(argc, argv, i);
 }
 
-KdCardFuncs fbdevFuncs = {
-    .cardinit         = fbdevCardInit,
-    .scrinit          = fbdevScreenInit,
-    .initScreen       = fbdevInitScreen,
-    .finishInitScreen = fbdevFinishInitScreen,
-    .createRes        = fbdevCreateResources,
-    .preserve         = fbdevPreserve,
-    .enable           = fbdevEnable,
-    .dpms             = fbdevDPMS,
-    .disable          = fbdevDisable,
-    .restore          = fbdevRestore,
-    .scrfini          = fbdevScreenFini,
-    .cardfini         = fbdevCardFini,
+KdCardFuncs fbdevFuncs;
+
+static this() {
+    fbdevFuncs.cardinit = fbdevCardInit;
+    fbdevFuncs.scrinit = fbdevScreenInit;
+    fbdevFuncs.initScreen = fbdevInitScreen;
+    fbdevFuncs.finishInitScreen = fbdevFinishInitScreen;
+    fbdevFuncs.createRes = fbdevCreateResources;
+    fbdevFuncs.preserve = fbdevPreserve;
+    fbdevFuncs.enable = fbdevEnable;
+    fbdevFuncs.dpms = fbdevDPMS;
+    fbdevFuncs.disable = fbdevDisable;
+    fbdevFuncs.restore = fbdevRestore;
+    fbdevFuncs.scrfini = fbdevScreenFini;
+    fbdevFuncs.cardfini = fbdevCardFini;
 
     /* no cursor funcs */
 
-#ifdef GLAMOR
-    .initAccel        = fbdevInitAccel,
-    .enableAccel      = fbdevEnableAccel,
-    .disableAccel     = fbdevDisableAccel,
-    .finiAccel        = fbdevFiniAccel,
-#endif
+version(GLAMOR) {
+    fbdevFuncs.initAccel        = fbdevInitAccel;
+    fbdevFuncs.enableAccel = fbdevEnableAccel;
+    fbdevFuncs.disableAccel = fbdevDisableAccel;
+    fbdevFuncs.finiAccel = fbdevFiniAccel;
+}
 
-    .getColors        = fbdevGetColors,
-    .putColors        = fbdevPutColors,
-
-    /* no closescreen func */
-};
+    fbdevFuncs.getColors = fbdevGetColors;
+    fbdevFuncs.putColors = fbdevPutColors;
+}
