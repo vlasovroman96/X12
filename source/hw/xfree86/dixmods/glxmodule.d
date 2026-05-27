@@ -1,3 +1,6 @@
+module glxmodule.c;
+@nogc nothrow:
+extern(C): __gshared:
 /**************************************************************************
 
 Copyright 1998-1999 Precision Insight, Inc., Cedar Park, Texas.
@@ -29,47 +32,46 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *   Kevin E. Martin <kevin@precisioninsight.com>
  *
  */
-#include <xorg-config.h>
+import xorg_config;
 
-#include "xf86Module.h"
-#include "xf86Priv.h"
-#include "xf86.h"
-#include "colormap.h"
-#include "micmap.h"
-#include "globals.h"
-#include "glxserver.h"
-#include "glx_extinit.h"
+import xf86Module;
+import xf86Priv;
+import xf86;
+import colormap;
+import micmap;
+import globals;
+import glxserver;
+import glx_extinit;
 
-static MODULESETUPPROTO(glxSetup);
+private MODULESETUPPROTO glxSetup;
 
-static XF86ModuleVersionInfo VersRec = {
-    .modname      = "glx",
-    .vendor       = MODULEVENDORSTRING,
-    ._modinfo1_   = MODINFOSTRING1,
-    ._modinfo2_   = MODINFOSTRING2,
-    .xf86version  = XORG_VERSION_CURRENT,
-    .majorversion = 1,
-    .minorversion = 0,
-    .patchlevel   = 0,
-    .abiclass     = ABI_CLASS_EXTENSION,
-    .abiversion   = ABI_EXTENSION_VERSION,
+private XF86ModuleVersionInfo VersRec = {
+    modname: "glx",
+    vendor: MODULEVENDORSTRING,
+    _modinfo1_: MODINFOSTRING1,
+    _modinfo2_: MODINFOSTRING2,
+    xf86version: XORG_VERSION_CURRENT,
+    majorversion: 1,
+    minorversion: 0,
+    patchlevel: 0,
+    abiclass: ABI_CLASS_EXTENSION,
+    abiversion: ABI_EXTENSION_VERSION,
 };
 
-_X_EXPORT XF86ModuleData glxModuleData = {
-    .vers = &VersRec,
-    .setup = glxSetup
+_X_EXPORT XF86ModuleData = {
+    vers: &VersRec,
+    setup: glxSetup
 };
 
-static void *
-glxSetup(void *module, void *opts, int *errmaj, int *errmin)
+private void* glxSetup(void* module_, void* opts, int* errmaj, int* errmin)
 {
     static Bool setupDone = FALSE;
-    __GLXprovider *provider;
+    __GLXprovider* provider = void;
 
     if (setupDone) {
         if (errmaj)
             *errmaj = LDR_ONCEONLY;
-        return NULL;
+        return null;
     }
 
     setupDone = TRUE;
@@ -79,5 +81,5 @@ glxSetup(void *module, void *opts, int *errmaj, int *errmin)
         GlxPushProvider(provider);
     xorgGlxCreateVendor();
 
-    return module;
+    return module_;
 }

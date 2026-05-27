@@ -1,3 +1,6 @@
+module fbmodule.c;
+@nogc nothrow:
+extern(C): __gshared:
 /*
  * Copyright (C) 1998 The XFree86 Project, Inc.  All Rights Reserved.
  *
@@ -23,28 +26,32 @@
  * dealings in this Software without prior written authorization from the
  * XFree86 Project.
  */
-#include <xorg-config.h>
+import xorg_config;
 
-#include "xf86Module.h"
-#include "fb.h"
+import xf86Module;
+import fb;
 
-static XF86ModuleVersionInfo VersRec = {
-#ifdef FB_ACCESS_WRAPPER
-    .modname      = "wfb",
-#else
-    .modname      = "fb",
-#endif
-    .vendor       = MODULEVENDORSTRING,
-    ._modinfo1_   = MODINFOSTRING1,
-    ._modinfo2_   = MODINFOSTRING2,
-    .xf86version  = XORG_VERSION_CURRENT,
-    .majorversion = 1,
-    .minorversion = 0,
-    .patchlevel   = 0,
-    .abiclass     = ABI_CLASS_ANSIC,
-    .abiversion   = ABI_ANSIC_VERSION,
+private XF86ModuleVersionInfo VersRec = {
+    vendor: MODULEVENDORSTRING,
+    _modinfo1_: MODINFOSTRING1,
+    _modinfo2_: MODINFOSTRING2,
+    xf86version: XORG_VERSION_CURRENT,
+    majorversion: 1,
+    minorversion: 0,
+    patchlevel: 0,
+    abiclass: ABI_CLASS_ANSIC,
+    abiversion: ABI_ANSIC_VERSION,
 };
 
-_X_EXPORT XF86ModuleData FBPREFIX(ModuleData) = {
-    .vers = &VersRec
+static this() {
+    version(FB_ACCESS_WRAPPER) {
+        VersRec.modname = "wfb";
+    }
+    else {
+        VersRec.modname = fb;
+    }
+}
+
+export XF86ModuleData ModuleData = {
+    vers: &VersRec
 };

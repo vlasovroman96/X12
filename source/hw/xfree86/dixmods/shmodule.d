@@ -1,3 +1,6 @@
+module shmodule.c;
+@nogc nothrow:
+extern(C): __gshared:
 /*
  * Copyright © 2000 Keith Packard
  *
@@ -19,34 +22,34 @@
  * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
  * PERFORMANCE OF THIS SOFTWARE.
  */
-#include <xorg-config.h>
+import xorg_config;
 
-#include "xf86Module.h"
-#include    <X11/X.h>
-#include    "scrnintstr.h"
-#include    "windowstr.h"
-#include    <X11/fonts/font.h>
-#include    "dixfontstr.h"
-#include    <X11/fonts/fontstruct.h>
-#include    "mi.h"
-#include    "regionstr.h"
-#include    "globals.h"
-#include    "gcstruct.h"
-#include "shadow.h"
+import xf86Module;
+import    X11.X;
+import    scrnintstr;
+import    windowstr;
+import    X11.fonts.font;
+import    dixfontstr;
+import    X11.fonts.fontstruct;
+import    mi;
+import    regionstr;
+import    globals;
+import    gcstruct;
+import shadow;
 
-static XF86ModuleVersionInfo VersRec = {
-    .modname      = "shadow",
-    .vendor       = MODULEVENDORSTRING,
-    ._modinfo1_   = MODINFOSTRING1,
-    ._modinfo2_   = MODINFOSTRING2,
-    .xf86version  = XORG_VERSION_CURRENT,
-    .majorversion = 1,
-    .minorversion = 1,
-    .patchlevel   = 0,
-    .abiclass     = ABI_CLASS_ANSIC,
-    .abiversion   = ABI_ANSIC_VERSION,
+private XF86ModuleVersionInfo VersRec = {
+    modname: "shadow",
+    vendor: MODULEVENDORSTRING,
+    _modinfo1_: MODINFOSTRING1,
+    _modinfo2_: MODINFOSTRING2,
+    xf86version: XORG_VERSION_CURRENT,
+    majorversion: 1,
+    minorversion: 1,
+    patchlevel: 0,
+    abiclass: ABI_CLASS_ANSIC,
+    abiversion: ABI_ANSIC_VERSION,
 };
 
-_X_EXPORT XF86ModuleData shadowModuleData = {
-    .vers = &VersRec
+export XF86ModuleData shadowModuleData = {
+    vers: &VersRec
 };
