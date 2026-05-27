@@ -1,3 +1,11 @@
+module xf86dri.c;
+@nogc nothrow:
+extern(C): __gshared:
+
+private template HasVersion(string versionId) {
+	mixin("version("~versionId~") {enum HasVersion = true;} else {enum HasVersion = false;}");
+}
+import core.stdc.config: c_long, c_ulong;
 /**************************************************************************
 
 Copyright 1998-1999 Precision Insight, Inc., Cedar Park, Texas.
@@ -32,53 +40,51 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *   Rickard E. (Rik) Faith <faith@valinux.com>
  *
  */
-#include <xorg-config.h>
+import xorg_config;
 
-#include <string.h>
-#include <X11/X.h>
-#include <X11/Xproto.h>
-#include <X11/dri/xf86driproto.h>
+import core.stdc.string;
+import X11.X;
+import X11.Xproto;
+import X11.dri.xf86driproto;
 
-#include "dix/dix_priv.h"
-#include "dix/request_priv.h"
-#include "dix/screenint_priv.h"
-#include "include/dristruct.h"
-#include "include/sarea.h"
+import dix.dix_priv;
+import dix.request_priv;
+import dix.screenint_priv;
+import include.dristruct;
+import include.sarea;
 
-#include "xf86.h"
-#include "misc.h"
-#include "dixstruct.h"
-#include "extnsionst.h"
-#include "cursorstr.h"
-#include "scrnintstr.h"
-#include "servermd.h"
-#include "swaprep.h"
-#include "xf86str.h"
-#include "dri_priv.h"
-#include "xf86drm.h"
-#include "protocol-versions.h"
-#include "xf86Extensions.h"
+import xf86;
+import misc;
+import dixstruct;
+import extnsionst;
+import cursorstr;
+import scrnintstr;
+import servermd;
+import swaprep;
+import xf86str;
+import dri_priv;
+import xf86drm;
+import protocol_versions;
+import xf86Extensions;
 
-static int DRIErrorBase;
+private int DRIErrorBase;
 
-static void XF86DRIResetProc(ExtensionEntry *extEntry);
+
 
 /*ARGSUSED*/
-static void
-XF86DRIResetProc(ExtensionEntry *extEntry)
+private void XF86DRIResetProc(ExtensionEntry* extEntry)
 {
     DRIReset();
 }
 
-static int
-ProcXF86DRIQueryVersion(register ClientPtr client)
+private int ProcXF86DRIQueryVersion(ClientPtr client)
 {
     X_REQUEST_HEAD_STRUCT(xXF86DRIQueryVersionReq);
 
     xXF86DRIQueryVersionReply reply = {
-        .majorVersion = SERVER_XF86DRI_MAJOR_VERSION,
-        .minorVersion = SERVER_XF86DRI_MINOR_VERSION,
-        .patchVersion = SERVER_XF86DRI_PATCH_VERSION
+        majorVersion: SERVER_XF86DRI_MAJOR_VERSION,
+        minorVersion: SERVER_XF86DRI_MINOR_VERSION,
+        patchVersion: SERVER_XF86DRI_PATCH_VERSION
     };
 
     X_REPLY_FIELD_CARD16(majorVersion);
@@ -88,48 +94,46 @@ ProcXF86DRIQueryVersion(register ClientPtr client)
     return X_SEND_REPLY_SIMPLE(client, reply);
 }
 
-static int
-ProcXF86DRIQueryDirectRenderingCapable(register ClientPtr client)
+private int ProcXF86DRIQueryDirectRenderingCapable(ClientPtr client)
 {
     X_REQUEST_HEAD_STRUCT(xXF86DRIQueryDirectRenderingCapableReq);
     X_REQUEST_FIELD_CARD32(screen);
 
-    ScreenPtr pScreen = dixGetScreenPtr(stuff->screen);
+    ScreenPtr pScreen = dixGetScreenPtr(stuff.screen);
 
     if (!pScreen) {
-        client->errorValue = stuff->screen;
+        client.errorValue = stuff.screen;
         return BadValue;
     }
 
-    Bool isCapable;
+    Bool isCapable = void;
 
     if (!DRIQueryDirectRenderingCapable(pScreen,
                                         &isCapable)) {
         return BadValue;
     }
 
-    if (!client->local || client->swapped)
+    if (!client.local || client.swapped)
         isCapable = 0;
 
     xXF86DRIQueryDirectRenderingCapableReply reply = {
-        .isCapable = isCapable
+        isCapable: isCapable
     };
 
     return X_SEND_REPLY_SIMPLE(client, reply);
 }
 
-static int
-ProcXF86DRIOpenConnection(register ClientPtr client)
+private int ProcXF86DRIOpenConnection(ClientPtr client)
 {
     X_REQUEST_HEAD_STRUCT(xXF86DRIOpenConnectionReq);
 
-    drm_handle_t hSAREA;
-    char *busIdString;
+    drm_handle_t hSAREA = void;
+    char* busIdString = void;
     CARD32 busIdStringLength = 0;
 
-    ScreenPtr pScreen = dixGetScreenPtr(stuff->screen);
+    ScreenPtr pScreen = dixGetScreenPtr(stuff.screen);
     if (!pScreen) {
-        client->errorValue = stuff->screen;
+        client.errorValue = stuff.screen;
         return BadValue;
     }
 
@@ -138,55 +142,54 @@ ProcXF86DRIOpenConnection(register ClientPtr client)
         return BadValue;
     }
 
-    x_rpcbuf_t rpcbuf = { .swapped = client->swapped, .err_clear = TRUE };
+    x_rpcbuf_t rpcbuf = { swapped: client.swapped, err_clear: TRUE };
     if (busIdString) {
         busIdStringLength = strlen(busIdString);
-        x_rpcbuf_write_CARD8s(&rpcbuf, (CARD8*)busIdString, strlen(busIdString));
+        x_rpcbuf_write_CARD8s(&rpcbuf, cast(CARD8*)busIdString, strlen(busIdString));
     }
 
     xXF86DRIOpenConnectionReply reply = {
-        .busIdStringLength = busIdStringLength,
-        .hSAREALow = (CARD32) (hSAREA & 0xffffffff),
-#if defined(LONG64) && !defined(__linux__)
-        .hSAREAHigh = (CARD32) (hSAREA >> 32),
-#endif
+        busIdStringLength: busIdStringLength,
+        hSAREALow: cast(CARD32) (hSAREA & 0xffffffff),
     };
+static if(HasVersion!("LONG64") && !HasVersion!("__linux__")) {
+        reply.hSAREAHigh = cast(CARD32) (hSAREA >> 32);
+}
+// #endif
 
     return X_SEND_REPLY_WITH_RPCBUF(client, reply, rpcbuf);
 }
 
-static int
-ProcXF86DRIAuthConnection(register ClientPtr client)
+private int ProcXF86DRIAuthConnection(ClientPtr client)
 {
     X_REQUEST_HEAD_STRUCT(xXF86DRIAuthConnectionReq);
 
-    ScreenPtr pScreen = dixGetScreenPtr(stuff->screen);
+    ScreenPtr pScreen = dixGetScreenPtr(stuff.screen);
     if (!pScreen) {
-        client->errorValue = stuff->screen;
+        client.errorValue = stuff.screen;
         return BadValue;
     }
 
     CARD8 authenticated = 1;
-    if (!DRIAuthConnection(pScreen, stuff->magic)) {
-        ErrorF("Failed to authenticate %lu\n", (unsigned long) stuff->magic);
+    if (!DRIAuthConnection(pScreen, stuff.magic)) {
+        ErrorF("Failed to authenticate %lu\n", cast(c_ulong) stuff.magic);
         authenticated = 0;
     }
 
     xXF86DRIAuthConnectionReply reply = {
-        .authenticated = authenticated
+        authenticated: authenticated
     };
 
     return X_SEND_REPLY_SIMPLE(client, reply);
 }
 
-static int
-ProcXF86DRICloseConnection(register ClientPtr client)
+private int ProcXF86DRICloseConnection(ClientPtr client)
 {
     X_REQUEST_HEAD_STRUCT(xXF86DRICloseConnectionReq);
 
-    ScreenPtr pScreen = dixGetScreenPtr(stuff->screen);
+    ScreenPtr pScreen = dixGetScreenPtr(stuff.screen);
     if (!pScreen) {
-        client->errorValue = stuff->screen;
+        client.errorValue = stuff.screen;
         return BadValue;
     }
 
@@ -194,92 +197,88 @@ ProcXF86DRICloseConnection(register ClientPtr client)
     return Success;
 }
 
-static int
-ProcXF86DRIGetClientDriverName(register ClientPtr client)
+private int ProcXF86DRIGetClientDriverName(ClientPtr client)
 {
     X_REQUEST_HEAD_STRUCT(xXF86DRIGetClientDriverNameReq);
 
-    ScreenPtr pScreen = dixGetScreenPtr(stuff->screen);
+    ScreenPtr pScreen = dixGetScreenPtr(stuff.screen);
     if (!pScreen) {
-        client->errorValue = stuff->screen;
+        client.errorValue = stuff.screen;
         return BadValue;
     }
 
     xXF86DRIGetClientDriverNameReply reply = { 0 };
 
-    char *clientDriverName = NULL;
+    char* clientDriverName = null;
 
     DRIGetClientDriverName(pScreen,
-                           (int *) &reply.ddxDriverMajorVersion,
-                           (int *) &reply.ddxDriverMinorVersion,
-                           (int *) &reply.ddxDriverPatchVersion,
+                           cast(int*) &reply.ddxDriverMajorVersion,
+                           cast(int*) &reply.ddxDriverMinorVersion,
+                           cast(int*) &reply.ddxDriverPatchVersion,
                            &clientDriverName);
 
-    x_rpcbuf_t rpcbuf = { .swapped = client->swapped, .err_clear = TRUE };
+    x_rpcbuf_t rpcbuf = { swapped: client.swapped, err_clear: TRUE };
     if (clientDriverName) {
         reply.clientDriverNameLength = strlen(clientDriverName);
-        x_rpcbuf_write_CARD8s(&rpcbuf, (CARD8*)clientDriverName, reply.clientDriverNameLength);
+        x_rpcbuf_write_CARD8s(&rpcbuf, cast(CARD8*)clientDriverName, reply.clientDriverNameLength);
     }
 
     return X_SEND_REPLY_WITH_RPCBUF(client, reply, rpcbuf);
 }
 
-static int
-ProcXF86DRICreateContext(register ClientPtr client)
+private int ProcXF86DRICreateContext(ClientPtr client)
 {
     X_REQUEST_HEAD_STRUCT(xXF86DRICreateContextReq);
 
-    ScreenPtr pScreen = dixGetScreenPtr(stuff->screen);
+    ScreenPtr pScreen = dixGetScreenPtr(stuff.screen);
     if (!pScreen) {
-        client->errorValue = stuff->screen;
+        client.errorValue = stuff.screen;
         return BadValue;
     }
 
     xXF86DRICreateContextReply reply = { 0 };
 
     if (!DRICreateContext(pScreen,
-                          NULL,
-                          stuff->context,
-                          (drm_context_t *) &reply.hHWContext)) {
+                          null,
+                          stuff.context,
+                          cast(drm_context_t*) &reply.hHWContext)) {
         return BadValue;
     }
 
     return X_SEND_REPLY_SIMPLE(client, reply);
 }
 
-static int
-ProcXF86DRIDestroyContext(register ClientPtr client)
+private int ProcXF86DRIDestroyContext(ClientPtr client)
 {
     X_REQUEST_HEAD_STRUCT(xXF86DRIDestroyContextReq);
 
-    ScreenPtr pScreen = dixGetScreenPtr(stuff->screen);
+    ScreenPtr pScreen = dixGetScreenPtr(stuff.screen);
     if (!pScreen) {
-        client->errorValue = stuff->screen;
+        client.errorValue = stuff.screen;
         return BadValue;
     }
 
-    if (!DRIDestroyContext(pScreen, stuff->context)) {
+    if (!DRIDestroyContext(pScreen, stuff.context)) {
         return BadValue;
     }
 
     return Success;
 }
 
-static int
-ProcXF86DRICreateDrawable(ClientPtr client)
+private int ProcXF86DRICreateDrawable(ClientPtr client)
 {
     X_REQUEST_HEAD_STRUCT(xXF86DRICreateDrawableReq);
 
-    DrawablePtr pDrawable;
-    int rc;
+    DrawablePtr pDrawable = void;
+    int rc = void;
 
-    ScreenPtr pScreen = dixGetScreenPtr(stuff->screen);
+    ScreenPtr pScreen = dixGetScreenPtr(stuff.screen);
     if (!pScreen) {
-        client->errorValue = stuff->screen;
+        client.errorValue = stuff.screen;
         return BadValue;
     }
 
-    rc = dixLookupDrawable(&pDrawable, stuff->drawable, client, 0,
+    rc = dixLookupDrawable(&pDrawable, stuff.drawable, client, 0,
                            DixReadAccess);
     if (rc != Success)
         return rc;
@@ -287,28 +286,27 @@ ProcXF86DRICreateDrawable(ClientPtr client)
     xXF86DRICreateDrawableReply reply = { 0 };
     if (!DRICreateDrawable(pScreen, client,
                            pDrawable,
-                           (drm_drawable_t *) &reply.hHWDrawable)) {
+                           cast(drm_drawable_t*) &reply.hHWDrawable)) {
         return BadValue;
     }
 
     return X_SEND_REPLY_SIMPLE(client, reply);
 }
 
-static int
-ProcXF86DRIDestroyDrawable(register ClientPtr client)
+private int ProcXF86DRIDestroyDrawable(ClientPtr client)
 {
     X_REQUEST_HEAD_STRUCT(xXF86DRIDestroyDrawableReq);
 
-    DrawablePtr pDrawable;
-    int rc;
+    DrawablePtr pDrawable = void;
+    int rc = void;
 
-    ScreenPtr pScreen = dixGetScreenPtr(stuff->screen);
+    ScreenPtr pScreen = dixGetScreenPtr(stuff.screen);
     if (!pScreen) {
-        client->errorValue = stuff->screen;
+        client.errorValue = stuff.screen;
         return BadValue;
     }
 
-    rc = dixLookupDrawable(&pDrawable, stuff->drawable, client, 0,
+    rc = dixLookupDrawable(&pDrawable, stuff.drawable, client, 0,
                            DixReadAccess);
     if (rc != Success)
         return rc;
@@ -321,24 +319,23 @@ ProcXF86DRIDestroyDrawable(register ClientPtr client)
     return Success;
 }
 
-static int
-ProcXF86DRIGetDrawableInfo(register ClientPtr client)
+private int ProcXF86DRIGetDrawableInfo(ClientPtr client)
 {
     X_REQUEST_HEAD_STRUCT(xXF86DRIGetDrawableInfoReq);
 
-    DrawablePtr pDrawable;
-    int X, Y, W, H;
-    drm_clip_rect_t *pClipRects;
-    drm_clip_rect_t *pBackClipRects;
-    int backX, backY, rc;
+    DrawablePtr pDrawable = void;
+    int X = void, Y = void, W = void, H = void;
+    drm_clip_rect_t* pClipRects = void;
+    drm_clip_rect_t* pBackClipRects = void;
+    int backX = void, backY = void, rc = void;
 
-    ScreenPtr pScreen = dixGetScreenPtr(stuff->screen);
+    ScreenPtr pScreen = dixGetScreenPtr(stuff.screen);
     if (!pScreen) {
-        client->errorValue = stuff->screen;
+        client.errorValue = stuff.screen;
         return BadValue;
     }
 
-    rc = dixLookupDrawable(&pDrawable, stuff->drawable, client, 0,
+    rc = dixLookupDrawable(&pDrawable, stuff.drawable, client, 0,
                            DixReadAccess);
     if (rc != Success)
         return rc;
@@ -347,17 +344,17 @@ ProcXF86DRIGetDrawableInfo(register ClientPtr client)
 
     if (!DRIGetDrawableInfo(pScreen,
                             pDrawable,
-                            (unsigned int *) &reply.drawableTableIndex,
-                            (unsigned int *) &reply.drawableTableStamp,
-                            (int *) &X,
-                            (int *) &Y,
-                            (int *) &W,
-                            (int *) &H,
-                            (int *) &reply.numClipRects,
+                            cast(uint*) &reply.drawableTableIndex,
+                            cast(uint*) &reply.drawableTableStamp,
+                            cast(int*) &X,
+                            cast(int*) &Y,
+                            cast(int*) &W,
+                            cast(int*) &H,
+                            cast(int*) &reply.numClipRects,
                             &pClipRects,
                             &backX,
                             &backY,
-                            (int *) &reply.numBackClipRects,
+                            cast(int*) &reply.numBackClipRects,
                             &pBackClipRects)) {
         return BadValue;
     }
@@ -369,7 +366,7 @@ ProcXF86DRIGetDrawableInfo(register ClientPtr client)
     reply.backX = backX;
     reply.backY = backY;
 
-    x_rpcbuf_t rpcbuf = { .swapped = client->swapped, .err_clear = TRUE };
+    x_rpcbuf_t rpcbuf = { swapped: client.swapped, err_clear: TRUE };
 
     if (reply.numClipRects) {
         int j = 0;
@@ -378,8 +375,8 @@ ProcXF86DRIGetDrawableInfo(register ClientPtr client)
             /* Clip cliprects to screen dimensions (redirected windows) */
             CARD16 x1 = max(pClipRects[i].x1, 0);
             CARD16 y1 = max(pClipRects[i].y1, 0);
-            CARD16 x2 = min(pClipRects[i].x2, pScreen->width);
-            CARD16 y2 = min(pClipRects[i].y2, pScreen->height);
+            CARD16 x2 = min(pClipRects[i].x2, pScreen.width);
+            CARD16 y2 = min(pClipRects[i].y2, pScreen.height);
 
             /* only write visible ones */
             if (x1 < x2 && y1 < y2) {
@@ -404,17 +401,16 @@ ProcXF86DRIGetDrawableInfo(register ClientPtr client)
     return X_SEND_REPLY_WITH_RPCBUF(client, reply, rpcbuf);
 }
 
-static int
-ProcXF86DRIGetDeviceInfo(register ClientPtr client)
+private int ProcXF86DRIGetDeviceInfo(ClientPtr client)
 {
     X_REQUEST_HEAD_STRUCT(xXF86DRIGetDeviceInfoReq);
 
-    drm_handle_t hFrameBuffer;
-    void *pDevPrivate;
+    drm_handle_t hFrameBuffer = void;
+    void* pDevPrivate = void;
 
-    ScreenPtr pScreen = dixGetScreenPtr(stuff->screen);
+    ScreenPtr pScreen = dixGetScreenPtr(stuff.screen);
     if (!pScreen) {
-        client->errorValue = stuff->screen;
+        client.errorValue = stuff.screen;
         return BadValue;
     }
 
@@ -422,41 +418,40 @@ ProcXF86DRIGetDeviceInfo(register ClientPtr client)
 
     if (!DRIGetDeviceInfo(pScreen,
                           &hFrameBuffer,
-                          (int *) &reply.framebufferOrigin,
-                          (int *) &reply.framebufferSize,
-                          (int *) &reply.framebufferStride,
-                          (int *) &reply.devPrivateSize,
+                          cast(int*) &reply.framebufferOrigin,
+                          cast(int*) &reply.framebufferSize,
+                          cast(int*) &reply.framebufferStride,
+                          cast(int*) &reply.devPrivateSize,
                           &pDevPrivate)) {
         return BadValue;
     }
 
-    reply.hFrameBufferLow = (CARD32) (hFrameBuffer & 0xffffffff);
-#if defined(LONG64) && !defined(__linux__)
-    reply.hFrameBufferHigh = (CARD32) (hFrameBuffer >> 32);
-#endif
+    reply.hFrameBufferLow = cast(CARD32) (hFrameBuffer & 0xffffffff);
+static if (HasVersion!"LONG64" && !HasVersion!"linux") {
+    reply.hFrameBufferHigh = cast(CARD32) (hFrameBuffer >> 32);
+}
 
-    x_rpcbuf_t rpcbuf = { .swapped = client->swapped, .err_clear = TRUE };
+    x_rpcbuf_t rpcbuf = { swapped: client.swapped, err_clear: TRUE };
     x_rpcbuf_write_CARD8s(&rpcbuf, pDevPrivate, reply.devPrivateSize);
 
     return X_SEND_REPLY_WITH_RPCBUF(client, reply, rpcbuf);
 }
 
-static int
-ProcXF86DRIDispatch(register ClientPtr client)
+private int ProcXF86DRIDispatch(ClientPtr client)
 {
     REQUEST(xReq);
 
-    switch (stuff->data) {
+    switch (stuff.data) {
     case X_XF86DRIQueryVersion:
         return ProcXF86DRIQueryVersion(client);
     case X_XF86DRIQueryDirectRenderingCapable:
         return ProcXF86DRIQueryDirectRenderingCapable(client);
-    }
+    default: break;}
 
-    if (!client->local)
+    if (!client.local)
         return DRIErrorBase + XF86DRIClientNotLocal;
 
-    switch (stuff->data) {
+    switch (stuff.data) {
     case X_XF86DRIOpenConnection:
         return ProcXF86DRIOpenConnection(client);
     case X_XF86DRICloseConnection:
@@ -483,18 +478,17 @@ ProcXF86DRIDispatch(register ClientPtr client)
     }
 }
 
-void
-XFree86DRIExtensionInit(void)
+void XFree86DRIExtensionInit()
 {
-    ExtensionEntry *extEntry;
+    ExtensionEntry* extEntry = void;
 
     if (DRIExtensionInit() &&
         (extEntry = AddExtension(XF86DRINAME,
                                  XF86DRINumberEvents,
                                  XF86DRINumberErrors,
-                                 ProcXF86DRIDispatch,
-                                 ProcXF86DRIDispatch,
-                                 XF86DRIResetProc, StandardMinorOpcode))) {
-        DRIErrorBase = extEntry->errorBase;
+                                 &ProcXF86DRIDispatch,
+                                 &ProcXF86DRIDispatch,
+                                 &XF86DRIResetProc, StandardMinorOpcode))) {
+        DRIErrorBase = extEntry.errorBase;
     }
 }
