@@ -1,27 +1,26 @@
-#include <dix-config.h>
+module log.c;
+@nogc nothrow:
+extern(C): __gshared:
+import dix_config;
 
-#include <X11/Xfuncproto.h>
+import X11.Xfuncproto;
 
-#include "include/os.h"
+import include.os;
 
-#include "xf86_compat.h"
-
-#undef xf86Msg
-#undef xf86MsgVerb
+import xf86_compat;
 
 /*
  * this is specifically for NVidia proprietary driver: they're again lagging
  * behind a year, doing at least some minimal cleanup of their code base.
  * All attempts to get in direct contact with them have failed.
  */
-_X_EXPORT void xf86Msg(MessageType type, const char *format, ...)
-    _X_ATTRIBUTE_PRINTF(2, 3);
+export void xf86Msg(MessageType type, const char *format, ...);
 
-void xf86Msg(MessageType type, const char *format, ...)
+void xf86Msg(MessageType type, const(char)* format, ...)
 {
     xf86NVidiaBugInternalFunc("xf86Msg()");
 
-    va_list ap;
+    va_list ap = void;
 
     va_start(ap, format);
     LogVMessageVerb(type, 1, format, ap);
@@ -33,11 +32,9 @@ void xf86Msg(MessageType type, const char *format, ...)
  * this is only needed for the 570.x nvidia drivers
  */
 
-_X_EXPORT void xf86MsgVerb(MessageType type, int verb, const char *format, ...)
-    _X_ATTRIBUTE_PRINTF(3, 4);
+export void xf86MsgVerb(MessageType type, int verb, const char *format, ...) ;
 
-void
-xf86MsgVerb(MessageType type, int verb, const char *format, ...)
+void xf86MsgVerb(MessageType type, int verb, const(char)* format, ...)
 {
     static char reportxf86MsgVerb = 1;
 
@@ -46,7 +43,7 @@ xf86MsgVerb(MessageType type, int verb, const char *format, ...)
         reportxf86MsgVerb = 0;
     }
 
-    va_list ap;
+    va_list ap = void;
     va_start(ap, format);
     LogVMessageVerb(type, verb, format, ap);
     va_end(ap);

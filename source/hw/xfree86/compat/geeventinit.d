@@ -1,11 +1,14 @@
-#include <dix-config.h>
+module geeventinit.c;
+@nogc nothrow:
+extern(C): __gshared:
+import dix_config;
 
-#include <X11/Xfuncproto.h>
-#include <X11/Xproto.h>
+import X11.Xfuncproto;
+import X11.Xproto;
 
-#include "os/osdep.h"
+import os.osdep;
 
-#include "xf86_compat.h"
+import xf86_compat;
 
 /*
  * needed for NVidia proprietary driver 340.x versions
@@ -16,13 +19,13 @@
  * still didn't do basic maintenance and fixed their driver
  */
 
-_X_EXPORT void GEInitEvent(xGenericEvent *ev, int extension);
+export 
 
-void GEInitEvent(xGenericEvent *ev, int extension)
+void GEInitEvent(xGenericEvent* ev, int extension)
 {
     xf86NVidiaBugObsoleteFunc("GEInitEvent()");
 
-    ev->type = GenericEvent;
-    ev->extension = extension;
-    ev->length = 0;
+    ev.type = GenericEvent;
+    ev.extension = extension;
+    ev.length = 0;
 }

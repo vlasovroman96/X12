@@ -1,10 +1,13 @@
-#include <dix-config.h>
+module hw.cfree86.compat.xf86Helper;
+@nogc nothrow:
+extern(C): __gshared:
+import dix_config;
 
-#include <X11/Xfuncproto.h>
+import X11.Xfuncproto;
 
 
-#include "xf86Priv.h"
-#include "xf86Bus.h"
+import xf86Priv;
+import xf86Bus;
 
 
 /*
@@ -17,14 +20,13 @@
  * this is only needed for the 570.x nvidia drivers
  */
 
-_X_EXPORT Bool xf86IsScreenPrimary(ScrnInfoPtr pScrn);
+export 
 
-Bool
-xf86IsScreenPrimary(ScrnInfoPtr pScrn)
+Bool xf86IsScreenPrimary(ScrnInfoPtr pScrn)
 {
-    int i;
+    int i = void;
 
-    for (i = 0; i < pScrn->numEntities; i++) {
+    for (i = 0; i < pScrn.numEntities; i++) {
         if (xf86IsEntityPrimary(i))
             return TRUE;
     }

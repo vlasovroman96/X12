@@ -1,18 +1,20 @@
-#include <dix-config.h>
+module clientexception.c;
+@nogc nothrow:
+extern(C): __gshared:
+import dix_config;
 
-#include <X11/Xfuncproto.h>
+import X11.Xfuncproto;
 
-#include "dix/dix_priv.h"
+import dix.dix_priv;
 
-#include "xf86_compat.h"
+import xf86_compat;
 
 /*
  * this is specifically for NVidia proprietary driver: they're again lagging
  * behind a year, doing at least some minimal cleanup of their code base.
  * All attempts to get in direct contact with them have failed.
  */
-_X_EXPORT void MarkClientException(ClientPtr pClient);
-
+export 
 void MarkClientException(ClientPtr pClient)
 {
     xf86NVidiaBugInternalFunc("MarkClientException()");

@@ -1,10 +1,13 @@
-#include <dix-config.h>
+module timercheck.c;
+@nogc nothrow:
+extern(C): __gshared:
+import dix_config;
 
-#include <X11/Xfuncproto.h>
+import X11.Xfuncproto;
 
-#include "os/osdep.h"
+import os.osdep;
 
-#include "xf86_compat.h"
+import xf86_compat;
 
 /*
  * needed for NVidia proprietary driver 340.x versions
@@ -14,9 +17,9 @@
  * still didn't do basic maintenance and fixed their driver
  */
 
-_X_EXPORT void TimerCheck(void);
+export 
 
-void TimerCheck(void) {
+void TimerCheck() {
     xf86NVidiaBugObsoleteFunc("TimerCheck()");
 
     DoTimers(GetTimeInMillis());
