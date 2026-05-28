@@ -1,3 +1,6 @@
+module xf86gtf.c;
+@nogc nothrow:
+extern(C): __gshared:
 /*
  * gtf.c  Generate mode timings using the GTF Timing Standard
  *
@@ -60,27 +63,27 @@
 
 /* Ruthlessly converted to server code by Adam Jackson <ajax@redhat.com> */
 
-#include <xorg-config.h>
+import xorg_config;
 
-#include "xf86.h"
-#include "xf86Modes.h"
-#include <string.h>
+import xf86;
+import xf86Modes;
+import core.stdc.string;
 
-#define MARGIN_PERCENT    1.8   /* % of active vertical image                */
-#define CELL_GRAN         8.0   /* assumed character cell granularity        */
-#define MIN_PORCH         1     /* minimum front porch                       */
-#define V_SYNC_RQD        3     /* width of vsync in lines                   */
-#define H_SYNC_PERCENT    8.0   /* width of hsync as % of total line         */
-#define MIN_VSYNC_PLUS_BP 550.0 /* min time of vsync + back porch (microsec) */
-#define M                 600.0 /* blanking formula gradient                 */
-#define C                 40.0  /* blanking formula offset                   */
-#define K                 128.0 /* blanking formula scaling factor           */
-#define J                 20.0  /* blanking formula scaling factor           */
+enum MARGIN_PERCENT =    1.8   /* % of active vertical image                */;
+enum CELL_GRAN =         8.0   /* assumed character cell granularity        */;
+enum MIN_PORCH =         1     /* minimum front porch                       */;
+enum V_SYNC_RQD =        3     /* width of vsync in lines                   */;
+enum H_SYNC_PERCENT =    8.0   /* width of hsync as % of total line         */;
+enum MIN_VSYNC_PLUS_BP = 550.0 /* min time of vsync + back porch (microsec) */;
+enum M =                 600.0 /* blanking formula gradient                 */;
+enum C =                 40.0  /* blanking formula offset                   */;
+enum K =                 128.0 /* blanking formula scaling factor           */;
+enum J =                 20.0  /* blanking formula scaling factor           */;
 
 /* C' and M' are part of the Blanking Duty Cycle computation */
 
-#define C_PRIME           (((C - J) * K/256.0) + J)
-#define M_PRIME           (K/256.0 * M)
+enum C_PRIME =           (((C - J) * K/256.0) + J);
+enum M_PRIME =           (K/256.0 * M);
 
 /*
  * xf86GTFMode() - as defined by the GTF Timing Standard, compute the
@@ -95,37 +98,36 @@
  * XServer of fbset mode descriptions, from what I can tell).
  */
 
-DisplayModePtr
-xf86GTFMode(int h_pixels, int v_lines, float freq, int interlaced, int margins)
+DisplayModePtr xf86GTFMode(int h_pixels, int v_lines, float freq, int interlaced, int margins)
 {
-    DisplayModeRec *mode = XNFcallocarray(1, sizeof(DisplayModeRec));
+    DisplayModeRec* mode = XNFcallocarray(1, DisplayModeRec.sizeof);
 
-    float h_pixels_rnd;
-    float v_lines_rnd;
-    float v_field_rate_rqd;
-    float top_margin;
-    float bottom_margin;
-    float interlace;
-    float h_period_est;
-    float vsync_plus_bp;
-    float v_back_porch;
-    float total_v_lines;
-    float v_field_rate_est;
-    float h_period;
-    float v_field_rate;
-    float v_frame_rate;
-    float left_margin;
-    float right_margin;
-    float total_active_pixels;
-    float ideal_duty_cycle;
-    float h_blank;
-    float total_pixels;
-    float pixel_freq;
-    float h_freq;
+    float h_pixels_rnd = void;
+    float v_lines_rnd = void;
+    float v_field_rate_rqd = void;
+    float top_margin = void;
+    float bottom_margin = void;
+    float interlace = void;
+    float h_period_est = void;
+    float vsync_plus_bp = void;
+    float v_back_porch = void;
+    float total_v_lines = void;
+    float v_field_rate_est = void;
+    float h_period = void;
+    float v_field_rate = void;
+    float v_frame_rate = void;
+    float left_margin = void;
+    float right_margin = void;
+    float total_active_pixels = void;
+    float ideal_duty_cycle = void;
+    float h_blank = void;
+    float total_pixels = void;
+    float pixel_freq = void;
+    float h_freq = void;
 
-    float h_sync;
-    float h_front_porch;
-    float v_odd_front_porch_lines;
+    float h_sync = void;
+    float h_front_porch = void;
+    float v_odd_front_porch_lines = void;
 
     /*  1. In order to give correct results, the number of horizontal
      *  pixels requested is first processed to ensure that it is divisible
@@ -135,7 +137,7 @@ xf86GTFMode(int h_pixels, int v_lines, float freq, int interlaced, int margins)
      *  [H PIXELS RND] = ((ROUND([H PIXELS]/[CELL GRAN RND],0))*[CELLGRAN RND])
      */
 
-    h_pixels_rnd = rint((float) h_pixels / CELL_GRAN) * CELL_GRAN;
+    h_pixels_rnd = rint(cast(float) h_pixels / CELL_GRAN) * CELL_GRAN;
 
     /*  2. If interlace is requested, the number of vertical lines assumed
      *  by the calculation must be halved, as the computation calculates
@@ -147,7 +149,7 @@ xf86GTFMode(int h_pixels, int v_lines, float freq, int interlaced, int margins)
      */
 
     v_lines_rnd = interlaced ?
-        rint((float) v_lines) / 2.0 : rint((float) v_lines);
+        rint(cast(float) v_lines) / 2.0 : rint(cast(float) v_lines);
 
     /*  3. Find the frame rate required:
      *
@@ -209,7 +211,7 @@ xf86GTFMode(int h_pixels, int v_lines, float freq, int interlaced, int margins)
      */
 
     v_back_porch = vsync_plus_bp - V_SYNC_RQD;
-    (void) v_back_porch;
+    cast(void) v_back_porch;
 
     /*  10. Find the total number of lines in Vertical field period:
      *
@@ -248,7 +250,7 @@ xf86GTFMode(int h_pixels, int v_lines, float freq, int interlaced, int margins)
      */
 
     v_frame_rate = interlaced ? v_field_rate / 2.0 : v_field_rate;
-    (void) v_frame_rate;
+    cast(void) v_frame_rate;
 
     /*  15. Find number of pixels in left margin:
      *
@@ -357,25 +359,25 @@ xf86GTFMode(int h_pixels, int v_lines, float freq, int interlaced, int margins)
 
     /* finally, pack the results in the mode struct */
 
-    mode->HDisplay = (int) (h_pixels_rnd);
-    mode->HSyncStart = (int) (h_pixels_rnd + h_front_porch);
-    mode->HSyncEnd = (int) (h_pixels_rnd + h_front_porch + h_sync);
-    mode->HTotal = (int) (total_pixels);
-    mode->VDisplay = (int) (v_lines_rnd);
-    mode->VSyncStart = (int) (v_lines_rnd + v_odd_front_porch_lines);
-    mode->VSyncEnd = (int) (v_lines_rnd + v_odd_front_porch_lines + V_SYNC_RQD);
-    mode->VTotal = (int) (total_v_lines);
+    mode.HDisplay = cast(int) (h_pixels_rnd);
+    mode.HSyncStart = cast(int) (h_pixels_rnd + h_front_porch);
+    mode.HSyncEnd = cast(int) (h_pixels_rnd + h_front_porch + h_sync);
+    mode.HTotal = cast(int) (total_pixels);
+    mode.VDisplay = cast(int) (v_lines_rnd);
+    mode.VSyncStart = cast(int) (v_lines_rnd + v_odd_front_porch_lines);
+    mode.VSyncEnd = cast(int) (v_lines_rnd + v_odd_front_porch_lines + V_SYNC_RQD);
+    mode.VTotal = cast(int) (total_v_lines);
 
-    mode->Clock = (int) (pixel_freq * 1000.0);
-    mode->HSync = h_freq;
-    mode->VRefresh = freq;
+    mode.Clock = cast(int) (pixel_freq * 1000.0);
+    mode.HSync = h_freq;
+    mode.VRefresh = freq;
 
     xf86SetModeDefaultName(mode);
 
-    mode->Flags = V_NHSYNC | V_PVSYNC;
+    mode.Flags = V_NHSYNC | V_PVSYNC;
     if (interlaced) {
-        mode->VTotal *= 2;
-        mode->Flags |= V_INTERLACE;
+        mode.VTotal *= 2;
+        mode.Flags |= V_INTERLACE;
     }
 
     return mode;
