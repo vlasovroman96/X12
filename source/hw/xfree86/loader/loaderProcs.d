@@ -1,3 +1,7 @@
+module loaderProcs.h;
+@nogc nothrow:
+extern(C): __gshared:
+import core.stdc.config: c_long, c_ulong;
 /*
  * Copyright 1995-1998 by Metro Link, Inc.
  *
@@ -20,7 +24,7 @@
  * PERFORMANCE OF THIS SOFTWARE.
  */
 /*
- * Copyright (c) 1997-2001 by The XFree86 Project, Inc.
+ * Copyright (c) 1997-2002 by The XFree86 Project, Inc.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -45,32 +49,43 @@
  * the sale, use or other dealings in this Software without prior written
  * authorization from the copyright holder(s) and author(s).
  */
-#ifndef _LOADER_H
-#define _LOADER_H
+ 
+public import xorg_config;
 
-#include <xorg-config.h>
+public import xf86Module;
 
-#include <X11/Xdefs.h>
-#include <X11/Xosdefs.h>
-#include <X11/Xfuncproto.h>
-#include <X11/Xmd.h>
+struct module_desc {
+    module_desc* child;
+    module_desc* sib;
+    module_desc* parent;
+    void* handle;
+    ModuleSetupProc SetupProc;
+    ModuleTearDownProc TearDownProc;
+    void* TearDownData;         /* returned from SetupProc */
+    const(XF86ModuleVersionInfo)* VersionInfo;
+}alias ModuleDesc = module_desc;
+alias ModuleDescPtr = module_desc*;
 
-/* Compiled-in version information */
-typedef struct {
-    int xf86Version;
-    int ansicVersion;
-    int videodrvVersion;
-    int xinputVersion;
-    int extensionVersion;
-    int fontVersion;
-} ModuleVersions;
-extern const ModuleVersions LoaderVersionInfo;
+/* External API for the loader */
 
-extern Bool LoaderIgnoreAbi;
+void LoaderInit();
+void LoaderClose();
 
-extern Bool is_nvidia_proprietary;
+ModuleDescPtr LoadModule(const(char)*, void*, const(XF86ModReqInfo)*, int*);
+ModuleDescPtr DuplicateModule(ModuleDescPtr mod, ModuleDescPtr parent);
+void UnloadDriver(ModuleDescPtr);
 
-/* Internal Functions */
-void *LoaderOpen(const char *, int *);
+void LoaderSetPath(const(char)* driver, const(char)* path);
+void LoaderInitPath();
+void LoaderClosePath();
 
-#endif                          /* _LOADER_H */
+void LoaderUnload(const(char)*, void*);
+c_ulong LoaderGetModuleVersion(ModuleDescPtr mod);
+
+void LoaderResetOptions();
+
+void LoaderSetIgnoreAbi();
+
+const(char)** LoaderListDir(const(char)*, const(char)**);
+
+                          /* _LOADERPROCS_H */

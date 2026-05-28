@@ -1,3 +1,6 @@
+module symbol_test.c;
+@nogc nothrow:
+extern(C): __gshared:
 /*
  * Copyright © 2017 Broadcom
  *
@@ -25,13 +28,13 @@
  * symbols of a set of X.Org modules when they're loaded in order.
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <dlfcn.h>
+import core.stdc.stdio;
+import core.stdc.stdlib;
+import core.sys.posix.dlfcn;
 
-int main (int argc, char**argv)
+int main(int argc, char** argv)
 {
-    void *ret;
+    void* ret = void;
 
     if (argc < 2) {
         fprintf(stderr,

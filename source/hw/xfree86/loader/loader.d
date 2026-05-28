@@ -1,3 +1,6 @@
+module hw.xfree86.loader.loader;
+@nogc nothrow:
+extern(C): __gshared:
 /*
  * Copyright 1995-1998 by Metro Link, Inc.
  *
@@ -45,32 +48,32 @@
  * the sale, use or other dealings in this Software without prior written
  * authorization from the copyright holder(s) and author(s).
  */
-#include <xorg-config.h>
+import xorg_config;
 
-#include <string.h>
-#include "os.h"
-#include "loader.h"
-#include "loaderProcs.h"
+import core.stdc.string;
+import os;
+import loader;
+import loaderProcs;
 
-#ifdef HAVE_DLFCN_H
+version (HAVE_DLFCN_H) {
 
-#include <dlfcn.h>
-#include <X11/Xos.h>
+import core.sys.posix.dlfcn;
+import X11.Xos;
+import xf86Module.h;
 
-#else
-#error i have no dynamic linker and i must scream
-#endif
+} else {
+static assert(0, "i have no dynamic linker and i must scream");
+}
 
-#ifndef XORG_NO_SDKSYMS
-extern void *xorg_symbols[];
-#endif
+version (XORG_NO_SDKSYMS) {} else {
+extern void*[1] xorg_symbols;
+}
 
-void
-LoaderInit(void)
+void LoaderInit()
 {
-#ifndef XORG_NO_SDKSYMS
-    LogMessageVerb(X_INFO, 2, "Loader magic: %p\n", (void *) xorg_symbols);
-#endif
+version (XORG_NO_SDKSYMS) {} else {
+    LogMessageVerb(X_INFO, 2, "Loader magic: %p\n", cast(void*) xorg_symbols);
+}
     LogMessageVerb(X_INFO, 2, "Module ABI versions:\n");
     LogMessageVerb(X_NONE, 2, "\t%s: %d.%d\n", ABI_CLASS_ANSIC,
                    GET_ABI_MAJOR(LoaderVersionInfo.ansicVersion),
@@ -88,63 +91,58 @@ LoaderInit(void)
     LoaderInitPath();
 }
 
-void
-LoaderClose(void)
+void LoaderClose()
 {
     LoaderClosePath();
 }
 
 /* Public Interface to the loader. */
 
-void *
-LoaderOpen(const char *module, int *errmaj)
+void* LoaderOpen(const(char)* module_, int* errmaj)
 {
-    void *ret;
+    void* ret = void;
 
-#if defined(DEBUG)
-    ErrorF("LoaderOpen(%s)\n", module);
-#endif
+version (DEBUG) {
+    ErrorF("LoaderOpen(%s)\n", module_);
+}
 
-    LogMessage(X_INFO, "Loading %s\n", module);
+    LogMessage(X_INFO, "Loading %s\n", module_);
 
-    if (!(ret = dlopen(module, RTLD_LAZY | RTLD_GLOBAL))) {
-        LogMessage(X_ERROR, "Failed to load %s: %s\n", module, dlerror());
+    if (((ret = dlopen(module_, RTLD_LAZY | RTLD_GLOBAL)) == 0)) {
+        LogMessage(X_ERROR, "Failed to load %s: %s\n", module_, dlerror());
         if (errmaj)
             *errmaj = LDR_NOLOAD;
-        return NULL;
+        return null;
     }
 
     return ret;
 }
 
-void *
-LoaderSymbol(const char *name)
+void* LoaderSymbol(const(char)* name)
 {
-    static void *global_scope = NULL;
-    void *p;
+    static void* global_scope = null;
+    void* p = void;
 
     p = dlsym(RTLD_DEFAULT, name);
-    if (p != NULL)
+    if (p != null)
         return p;
 
     if (!global_scope)
-        global_scope = dlopen(NULL, RTLD_LAZY | RTLD_GLOBAL);
+        global_scope = dlopen(null, RTLD_LAZY | RTLD_GLOBAL);
 
     if (global_scope)
         return dlsym(global_scope, name);
 
-    return NULL;
+    return null;
 }
 
-void *
-LoaderSymbolFromModule(void *handle, const char *name)
+void* LoaderSymbolFromModule(void* handle, const(char)* name)
 {
     ModuleDescPtr mod = handle;
-    return dlsym(mod->handle, name);
+    return dlsym(mod.handle, name);
 }
 
-void
-LoaderUnload(const char *name, void *handle)
+void LoaderUnload(const(char)* name, void* handle)
 {
     LogMessageVerb(X_INFO, 1, "Unloading %s\n", name);
     if (handle)
@@ -154,29 +152,27 @@ LoaderUnload(const char *name, void *handle)
 Bool LoaderIgnoreAbi = FALSE;
 Bool is_nvidia_proprietary = FALSE;
 
-void
-LoaderSetIgnoreAbi(void)
+void LoaderSetIgnoreAbi()
 {
     /* Only used to keep consistency with the loader api */
     /* This really doesn't have to be a proc */
     LoaderIgnoreAbi = TRUE;
 }
 
-Bool
-LoaderShouldIgnoreABI(void)
+Bool LoaderShouldIgnoreABI()
 {
     /* The nvidia proprietary DDX driver calls this deprecated function */
     return is_nvidia_proprietary || LoaderIgnoreAbi;
 }
 
-int
-LoaderGetABIVersion(const char *abiclass)
+int LoaderGetABIVersion(const(char)* abiclass)
 {
-    struct {
-        const char *name;
-        int version;
-    } classes[] = {
-        {ABI_CLASS_ANSIC, LoaderVersionInfo.ansicVersion},
+    struct _Classes {
+        const(char)* name = void;
+        int version_ = void;
+    }
+    _Classes[5] classes;
+    classes[0] = _Classes(ABI_CLASS_ANSIC, LoaderVersionInfo.ansicVersion);
         /*
          * XXX This is a hack. XXX
          *
@@ -211,20 +207,20 @@ LoaderGetABIVersion(const char *abiclass)
          * Therefore we have added a compile-time flag that switches
          * between abi's.
          */
-        {ABI_CLASS_VIDEODRV,
-#ifdef CONFIG_LEGACY_NVIDIA_PADDING
-                             is_nvidia_proprietary ? ABI_NVIDIA_VERSION :
-#endif
-                             LoaderVersionInfo.videodrvVersion},
-        {ABI_CLASS_XINPUT, LoaderVersionInfo.xinputVersion},
-        {ABI_CLASS_EXTENSION, LoaderVersionInfo.extensionVersion},
-        {NULL, 0}
-    };
-    int i;
+         int ver = LoaderVersionInfo.videodrvVersion;
+         version(CONFIG_LEGACY_NVIDIA_PADDING) {
+            ver = is_nvidia_proprietary ?  ABI_NVIDIA_VERSION : LoaderVersionInfo.videodrvVersion;
+         }
+        classes[1] = _Classes(ABI_CLASS_VIDEODRV, ver);
+
+        classes[2] = _Classes(ABI_CLASS_XINPUT, LoaderVersionInfo.xinputVersion);
+        classes[3] = _Classes(ABI_CLASS_EXTENSION, LoaderVersionInfo.extensionVersion),
+        classes[4] = _Classes(null, 0);
+    int i = void;
 
     for (i = 0; classes[i].name; i++) {
         if (!strcmp(classes[i].name, abiclass)) {
-            return classes[i].version;
+            return classes[i].version_;
         }
     }
 
