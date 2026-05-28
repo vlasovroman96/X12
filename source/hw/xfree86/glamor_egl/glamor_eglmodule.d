@@ -1,3 +1,6 @@
+module hw.xfree86.glamor_egl.glamor_eglmodule;
+@nogc nothrow:
+extern(C): __gshared:
 /*
  * Copyright (C) 1998 The XFree86 Project, Inc.  All Rights Reserved.
  *
@@ -26,26 +29,26 @@
  * Authors:
  *    Zhigang Gong <zhigang.gong@gmail.com>
  */
-#include <dix-config.h>
+import dix_config;
 
-#include <xf86.h>
-#define GLAMOR_FOR_XORG
-#include <xf86Module.h>
-#include "glamor.h"
+import xf86;
+version = GLAMOR_FOR_XORG;
+import xf86Module;
+import glamor;
 
-static XF86ModuleVersionInfo VersRec = {
-    .modname      = GLAMOR_EGL_MODULE_NAME,
-    .vendor       = MODULEVENDORSTRING,
-    ._modinfo1_   = MODINFOSTRING1,
-    ._modinfo2_   = MODINFOSTRING2,
-    .xf86version  = XORG_VERSION_CURRENT,
-    .majorversion = 1,
-    .minorversion = 0,
-    .patchlevel   = 1,
-    .abiclass     = ABI_CLASS_ANSIC,
-    .abiversion   = ABI_ANSIC_VERSION,
+private XF86ModuleVersionInfo VersRec = {
+    modname: GLAMOR_EGL_MODULE_NAME,
+    vendor: MODULEVENDORSTRING,
+    _modinfo1_: MODINFOSTRING1,
+    _modinfo2_: MODINFOSTRING2,
+    xf86version: XORG_VERSION_CURRENT,
+    majorversion: 1,
+    minorversion: 0,
+    patchlevel: 1,
+    abiclass: ABI_CLASS_ANSIC,
+    abiversion: ABI_ANSIC_VERSION,
 };
 
-_X_EXPORT XF86ModuleData glamoreglModuleData = {
-    .vers = &VersRec
+export XF86ModuleData glamoreglModuleData = {
+    vers: &VersRec
 };
