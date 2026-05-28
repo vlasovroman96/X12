@@ -1,45 +1,48 @@
+module xf86int10.c;
+@nogc nothrow:
+extern(C): __gshared:
+import core.stdc.config: c_long, c_ulong;
 /*
  *                   XFree86 int10 module
  *   execute BIOS int 10h calls in x86 real mode environment
  *                 Copyright 1999 Egbert Eich
  */
-#include <xorg-config.h>
+import xorg_config;
 
-#include "xf86.h"
-#include "compiler.h"
-#define _INT10_PRIVATE
-#include "xf86int10_priv.h"
-#include "int10Defines.h"
-#include "Pci.h"
+import xf86;
+import compiler;
+version = _INT10_PRIVATE;
+import xf86int10_priv;
+import int10Defines;
+import Pci;
 
-#define REG pInt
+enum REG = pInt;
 
-xf86Int10InfoPtr Int10Current = NULL;
+xf86Int10InfoPtr Int10Current = null;
 
-static int int1A_handler(xf86Int10InfoPtr pInt);
 
-#ifndef _PC
-static int int42_handler(xf86Int10InfoPtr pInt);
-#endif
-static int intE6_handler(xf86Int10InfoPtr pInt);
-static struct pci_device *findPci(xf86Int10InfoPtr pInt, unsigned short bx);
-static CARD32 pciSlotBX(const struct pci_device *pvp);
 
-int
-int_handler(xf86Int10InfoPtr pInt)
+version (_PC) {} else {
+
+}
+private int intE6_handler(xf86Int10InfoPtr pInt);
+private pci_device* findPci(xf86Int10InfoPtr pInt, ushort bx);
+private CARD32 pciSlotBX(const(pci_device)* pvp);
+
+int int_handler(xf86Int10InfoPtr pInt)
 {
-    int num = pInt->num;
+    int num = pInt.num;
     int ret = 0;
 
     switch (num) {
-#ifndef _PC
+version (_PC) {} else {
     case 0x10:
     case 0x42:
     case 0x6D:
         if (getIntVect(pInt, num) == I_S_DEFAULT_INT_VECT)
             ret = int42_handler(pInt);
         break;
-#endif
+}
     case 0x1A:
         ret = int1A_handler(pInt);
         break;
@@ -54,7 +57,7 @@ int_handler(xf86Int10InfoPtr pInt)
         ret = run_bios_int(num, pInt);
 
     if (!ret) {
-        xf86DrvMsg(pInt->pScrn->scrnIndex, X_ERROR, "Halting on int 0x%2.2x!\n", num);
+        xf86DrvMsg(pInt.pScrn.scrnIndex, X_ERROR, "Halting on int 0x%2.2x!\n", num);
         dump_registers(pInt);
         stack_trace(pInt);
     }
@@ -62,7 +65,7 @@ int_handler(xf86Int10InfoPtr pInt)
     return ret;
 }
 
-#ifndef _PC
+version (_PC) {} else {
 /*
  * This is derived from a number of PC system BIOS'es.  The intent here is to
  * provide very primitive video support, before an EGA/VGA BIOS installs its
@@ -71,8 +74,7 @@ int_handler(xf86Int10InfoPtr pInt)
  * arise.  What are "Not Implemented" throughout are video memory accesses.
  * Also, very little input validity checking is done here.
  */
-static int
-int42_handler(xf86Int10InfoPtr pInt)
+private int int42_handler(xf86Int10InfoPtr pInt)
 {
     switch (X86_AH) {
     case 0x00:
@@ -81,10 +83,10 @@ int42_handler(xf86Int10InfoPtr pInt)
         /* Leave:  Nothing                                    */
         /* Implemented (except for clearing the screen)       */
     {                           /* Localise */
-        unsigned int ioport;
-        int i;
-        CARD16 int1d, regvals, tmp;
-        CARD8 mode, cgamode, cgacolour;
+        uint ioport = void;
+        int i = void;
+        CARD16 int1d = void, regvals = void, tmp = void;
+        CARD8 mode = void, cgamode = void, cgacolour = void;
 
         /*
          * Ignore all mode numbers but 0x00-0x13.  Some systems also ignore
@@ -116,7 +118,7 @@ int42_handler(xf86Int10InfoPtr pInt)
             if (mode >= 0x07)   /* Don't try MDA timings */
                 mode = 0x01;    /* !?!?! */
             break;
-        }
+        default: break;}
 
         /* Locate data in video parameter table */
         int1d = MEM_RW(pInt, 0x1d << 2);
@@ -170,14 +172,14 @@ int42_handler(xf86Int10InfoPtr pInt)
         MEM_WB(pInt, 0x0484, (25 - 1));
 
         /* Program the mode */
-        pci_io_write8(pInt->io, ioport + 4, cgamode & 0x37);    /* Turn off screen */
+        pci_io_write8(pInt.io, ioport + 4, cgamode & 0x37);    /* Turn off screen */
         for (i = 0; i < 0x10; i++) {
             tmp = MEM_RB(pInt, regvals + i);
-            pci_io_write8(pInt->io, ioport, i);
-            pci_io_write8(pInt->io, ioport + 1, tmp);
+            pci_io_write8(pInt.io, ioport, i);
+            pci_io_write8(pInt.io, ioport + 1, tmp);
         }
-        pci_io_write8(pInt->io, ioport + 5, cgacolour); /* Select colour mode */
-        pci_io_write8(pInt->io, ioport + 4, cgamode);   /* Turn on screen */
+        pci_io_write8(pInt.io, ioport + 5, cgacolour); /* Select colour mode */
+        pci_io_write8(pInt.io, ioport + 4, cgamode);   /* Turn on screen */
     }
         break;
 
@@ -188,15 +190,15 @@ int42_handler(xf86Int10InfoPtr pInt)
         /* Leave:  Nothing                                    */
         /* Implemented                                        */
     {                           /* Localise */
-        unsigned int ioport = MEM_RW(pInt, 0x0463);
+        uint ioport = MEM_RW(pInt, 0x0463);
 
         MEM_WB(pInt, 0x0460, X86_CL);
         MEM_WB(pInt, 0x0461, X86_CH);
 
-        pci_io_write8(pInt->io, ioport, 0x0A);
-        pci_io_write8(pInt->io, ioport + 1, X86_CH);
-        pci_io_write8(pInt->io, ioport, 0x0B);
-        pci_io_write8(pInt->io, ioport + 1, X86_CL);
+        pci_io_write8(pInt.io, ioport, 0x0A);
+        pci_io_write8(pInt.io, ioport + 1, X86_CH);
+        pci_io_write8(pInt.io, ioport, 0x0B);
+        pci_io_write8(pInt.io, ioport + 1, X86_CL);
     }
         break;
 
@@ -208,8 +210,8 @@ int42_handler(xf86Int10InfoPtr pInt)
         /* Leave:  Nothing                                    */
         /* Implemented                                        */
     {                           /* Localise */
-        unsigned int ioport;
-        CARD16 offset;
+        uint ioport = void;
+        CARD16 offset = void;
 
         MEM_WB(pInt, (X86_BH << 1) + 0x0450, X86_DL);
         MEM_WB(pInt, (X86_BH << 1) + 0x0451, X86_DH);
@@ -221,10 +223,10 @@ int42_handler(xf86Int10InfoPtr pInt)
         offset += MEM_RW(pInt, 0x044E) << 1;
 
         ioport = MEM_RW(pInt, 0x0463);
-        pci_io_write8(pInt->io, ioport, 0x0E);
-        pci_io_write8(pInt->io, ioport + 1, offset >> 8);
-        pci_io_write8(pInt->io, ioport, 0x0F);
-        pci_io_write8(pInt->io, ioport + 1, offset & 0xFF);
+        pci_io_write8(pInt.io, ioport, 0x0E);
+        pci_io_write8(pInt.io, ioport + 1, offset >> 8);
+        pci_io_write8(pInt.io, ioport, 0x0F);
+        pci_io_write8(pInt.io, ioport + 1, offset & 0xFF);
     }
         break;
 
@@ -254,9 +256,9 @@ int42_handler(xf86Int10InfoPtr pInt)
         /*         DL = character column                      */
         /* Not Implemented                                    */
     {                           /* Localise */
-        xf86DrvMsgVerb(pInt->pScrn->scrnIndex, X_NOT_IMPLEMENTED, 2,
+        xf86DrvMsgVerb(pInt.pScrn.scrnIndex, X_NOT_IMPLEMENTED, 2,
                        "int 0x%2.2x(AH=0x04) -- Get Light Pen Position\n",
-                       pInt->num);
+                       pInt.num);
         if (xf86GetVerbosity() > 3) {
             dump_registers(pInt);
             stack_trace(pInt);
@@ -271,9 +273,9 @@ int42_handler(xf86Int10InfoPtr pInt)
         /* Leave:  Nothing                                    */
         /* Implemented                                        */
     {                           /* Localise */
-        unsigned int ioport = MEM_RW(pInt, 0x0463);
-        CARD16 start;
-        CARD8 x, y;
+        uint ioport = MEM_RW(pInt, 0x0463);
+        CARD16 start = void;
+        CARD8 x = void, y = void;
 
         /* Calculate new start address */
         MEM_WB(pInt, 0x0462, X86_AL);
@@ -282,10 +284,10 @@ int42_handler(xf86Int10InfoPtr pInt)
         start <<= 1;
 
         /* Update start address */
-        pci_io_write8(pInt->io, ioport, 0x0C);
-        pci_io_write8(pInt->io, ioport + 1, start >> 8);
-        pci_io_write8(pInt->io, ioport, 0x0D);
-        pci_io_write8(pInt->io, ioport + 1, start & 0xFF);
+        pci_io_write8(pInt.io, ioport, 0x0C);
+        pci_io_write8(pInt.io, ioport + 1, start >> 8);
+        pci_io_write8(pInt.io, ioport, 0x0D);
+        pci_io_write8(pInt.io, ioport + 1, start & 0xFF);
 
         /* Switch cursor position */
         y = MEM_RB(pInt, (X86_AL << 1) + 0x0450);
@@ -293,10 +295,10 @@ int42_handler(xf86Int10InfoPtr pInt)
         start += (y * MEM_RW(pInt, 0x044A)) + x;
 
         /* Update cursor position */
-        pci_io_write8(pInt->io, ioport, 0x0E);
-        pci_io_write8(pInt->io, ioport + 1, start >> 8);
-        pci_io_write8(pInt->io, ioport, 0x0F);
-        pci_io_write8(pInt->io, ioport + 1, start & 0xFF);
+        pci_io_write8(pInt.io, ioport, 0x0E);
+        pci_io_write8(pInt.io, ioport + 1, start >> 8);
+        pci_io_write8(pInt.io, ioport, 0x0F);
+        pci_io_write8(pInt.io, ioport + 1, start & 0xFF);
     }
         break;
 
@@ -311,12 +313,12 @@ int42_handler(xf86Int10InfoPtr pInt)
         /* Leave:  Nothing                                    */
         /* Not Implemented                                    */
     {                           /* Localise */
-        xf86DrvMsgVerb(pInt->pScrn->scrnIndex, X_NOT_IMPLEMENTED, 2,
+        xf86DrvMsgVerb(pInt.pScrn.scrnIndex, X_NOT_IMPLEMENTED, 2,
                        "int 0x%2.2x(AH=0x06) -- Initialise or Scroll Window Up\n",
-                       pInt->num);
-        xf86DrvMsgVerb(pInt->pScrn->scrnIndex, X_NOT_IMPLEMENTED, 3,
+                       pInt.num);
+        xf86DrvMsgVerb(pInt.pScrn.scrnIndex, X_NOT_IMPLEMENTED, 3,
                        " AL=0x%2.2x, BH=0x%2.2x,"
-                       " CH=0x%2.2x, CL=0x%2.2x, DH=0x%2.2x, DL=0x%2.2x\n",
+                       ~ " CH=0x%2.2x, CL=0x%2.2x, DH=0x%2.2x, DL=0x%2.2x\n",
                        X86_AL, X86_BH, X86_CH, X86_CL, X86_DH, X86_DL);
         if (xf86GetVerbosity() > 3) {
             dump_registers(pInt);
@@ -336,12 +338,12 @@ int42_handler(xf86Int10InfoPtr pInt)
         /* Leave:  Nothing                                    */
         /* Not Implemented                                    */
     {                           /* Localise */
-        xf86DrvMsgVerb(pInt->pScrn->scrnIndex, X_NOT_IMPLEMENTED, 2,
+        xf86DrvMsgVerb(pInt.pScrn.scrnIndex, X_NOT_IMPLEMENTED, 2,
                        "int 0x%2.2x(AH=0x07) -- Initialise or Scroll Window Down\n",
-                       pInt->num);
-        xf86DrvMsgVerb(pInt->pScrn->scrnIndex, X_NOT_IMPLEMENTED, 3,
+                       pInt.num);
+        xf86DrvMsgVerb(pInt.pScrn.scrnIndex, X_NOT_IMPLEMENTED, 3,
                        " AL=0x%2.2x, BH=0x%2.2x,"
-                       " CH=0x%2.2x, CL=0x%2.2x, DH=0x%2.2x, DL=0x%2.2x\n",
+                       ~ " CH=0x%2.2x, CL=0x%2.2x, DH=0x%2.2x, DL=0x%2.2x\n",
                        X86_AL, X86_BH, X86_CH, X86_CL, X86_DH, X86_DL);
         if (xf86GetVerbosity() > 3) {
             dump_registers(pInt);
@@ -357,10 +359,10 @@ int42_handler(xf86Int10InfoPtr pInt)
         /*         AL = character                             */
         /* Not Implemented                                    */
     {                           /* Localise */
-        xf86DrvMsgVerb(pInt->pScrn->scrnIndex, X_NOT_IMPLEMENTED, 2,
+        xf86DrvMsgVerb(pInt.pScrn.scrnIndex, X_NOT_IMPLEMENTED, 2,
                        "int 0x%2.2x(AH=0x08) -- Read Character and Attribute at"
-                       " Cursor\n", pInt->num);
-        xf86DrvMsgVerb(pInt->pScrn->scrnIndex, X_NOT_IMPLEMENTED, 3,
+                       ~ " Cursor\n", pInt.num);
+        xf86DrvMsgVerb(pInt.pScrn.scrnIndex, X_NOT_IMPLEMENTED, 3,
                        "BH=0x%2.2x\n", X86_BH);
         if (xf86GetVerbosity() > 3) {
             dump_registers(pInt);
@@ -379,10 +381,10 @@ int42_handler(xf86Int10InfoPtr pInt)
         /* Leave:  Nothing                                    */
         /* Not Implemented                                    */
     {                           /* Localise */
-        xf86DrvMsgVerb(pInt->pScrn->scrnIndex, X_NOT_IMPLEMENTED, 2,
+        xf86DrvMsgVerb(pInt.pScrn.scrnIndex, X_NOT_IMPLEMENTED, 2,
                        "int 0x%2.2x(AH=0x09) -- Write Character and Attribute at"
-                       " Cursor\n", pInt->num);
-        xf86DrvMsgVerb(pInt->pScrn->scrnIndex, X_NOT_IMPLEMENTED, 3,
+                       ~ " Cursor\n", pInt.num);
+        xf86DrvMsgVerb(pInt.pScrn.scrnIndex, X_NOT_IMPLEMENTED, 3,
                        "AL=0x%2.2x, BH=0x%2.2x, BL=0x%2.2x, CX=0x%4.4x\n",
                        X86_AL, X86_BH, X86_BL, X86_CX);
         if (xf86GetVerbosity() > 3) {
@@ -401,10 +403,10 @@ int42_handler(xf86Int10InfoPtr pInt)
         /* Leave:  Nothing                                    */
         /* Not Implemented                                    */
     {                           /* Localise */
-        xf86DrvMsgVerb(pInt->pScrn->scrnIndex, X_NOT_IMPLEMENTED, 2,
+        xf86DrvMsgVerb(pInt.pScrn.scrnIndex, X_NOT_IMPLEMENTED, 2,
                        "int 0x%2.2x(AH=0x0A) -- Write Character at Cursor\n",
-                       pInt->num);
-        xf86DrvMsgVerb(pInt->pScrn->scrnIndex, X_NOT_IMPLEMENTED, 3,
+                       pInt.num);
+        xf86DrvMsgVerb(pInt.pScrn.scrnIndex, X_NOT_IMPLEMENTED, 3,
                        "AL=0x%2.2x, BH=0x%2.2x, BL=0x%2.2x, CX=0x%4.4x\n",
                        X86_AL, X86_BH, X86_BL, X86_CX);
         if (xf86GetVerbosity() > 3) {
@@ -421,7 +423,7 @@ int42_handler(xf86Int10InfoPtr pInt)
         /* Leave:  Nothing                                    */
         /* Implemented                                        */
     {                           /* Localise */
-        unsigned int ioport = MEM_RW(pInt, 0x0463) + 5;
+        uint ioport = MEM_RW(pInt, 0x0463) + 5;
         CARD8 cgacolour = MEM_RB(pInt, 0x0466);
 
         if (X86_BH) {
@@ -434,7 +436,7 @@ int42_handler(xf86Int10InfoPtr pInt)
         }
 
         MEM_WB(pInt, 0x0466, cgacolour);
-        pci_io_write8(pInt->io, ioport, cgacolour);
+        pci_io_write8(pInt.io, ioport, cgacolour);
     }
         break;
 
@@ -447,10 +449,10 @@ int42_handler(xf86Int10InfoPtr pInt)
         /* Leave:  Nothing                                    */
         /* Not Implemented                                    */
     {                           /* Localise */
-        xf86DrvMsgVerb(pInt->pScrn->scrnIndex, X_NOT_IMPLEMENTED, 2,
+        xf86DrvMsgVerb(pInt.pScrn.scrnIndex, X_NOT_IMPLEMENTED, 2,
                        "int 0x%2.2x(AH=0x0C) -- Write Graphics Pixel\n",
-                       pInt->num);
-        xf86DrvMsgVerb(pInt->pScrn->scrnIndex, X_NOT_IMPLEMENTED, 3,
+                       pInt.num);
+        xf86DrvMsgVerb(pInt.pScrn.scrnIndex, X_NOT_IMPLEMENTED, 3,
                        "AL=0x%2.2x, BH=0x%2.2x, CX=0x%4.4x, DX=0x%4.4x\n",
                        X86_AL, X86_BH, X86_CX, X86_DX);
         if (xf86GetVerbosity() > 3) {
@@ -468,10 +470,10 @@ int42_handler(xf86Int10InfoPtr pInt)
         /* Leave:  AL = pixel value                           */
         /* Not Implemented                                    */
     {                           /* Localise */
-        xf86DrvMsgVerb(pInt->pScrn->scrnIndex, X_NOT_IMPLEMENTED, 2,
+        xf86DrvMsgVerb(pInt.pScrn.scrnIndex, X_NOT_IMPLEMENTED, 2,
                        "int 0x%2.2x(AH=0x0D) -- Read Graphics Pixel\n",
-                       pInt->num);
-        xf86DrvMsgVerb(pInt->pScrn->scrnIndex, X_NOT_IMPLEMENTED, 3,
+                       pInt.num);
+        xf86DrvMsgVerb(pInt.pScrn.scrnIndex, X_NOT_IMPLEMENTED, 3,
                        "BH=0x%2.2x, CX=0x%4.4x, DX=0x%4.4x\n", X86_BH, X86_CX,
                        X86_DX);
         if (xf86GetVerbosity() > 3) {
@@ -495,10 +497,10 @@ int42_handler(xf86Int10InfoPtr pInt)
         /*           which might or might not have been       */
         /*           installed yet.                           */
     {                           /* Localise */
-        xf86DrvMsgVerb(pInt->pScrn->scrnIndex, X_NOT_IMPLEMENTED, 2,
+        xf86DrvMsgVerb(pInt.pScrn.scrnIndex, X_NOT_IMPLEMENTED, 2,
                        "int 0x%2.2x(AH=0x0E) -- Write Character in Teletype Mode\n",
-                       pInt->num);
-        xf86DrvMsgVerb(pInt->pScrn->scrnIndex, X_NOT_IMPLEMENTED, 3,
+                       pInt.num);
+        xf86DrvMsgVerb(pInt.pScrn.scrnIndex, X_NOT_IMPLEMENTED, 3,
                        "AL=0x%2.2x, BH=0x%2.2x, BL=0x%2.2x\n",
                        X86_AL, X86_BH, X86_BL);
         if (xf86GetVerbosity() > 3) {
@@ -561,12 +563,12 @@ int42_handler(xf86Int10InfoPtr pInt)
         /*           which might or might not have been       */
         /*           installed yet.                           */
     {                           /* Localise */
-        xf86DrvMsgVerb(pInt->pScrn->scrnIndex, X_NOT_IMPLEMENTED, 2,
+        xf86DrvMsgVerb(pInt.pScrn.scrnIndex, X_NOT_IMPLEMENTED, 2,
                        "int 0x%2.2x(AH=0x13) -- Write String in Teletype Mode\n",
-                       pInt->num);
-        xf86DrvMsgVerb(pInt->pScrn->scrnIndex, X_NOT_IMPLEMENTED, 3,
+                       pInt.num);
+        xf86DrvMsgVerb(pInt.pScrn.scrnIndex, X_NOT_IMPLEMENTED, 3,
                        "AL=0x%2.2x, BL=0x%2.2x, CX=0x%4.4x,"
-                       " DH=0x%2.2x, DL=0x%2.2x, ES:BP=0x%4.4x:0x%4.4x\n",
+                       ~ " DH=0x%2.2x, DL=0x%2.2x, ES:BP=0x%4.4x:0x%4.4x\n",
                        X86_AL, X86_BL, X86_CX, X86_DH, X86_DL, X86_ES, X86_BP);
         if (xf86GetVerbosity() > 3) {
             dump_registers(pInt);
@@ -585,29 +587,28 @@ int42_handler(xf86Int10InfoPtr pInt)
 
     return 1;
 }
-#endif
+}
 
-#define SUCCESSFUL              0x00
-#define DEVICE_NOT_FOUND        0x86
-#define BAD_REGISTER_NUMBER     0x87
+enum SUCCESSFUL =              0x00;
+enum DEVICE_NOT_FOUND =        0x86;
+enum BAD_REGISTER_NUMBER =     0x87;
 
-#ifdef SHOW_ALL_DEVICES
+version (SHOW_ALL_DEVICES) {
 /**
  * These functions are meant to be used by the PCI BIOS emulation. Some
  * BIOSes need to see if there are \b other chips of the same type around so
  * by setting \c exclude one PCI device can be explicitly excluded, if
  * required.
  */
-static struct pci_device *
-do_find(const struct pci_id_match *m, char n, const struct pci_device *exclude)
+private pci_device* do_find(const(pci_id_match)* m, char n, const(pci_device)* exclude)
 {
-    struct pci_device *dev;
-    struct pci_device_iterator *iter;
+    pci_device* dev = void;
+    pci_device_iterator* iter = void;
 
     n++;
 
     iter = pci_id_match_iterator_create(m);
-    while ((dev = pci_device_next(iter)) != NULL) {
+    while ((dev = pci_device_next(iter)) != null) {
         if ((dev != exclude) && !(--n)) {
             break;
         }
@@ -618,11 +619,9 @@ do_find(const struct pci_id_match *m, char n, const struct pci_device *exclude)
     return dev;
 }
 
-static struct pci_device *
-find_pci_device_vendor(CARD16 vendorID, CARD16 deviceID,
-                       char n, const struct pci_device *exclude)
+private pci_device* find_pci_device_vendor(CARD16 vendorID, CARD16 deviceID, char n, const(pci_device)* exclude)
 {
-    struct pci_id_match m;
+    pci_id_match m = void;
 
     m.vendor_id = vendorID;
     m.device_id = deviceID;
@@ -634,65 +633,61 @@ find_pci_device_vendor(CARD16 vendorID, CARD16 deviceID,
     return do_find(&m, n, exclude);
 }
 
-static struct pci_device *
-find_pci_class(CARD8 intf, CARD8 subClass, CARD16 _class,
-               char n, const struct pci_device *exclude)
+private pci_device* find_pci_class(CARD8 intf, CARD8 subClass, CARD16 _class, char n, const(pci_device)* exclude)
 {
-    struct pci_id_match m;
+    pci_id_match m = void;
 
     m.vendor_id = PCI_MATCH_ANY;
     m.device_id = PCI_MATCH_ANY;
     m.subvendor_id = PCI_MATCH_ANY;
     m.subdevice_id = PCI_MATCH_ANY;
-    m.device_class = (((uint32_t) _class) << 16)
-        | (((uint32_t) subClass) << 8) | intf;
+    m.device_class = ((cast(uint) _class) << 16)
+        | ((cast(uint) subClass) << 8) | intf;
     m.device_class_mask = 0x00ffffff;
 
     return do_find(&m, n, exclude);
 }
-#endif
+}
 
 /*
  * Return the last bus number in the same domain as dev.  Only look at the
  * one domain since this is going into %cl, and VGA I/O is per-domain anyway.
  */
-static int
-int1A_last_bus_number(struct pci_device *dev)
+private int int1A_last_bus_number(pci_device* dev)
 {
-    struct pci_device *d;
+    pci_device* d = void;
 
-    struct pci_slot_match m = { dev->domain,
+    pci_slot_match m = { dev.domain,
         PCI_MATCH_ANY,
         PCI_MATCH_ANY,
         PCI_MATCH_ANY
     };
-    struct pci_device_iterator *iter;
+    pci_device_iterator* iter = void;
     int i = 0;
 
     iter = pci_slot_match_iterator_create(&m);
 
     while ((d = pci_device_next(iter)))
-        if (d->bus > i)
-            i = d->bus;
+        if (d.bus > i)
+            i = d.bus;
 
     pci_iterator_destroy(iter);
 
     return i;
 }
 
-static int
-int1A_handler(xf86Int10InfoPtr pInt)
+private int int1A_handler(xf86Int10InfoPtr pInt)
 {
-    struct pci_device *const pvp = xf86GetPciInfoForEntity(pInt->entityIndex);
-    struct pci_device *dev;
+    pci_device* pvp = xf86GetPciInfoForEntity(pInt.entityIndex);
+    pci_device* dev = void;
 
-    if (pvp == NULL)
+    if (pvp == null)
         return 0;               /* oops */
 
-#ifdef PRINT_INT
+version (PRINT_INT) {
     ErrorF("int 0x1a: ax=0x%x bx=0x%x cx=0x%x dx=0x%x di=0x%x es=0x%x\n",
            X86_EAX, X86_EBX, X86_ECX, X86_EDX, X86_EDI, X86_ESI);
-#endif
+}
     switch (X86_AX) {
     case 0xb101:
         X86_EAX &= 0xFF00;      /* no config space/special cycle support */
@@ -700,144 +695,145 @@ int1A_handler(xf86Int10InfoPtr pInt)
         X86_EBX = 0x0210;       /* Version 2.10 */
         X86_ECX &= 0xFF00;
         X86_ECX |= int1A_last_bus_number(pvp);
-        X86_EFLAGS &= ~((unsigned long) 0x01);  /* clear carry flag */
-#ifdef PRINT_INT
+        X86_EFLAGS &= ~(cast(c_ulong) 0x01);  /* clear carry flag */
+version (PRINT_INT) {
         ErrorF("ax=0x%x dx=0x%x bx=0x%x cx=0x%x flags=0x%x\n",
                X86_EAX, X86_EDX, X86_EBX, X86_ECX, X86_EFLAGS);
-#endif
+}
         return 1;
     case 0xb102:
-        if ((X86_DX == pvp->vendor_id)
-            && (X86_CX == pvp->device_id)
+        if ((X86_DX == pvp.vendor_id)
+            && (X86_CX == pvp.device_id)
             && (X86_ESI == 0)) {
             X86_EAX = X86_AL | (SUCCESSFUL << 8);
-            X86_EFLAGS &= ~((unsigned long) 0x01);      /* clear carry flag */
+            X86_EFLAGS &= ~(cast(c_ulong) 0x01);      /* clear carry flag */
             X86_EBX = pciSlotBX(pvp);
         }
-#ifdef SHOW_ALL_DEVICES
-        else if ((dev = find_pci_device_vendor(X86_EDX, X86_ECX, X86_ESI, pvp))) {
+version (SHOW_ALL_DEVICES) {
+        if(dev = find_pci_device_vendor(X86_EDX, X86_ECX, X86_ESI, pvp)) {
             X86_EAX = X86_AL | (SUCCESSFUL << 8);
-            X86_EFLAGS &= ~((unsigned long) 0x01);      /* clear carry flag */
+            X86_EFLAGS &= ~(cast(c_ulong) 0x01);      /* clear carry flag */
             X86_EBX = pciSlotBX(dev);
         }
-#endif
-        else {
-            X86_EAX = X86_AL | (DEVICE_NOT_FOUND << 8);
-            X86_EFLAGS |= ((unsigned long) 0x01);       /* set carry flag */
+        else { X86_EAX = X86_AL | (DEVICE_NOT_FOUND << 8);
+            X86_EFLAGS |= (cast(c_ulong) 0x01); 
         }
-#ifdef PRINT_INT
+}
+        else { X86_EAX = X86_AL | (DEVICE_NOT_FOUND << 8);
+            X86_EFLAGS |= (cast(c_ulong) 0x01);       /* set carry flag */
+        default: break;}
+version (PRINT_INT) {
         ErrorF("ax=0x%x bx=0x%x flags=0x%x\n", X86_EAX, X86_EBX, X86_EFLAGS);
-#endif
+}
         return 1;
     case 0xb103:
-        if ((X86_ECX & 0x00FFFFFF) == pvp->device_class) {
+        if ((X86_ECX & 0x00FFFFFF) == pvp.device_class) {
             X86_EAX = X86_AL | (SUCCESSFUL << 8);
             X86_EBX = pciSlotBX(pvp);
-            X86_EFLAGS &= ~((unsigned long) 0x01);      /* clear carry flag */
+            X86_EFLAGS &= ~(cast(c_ulong) 0x01);      /* clear carry flag */
         }
-#ifdef SHOW_ALL_DEVICES
-        else if ((dev = find_pci_class(X86_CL, X86_CH,
+version (SHOW_ALL_DEVICES) {
+        if((dev = find_pci_class(X86_CL, X86_CH,
                                        (X86_ECX & 0xffff0000) >> 16,
-                                       X86_ESI, pvp))) {
-            X86_EAX = X86_AL | (SUCCESSFUL << 8);
-            X86_EFLAGS &= ~((unsigned long) 0x01);      /* clear carry flag */
-            X86_EBX = pciSlotBX(dev);
+                                       X86_ESI, pvp))){
+            X86_EFLAGS &= ~(cast(c_ulong) 0x01);      /* clear carry flag */
+            X86_EBX = pciSlotBX(dev);}
         }
-#endif
+//! #endif
         else {
             X86_EAX = X86_AL | (DEVICE_NOT_FOUND << 8);
-            X86_EFLAGS |= ((unsigned long) 0x01);       /* set carry flag */
+            X86_EFLAGS |= (cast(c_ulong) 0x01);       /* set carry flag */
         }
-#ifdef PRINT_INT
+version (PRINT_INT) {
         ErrorF("ax=0x%x flags=0x%x\n", X86_EAX, X86_EFLAGS);
-#endif
+}
         return 1;
     case 0xb108:
-        if ((dev = findPci(pInt, X86_EBX)) != NULL) {
+        if ((dev = findPci(pInt, X86_EBX)) != null) {
             pci_device_cfg_read_u8(dev, &X86_CL, X86_DI);
             X86_EAX = X86_AL | (SUCCESSFUL << 8);
-            X86_EFLAGS &= ~((unsigned long) 0x01);      /* clear carry flag */
+            X86_EFLAGS &= ~(cast(c_ulong) 0x01);      /* clear carry flag */
         }
         else {
             X86_EAX = X86_AL | (BAD_REGISTER_NUMBER << 8);
-            X86_EFLAGS |= ((unsigned long) 0x01);       /* set carry flag */
+            X86_EFLAGS |= (cast(c_ulong) 0x01);       /* set carry flag */
         }
-#ifdef PRINT_INT
+version (PRINT_INT) {
         ErrorF("ax=0x%x cx=0x%x flags=0x%x\n", X86_EAX, X86_ECX, X86_EFLAGS);
-#endif
+}
         return 1;
     case 0xb109:
-        if ((dev = findPci(pInt, X86_EBX)) != NULL) {
+        if ((dev = findPci(pInt, X86_EBX)) != null) {
             pci_device_cfg_read_u16(dev, &X86_CX, X86_DI);
             X86_EAX = X86_AL | (SUCCESSFUL << 8);
-            X86_EFLAGS &= ~((unsigned long) 0x01);      /* clear carry flag */
+            X86_EFLAGS &= ~(cast(c_ulong) 0x01);      /* clear carry flag */
         }
         else {
             X86_EAX = X86_AL | (BAD_REGISTER_NUMBER << 8);
-            X86_EFLAGS |= ((unsigned long) 0x01);       /* set carry flag */
+            X86_EFLAGS |= (cast(c_ulong) 0x01);       /* set carry flag */
         }
-#ifdef PRINT_INT
+version (PRINT_INT) {
         ErrorF("ax=0x%x cx=0x%x flags=0x%x\n", X86_EAX, X86_ECX, X86_EFLAGS);
-#endif
+}
         return 1;
     case 0xb10a:
-        if ((dev = findPci(pInt, X86_EBX)) != NULL) {
+        if ((dev = findPci(pInt, X86_EBX)) != null) {
             pci_device_cfg_read_u32(dev, &X86_ECX, X86_DI);
             X86_EAX = X86_AL | (SUCCESSFUL << 8);
-            X86_EFLAGS &= ~((unsigned long) 0x01);      /* clear carry flag */
+            X86_EFLAGS &= ~(cast(c_ulong) 0x01);      /* clear carry flag */
         }
         else {
             X86_EAX = X86_AL | (BAD_REGISTER_NUMBER << 8);
-            X86_EFLAGS |= ((unsigned long) 0x01);       /* set carry flag */
+            X86_EFLAGS |= (cast(c_ulong) 0x01);       /* set carry flag */
         }
-#ifdef PRINT_INT
+version (PRINT_INT) {
         ErrorF("ax=0x%x cx=0x%x flags=0x%x\n", X86_EAX, X86_ECX, X86_EFLAGS);
-#endif
+}
         return 1;
     case 0xb10b:
-        if ((dev = findPci(pInt, X86_EBX)) != NULL) {
+        if ((dev = findPci(pInt, X86_EBX)) != null) {
             pci_device_cfg_write_u8(dev, X86_CL, X86_DI);
             X86_EAX = X86_AL | (SUCCESSFUL << 8);
-            X86_EFLAGS &= ~((unsigned long) 0x01);      /* clear carry flag */
+            X86_EFLAGS &= ~(cast(c_ulong) 0x01);      /* clear carry flag */
         }
         else {
             X86_EAX = X86_AL | (BAD_REGISTER_NUMBER << 8);
-            X86_EFLAGS |= ((unsigned long) 0x01);       /* set carry flag */
+            X86_EFLAGS |= (cast(c_ulong) 0x01);       /* set carry flag */
         }
-#ifdef PRINT_INT
+version (PRINT_INT) {
         ErrorF("ax=0x%x flags=0x%x\n", X86_EAX, X86_EFLAGS);
-#endif
+}
         return 1;
     case 0xb10c:
-        if ((dev = findPci(pInt, X86_EBX)) != NULL) {
+        if ((dev = findPci(pInt, X86_EBX)) != null) {
             pci_device_cfg_write_u16(dev, X86_CX, X86_DI);
             X86_EAX = X86_AL | (SUCCESSFUL << 8);
-            X86_EFLAGS &= ~((unsigned long) 0x01);      /* clear carry flag */
+            X86_EFLAGS &= ~(cast(c_ulong) 0x01);      /* clear carry flag */
         }
         else {
             X86_EAX = X86_AL | (BAD_REGISTER_NUMBER << 8);
-            X86_EFLAGS |= ((unsigned long) 0x01);       /* set carry flag */
+            X86_EFLAGS |= (cast(c_ulong) 0x01);       /* set carry flag */
         }
-#ifdef PRINT_INT
+version (PRINT_INT) {
         ErrorF("ax=0x%x flags=0x%x\n", X86_EAX, X86_EFLAGS);
-#endif
+}
         return 1;
     case 0xb10d:
-        if ((dev = findPci(pInt, X86_EBX)) != NULL) {
+        if ((dev = findPci(pInt, X86_EBX)) != null) {
             pci_device_cfg_write_u32(dev, X86_ECX, X86_DI);
             X86_EAX = X86_AL | (SUCCESSFUL << 8);
-            X86_EFLAGS &= ~((unsigned long) 0x01);      /* clear carry flag */
+            X86_EFLAGS &= ~(cast(c_ulong) 0x01);      /* clear carry flag */
         }
         else {
             X86_EAX = X86_AL | (BAD_REGISTER_NUMBER << 8);
-            X86_EFLAGS |= ((unsigned long) 0x01);       /* set carry flag */
+            X86_EFLAGS |= (cast(c_ulong) 0x01);       /* set carry flag */
         }
-#ifdef PRINT_INT
+version (PRINT_INT) {
         ErrorF("ax=0x%x flags=0x%x\n", X86_EAX, X86_EFLAGS);
-#endif
+}
         return 1;
     default:
-        xf86DrvMsgVerb(pInt->pScrn->scrnIndex, X_NOT_IMPLEMENTED, 2,
+        xf86DrvMsgVerb(pInt.pScrn.scrnIndex, X_NOT_IMPLEMENTED, 2,
                        "int 0x1a subfunction\n");
         dump_registers(pInt);
         if (xf86GetVerbosity() > 3)
@@ -846,35 +842,32 @@ int1A_handler(xf86Int10InfoPtr pInt)
     }
 }
 
-static struct pci_device *
-findPci(xf86Int10InfoPtr pInt, unsigned short bx)
+private pci_device* findPci(xf86Int10InfoPtr pInt, ushort bx)
 {
-    const unsigned bus = (bx >> 8) & 0x00FF;
-    const unsigned dev = (bx >> 3) & 0x001F;
-    const unsigned func = (bx) & 0x0007;
+    const(uint) bus = (bx >> 8) & 0x00FF;
+    const(uint) dev = (bx >> 3) & 0x001F;
+    const(uint) func = (bx) & 0x0007;
 
-    return pci_device_find_by_slot(pInt->dev->domain, bus, dev, func);
+    return pci_device_find_by_slot(pInt.dev.domain, bus, dev, func);
 }
 
-static CARD32
-pciSlotBX(const struct pci_device *pvp)
+private CARD32 pciSlotBX(const(pci_device)* pvp)
 {
-    return ((pvp->bus << 8) & 0x00FF00) | (pvp->dev << 3) | (pvp->func);
+    return ((pvp.bus << 8) & 0x00FF00) | (pvp.dev << 3) | (pvp.func);
 }
 
 /*
  * handle initialization
  */
-static int
-intE6_handler(xf86Int10InfoPtr pInt)
+private int intE6_handler(xf86Int10InfoPtr pInt)
 {
-    struct pci_device *pvp;
+    pci_device* pvp;
 
-    if ((pvp = xf86GetPciInfoForEntity(pInt->entityIndex)))
-        X86_AX = (pvp->bus << 8) | (pvp->dev << 3) | (pvp->func & 0x7);
+    if ((pvp = xf86GetPciInfoForEntity(pInt.entityIndex)))
+        X86_AX = (pvp.bus << 8) | (pvp.dev << 3) | (pvp.func & 0x7);
     pushw(pInt, X86_CS);
     pushw(pInt, X86_IP);
-    X86_CS = pInt->BIOSseg;
+    X86_CS = pInt.BIOSseg;
     X86_EIP = 0x0003;
     X86_ES = 0;                 /* standard pc es */
     return 1;

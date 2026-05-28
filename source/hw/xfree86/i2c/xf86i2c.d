@@ -1,3 +1,7 @@
+module hw.xfree86.i2c.xf86i2c;
+@nogc nothrow:
+extern(C): __gshared:
+import core.stdc.config: c_long, c_ulong;
 /*
  * Copyright (C) 1998 Itai Nahshon, Michael Schimek
  *
@@ -5,33 +9,33 @@
  * the I2C driver from the Linux kernel.
  *      (c) 1998 Gerd Knorr <kraxel@cs.tu-berlin.de>
  */
-#include <xorg-config.h>
+import xorg_config;
 
-#include <sys/time.h>
-#include <string.h>
+import core.sys.posix.sys.time;
+import core.stdc.string;
 
-#include "os/osdep.h"
+import os.osdep;
 
-#include "misc.h"
-#include "xf86.h"
-#include "xf86_OSproc.h"
+import misc;
+import xf86;
+import xf86_OSproc;
 
-#include <X11/X.h>
-#include <X11/Xos.h>
-#include <X11/Xproto.h>
-#include "scrnintstr.h"
-#include "regionstr.h"
-#include "windowstr.h"
-#include "pixmapstr.h"
-#include "validate.h"
-#include "resource.h"
-#include "gcstruct.h"
-#include "dixstruct.h"
+import X11.X;
+import X11.Xos;
+import X11.Xproto;
+import scrnintstr;
+import regionstr;
+import windowstr;
+import pixmapstr;
+import validate;
+import resource;
+import gcstruct;
+import dixstruct;
 
-#include "xf86i2c.h"
+import xf86i2c;
 
-#define I2C_TIMEOUT(x)	/*(x)*/ /* Report timeouts */
-#define I2C_TRACE(x)    /*(x)*/ /* Report progress */
+//#define I2C_TIMEOUT(x)	/*(x)*/ /* Report timeouts */
+//#define I2C_TRACE(x)    /*(x)*/ /* Report progress */
 
 /* This is the default I2CUDelay function if not supplied by the driver.
  * High level I2C interfaces implementing the bus protocol in hardware
@@ -41,12 +45,11 @@
  * All values 0 to 1e6 inclusive must be expected.
  */
 
-static void
-I2CUDelay(I2CBusPtr b, int usec)
+private void I2CUDelay(I2CBusPtr b, int usec)
 {
-    struct timeval begin, cur;
-    long d_secs, d_usecs;
-    long diff;
+    timeval begin = void, cur = void;
+    c_long d_secs = void, d_usecs = void;
+    c_long diff = void;
 
     if (usec > 0) {
         X_GETTIMEOFDAY(&begin);
@@ -71,7 +74,7 @@ I2CUDelay(I2CBusPtr b, int usec)
  * there is no explicit test for conflicts.
  */
 
-#define RISEFALLTIME 2          /* usec, actually 300 to 1000 ns according to the i2c specs */
+enum RISEFALLTIME = 2          /* usec, actually 300 to 1000 ns according to the i2c specs */;
 
 /* Some devices will hold SCL low to slow down the bus or until
  * ready for transmission.
@@ -81,24 +84,23 @@ I2CUDelay(I2CBusPtr b, int usec)
  * does not support this clock synchronization.
  */
 
-static Bool
-I2CRaiseSCL(I2CBusPtr b, int sda, int timeout)
+private Bool I2CRaiseSCL(I2CBusPtr b, int sda, int timeout)
 {
-    int i, scl;
+    int i = void, scl = void;
 
-    b->I2CPutBits(b, 1, sda);
-    b->I2CUDelay(b, b->RiseFallTime);
+    b.I2CPutBits(b, 1, sda);
+    b.I2CUDelay(b, b.RiseFallTime);
 
-    for (i = timeout; i > 0; i -= b->RiseFallTime) {
-        b->I2CGetBits(b, &scl, &sda);
+    for (i = timeout; i > 0; i -= b.RiseFallTime) {
+        b.I2CGetBits(b, &scl, &sda);
         if (scl)
             break;
-        b->I2CUDelay(b, b->RiseFallTime);
+        b.I2CUDelay(b, b.RiseFallTime);
     }
 
     if (i <= 0) {
         I2C_TIMEOUT(ErrorF
-                    ("[I2CRaiseSCL(<%s>, %d, %d) timeout]", b->BusName, sda,
+                    ("[I2CRaiseSCL(<%s>, %d, %d) timeout]", b.BusName, sda,
                      timeout));
         return FALSE;
     }
@@ -125,16 +127,15 @@ I2CRaiseSCL(I2CBusPtr b, int sda, int timeout)
  * arbitration procedure.
  */
 
-static Bool
-I2CStart(I2CBusPtr b, int timeout)
+private Bool I2CStart(I2CBusPtr b, int timeout)
 {
     if (!I2CRaiseSCL(b, 1, timeout))
         return FALSE;
 
-    b->I2CPutBits(b, 1, 0);
-    b->I2CUDelay(b, b->HoldTime);
-    b->I2CPutBits(b, 0, 0);
-    b->I2CUDelay(b, b->HoldTime);
+    b.I2CPutBits(b, 1, 0);
+    b.I2CUDelay(b, b.HoldTime);
+    b.I2CPutBits(b, 0, 0);
+    b.I2CUDelay(b, b.HoldTime);
 
     I2C_TRACE(ErrorF("\ni2c: <"));
 
@@ -148,18 +149,17 @@ I2CStart(I2CBusPtr b, int timeout)
  * on a transaction but only one stop signal.
  */
 
-static void
-I2CStop(I2CDevPtr d)
+private void I2CStop(I2CDevPtr d)
 {
-    I2CBusPtr b = d->pI2CBus;
+    I2CBusPtr b = d.pI2CBus;
 
-    b->I2CPutBits(b, 0, 0);
-    b->I2CUDelay(b, b->RiseFallTime);
+    b.I2CPutBits(b, 0, 0);
+    b.I2CUDelay(b, b.RiseFallTime);
 
-    b->I2CPutBits(b, 1, 0);
-    b->I2CUDelay(b, b->HoldTime);
-    b->I2CPutBits(b, 1, 1);
-    b->I2CUDelay(b, b->HoldTime);
+    b.I2CPutBits(b, 1, 0);
+    b.I2CUDelay(b, b.HoldTime);
+    b.I2CPutBits(b, 1, 1);
+    b.I2CUDelay(b, b.HoldTime);
 
     I2C_TRACE(ErrorF(">\n"));
 }
@@ -168,36 +168,34 @@ I2CStop(I2CDevPtr d)
  * Return FALSE if a timeout occurs.
  */
 
-static Bool
-I2CWriteBit(I2CBusPtr b, int sda, int timeout)
+private Bool I2CWriteBit(I2CBusPtr b, int sda, int timeout)
 {
-    Bool r;
+    Bool r = void;
 
-    b->I2CPutBits(b, 0, sda);
-    b->I2CUDelay(b, b->RiseFallTime);
+    b.I2CPutBits(b, 0, sda);
+    b.I2CUDelay(b, b.RiseFallTime);
 
     r = I2CRaiseSCL(b, sda, timeout);
-    b->I2CUDelay(b, b->HoldTime);
+    b.I2CUDelay(b, b.HoldTime);
 
-    b->I2CPutBits(b, 0, sda);
-    b->I2CUDelay(b, b->HoldTime);
+    b.I2CPutBits(b, 0, sda);
+    b.I2CUDelay(b, b.HoldTime);
 
     return r;
 }
 
-static Bool
-I2CReadBit(I2CBusPtr b, int *psda, int timeout)
+private Bool I2CReadBit(I2CBusPtr b, int* psda, int timeout)
 {
-    Bool r;
-    int scl;
+    Bool r = void;
+    int scl = void;
 
     r = I2CRaiseSCL(b, 1, timeout);
-    b->I2CUDelay(b, b->HoldTime);
+    b.I2CUDelay(b, b.HoldTime);
 
-    b->I2CGetBits(b, &scl, psda);
+    b.I2CGetBits(b, &scl, psda);
 
-    b->I2CPutBits(b, 0, 1);
-    b->I2CUDelay(b, b->HoldTime);
+    b.I2CPutBits(b, 0, 1);
+    b.I2CUDelay(b, b.HoldTime);
 
     return r;
 }
@@ -218,45 +216,44 @@ I2CReadBit(I2CBusPtr b, int *psda, int timeout)
  * zero according to the comment on I2CRaiseSCL.
  */
 
-static Bool
-I2CPutByte(I2CDevPtr d, I2CByte data)
+private Bool I2CPutByte(I2CDevPtr d, I2CByte data)
 {
-    Bool r;
-    int i, scl, sda;
-    I2CBusPtr b = d->pI2CBus;
+    Bool r = void;
+    int i = void, scl = void, sda = void;
+    I2CBusPtr b = d.pI2CBus;
 
-    if (!I2CWriteBit(b, (data >> 7) & 1, d->ByteTimeout))
+    if (!I2CWriteBit(b, (data >> 7) & 1, d.ByteTimeout))
         return FALSE;
 
     for (i = 6; i >= 0; i--)
-        if (!I2CWriteBit(b, (data >> i) & 1, d->BitTimeout))
+        if (!I2CWriteBit(b, (data >> i) & 1, d.BitTimeout))
             return FALSE;
 
-    b->I2CPutBits(b, 0, 1);
-    b->I2CUDelay(b, b->RiseFallTime);
+    b.I2CPutBits(b, 0, 1);
+    b.I2CUDelay(b, b.RiseFallTime);
 
-    r = I2CRaiseSCL(b, 1, b->HoldTime);
+    r = I2CRaiseSCL(b, 1, b.HoldTime);
 
     if (r) {
-        for (i = d->AcknTimeout; i > 0; i -= b->HoldTime) {
-            b->I2CUDelay(b, b->HoldTime);
-            b->I2CGetBits(b, &scl, &sda);
+        for (i = d.AcknTimeout; i > 0; i -= b.HoldTime) {
+            b.I2CUDelay(b, b.HoldTime);
+            b.I2CGetBits(b, &scl, &sda);
             if (sda == 0)
                 break;
         }
 
         if (i <= 0) {
             I2C_TIMEOUT(ErrorF("[I2CPutByte(<%s>, 0x%02x, %d, %d, %d) timeout]",
-                               b->BusName, data, d->BitTimeout,
-                               d->ByteTimeout, d->AcknTimeout));
+                               b.BusName, data, d.BitTimeout,
+                               d.ByteTimeout, d.AcknTimeout));
             r = FALSE;
         }
 
-        I2C_TRACE(ErrorF("W%02x%c ", (int) data, sda ? '-' : '+'));
+        I2C_TRACE(ErrorF("W%02x%c ", cast(int) data, sda ? '-' : '+'));
     }
 
-    b->I2CPutBits(b, 0, 1);
-    b->I2CUDelay(b, b->HoldTime);
+    b.I2CPutBits(b, 0, 1);
+    b.I2CUDelay(b, b.HoldTime);
 
     return r;
 }
@@ -278,30 +275,29 @@ I2CPutByte(I2CDevPtr d, I2CByte data)
  * otherwise ACK (0) will be sent.
  */
 
-static Bool
-I2CGetByte(I2CDevPtr d, I2CByte * data, Bool last)
+private Bool I2CGetByte(I2CDevPtr d, I2CByte* data, Bool last)
 {
-    int i, sda;
-    I2CBusPtr b = d->pI2CBus;
+    int i = void, sda = void;
+    I2CBusPtr b = d.pI2CBus;
 
-    b->I2CPutBits(b, 0, 1);
-    b->I2CUDelay(b, b->RiseFallTime);
+    b.I2CPutBits(b, 0, 1);
+    b.I2CUDelay(b, b.RiseFallTime);
 
-    if (!I2CReadBit(b, &sda, d->ByteTimeout))
+    if (!I2CReadBit(b, &sda, d.ByteTimeout))
         return FALSE;
 
     *data = (sda > 0) << 7;
 
     for (i = 6; i >= 0; i--)
-        if (!I2CReadBit(b, &sda, d->BitTimeout))
+        if (!I2CReadBit(b, &sda, d.BitTimeout))
             return FALSE;
         else
             *data |= (sda > 0) << i;
 
-    if (!I2CWriteBit(b, last ? 1 : 0, d->BitTimeout))
+    if (!I2CWriteBit(b, last ? 1 : 0, d.BitTimeout))
         return FALSE;
 
-    I2C_TRACE(ErrorF("R%02x%c ", (int) *data, last ? '+' : '-'));
+    I2C_TRACE(ErrorF("R%02x%c ", cast(int) *data, last ? '+' : '-'));
 
     return TRUE;
 }
@@ -331,10 +327,9 @@ I2CGetByte(I2CDevPtr d, I2CByte * data, Bool last)
  *    for more.
  */
 
-static Bool
-I2CAddress(I2CDevPtr d, I2CSlaveAddr addr)
+private Bool I2CAddress(I2CDevPtr d, I2CSlaveAddr addr)
 {
-    if (I2CStart(d->pI2CBus, d->StartTimeout)) {
+    if (I2CStart(d.pI2CBus, d.StartTimeout)) {
         if (I2CPutByte(d, addr & 0xFF)) {
             if ((addr & 0xF8) != 0xF0 && (addr & 0xFE) != 0x00)
                 return TRUE;
@@ -359,25 +354,24 @@ I2CAddress(I2CDevPtr d, I2CSlaveAddr addr)
  * Don't expect a read- or write-only device will respond otherwise.
  */
 
-Bool
-xf86I2CProbeAddress(I2CBusPtr b, I2CSlaveAddr addr)
+Bool xf86I2CProbeAddress(I2CBusPtr b, I2CSlaveAddr addr)
 {
-    int r;
-    I2CDevRec d;
+    int r = void;
+    I2CDevRec d = void;
 
     d.DevName = "Probing";
-    d.BitTimeout = b->BitTimeout;
-    d.ByteTimeout = b->ByteTimeout;
-    d.AcknTimeout = b->AcknTimeout;
-    d.StartTimeout = b->StartTimeout;
+    d.BitTimeout = b.BitTimeout;
+    d.ByteTimeout = b.ByteTimeout;
+    d.AcknTimeout = b.AcknTimeout;
+    d.StartTimeout = b.StartTimeout;
     d.SlaveAddr = addr;
     d.pI2CBus = b;
-    d.NextDev = NULL;
+    d.NextDev = null;
 
-    r = b->I2CAddress(&d, addr);
+    r = b.I2CAddress(&d, addr);
 
     if (r)
-        b->I2CStop(&d);
+        b.I2CStop(&d);
 
     return r;
 }
@@ -405,57 +399,51 @@ xf86I2CProbeAddress(I2CBusPtr b, I2CSlaveAddr addr)
  * be executed anyway to leave the bus in clean idle state.
  */
 
-static Bool
-I2CWriteRead(I2CDevPtr d,
-             I2CByte * WriteBuffer, int nWrite, I2CByte * ReadBuffer, int nRead)
+private Bool I2CWriteRead(I2CDevPtr d, I2CByte* WriteBuffer, int nWrite, I2CByte* ReadBuffer, int nRead)
 {
     Bool r = TRUE;
-    I2CBusPtr b = d->pI2CBus;
+    I2CBusPtr b = d.pI2CBus;
     int s = 0;
 
     if (r && nWrite > 0) {
-        r = b->I2CAddress(d, d->SlaveAddr & ~1);
+        r = b.I2CAddress(d, d.SlaveAddr & ~1);
         if (r) {
             for (; nWrite > 0; WriteBuffer++, nWrite--)
-                if (!(r = b->I2CPutByte(d, *WriteBuffer)))
+                if (((r = b.I2CPutByte(d, *WriteBuffer)) == 0))
                     break;
             s++;
         }
     }
 
     if (r && nRead > 0) {
-        r = b->I2CAddress(d, d->SlaveAddr | 1);
+        r = b.I2CAddress(d, d.SlaveAddr | 1);
         if (r) {
             for (; nRead > 0; ReadBuffer++, nRead--)
-                if (!(r = b->I2CGetByte(d, ReadBuffer, nRead == 1)))
+                if (((r = b.I2CGetByte(d, ReadBuffer, nRead == 1)) == 0))
                     break;
             s++;
         }
     }
 
     if (s)
-        b->I2CStop(d);
+        b.I2CStop(d);
 
     return r;
 }
 
 /* wrapper - for compatibility and convenience */
 
-Bool
-xf86I2CWriteRead(I2CDevPtr d,
-                 I2CByte * WriteBuffer, int nWrite,
-                 I2CByte * ReadBuffer, int nRead)
+Bool xf86I2CWriteRead(I2CDevPtr d, I2CByte* WriteBuffer, int nWrite, I2CByte* ReadBuffer, int nRead)
 {
-    I2CBusPtr b = d->pI2CBus;
+    I2CBusPtr b = d.pI2CBus;
 
-    return b->I2CWriteRead(d, WriteBuffer, nWrite, ReadBuffer, nRead);
+    return b.I2CWriteRead(d, WriteBuffer, nWrite, ReadBuffer, nRead);
 }
 
 /* Read a byte from one of the registers determined by its sub-address.
  */
 
-Bool
-xf86I2CReadByte(I2CDevPtr d, I2CByte subaddr, I2CByte * pbyte)
+Bool xf86I2CReadByte(I2CDevPtr d, I2CByte subaddr, I2CByte* pbyte)
 {
     return xf86I2CWriteRead(d, &subaddr, 1, pbyte, 1);
 }
@@ -464,8 +452,7 @@ xf86I2CReadByte(I2CDevPtr d, I2CByte subaddr, I2CByte * pbyte)
  * sub-address of the first register.
  */
 
-Bool
-xf86I2CReadBytes(I2CDevPtr d, I2CByte subaddr, I2CByte * pbyte, int n)
+Bool xf86I2CReadBytes(I2CDevPtr d, I2CByte subaddr, I2CByte* pbyte, int n)
 {
     return xf86I2CWriteRead(d, &subaddr, 1, pbyte, n);
 }
@@ -473,15 +460,14 @@ xf86I2CReadBytes(I2CDevPtr d, I2CByte subaddr, I2CByte * pbyte, int n)
 /* Write a byte to one of the registers determined by its sub-address.
  */
 
-Bool
-xf86I2CWriteByte(I2CDevPtr d, I2CByte subaddr, I2CByte byte)
+Bool xf86I2CWriteByte(I2CDevPtr d, I2CByte subaddr, I2CByte byte_)
 {
-    I2CByte wb[2];
+    I2CByte[2] wb = void;
 
     wb[0] = subaddr;
-    wb[1] = byte;
+    wb[1] = byte_;
 
-    return xf86I2CWriteRead(d, wb, 2, NULL, 0);
+    return xf86I2CWriteRead(d, wb.ptr, 2, null, 0);
 }
 
 /* Write a vector of bytes to not adjacent registers. This vector is,
@@ -491,29 +477,28 @@ xf86I2CWriteByte(I2CDevPtr d, I2CByte subaddr, I2CByte byte)
  * remain uninitialized.
  */
 
-Bool
-xf86I2CWriteVec(I2CDevPtr d, I2CByte * vec, int nValues)
+Bool xf86I2CWriteVec(I2CDevPtr d, I2CByte* vec, int nValues)
 {
-    I2CBusPtr b = d->pI2CBus;
+    I2CBusPtr b = d.pI2CBus;
     Bool r = TRUE;
     int s = 0;
 
     if (nValues > 0) {
         for (; nValues > 0; nValues--, vec += 2) {
-            if (!(r = b->I2CAddress(d, d->SlaveAddr & ~1)))
+            if (((r = b.I2CAddress(d, d.SlaveAddr & ~1)) == 0))
                 break;
 
             s++;
 
-            if (!(r = b->I2CPutByte(d, vec[0])))
+            if (((r = b.I2CPutByte(d, vec[0])) == 0))
                 break;
 
-            if (!(r = b->I2CPutByte(d, vec[1])))
+            if (((r = b.I2CPutByte(d, vec[1])) == 0))
                 break;
         }
 
         if (s > 0)
-            b->I2CStop(d);
+            b.I2CStop(d);
     }
 
     return r;
@@ -532,33 +517,31 @@ xf86I2CWriteVec(I2CDevPtr d, I2CByte * vec, int nValues)
  * the least significant bit, indicating a read or write access, to zero.
  */
 
-I2CDevPtr
-xf86CreateI2CDevRec(void)
+I2CDevPtr xf86CreateI2CDevRec()
 {
-    return calloc(1, sizeof(I2CDevRec));
+    return calloc(1, I2CDevRec.sizeof);
 }
 
 /* Unlink an I2C device. If you got the I2CDevRec from xf86CreateI2CDevRec
  * you should set <unalloc> to free it.
  */
 
-void
-xf86DestroyI2CDevRec(I2CDevPtr d, Bool unalloc)
+void xf86DestroyI2CDevRec(I2CDevPtr d, Bool unalloc)
 {
-    if (d && d->pI2CBus) {
-        I2CDevPtr *p;
+    if (d && d.pI2CBus) {
+        I2CDevPtr* p = void;
 
         /* Remove this from the list of active I2C devices. */
 
-        for (p = &d->pI2CBus->FirstDev; *p != NULL; p = &(*p)->NextDev)
+        for (p = &d.pI2CBus.FirstDev; *p != null; p = &(*p).NextDev)
             if (*p == d) {
-                *p = (*p)->NextDev;
+                *p = (*p).NextDev;
                 break;
             }
 
-        xf86DrvMsg(d->pI2CBus->scrnIndex, X_INFO,
+        xf86DrvMsg(d.pI2CBus.scrnIndex, X_INFO,
                    "I2C device \"%s:%s\" removed.\n",
-                   d->pI2CBus->BusName, d->DevName);
+                   d.pI2CBus.BusName, d.DevName);
     }
 
     if (unalloc)
@@ -578,50 +561,48 @@ xf86DestroyI2CDevRec(I2CDevPtr d, Bool unalloc)
  * the bus-wide defaults. The function returns TRUE on success.
  */
 
-Bool
-xf86I2CDevInit(I2CDevPtr d)
+Bool xf86I2CDevInit(I2CDevPtr d)
 {
-    I2CBusPtr b;
+    I2CBusPtr b = void;
 
-    if (d == NULL ||
-        (b = d->pI2CBus) == NULL ||
-        (d->SlaveAddr & 1) || xf86I2CFindDev(b, d->SlaveAddr) != NULL)
+    if (d == null ||
+        (b = d.pI2CBus) == null ||
+        (d.SlaveAddr & 1) || xf86I2CFindDev(b, d.SlaveAddr) != null)
         return FALSE;
 
-    if (d->BitTimeout <= 0)
-        d->BitTimeout = b->BitTimeout;
-    if (d->ByteTimeout <= 0)
-        d->ByteTimeout = b->ByteTimeout;
-    if (d->AcknTimeout <= 0)
-        d->AcknTimeout = b->AcknTimeout;
-    if (d->StartTimeout <= 0)
-        d->StartTimeout = b->StartTimeout;
+    if (d.BitTimeout <= 0)
+        d.BitTimeout = b.BitTimeout;
+    if (d.ByteTimeout <= 0)
+        d.ByteTimeout = b.ByteTimeout;
+    if (d.AcknTimeout <= 0)
+        d.AcknTimeout = b.AcknTimeout;
+    if (d.StartTimeout <= 0)
+        d.StartTimeout = b.StartTimeout;
 
-    d->NextDev = b->FirstDev;
-    b->FirstDev = d;
+    d.NextDev = b.FirstDev;
+    b.FirstDev = d;
 
-    xf86DrvMsg(b->scrnIndex, X_INFO,
+    xf86DrvMsg(b.scrnIndex, X_INFO,
                "I2C device \"%s:%s\" registered at address 0x%02X.\n",
-               b->BusName, d->DevName, d->SlaveAddr);
+               b.BusName, d.DevName, d.SlaveAddr);
 
     return TRUE;
 }
 
-I2CDevPtr
-xf86I2CFindDev(I2CBusPtr b, I2CSlaveAddr addr)
+I2CDevPtr xf86I2CFindDev(I2CBusPtr b, I2CSlaveAddr addr)
 {
-    I2CDevPtr d;
+    I2CDevPtr d = void;
 
     if (b) {
-        for (d = b->FirstDev; d != NULL; d = d->NextDev)
-            if (d->SlaveAddr == addr)
+        for (d = b.FirstDev; d != null; d = d.NextDev)
+            if (d.SlaveAddr == addr)
                 return d;
     }
 
-    return NULL;
+    return null;
 }
 
-static I2CBusPtr I2CBusList;
+private I2CBusPtr I2CBusList;
 
 /* Allocates an I2CBusRec for you and initializes with proper defaults
  * you may modify before calling xf86I2CBusInit. Your I2CBusRec must
@@ -631,22 +612,21 @@ static I2CBusPtr I2CBusList;
  * with safe defaults.
  */
 
-I2CBusPtr
-xf86CreateI2CBusRec(void)
+I2CBusPtr xf86CreateI2CBusRec()
 {
-    I2CBusPtr b;
+    I2CBusPtr b = void;
 
-    b = (I2CBusPtr) calloc(1, sizeof(I2CBusRec));
+    b = cast(I2CBusPtr) calloc(1, I2CBusRec.sizeof);
 
-    if (b != NULL) {
-        b->scrnIndex = -1;
-        b->pScrn = NULL;
-        b->HoldTime = 5;        /* 100 kHz bus */
-        b->BitTimeout = 5;
-        b->ByteTimeout = 5;
-        b->AcknTimeout = 5;
-        b->StartTimeout = 5;
-        b->RiseFallTime = RISEFALLTIME;
+    if (b != null) {
+        b.scrnIndex = -1;
+        b.pScrn = null;
+        b.HoldTime = 5;        /* 100 kHz bus */
+        b.BitTimeout = 5;
+        b.ByteTimeout = 5;
+        b.AcknTimeout = 5;
+        b.StartTimeout = 5;
+        b.RiseFallTime = RISEFALLTIME;
     }
 
     return b;
@@ -658,26 +638,25 @@ xf86CreateI2CBusRec(void)
  * first, passing down the <unalloc> option.
  */
 
-void
-xf86DestroyI2CBusRec(I2CBusPtr b, Bool unalloc, Bool devs_too)
+void xf86DestroyI2CBusRec(I2CBusPtr b, Bool unalloc, Bool devs_too)
 {
     if (b) {
-        I2CBusPtr *p;
+        I2CBusPtr* p = void;
 
         /* Remove this from the list of active I2C buses */
 
-        for (p = &I2CBusList; *p != NULL; p = &(*p)->NextBus)
+        for (p = &I2CBusList; *p != null; p = &(*p).NextBus)
             if (*p == b) {
-                *p = (*p)->NextBus;
+                *p = (*p).NextBus;
                 break;
             }
 
-        if (b->FirstDev != NULL) {
+        if (b.FirstDev != null) {
             if (devs_too) {
-                I2CDevPtr d;
+                I2CDevPtr d = void;
 
-                while ((d = b->FirstDev) != NULL) {
-                    b->FirstDev = d->NextDev;
+                while ((d = b.FirstDev) != null) {
+                    b.FirstDev = d.NextDev;
                     xf86DestroyI2CDevRec(d, unalloc);
                 }
             }
@@ -685,14 +664,14 @@ xf86DestroyI2CBusRec(I2CBusPtr b, Bool unalloc, Bool devs_too)
                 if (unalloc) {
                     LogMessageVerb(X_ERROR, 1,
                                    "i2c bug: Attempt to remove I2C bus \"%s\", "
-                                   "but device list is not empty.\n", b->BusName);
+                                   ~ "but device list is not empty.\n", b.BusName);
                     return;
                 }
             }
         }
 
-        xf86DrvMsg(b->scrnIndex, X_INFO, "I2C bus \"%s\" removed.\n",
-                   b->BusName);
+        xf86DrvMsg(b.scrnIndex, X_INFO, "I2C bus \"%s\" removed.\n",
+                   b.BusName);
 
         if (unalloc)
             free(b);
@@ -707,15 +686,14 @@ xf86DestroyI2CBusRec(I2CBusPtr b, Bool unalloc, Bool devs_too)
  * At this point there won't be any traffic on the I2C bus.
  */
 
-Bool
-xf86I2CBusInit(I2CBusPtr b)
+Bool xf86I2CBusInit(I2CBusPtr b)
 {
     /* I2C buses must be identified by a unique scrnIndex
      * and name. If scrnIndex is unspecified (a negative value),
      * then the name must be unique throughout the server.
      */
 
-    if (b->BusName == NULL || xf86I2CFindBus(b->scrnIndex, b->BusName) != NULL)
+    if (b.BusName == null || xf86I2CFindBus(b.scrnIndex, b.BusName) != null)
         return FALSE;
 
     /* If the high level functions are not
@@ -723,79 +701,77 @@ xf86I2CBusInit(I2CBusPtr b)
      * In this case we need the low-level
      * function.
      */
-    if (b->I2CWriteRead == NULL) {
-        b->I2CWriteRead = I2CWriteRead;
+    if (b.I2CWriteRead == null) {
+        b.I2CWriteRead = I2CWriteRead;
 
-        if (b->I2CPutBits == NULL || b->I2CGetBits == NULL) {
-            if (b->I2CPutByte == NULL ||
-                b->I2CGetByte == NULL ||
-                b->I2CAddress == NULL ||
-                b->I2CStart == NULL || b->I2CStop == NULL)
+        if (b.I2CPutBits == null || b.I2CGetBits == null) {
+            if (b.I2CPutByte == null ||
+                b.I2CGetByte == null ||
+                b.I2CAddress == null ||
+                b.I2CStart == null || b.I2CStop == null)
                 return FALSE;
         }
         else {
-            b->I2CPutByte = I2CPutByte;
-            b->I2CGetByte = I2CGetByte;
-            b->I2CAddress = I2CAddress;
-            b->I2CStop = I2CStop;
-            b->I2CStart = I2CStart;
+            b.I2CPutByte = I2CPutByte;
+            b.I2CGetByte = I2CGetByte;
+            b.I2CAddress = I2CAddress;
+            b.I2CStop = I2CStop;
+            b.I2CStart = I2CStart;
         }
     }
 
-    if (b->I2CUDelay == NULL)
-        b->I2CUDelay = I2CUDelay;
+    if (b.I2CUDelay == null)
+        b.I2CUDelay = I2CUDelay;
 
-    if (b->HoldTime < 2)
-        b->HoldTime = 5;
-    if (b->BitTimeout <= 0)
-        b->BitTimeout = b->HoldTime;
-    if (b->ByteTimeout <= 0)
-        b->ByteTimeout = b->HoldTime;
-    if (b->AcknTimeout <= 0)
-        b->AcknTimeout = b->HoldTime;
-    if (b->StartTimeout <= 0)
-        b->StartTimeout = b->HoldTime;
+    if (b.HoldTime < 2)
+        b.HoldTime = 5;
+    if (b.BitTimeout <= 0)
+        b.BitTimeout = b.HoldTime;
+    if (b.ByteTimeout <= 0)
+        b.ByteTimeout = b.HoldTime;
+    if (b.AcknTimeout <= 0)
+        b.AcknTimeout = b.HoldTime;
+    if (b.StartTimeout <= 0)
+        b.StartTimeout = b.HoldTime;
 
     /* Put new bus on list. */
 
-    b->NextBus = I2CBusList;
+    b.NextBus = I2CBusList;
     I2CBusList = b;
 
-    xf86DrvMsg(b->scrnIndex, X_INFO, "I2C bus \"%s\" initialized.\n",
-               b->BusName);
+    xf86DrvMsg(b.scrnIndex, X_INFO, "I2C bus \"%s\" initialized.\n",
+               b.BusName);
 
     return TRUE;
 }
 
-I2CBusPtr
-xf86I2CFindBus(int scrnIndex, const char *name)
+I2CBusPtr xf86I2CFindBus(int scrnIndex, const(char)* name)
 {
-    I2CBusPtr p;
+    I2CBusPtr p = void;
 
-    if (name != NULL)
-        for (p = I2CBusList; p != NULL; p = p->NextBus)
-            if (scrnIndex < 0 || p->scrnIndex == scrnIndex)
-                if (!strcmp(p->BusName, name))
+    if (name != null)
+        for (p = I2CBusList; p != null; p = p.NextBus)
+            if (scrnIndex < 0 || p.scrnIndex == scrnIndex)
+                if (!strcmp(p.BusName, name))
                     return p;
 
-    return NULL;
+    return null;
 }
 
 /*
  * Return an array of I2CBusPtr's related to a screen.  The caller is
  * responsible for freeing the array.
  */
-int
-xf86I2CGetScreenBuses(int scrnIndex, I2CBusPtr ** pppI2CBus)
+int xf86I2CGetScreenBuses(int scrnIndex, I2CBusPtr** pppI2CBus)
 {
-    I2CBusPtr pI2CBus;
+    I2CBusPtr pI2CBus = void;
     int n = 0;
 
     if (pppI2CBus)
-        *pppI2CBus = NULL;
+        *pppI2CBus = null;
 
-    for (pI2CBus = I2CBusList; pI2CBus; pI2CBus = pI2CBus->NextBus) {
-        if ((pI2CBus->scrnIndex >= 0) && (pI2CBus->scrnIndex != scrnIndex))
+    for (pI2CBus = I2CBusList; pI2CBus; pI2CBus = pI2CBus.NextBus) {
+        if ((pI2CBus.scrnIndex >= 0) && (pI2CBus.scrnIndex != scrnIndex))
             continue;
 
         n++;
@@ -803,7 +779,7 @@ xf86I2CGetScreenBuses(int scrnIndex, I2CBusPtr ** pppI2CBus)
         if (!pppI2CBus)
             continue;
 
-        *pppI2CBus = XNFreallocarray(*pppI2CBus, n, sizeof(I2CBusPtr));
+        *pppI2CBus = XNFreallocarray(*pppI2CBus, n, I2CBusPtr.sizeof);
         (*pppI2CBus)[n - 1] = pI2CBus;
     }
 

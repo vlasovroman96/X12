@@ -1,70 +1,75 @@
+module helper_mem.c;
+@nogc nothrow:
+extern(C): __gshared:
+import core.stdc.config: c_long, c_ulong;
 /*
  *                   XFree86 int10 module
  *   execute BIOS int 10h calls in x86 real mode environment
  *                 Copyright 1999 Egbert Eich
  */
-#include <xorg-config.h>
+import xorg_config;
 
-#include <string.h>
-#include <stdlib.h>
+import core.stdc.string;
+import core.stdc.stdlib;
 
-#include "xf86.h"
-#include "xf86_OSproc.h"
-#include "compiler.h"
-#include "xf86Pci.h"
-#define _INT10_PRIVATE
-#if 0
-#include "int10Defines.h"
-#endif
-#include "xf86int10_priv.h"
+import xf86;
+import xf86_OSproc;
+import compiler;
+import xf86Pci;
+version = _INT10_PRIVATE;
+version (none) {
+import int10Defines;
+}
+import xf86int10_priv;
 
-#define REG pInt
+enum REG = pInt;
 
-typedef enum {
+enum INT10Opts {
     OPT_NOINT10,
     OPT_INIT_PRIMARY,
-} INT10Opts;
+}
+alias OPT_NOINT10 = INT10Opts.OPT_NOINT10;
+alias OPT_INIT_PRIMARY = INT10Opts.OPT_INIT_PRIMARY;
 
-static const OptionInfoRec INT10Options[] = {
+
+private const(OptionInfoRec)[4] INT10Options = [
     {OPT_NOINT10, "NoINT10", OPTV_BOOLEAN, {0}, FALSE},
     {OPT_INIT_PRIMARY, "InitPrimary", OPTV_BOOLEAN, {0}, FALSE},
-    {-1, NULL, OPTV_NONE, {0}, FALSE},
-};
+    {-1, null, OPTV_NONE, {0}, FALSE},
+];
 
-#ifdef DEBUG
-void
-dprint(unsigned long start, unsigned long size)
+version (DEBUG) {
+void dprint(c_ulong start, c_ulong size)
 {
-    int i, j;
-    char *c = (char *) start;
+    int i = void, j = void;
+    char* c = cast(char*) start;
 
     for (j = 0; j < (size >> 4); j++) {
-        char *d = c;
+        char* d = c;
 
-        ErrorF("\n0x%lx:  ", (unsigned long) c);
+        ErrorF("\n0x%lx:  ", cast(c_ulong) c);
         for (i = 0; i < 16; i++)
-            ErrorF("%2.2x ", (unsigned char) (*(c++)));
+            ErrorF("%2.2x ", cast(ubyte) (*(c++)));
         c = d;
         for (i = 0; i < 16; i++) {
-            ErrorF("%c", ((((CARD8) (*c)) > 32) && (((CARD8) (*c)) < 128)) ?
-                   (unsigned char) (*(c)) : '.');
+            ErrorF("%c", (((cast(CARD8) (*c)) > 32) && ((cast(CARD8) (*c)) < 128)) ?
+                   cast(ubyte) (*(c)) : '.');
             c++;
         }
     }
     ErrorF("\n");
 }
-#endif
+}
 
-#ifndef _PC
+version (_PC) {} else {
 /*
  * here we are really paranoid about faking a "real"
  * BIOS. Most of this information was pulled from
  * dosemu.
  */
-void
-setup_int_vect(xf86Int10InfoPtr pInt)
+void setup_int_vect(xf86Int10InfoPtr pInt)
 {
-    int i;
+    int i = void;
 
     /* let the int vects point to the SYS_BIOS seg */
     for (i = 0; i < 0x80; i++) {
@@ -102,12 +107,11 @@ setup_int_vect(xf86Int10InfoPtr pInt)
     MEM_WB(pInt, 0x0410, i);
     /* XXX Perhaps setup more of the BDA here.  See also int42(0x00). */
 }
-#endif
+}
 
-int
-setup_system_bios(void *base_addr)
+int setup_system_bios(void* base_addr)
 {
-    char *base = (char *) base_addr;
+    char* base = cast(char*) base_addr;
 
     /*
      * we trap the "industry standard entry points" to the BIOS
@@ -121,13 +125,12 @@ setup_system_bios(void *base_addr)
     /* set up eisa ident string */
     strcpy(base + 0x0FFD9, "PCI_ISA");
     /* write system model id for IBM-AT */
-    *((unsigned char *) (base + 0x0FFFE)) = 0xfc;
+    *(cast(ubyte*) (base + 0x0FFFE)) = 0xfc;
 
     return 1;
 }
 
-void
-reset_int_vect(xf86Int10InfoPtr pInt)
+void reset_int_vect(xf86Int10InfoPtr pInt)
 {
     /*
      * This table is normally located at 0xF000:0xF0A4.  However, int 0x42,
@@ -135,7 +138,7 @@ reset_int_vect(xf86Int10InfoPtr pInt)
      * 64kB.  Note that because this data doesn't survive POST, int 0x42 should
      * only be used during EGA/VGA BIOS initialisation.
      */
-    static const CARD8 VideoParms[] = {
+    static const(CARD8)[92] VideoParms = [
         /* Timing for modes 0x00 & 0x01 */
         0x38, 0x28, 0x2d, 0x0a, 0x1f, 0x06, 0x19, 0x1c,
         0x02, 0x07, 0x06, 0x07, 0x00, 0x00, 0x00, 0x00,
@@ -159,12 +162,12 @@ reset_int_vect(xf86Int10InfoPtr pInt)
         0x2c, 0x28, 0x2d, 0x29, 0x2a, 0x2e, 0x1e, 0x29,
         /* Padding */
         0x00, 0x00, 0x00, 0x00
-    };
-    int i;
+    ];
+    int i = void;
 
-    for (i = 0; i < sizeof(VideoParms); i++)
-        MEM_WB(pInt, i + (0x1000 - sizeof(VideoParms)), VideoParms[i]);
-    MEM_WW(pInt, 0x1d << 2, 0x1000 - sizeof(VideoParms));
+    for (i = 0; i < VideoParms.sizeof; i++)
+        MEM_WB(pInt, i + (0x1000 - VideoParms.sizeof), VideoParms[i]);
+    MEM_WW(pInt, 0x1d << 2, 0x1000 - VideoParms.sizeof);
     MEM_WW(pInt, (0x1d << 2) + 2, 0);
 
     MEM_WW(pInt, 0x10 << 2, 0xf065);
@@ -175,8 +178,7 @@ reset_int_vect(xf86Int10InfoPtr pInt)
     MEM_WW(pInt, (0x6D << 2) + 2, SYS_BIOS >> 4);
 }
 
-void
-set_return_trap(xf86Int10InfoPtr pInt)
+void set_return_trap(xf86Int10InfoPtr pInt)
 {
     /*
      * Here we set the exit condition:  We return when we encounter
@@ -187,29 +189,28 @@ set_return_trap(xf86Int10InfoPtr pInt)
     /*
      * Allocate a segment for the stack
      */
-    xf86Int10AllocPages(pInt, 1, &pInt->stackseg);
+    xf86Int10AllocPages(pInt, 1, &pInt.stackseg);
 }
 
-void *
-xf86HandleInt10Options(ScrnInfoPtr pScrn, int entityIndex)
+void* xf86HandleInt10Options(ScrnInfoPtr pScrn, int entityIndex)
 {
     EntityInfoPtr pEnt = xf86GetEntityInfo(entityIndex);
-    OptionInfoPtr options = NULL;
+    OptionInfoPtr options = null;
 
-    if (pEnt->device) {
-        void *configOptions = NULL;
+    if (pEnt.device) {
+        void* configOptions = null;
 
         /* Check if xf86CollectOptions() has already been called */
-        if (((pEnt->index < 0) ||
-             !pScrn || !(configOptions = pScrn->options)) && pEnt->device)
-            configOptions = pEnt->device->options;
+        if (((pEnt.index < 0) ||
+             !pScrn || ((configOptions = pScrn.options) == 0)) && pEnt.device)
+            configOptions = pEnt.device.options;
 
         if (configOptions) {
-            if (!(options = (OptionInfoPtr) calloc(1, sizeof(INT10Options))))
-                return NULL;
+            if (((options = cast(OptionInfoPtr) calloc(1, INT10Options.sizeof)) == 0))
+                return null;
 
-            (void) memcpy(options, INT10Options, sizeof(INT10Options));
-            xf86ProcessOptions(pScrn->scrnIndex, configOptions, options);
+            cast(void) memcpy(options, INT10Options.ptr, INT10Options.sizeof);
+            xf86ProcessOptions(pScrn.scrnIndex, configOptions, options);
         }
     }
     free(pEnt);
@@ -217,8 +218,7 @@ xf86HandleInt10Options(ScrnInfoPtr pScrn, int entityIndex)
     return options;
 }
 
-Bool
-int10skip(const void *options)
+Bool int10skip(const(void)* options)
 {
     Bool noint10 = FALSE;
 
@@ -229,10 +229,9 @@ int10skip(const void *options)
     return noint10;
 }
 
-Bool
-int10_check_bios(int scrnIndex, int codeSeg, const unsigned char *vbiosMem)
+Bool int10_check_bios(int scrnIndex, int codeSeg, const(ubyte)* vbiosMem)
 {
-    int size;
+    int size = void;
 
     if ((codeSeg & 0x1f) ||     /* Not 512-byte aligned otherwise */
         ((codeSeg << 4) < V_BIOS) || ((codeSeg << 4) >= SYS_SIZE))
@@ -252,8 +251,7 @@ int10_check_bios(int scrnIndex, int codeSeg, const unsigned char *vbiosMem)
     return TRUE;
 }
 
-Bool
-initPrimary(const void *options)
+Bool initPrimary(const(void)* options)
 {
     Bool initPrimary = FALSE;
 
@@ -264,33 +262,31 @@ initPrimary(const void *options)
     return initPrimary;
 }
 
-BusType
-xf86int10GetBiosLocationType(const xf86Int10InfoPtr pInt)
+BusType xf86int10GetBiosLocationType(const(xf86Int10InfoPtr) pInt)
 {
-    BusType location_type;
+    BusType location_type = void;
 
-    EntityInfoPtr pEnt = xf86GetEntityInfo(pInt->entityIndex);
+    EntityInfoPtr pEnt = xf86GetEntityInfo(pInt.entityIndex);
 
-    location_type = pEnt->location.type;
+    location_type = pEnt.location.type;
     free(pEnt);
 
     return location_type;
 }
 
-#define CHECK_V_SEGMENT_RANGE(x)   \
-    if (((x) << 4) < V_BIOS) { \
-	xf86DrvMsg(pInt->pScrn->scrnIndex, X_ERROR, \
-		   "V_BIOS address 0x%lx out of range\n", \
-		   (unsigned long)(x) << 4); \
-	return FALSE; \
-    }
+enum string CHECK_V_SEGMENT_RANGE(string x) = `
+    if (((` ~ x ~ `) << 4) < V_BIOS) { 
+	xf86DrvMsg(pInt.pScrn.scrnIndex, X_ERROR, 
+		   "V_BIOS address 0x%lx out of range\n", 
+		   cast(c_ulong)(` ~ x ~ `) << 4); 
+	return FALSE; 
+    }`;
 
-Bool
-xf86int10GetBiosSegment(xf86Int10InfoPtr pInt, void *base)
+Bool xf86int10GetBiosSegment(xf86Int10InfoPtr pInt, void* base)
 {
-    unsigned i;
+    uint i = void;
     int cs = ~0;
-    int segments[4];
+    int[4] segments = void;
 
     segments[0] = MEM_RW(pInt, (0x10 << 2) + 2);
     segments[1] = MEM_RW(pInt, (0x42 << 2) + 2);
@@ -298,25 +294,25 @@ xf86int10GetBiosSegment(xf86Int10InfoPtr pInt, void *base)
     segments[3] = ~0;
 
     for (i = 0; segments[i] != ~0; i++) {
-        unsigned char *vbiosMem;
+        ubyte* vbiosMem = void;
 
         cs = segments[i];
 
-        CHECK_V_SEGMENT_RANGE(cs);
-        vbiosMem = (unsigned char *) base + (cs << 4);
-        if (int10_check_bios(pInt->pScrn->scrnIndex, cs, vbiosMem)) {
+        mixin(CHECK_V_SEGMENT_RANGE!(`cs`));
+        vbiosMem = cast(ubyte*) base + (cs << 4);
+        if (int10_check_bios(pInt.pScrn.scrnIndex, cs, vbiosMem)) {
             break;
         }
     }
 
     if (segments[i] == ~0) {
-        xf86DrvMsg(pInt->pScrn->scrnIndex, X_ERROR, "No V_BIOS found\n");
+        xf86DrvMsg(pInt.pScrn.scrnIndex, X_ERROR, "No V_BIOS found\n");
         return FALSE;
     }
 
-    xf86DrvMsg(pInt->pScrn->scrnIndex, X_INFO, "Primary V_BIOS segment is: 0x%lx\n",
-               (unsigned long) cs);
+    xf86DrvMsg(pInt.pScrn.scrnIndex, X_INFO, "Primary V_BIOS segment is: 0x%lx\n",
+               cast(c_ulong) cs);
 
-    pInt->BIOSseg = cs;
+    pInt.BIOSseg = cs;
     return TRUE;
 }
