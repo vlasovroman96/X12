@@ -29,7 +29,7 @@ public import deimos.X11.Xmd;
 
 public import xlibre_ptrtypes;
 
-public import callback;
+public import include.callback;
 public import dix;
 public import resource;
 public import include.cursor;

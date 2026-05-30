@@ -64,7 +64,7 @@ public import core.stdc.time;
 public import deimos.X11.Xfuncproto;
 
 public import xlibre_ptrtypes;
-public import callback;
+public import include.callback;
 public import misc;
 
 /*

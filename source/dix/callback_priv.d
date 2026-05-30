@@ -6,7 +6,7 @@ extern(C): __gshared:
  * Copyright © 2024 Enrico Weigelt, metux IT consult <info@metux.net>
  */
  
-public import callback;
+public import include.callback;
 
 void InitCallbackManager();
 void DeleteCallbackManager();

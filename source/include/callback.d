@@ -1,4 +1,4 @@
-module callback.h;
+module include.callback;
 @nogc nothrow:
 extern(C): __gshared:
 /***********************************************************

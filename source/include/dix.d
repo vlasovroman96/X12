@@ -52,7 +52,7 @@ public import deimos.X11.extensions.XI;
 
 public import xlibre_ptrtypes;
 
-public import callback;
+public import include.callback;
 public import gc;
 public import window;
 public import input;
