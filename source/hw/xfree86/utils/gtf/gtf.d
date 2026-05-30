@@ -1,3 +1,6 @@
+module hw.xfree86.utils.gtf.gtf;
+@nogc nothrow:
+extern(C): __gshared:
 /* gtf.c  Generate mode timings using the GTF Timing Standard
  *
  * gcc gtf.c -o gtf -lm -Wall
@@ -102,51 +105,50 @@
  * o Error checking.
  *
  */
-#include <xorg-config.h>
+import xorg_config;
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <math.h>
+import core.stdc.stdio;
+import core.stdc.stdlib;
+import core.stdc.string;
+import core.stdc.math;
 
-#define MARGIN_PERCENT    1.8   /* % of active vertical image                */
-#define CELL_GRAN         8.0   /* assumed character cell granularity        */
-#define MIN_PORCH         1     /* minimum front porch                       */
-#define V_SYNC_RQD        3     /* width of vsync in lines                   */
-#define H_SYNC_PERCENT    8.0   /* width of hsync as % of total line         */
-#define MIN_VSYNC_PLUS_BP 550.0 /* min time of vsync + back porch (microsec) */
-#define M                 600.0 /* blanking formula gradient                 */
-#define C                 40.0  /* blanking formula offset                   */
-#define K                 128.0 /* blanking formula scaling factor           */
-#define J                 20.0  /* blanking formula scaling factor           */
+enum MARGIN_PERCENT =    1.8   /* % of active vertical image                */;
+enum CELL_GRAN =         8.0   /* assumed character cell granularity        */;
+enum MIN_PORCH =         1     /* minimum front porch                       */;
+enum V_SYNC_RQD =        3     /* width of vsync in lines                   */;
+enum H_SYNC_PERCENT =    8.0   /* width of hsync as % of total line         */;
+enum MIN_VSYNC_PLUS_BP = 550.0 /* min time of vsync + back porch (microsec) */;
+enum M =                 600.0 /* blanking formula gradient                 */;
+enum C =                 40.0  /* blanking formula offset                   */;
+enum K =                 128.0 /* blanking formula scaling factor           */;
+enum J =                 20.0  /* blanking formula scaling factor           */;
 
 /* C' and M' are part of the Blanking Duty Cycle computation */
 
-#define C_PRIME           (((C - J) * K/256.0) + J)
-#define M_PRIME           (K/256.0 * M)
+enum C_PRIME =           (((C - J) * K/256.0) + J);
+enum M_PRIME =           (K/256.0 * M);
 
 /* struct definitions */
 
-typedef struct __mode {
+struct mode {
     int hr, hss, hse, hfl;
     int vr, vss, vse, vfl;
-    float pclk, h_freq, v_freq;
-} mode;
+    float pclk = 0, h_freq = 0, v_freq = 0;
+}
 
-typedef struct __options {
+struct options {
     int x, y;
     int xorgmode, fbmode;
-    float v_freq;
-} options;
+    float v_freq = 0;
+}
 
 /* prototypes */
 
-void print_value(int n, const char *name, float val);
-void print_xf86_mode(mode * m);
-void print_fb_mode(mode * m);
-mode *vert_refresh(int h_pixels, int v_lines, float freq,
-                   int interlaced, int margins);
-options *parse_command_line(int argc, char *argv[]);
+
+
+
+mode* vert_refresh(int h_pixels, int v_lines, float freq, int interlaced, int margins);
+options* parse_command_line(int argc, char** argv);
 
 /*
  * print_value() - print the result of the named computation; this is
@@ -155,8 +157,7 @@ options *parse_command_line(int argc, char *argv[]);
 
 int global_verbose = 0;
 
-void
-print_value(int n, const char *name, float val)
+void print_value(int n, const(char)* name, float val)
 {
     if (global_verbose) {
         printf("%2d: %-27s: %15f\n", n, name, val);
@@ -165,19 +166,18 @@ print_value(int n, const char *name, float val)
 
 /* print_xf86_mode() - print the XServer modeline, given mode timings. */
 
-void
-print_xf86_mode(mode * m)
+void print_xf86_mode(mode* m)
 {
     printf("\n");
     printf("  # %dx%d @ %.2f Hz (GTF) hsync: %.2f kHz; pclk: %.2f MHz\n",
-           m->hr, m->vr, m->v_freq, m->h_freq, m->pclk);
+           m.hr, m.vr, m.v_freq, m.h_freq, m.pclk);
 
     printf("  Modeline \"%dx%d_%.2f\"  %.2f"
-           "  %d %d %d %d"
-           "  %d %d %d %d"
-           "  -HSync +Vsync\n\n",
-           m->hr, m->vr, m->v_freq, m->pclk,
-           m->hr, m->hss, m->hse, m->hfl, m->vr, m->vss, m->vse, m->vfl);
+           ~ "  %d %d %d %d"
+           ~ "  %d %d %d %d"
+           ~ "  -HSync +Vsync\n\n",
+           m.hr, m.vr, m.v_freq, m.pclk,
+           m.hr, m.hss, m.hse, m.hfl, m.vr, m.vss, m.vse, m.vfl);
 
 }
 
@@ -227,21 +227,20 @@ print_xf86_mode(mode * m)
  * to edit the mode description after it's generated.
  */
 
-void
-print_fb_mode(mode * m)
+void print_fb_mode(mode* m)
 {
     printf("\n");
-    printf("mode \"%dx%d %.2fHz 32bit (GTF)\"\n", m->hr, m->vr, m->v_freq);
+    printf("mode \"%dx%d %.2fHz 32bit (GTF)\"\n", m.hr, m.vr, m.v_freq);
     printf("    # PCLK: %.2f MHz, H: %.2f kHz, V: %.2f Hz\n",
-           m->pclk, m->h_freq, m->v_freq);
-    printf("    geometry %d %d %d %d 32\n", m->hr, m->vr, m->hr, m->vr);
-    printf("    timings %d %d %d %d %d %d %d\n", (int)lrint(1000000.0 / m->pclk),       /* pixclock in picoseconds */
-           m->hfl - m->hse,     /* left margin (in pixels) */
-           m->hss - m->hr,      /* right margin (in pixels) */
-           m->vfl - m->vse,     /* upper margin (in pixel lines) */
-           m->vss - m->vr,      /* lower margin (in pixel lines) */
-           m->hse - m->hss,     /* horizontal sync length (pixels) */
-           m->vse - m->vss);    /* vert sync length (pixel lines) */
+           m.pclk, m.h_freq, m.v_freq);
+    printf("    geometry %d %d %d %d 32\n", m.hr, m.vr, m.hr, m.vr);
+    printf("    timings %d %d %d %d %d %d %d\n", cast(int)lrint(1000000.0 / m.pclk),       /* pixclock in picoseconds */
+           m.hfl - m.hse,     /* left margin (in pixels) */
+           m.hss - m.hr,      /* right margin (in pixels) */
+           m.vfl - m.vse,     /* upper margin (in pixel lines) */
+           m.vss - m.vr,      /* lower margin (in pixel lines) */
+           m.hse - m.hss,     /* horizontal sync length (pixels) */
+           m.vse - m.vss);    /* vert sync length (pixel lines) */
     printf("    hsync low\n");
     printf("    vsync high\n");
     printf("endmode\n\n");
@@ -261,39 +260,38 @@ print_fb_mode(mode * m)
  * XServer of fbset mode descriptions, from what I can tell).
  */
 
-mode *
-vert_refresh(int h_pixels, int v_lines, float freq, int interlaced, int margins)
+mode* vert_refresh(int h_pixels, int v_lines, float freq, int interlaced, int margins)
 {
-    float h_pixels_rnd;
-    float v_lines_rnd;
-    float v_field_rate_rqd;
-    float top_margin;
-    float bottom_margin;
-    float interlace;
-    float h_period_est;
-    float vsync_plus_bp;
-    float v_back_porch;
-    float total_v_lines;
-    float v_field_rate_est;
-    float h_period;
-    float v_field_rate;
-    float v_frame_rate;
-    float left_margin;
-    float right_margin;
-    float total_active_pixels;
-    float ideal_duty_cycle;
-    float h_blank;
-    float total_pixels;
-    float pixel_freq;
-    float h_freq;
+    float h_pixels_rnd = void;
+    float v_lines_rnd = void;
+    float v_field_rate_rqd = void;
+    float top_margin = void;
+    float bottom_margin = void;
+    float interlace = void;
+    float h_period_est = void;
+    float vsync_plus_bp = void;
+    float v_back_porch = void;
+    float total_v_lines = void;
+    float v_field_rate_est = void;
+    float h_period = void;
+    float v_field_rate = void;
+    float v_frame_rate = void;
+    float left_margin = void;
+    float right_margin = void;
+    float total_active_pixels = void;
+    float ideal_duty_cycle = void;
+    float h_blank = void;
+    float total_pixels = void;
+    float pixel_freq = void;
+    float h_freq = void;
 
-    float h_sync;
-    float h_front_porch;
-    float v_odd_front_porch_lines;
+    float h_sync = void;
+    float h_front_porch = void;
+    float v_odd_front_porch_lines = void;
 
-    mode *m = (mode *) calloc(1, sizeof(mode));
+    mode* m = cast(mode*) calloc(1, mode.sizeof);
     if (!m)
-        return NULL;
+        return null;
 
     /*  1. In order to give correct results, the number of horizontal
      *  pixels requested is first processed to ensure that it is divisible
@@ -303,7 +301,7 @@ vert_refresh(int h_pixels, int v_lines, float freq, int interlaced, int margins)
      *  [H PIXELS RND] = ((ROUND([H PIXELS]/[CELL GRAN RND],0))*[CELLGRAN RND])
      */
 
-    h_pixels_rnd = rint((float) h_pixels / CELL_GRAN) * CELL_GRAN;
+    h_pixels_rnd = rint(cast(float) h_pixels / CELL_GRAN) * CELL_GRAN;
 
     print_value(1, "[H PIXELS RND]", h_pixels_rnd);
 
@@ -317,7 +315,7 @@ vert_refresh(int h_pixels, int v_lines, float freq, int interlaced, int margins)
      */
 
     v_lines_rnd = interlaced ?
-        rint((float) v_lines) / 2.0 : rint((float) v_lines);
+        rint(cast(float) v_lines) / 2.0 : rint(cast(float) v_lines);
 
     print_value(2, "[V LINES RND]", v_lines_rnd);
 
@@ -573,19 +571,19 @@ vert_refresh(int h_pixels, int v_lines, float freq, int interlaced, int margins)
 
     /* finally, pack the results in the mode struct */
 
-    m->hr = (int) (h_pixels_rnd);
-    m->hss = (int) (h_pixels_rnd + h_front_porch);
-    m->hse = (int) (h_pixels_rnd + h_front_porch + h_sync);
-    m->hfl = (int) (total_pixels);
+    m.hr = cast(int) (h_pixels_rnd);
+    m.hss = cast(int) (h_pixels_rnd + h_front_porch);
+    m.hse = cast(int) (h_pixels_rnd + h_front_porch + h_sync);
+    m.hfl = cast(int) (total_pixels);
 
-    m->vr = (int) (v_lines_rnd);
-    m->vss = (int) (v_lines_rnd + v_odd_front_porch_lines);
-    m->vse = (int) (int) (v_lines_rnd + v_odd_front_porch_lines + V_SYNC_RQD);
-    m->vfl = (int) (total_v_lines);
+    m.vr = cast(int) (v_lines_rnd);
+    m.vss = cast(int) (v_lines_rnd + v_odd_front_porch_lines);
+    m.vse = cast(int) cast(int) (v_lines_rnd + v_odd_front_porch_lines + V_SYNC_RQD);
+    m.vfl = cast(int) (total_v_lines);
 
-    m->pclk = pixel_freq;
-    m->h_freq = h_freq;
-    m->v_freq = freq;
+    m.pclk = pixel_freq;
+    m.h_freq = h_freq;
+    m.v_freq = freq;
 
     return m;
 
@@ -597,21 +595,20 @@ vert_refresh(int h_pixels, int v_lines, float freq, int interlaced, int margins)
  * and return NULL.
  */
 
-options *
-parse_command_line(int argc, char *argv[])
+options* parse_command_line(int argc, char** argv)
 {
-    int n;
+    int n = void;
 
-    options *o = (options *) calloc(1, sizeof(options));
+    options* o = cast(options*) calloc(1, options.sizeof);
     if (!o)
         goto bad_option;
 
     if (argc < 4)
         goto bad_option;
 
-    o->x = atoi(argv[1]);
-    o->y = atoi(argv[2]);
-    o->v_freq = atof(argv[3]);
+    o.x = atoi(argv[1]);
+    o.y = atoi(argv[2]);
+    o.v_freq = atof(argv[3]);
 
     /* XXX should check for errors in the above */
 
@@ -623,12 +620,12 @@ parse_command_line(int argc, char *argv[])
         }
         else if ((strcmp(argv[n], "-f") == 0) ||
                  (strcmp(argv[n], "--fbmode") == 0)) {
-            o->fbmode = 1;
+            o.fbmode = 1;
         }
         else if ((strcmp(argv[n], "-x") == 0) ||
                  (strcmp(argv[n], "--xorgmode") == 0) ||
                  (strcmp(argv[n], "--xf86mode") == 0)) {
-            o->xorgmode = 1;
+            o.xorgmode = 1;
         }
         else {
             goto bad_option;
@@ -640,8 +637,8 @@ parse_command_line(int argc, char *argv[])
     /* if neither xorgmode nor fbmode were requested, default to
        xorgmode */
 
-    if (!o->fbmode && !o->xorgmode)
-        o->xorgmode = 1;
+    if (!o.fbmode && !o.xorgmode)
+        o.xorgmode = 1;
 
     return o;
 
@@ -649,48 +646,47 @@ parse_command_line(int argc, char *argv[])
 
     fprintf(stderr, "\n");
     fprintf(stderr, "usage: %s x y refresh [-v|--verbose] "
-            "[-f|--fbmode] [-x|--xorgmode]\n", argv[0]);
+            ~ "[-f|--fbmode] [-x|--xorgmode]\n", argv[0]);
 
     fprintf(stderr, "\n");
 
     fprintf(stderr, "            x : the desired horizontal "
-            "resolution (required)\n");
+            ~ "resolution (required)\n");
     fprintf(stderr, "            y : the desired vertical "
-            "resolution (required)\n");
-    fprintf(stderr, "      refresh : the desired refresh " "rate (required)\n");
+            ~ "resolution (required)\n");
+    fprintf(stderr, "      refresh : the desired refresh " ~ "rate (required)\n");
     fprintf(stderr, " -v|--verbose : enable verbose printouts "
-            "(traces each step of the computation)\n");
+            ~ "(traces each step of the computation)\n");
     fprintf(stderr, "  -f|--fbmode : output an fbset(8)-style mode "
-            "description\n");
-    fprintf(stderr, " -x|--xorgmode : output an " __XSERVERNAME__ "-style mode "
-            "description (this is the default\n"
-            "                if no mode description is requested)\n");
+            ~ "description\n");
+    fprintf(stderr, " -x|--xorgmode : output an " ~ __XSERVERNAME__ ~ "-style mode "
+            ~ "description (this is the default\n"
+            ~ "                if no mode description is requested)\n");
 
     fprintf(stderr, "\n");
 
     free(o);
-    return NULL;
+    return null;
 
 }
 
-int
-main(int argc, char *argv[])
+int main(int argc, char** argv)
 {
-    mode *m;
-    options *o;
+    mode* m = void;
+    options* o = void;
 
     o = parse_command_line(argc, argv);
     if (!o)
         exit(1);
 
-    m = vert_refresh(o->x, o->y, o->v_freq, 0, 0);
+    m = vert_refresh(o.x, o.y, o.v_freq, 0, 0);
     if (!m)
         exit(1);
 
-    if (o->xorgmode)
+    if (o.xorgmode)
         print_xf86_mode(m);
 
-    if (o->fbmode)
+    if (o.fbmode)
         print_fb_mode(m);
 
     free(m);
