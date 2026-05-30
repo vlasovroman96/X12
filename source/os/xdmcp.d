@@ -47,11 +47,11 @@ import os.auth;
 import os.ossock;
 
 import include.misc;
-import osdep;
+import os.osdep;
 import xdmcp;
-import xdmauth;
+import os.xdmauth;
 import include.input;
-import dixstruct;
+import include.dixstruct;
 
 import os.Xtrans;
 

@@ -41,7 +41,7 @@ import os.log_priv;
 import include.misc;
 import xf86;
 import include.scrnintstr;
-import regionstr;
+import include.regionstr;
 import xf86fbman;
 
 struct _FBManagerFuncs {

@@ -73,7 +73,7 @@ import os.ossock;
 import os.screensaver;
 
 import include.misc;
-import osdep;
+import os.osdep;
 import dixstruct_priv;
 import include.globals;
 version (DPMSExtension) {

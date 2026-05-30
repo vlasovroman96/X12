@@ -24,7 +24,7 @@ extern(C): __gshared:
  * DEALINGS IN THE SOFTWARE.
  */
  
-public import screenint;
+public import include.screenint;
 
 alias SyncObject = _SyncObject;
 alias SyncFence = _SyncFence;

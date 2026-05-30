@@ -48,16 +48,16 @@ extern(C): __gshared:
  
 public import deimos.X11.X;
 public import deimos.X11.Xproto;
-public import deimos.X11.extensions.xfixesproto;
+// public import deimos.X11.extensions.xfixesproto;
 
 public import dix.selection_priv;
 
 public import include.misc;
 public import include.os;
-public import dixstruct;
+public import include.dixstruct;
 public import include.extnsionst;
 public import include.windowstr;
-public import xfixes;
+public import xfixes.xfixes;
 
 extern int XFixesEventBase;
 extern int XFixesUseXinerama;

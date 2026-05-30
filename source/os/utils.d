@@ -87,7 +87,7 @@ import core.sys.posix.libgen;
 import include.input;
 import include.dixfont;
 import deimos.X11.fonts.libxfont2;
-import osdep;
+import os.osdep;
 
 version (XDMCP) {
 import xdmcp;
@@ -129,7 +129,7 @@ import present.present_priv;
 import Xext.xf86bigfontsrv; /* XF86BigfontCleanup() */
 import xkb.xkbsrv_priv;
 
-import dixstruct;
+import include.dixstruct;
 import picture;
 import miinitext;
 import dixstruct_priv;

@@ -183,7 +183,7 @@ import os.auth;
 import os.client_priv;
 import os.osdep;
 
-import dixstruct;
+import include.dixstruct;
 
 import xace;
 

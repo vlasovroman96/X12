@@ -35,7 +35,7 @@ import dix.input_priv;
 import include.inputstr;
 // import assert;
 import include.scrnintstr;
-import tests_common;
+import test.tests_common;
 
 private void free_device(DeviceIntPtr dev)
 {

@@ -64,7 +64,7 @@ import include.gcstruct;
 import include.pixmapstr;
 import dixfontstr;
 import include.scrnintstr;
-import dixstruct;
+import include.dixstruct;
 import include.privates;
 import include.dix;
 import xace;

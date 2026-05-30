@@ -63,7 +63,7 @@ import include.windowstr;
 import include.scrnintstr;
 import include.input;
 import include.dixfont;
-import dixstruct;
+import include.dixstruct;
 import include.os;
 
 ScreenInfo screenInfo;

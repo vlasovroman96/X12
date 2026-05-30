@@ -1,4 +1,4 @@
-module property_priv;
+module dix.property_priv;
 @nogc nothrow:
 extern(C): __gshared:
 import core.stdc.config: c_long, c_ulong;
@@ -57,7 +57,7 @@ public import deimos.X11.X;
 
 public import include.dix;
 public import include.window;
-public import property;
+public import include.property;
 
 struct PropertyStateRec {
     WindowPtr win;

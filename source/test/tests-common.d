@@ -7,7 +7,7 @@ import core.stdc.stdlib;
 import core.stdc.stdio;
 import core.sys.posix.unistd;
 
-import tests_common;
+import test.tests_common;
 
 void run_test_in_child(const(testfunc_t)* function() suite, const(char)* funcname)
 {

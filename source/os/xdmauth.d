@@ -47,14 +47,14 @@ import os.io_priv;
 import os.Xtrans;
 
 import include.os;
-import osdep;
+import os.osdep;
 
 version (XDMCP) {
 import xdmcp;
 }
 
-import xdmauth;
-import dixstruct;
+import os.xdmauth;
+import include.dixstruct;
 
 version (HASXDMAUTH) {
 

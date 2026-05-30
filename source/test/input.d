@@ -54,7 +54,7 @@ import exglobals;
 import eventstr;
 // import assert;
 
-import tests_common;
+import test.tests_common;
 
 /**
  * Init a device with axes.

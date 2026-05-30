@@ -52,12 +52,12 @@ import build.dix_config;
 
 import deimos.X11.X;
 import deimos.X11.Xproto;
-import deimos.X11.fonts.fontstruct;
+// import deimos.X11.fonts.fontstruct;
 
 import dix.dix_priv;
 
 import include.misc;
-import dixstruct;
+import include.dixstruct;
 import include.scrnintstr;
 import swaprep;
 import include.globals;

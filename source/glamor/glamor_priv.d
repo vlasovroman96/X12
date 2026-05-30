@@ -37,8 +37,8 @@ public import include.glamor;
 public import xvdix;
 
 static if (XSYNC) {
-public import misyncshm;
-public import misyncstr;
+public import include.misyncshm;
+public import include.misyncstr;
 }
 
 public import epoxy.gl;

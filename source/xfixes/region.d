@@ -36,7 +36,7 @@ import Xext.panoramiXsrv;
 import xfixesint;
 import include.scrnintstr;
 
-import regionstr;
+import include.regionstr;
 import include.gcstruct;
 import include.window;
 

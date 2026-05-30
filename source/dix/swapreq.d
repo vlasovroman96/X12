@@ -58,7 +58,7 @@ import dix.dix_priv;
 import dix.reqhandlers_priv;
 
 import include.misc;
-import dixstruct;
+import include.dixstruct;
 import include.extnsionst;         /* for SendEvent */
 import swapreq;
 

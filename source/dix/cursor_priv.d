@@ -6,7 +6,7 @@ extern(C): __gshared:
  * Copyright © 2024 Enrico Weigelt, metux IT consult <info@metux.net>
  */
  
-public import deimos.X11.fonts.font;
+// public import deimos.X11.fonts.font;
 public import deimos.X11.X;
 public import deimos.X11.Xdefs;
 public import deimos.X11.Xmd;

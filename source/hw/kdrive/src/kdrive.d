@@ -42,7 +42,7 @@ import os.ddx_priv;
 import os.osdep;
 
 import kdrive;
-import dixstruct;
+import include.dixstruct;
 import include.privates;
 
 /* workaround for <windows.h> being included somewhere and conflicting with us */

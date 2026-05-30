@@ -72,7 +72,7 @@ import os.osdep;
 
 import include.windowstr;
 import include.gcstruct;
-import regionstr;
+import include.regionstr;
 import miwideline;
 
 struct Spans {

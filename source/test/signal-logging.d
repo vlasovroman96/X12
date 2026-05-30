@@ -37,7 +37,7 @@ import os.log_priv;
 // import assert;
 import include.misc;
 
-import tests_common;
+import test.tests_common;
 
 struct number_format_test {
     ulong number;

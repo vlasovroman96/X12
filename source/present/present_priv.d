@@ -34,7 +34,7 @@ public import include.scrnintstr;
 public import include.misc;
 public import include.list;
 public import include.windowstr;
-public import dixstruct;
+public import include.dixstruct;
 public import syncsrv;
 public import xfixes;
 public import include.randrstr;

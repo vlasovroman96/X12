@@ -34,7 +34,7 @@ import build.dix_config;
 
 import core.stdc.assert_;
 import include.os;
-import tests_common;
+import test.tests_common;
 
 /* Ensure we're testing our functions, even on platforms with libc versions */
 import core.stdc.string;

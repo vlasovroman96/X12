@@ -24,13 +24,13 @@ import X11.X;
 import X11.Xos;
 import X11.Xproto;
 import include.scrnintstr;
-import regionstr;
+import include.regionstr;
 import include.windowstr;
 import include.pixmapstr;
 import validate;
 import include.resource;
 import include.gcstruct;
-import dixstruct;
+import include.dixstruct;
 
 import xf86i2c;
 

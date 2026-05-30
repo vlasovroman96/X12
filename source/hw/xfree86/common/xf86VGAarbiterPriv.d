@@ -33,7 +33,7 @@ public import xf86;
 public import xf86_OSproc;
 public import X11.X;
 public import include.scrnintstr;
-public import screenint;
+public import include.screenint;
 public import include.gcstruct;
 public import include.pixmapstr;
 public import include.pixmap;

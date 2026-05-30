@@ -34,7 +34,7 @@ import build.dix_config;
 import core.stdc.math;
 import deimos.X11.X;
 import deimos.X11.Xprotostr;
-import regionstr;
+import include.regionstr;
 import include.gcstruct;
 import include.pixmapstr;
 import mi;

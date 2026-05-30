@@ -52,7 +52,7 @@ import deimos.X11.X;
 import include.gcstruct;
 import include.scrnintstr;
 import include.pixmapstr;
-import regionstr;
+import include.regionstr;
 import mi;
 import include.servermd;
 

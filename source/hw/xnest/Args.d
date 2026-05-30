@@ -23,7 +23,7 @@ import X11.Xproto;
 import miext.extinit_priv;
 import os.ddx_priv;
 
-import screenint;
+import include.screenint;
 import include.input;
 import include.misc;
 import include.scrnintstr;

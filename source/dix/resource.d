@@ -140,7 +140,7 @@ import Xext.panoramiXsrv;
 import include.misc;
 import include.os;
 import include.resource;
-import dixstruct;
+import include.dixstruct;
 import opaque;
 import include.windowstr;
 import include.dixfont;

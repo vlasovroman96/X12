@@ -90,13 +90,13 @@ import Xext.panoramiX;
 import Xext.panoramiXsrv;
 
 import include.misc;
-import regionstr;
+import include.regionstr;
 import include.scrnintstr;
 import include.gcstruct;
 import include.windowstr;
 import include.pixmap;
 import include.input;
-import dixstruct;
+import include.dixstruct;
 import include.globals;
 
 /*

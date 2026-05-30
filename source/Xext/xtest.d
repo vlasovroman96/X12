@@ -57,7 +57,7 @@ import Xext.panoramiXsrv;
 
 import include.misc;
 import include.os;
-import dixstruct;
+import include.dixstruct;
 import include.extnsionst;
 import include.windowstr;
 import include.inputstr;

@@ -25,7 +25,7 @@ import X11.Xproto;
 import os.client_priv;
 import os.osdep;
 
-import screenint;
+import include.screenint;
 import include.input;
 import include.misc;
 import include.scrnintstr;

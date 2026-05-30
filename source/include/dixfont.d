@@ -31,8 +31,8 @@ enum DIXFONT_H = 1;
 public import include.xlibre_ptrtypes;
 
 public import include.dix;
-public import deimos.X11.fonts.font;
-public import deimos.X11.fonts.fontstruct;
+// public import deimos.X11.fonts.font;
+// public import deimos.X11.fonts.fontstruct;
 
 extern int SetDefaultFont(const(char)*);
 

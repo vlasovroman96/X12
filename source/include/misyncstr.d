@@ -28,9 +28,9 @@ public import core.stdc.stdint;
 
 public import include.xlibre_ptrtypes;
 public import include.dix;
-public import misync;
+public import include.misync;
 public import include.scrnintstr;
-public import deimos.X11.extensions.syncconst;
+// public import deimos.X11.extensions.syncconst;
 
 /* Sync object types */
 enum SYNC_COUNTER =		0;

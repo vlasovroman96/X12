@@ -30,7 +30,7 @@ import os.client_priv;
 import include.scrnintstr;
 import include.extnsionst;
 import include.pixmapstr;
-import regionstr;
+import include.regionstr;
 import include.gcstruct;
 import xacestr;
 

@@ -32,7 +32,7 @@ import core.stdc.assert_;
 import xf86;
 import xf86Parser;
 
-import tests_common;
+import test.tests_common;
 
 private void xfree86_option_list_duplicate()
 {

@@ -44,12 +44,12 @@ import xkb.xkbsrv_priv;
 import include.misc;
 import include.inputstr;
 import opaque;
-import property;
+import include.property;
 import xkb.xkbgeom_priv;
 import deimos.X11.extensions.XKMformat;
 import core.stdc.assert_;
 
-import tests_common;
+import test.tests_common;
 
 /**
  * Initialize an empty XkbRMLVOSet.

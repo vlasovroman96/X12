@@ -63,8 +63,8 @@ import Xext.panoramiX;
 import Xext.panoramiXsrv;
 
 import include.windowstr;
-import propertyst;
-import dixstruct;
+import include.propertyst;
+import include.dixstruct;
 import dispatch;
 import swaprep;
 import xace;

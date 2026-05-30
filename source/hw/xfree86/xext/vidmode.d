@@ -49,7 +49,7 @@ import os.log_priv;
 import os.osdep;
 
 import include.misc;
-import dixstruct;
+import include.dixstruct;
 import include.extnsionst;
 import include.scrnintstr;
 import include.servermd;

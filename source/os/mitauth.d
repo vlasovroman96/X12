@@ -38,9 +38,9 @@ import build.dix_config;
 
 import deimos.X11.X;
 import include.os;
-import osdep;
-import mitauth;
-import dixstruct;
+import os.osdep;
+import os.mitauth;
+import include.dixstruct;
 
 struct auth {
     auth* next;

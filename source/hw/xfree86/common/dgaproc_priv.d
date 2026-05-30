@@ -6,7 +6,7 @@ extern(C): __gshared:
  * Copyright © 2024 Enrico Weigelt, metux IT consult <info@metux.net>
  */
  
-public import screenint;
+public import include.screenint;
 public import include.input;
 
 Bool DGAScreenAvailable(ScreenPtr pScreen);

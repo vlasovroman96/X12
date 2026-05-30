@@ -28,8 +28,8 @@ import dix.screenint_priv;
 import present.present_priv;
 import randr.randrstr_priv;
 
-import misync;
-import misyncstr;
+import include.misync;
+import include.misyncstr;
 
 /*
  * Screen flip mode

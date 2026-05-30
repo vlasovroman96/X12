@@ -1,4 +1,4 @@
-module extension_priv;
+module dix.extension_priv;
 @nogc nothrow:
 extern(C): __gshared:
 /* SPDX-License-Identifier: MIT OR X112

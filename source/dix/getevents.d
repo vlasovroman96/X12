@@ -59,7 +59,7 @@ import include.resource;
 import include.inputstr;
 import include.scrnintstr;
 import include.cursorstr;
-import dixstruct;
+import include.dixstruct;
 import include.globals;
 import mipointer;
 import eventstr;

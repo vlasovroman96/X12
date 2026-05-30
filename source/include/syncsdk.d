@@ -25,7 +25,7 @@ extern(C): __gshared:
  */
 
  
-public import misync;
+public import include.misync;
 
 extern _X_EXPORT SyncVerifyFence(SyncFence** ppFence, XID fid, ClientPtr client, Mask mode);
 

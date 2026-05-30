@@ -27,7 +27,7 @@ SOFTWARE.
  
 public import include.servermd;
 public import include.dixfont;
-public import deimos.X11.fonts.fontstruct;
+// public import deimos.X11.fonts.fontstruct;
 public import deimos.X11.Xproto;         /* for xQueryFontReply */
 
 enum string FONTCHARSET(string font) = `(` ~ font ~ `)`;

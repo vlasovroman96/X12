@@ -32,11 +32,11 @@ in this Software without prior written authorization from the X Consortium.
 
 import build.dix_config;
 
-import stdbool;
+// import stdbool;
 import core.stdc.stdio;
 import deimos.X11.X;
 import deimos.X11.Xproto;
-import deimos.X11.extensions.saverproto;
+// import deimos.X11.extensions.saverproto;
 
 import dix.colormap_priv;
 import dix.cursor_priv;
@@ -57,7 +57,7 @@ import include.windowstr;
 import include.scrnintstr;
 import include.pixmapstr;
 import include.extnsionst;
-import dixstruct;
+import include.dixstruct;
 import include.resource;
 import include.gcstruct;
 import include.cursorstr;

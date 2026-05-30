@@ -67,7 +67,7 @@ import os.bug_priv;
 
 import include.misc;
 import include.dix;
-import dixstruct;
+import include.dixstruct;
 import include.os;
 import include.scrnintstr;
 import include.resource;

@@ -54,7 +54,7 @@ import os.osdep;
 import Xext.panoramiX;
 import Xext.panoramiXsrv;
 
-import dixstruct;
+import include.dixstruct;
 import include.extnsionst;
 import set;
 import swaprep;

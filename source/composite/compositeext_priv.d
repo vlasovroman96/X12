@@ -9,7 +9,7 @@ extern(C): __gshared:
  
 public import deimos.X11.X;
 
-public import screenint;
+public import include.screenint;
 
 Bool CompositeIsImplicitRedirectException(ScreenPtr pScreen, XID parentVisual, XID winVisual);
 

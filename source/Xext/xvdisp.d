@@ -51,7 +51,7 @@ import include.scrnintstr;
 import include.windowstr;
 import include.pixmapstr;
 import include.gcstruct;
-import dixstruct;
+import include.dixstruct;
 import include.resource;
 import opaque;
 

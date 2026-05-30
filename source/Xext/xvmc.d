@@ -21,7 +21,7 @@ import Xext.xvdix_priv;
 
 import include.misc;
 import include.os;
-import dixstruct;
+import include.dixstruct;
 import include.resource;
 import include.scrnintstr;
 import include.extnsionst;

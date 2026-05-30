@@ -41,7 +41,7 @@ import include.extinit;
 
 import include.scrnintstr;
 import include.resource;
-import dixstruct;
+import include.dixstruct;
 
 import xf86xvpriv;
 import xf86xvmc;

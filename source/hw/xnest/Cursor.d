@@ -25,7 +25,7 @@ import X11.Xproto;
 import xcb.xcb;
 import xcb.xcb_aux;
 
-import screenint;
+import include.screenint;
 import include.input;
 import include.misc;
 import include.cursorstr;

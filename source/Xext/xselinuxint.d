@@ -26,7 +26,7 @@ public import selinux.avc;
 
 public import include.globals;
 public import dixaccess;
-public import dixstruct;
+public import include.dixstruct;
 public import include.privates;
 public import include.resource;
 public import include.inputstr;

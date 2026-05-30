@@ -34,7 +34,7 @@ import build.dix_config;
 import core.stdc.stdint;
 import deimos.X11.X;
 import deimos.X11.Xproto;
-import deimos.X11.extensions.xcmiscproto;
+// import deimos.X11.extensions.xcmiscproto;
 
 import dix.dix_priv;
 import dix.request_priv;
@@ -44,7 +44,7 @@ import miext.extinit_priv;
 
 import include.misc;
 import include.os;
-import dixstruct;
+import include.dixstruct;
 import include.extnsionst;
 import swaprep;
 

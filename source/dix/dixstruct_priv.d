@@ -1,4 +1,4 @@
-module dixstruct_priv;
+module dix.dixstruct_priv;
 @nogc nothrow:
 extern(C): __gshared:
 import core.stdc.config: c_long, c_ulong;
@@ -16,7 +16,7 @@ public import include.cursor;
 public import include.gc;
 public import include.pixmap;
 public import include.privates;
-public import dixstruct;
+public import include.dixstruct;
 
 pragma(inline, true) private void SetReqFds(ClientPtr client, int req_fds) {
     if (client.req_fds != 0 && req_fds != client.req_fds)

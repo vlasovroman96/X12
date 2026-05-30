@@ -41,9 +41,9 @@ import Xext.panoramiX;
 import Xext.panoramiXsrv;
 import xfixes.xfixes;
 
-import damagestr;
-import protocol_versions;
-import dixstruct_priv;
+import include.damagestr;
+import include.protocol_versions;
+import dix.dixstruct_priv;
 
 struct _DamageClient {
     CARD32 major_version;

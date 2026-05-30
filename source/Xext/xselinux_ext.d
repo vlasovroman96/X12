@@ -30,7 +30,7 @@ import miext.extinit_priv;
 
 import include.inputstr;
 import include.windowstr;
-import propertyst;
+import include.propertyst;
 import include.extnsionst;
 import xselinuxint;
 

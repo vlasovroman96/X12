@@ -25,9 +25,9 @@ extern(C): __gshared:
 
  
 public import deimos.X11.Xmd;
-public import deimos.X11.extensions.shmproto;
+// public import deimos.X11.extensions.shmproto;
 
-public import screenint;
+public import include.screenint;
 public import include.pixmap;
 public import include.gc;
 

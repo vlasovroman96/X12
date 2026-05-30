@@ -38,7 +38,7 @@ import deimos.X11.X;
 import deimos.X11.Xmd;
 import include.misc;
 import include.windowstr;
-import dixstruct;
+import include.dixstruct;
 import include.pixmapstr;
 import include.scrnintstr;
 

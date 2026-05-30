@@ -32,7 +32,7 @@ from The Open Group.
    _SECURITY_SERVER section of <X11/extensions/security.h> */
 
  
-public import deimos.X11.extensions.secur;
+// public import deimos.X11.extensions.secur;
 
 public import include.input;              /* for DeviceIntPtr */
 public import include.pixmap;             /* for DrawablePtr */

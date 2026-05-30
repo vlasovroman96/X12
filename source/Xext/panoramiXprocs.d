@@ -46,14 +46,14 @@ import Xext.panoramiX;
 import Xext.panoramiXsrv;
 
 import include.windowstr;
-import dixfontstr;
+import include.dixfontstr;
 import include.gcstruct;
 import include.scrnintstr;
-import opaque;
+import include.opaque;
 import include.inputstr;
 import migc;
 import include.misc;
-import dixstruct;
+import include.dixstruct;
 import include.resource;
 import panoramiXh;
 

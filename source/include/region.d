@@ -48,6 +48,6 @@ SOFTWARE.
 ******************************************************************/
 
  
-public import regionstr;
+public import include.regionstr;
 
                           /* REGION_H */

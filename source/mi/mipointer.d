@@ -70,7 +70,7 @@ import   pixmapstr;
 import   scrnintstr;
 import   mipointrst;
 import   cursorstr;
-import   dixstruct;
+import include.dixstruct;
 import   inputstr;
 import   eventstr;
 

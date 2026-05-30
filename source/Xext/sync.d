@@ -60,7 +60,7 @@ import core.stdc.stdio;
 import deimos.X11.X;
 import deimos.X11.Xproto;
 import deimos.X11.Xmd;
-import deimos.X11.extensions.syncproto;
+// import deimos.X11.extensions.syncproto;
 
 import dix.dix_priv;
 import dix.request_priv;
@@ -73,13 +73,13 @@ import os.osdep;
 import include.scrnintstr;
 import include.os;
 import include.extnsionst;
-import dixstruct;
+import include.dixstruct;
 import include.pixmapstr;
 import include.resource;
 import syncsrv;
 import include.protocol_versions;
 import include.inputstr;
-import misync_priv;
+// import include.misync_priv;
 
 /*
  * Local Global Variables

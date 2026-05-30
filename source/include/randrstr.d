@@ -36,7 +36,7 @@ public import deimos.X11.Xproto;
 public import include.xlibre_ptrtypes;
 public import include.misc;
 public import include.os;
-public import dixstruct;
+public import include.dixstruct;
 public import include.resource;
 public import include.scrnintstr;
 public import include.windowstr;

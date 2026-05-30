@@ -25,8 +25,8 @@ extern(C): __gshared:
 import build.dix_config;
 
 import glamor_priv;
-import misyncshm;
-import misyncstr;
+import include.misyncshm;
+import include.misyncstr;
 
 static if (XSYNC) {
 /*

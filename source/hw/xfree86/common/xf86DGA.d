@@ -71,7 +71,7 @@ import xf86Xinput;
 import eventstr;
 import xf86Extensions;
 import include.misc;
-import dixstruct;
+import include.dixstruct;
 import include.extnsionst;
 import include.cursorstr;
 import include.scrnintstr;

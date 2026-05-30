@@ -31,8 +31,8 @@ in this Software without prior written authorization from The Open Group.
 import build.dix_config;
 
 import deimos.X11.Xmd;
-import deimos.X11.extensions.securproto;
-import deimos.X11.Xfuncproto;
+// import deimos.X11.extensions.securproto;
+// import deimos.X11.Xfuncproto;
 
 import dix.client_priv;
 import dix.devices_priv;
@@ -51,10 +51,10 @@ import os.osdep;
 import include.scrnintstr;
 import include.inputstr;
 import include.windowstr;
-import propertyst;
+import include.propertyst;
 import include.privates;
 import xacestr;
-import securitysrv;
+import Xext.securitysrv;
 import include.protocol_versions;
 
 Bool noSecurityExtension = FALSE;

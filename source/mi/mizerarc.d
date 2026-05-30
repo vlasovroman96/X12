@@ -43,7 +43,7 @@ import deimos.X11.Xprotostr;
 
 import mi.mi_priv;
 
-import regionstr;
+import include.regionstr;
 import include.gcstruct;
 import include.pixmapstr;
 import mizerarc;

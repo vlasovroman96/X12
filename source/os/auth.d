@@ -36,11 +36,11 @@ from The Open Group.
 
 import build.dix_config;
 
-import   X11.X;
-import   X11.Xauth;
+import   deimos.X11.X;
+// import   deimos.X11.Xauth;
 import   misc;
-import   osdep;
-import   dixstruct;
+import os.osdep;
+import include.dixstruct;
 import   core.sys.posix.sys.types;
 import   core.sys.posix.sys.stat;
 import   core.stdc.errno;
@@ -55,8 +55,8 @@ version (XDMCP) {
 import xdmcp;
 }
 
-import xdmauth;
-import mitauth;
+import os.xdmauth;
+import os.mitauth;
 
 struct protocol {
     const(char)* name;

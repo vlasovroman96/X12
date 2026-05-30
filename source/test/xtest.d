@@ -43,7 +43,7 @@ import include.exevents;
 import xkbsrv;
 import xserver_properties;
 import syncsrv;
-import tests_common;
+import test.tests_common;
 
 /**
  */

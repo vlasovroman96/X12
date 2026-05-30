@@ -33,7 +33,7 @@ import deimos.X11.X;
 import xfixesint;
 import deimos.X11.extensions.xfixeswire;
 
-import tests_common;
+import test.tests_common;
 
 private void _fixes_test_direction(PointerBarrier* barrier, int* d, int permitted)
 {

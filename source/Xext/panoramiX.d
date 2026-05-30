@@ -62,7 +62,7 @@ import include.pixmapstr;
 import include.globals;
 import include.servermd;
 import include.resource;
-import picturestr_priv;
+import render.picturestr_priv;
 import xfixesint;
 import composite.compint;
 import include.protocol_versions;

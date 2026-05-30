@@ -114,7 +114,7 @@ import include.misc;
 import include.os;
 import include.windowstr;
 import include.resource;
-import dixstruct;
+import include.dixstruct;
 import include.gcstruct;
 import include.extension;
 import include.cursorstr;

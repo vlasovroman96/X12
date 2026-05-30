@@ -31,8 +31,8 @@ import xf86_priv;
 import xf86DDC_priv;
 import xf86Priv;
 import X11.Xatom;
-import property;
-import propertyst;
+import include.property;
+import include.propertyst;
 import core.stdc.string;
 
 enum EDID1_ATOM_NAME =         "XFree86_DDC_EDID1_RAWDATA";

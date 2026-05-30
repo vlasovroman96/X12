@@ -25,7 +25,7 @@ extern(C): __gshared:
 
 import build.dix_config;
 
-import deimos.X11.Xos;
+// import deimos.X11.Xos;
 import deimos.X11.Xdefs;
 
 import os.busfault;

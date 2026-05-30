@@ -32,7 +32,7 @@ public import pixman;
 public import include.scrnintstr;
 public import include.pixmap;
 public import include.pixmapstr;
-public import regionstr;
+public import include.regionstr;
 public import include.gcstruct;
 public import colormap;
 public import miscstruct;

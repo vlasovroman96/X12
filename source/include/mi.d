@@ -51,7 +51,7 @@ SOFTWARE.
 public import deimos.X11.X;
 public import deimos.X11.fonts.font;
 
-public import regionstr;
+public import include.regionstr;
 public import validate;
 public import include.window;
 public import include.gc;

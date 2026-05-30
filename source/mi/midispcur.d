@@ -47,7 +47,7 @@ import   input;
 import   cursorstr;
 import   windowstr;
 import   regionstr;
-import   dixstruct;
+import include.dixstruct;
 import   scrnintstr;
 import   servermd;
 import   mipointer;

@@ -41,7 +41,7 @@ import os.client_priv;
 
 import glxserver;
 import include.windowstr;
-import propertyst;
+import include.propertyst;
 import include.privates;
 import include.os;
 import include.glx_extinit;

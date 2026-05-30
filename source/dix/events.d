@@ -152,7 +152,7 @@ import include.windowstr;
 import include.inputstr;
 import include.scrnintstr;
 import include.cursorstr;
-import dixstruct;
+import include.dixstruct;
 import include.globals;
 import xace;
 import exglobals;

@@ -31,7 +31,7 @@ import xcb.xkb;
 
 import os.osdep;
 
-import screenint;
+import include.screenint;
 import include.inputstr;
 import include.misc;
 import include.scrnintstr;

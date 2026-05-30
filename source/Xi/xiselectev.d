@@ -38,7 +38,7 @@ import dix.resource_priv;
 import dix.window_priv;
 import Xi.handlers;
 
-import dixstruct;
+import include.dixstruct;
 import include.windowstr;
 
 /**

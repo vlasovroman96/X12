@@ -87,7 +87,7 @@ import os.ossock;
 
 import include.os;
 import opaque;
-import dixstruct;
+import include.dixstruct;
 import include.misc;
 
 CallbackListPtr ReplyCallback = null;

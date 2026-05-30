@@ -9,7 +9,7 @@ import core.stdc.config: c_long, c_ulong;
 import build.dix_config;
 
 import core.sys.posix.unistd;
-import stdbool;
+// import stdbool;
 
 version (Windows) {
 import deimos.X11.Xwinsock;

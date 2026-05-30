@@ -32,7 +32,7 @@ import build.dix_config;
 import core.stdc.stdlib;
 import deimos.X11.X;
 import deimos.X11.Xproto;
-import deimos.X11.extensions.shapeproto;
+// import deimos.X11.extensions.shapeproto;
 
 import dix.client_priv;
 import dix.dix_priv;
@@ -52,9 +52,9 @@ import include.windowstr;
 import include.scrnintstr;
 import include.pixmapstr;
 import include.extnsionst;
-import dixstruct;
-import opaque;
-import regionstr;
+import include.dixstruct;
+import include.opaque;
+import include.regionstr;
 import include.gcstruct;
 import include.protocol_versions;
 

@@ -80,7 +80,7 @@ Equipment Corporation.
 
 import build.dix_config;
 
-import regionstr;
+import include.regionstr;
 import deimos.X11.Xprotostr;
 import deimos.X11.Xfuncproto;
 import include.gc;

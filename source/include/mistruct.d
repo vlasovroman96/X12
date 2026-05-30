@@ -49,7 +49,7 @@ SOFTWARE.
 
  
 public import mi;
-public import regionstr;
+public import include.regionstr;
 
 /* information about dashes */
 struct miDashRec {

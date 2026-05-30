@@ -11,7 +11,7 @@ import include.os;
 import include.servermd;
 import include.pixmapstr;
 import include.windowstr;
-import propertyst;
+import include.propertyst;
 import include.gcstruct;
 import loaderProcs;
 import xf86;

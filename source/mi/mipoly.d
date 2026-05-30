@@ -60,7 +60,7 @@ import include.pixmapstr;
 import mi;
 import miscanfill;
 import mipoly;
-import regionstr;
+import include.regionstr;
 
 /*
  * Insert the given edge into the edge table.  First we must find the correct

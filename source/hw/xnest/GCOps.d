@@ -27,7 +27,7 @@ import X11.fonts.fontstruct;
 import xcb.xcb;
 import xcb.xcb_aux;
 
-import regionstr;
+import include.regionstr;
 import include.gcstruct;
 import include.scrnintstr;
 import include.windowstr;

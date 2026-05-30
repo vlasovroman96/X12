@@ -50,7 +50,7 @@ import build.dix_config;
 
 import mi.mi_priv;
 
-import regionstr;
+import include.regionstr;
 import mistruct;
 
 void miStepDash(int dist, int* pDashIndex, ubyte* pDash, int numInDashList, int* pDashOffset)

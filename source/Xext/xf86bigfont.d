@@ -62,9 +62,9 @@ import core.sys.posix.sys.stat;
 
 import deimos.X11.X;
 import deimos.X11.Xproto;
-import deimos.X11.extensions.xf86bigfproto;
-import deimos.X11.fonts.fontstruct; // libxfont2.h missed to include that
-import deimos.X11.fonts.libxfont2;
+// import deimos.X11.extensions.xf86bigfproto;
+// import deimos.X11.fonts.fontstruct; // libxfont2.h missed to include that
+// import deimos.X11.fonts.libxfont2;
 
 import dix.dix_priv;
 import dix.request_priv;
@@ -74,9 +74,9 @@ import os.osdep;
 import include.misc;
 import include.os;
 import os.osdep;
-import dixstruct;
+import include.dixstruct;
 import include.gcstruct;
-import dixfontstr;
+import include.dixfontstr;
 import include.extnsionst;
 import include.protocol_versions;
 

@@ -28,7 +28,7 @@ public import include.resource;
 public import include.extnsionst;
 public import include.window;
 public import include.input;
-public import property;
+public import include.property;
 public import xace;
 
 /* XACE_RESOURCE_ACCESS */

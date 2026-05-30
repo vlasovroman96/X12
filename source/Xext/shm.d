@@ -47,8 +47,8 @@ import core.sys.posix.sys.stat;
 import core.sys.posix.fcntl;
 import deimos.X11.X;
 import deimos.X11.Xproto;
-import deimos.X11.extensions.shmproto;
-import deimos.X11.Xfuncproto;
+// import deimos.X11.extensions.shmproto;
+// import deimos.X11.Xfuncproto;
 
 import dix.dix_priv;
 import dix.request_priv;
@@ -69,7 +69,7 @@ import Xext.shm_priv;
 
 import include.misc;
 import include.os;
-import dixstruct_priv;
+import dix.dixstruct_priv;
 import include.resource;
 import include.scrnintstr;
 import include.windowstr;

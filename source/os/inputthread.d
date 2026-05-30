@@ -43,7 +43,7 @@ import os.ossock;
 
 import include.inputstr;
 import opaque;
-import osdep;
+import os.osdep;
 
 static if (INPUTTHREAD) {
 

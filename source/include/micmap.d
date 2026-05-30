@@ -9,7 +9,7 @@ public import deimos.X11.Xdefs;
 
 public import colormap;
 public import include.privates;
-public import screenint;
+public import include.screenint;
 
 extern DevPrivateKeyRec micmapScrPrivateKeyRec;
 

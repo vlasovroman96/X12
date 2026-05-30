@@ -33,7 +33,7 @@ import core.stdc.string;
 import core.stdc.assert_;
 import core.stdc.stdlib;
 
-import tests_common;
+import test.tests_common;
 
 struct parent {
     int a;

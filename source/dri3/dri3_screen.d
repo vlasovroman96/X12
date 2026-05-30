@@ -31,8 +31,8 @@ import core.sys.posix.unistd;
 import include.syncsdk;
 
 import dri3_priv;
-import misync;
-import misyncshm;
+import include.misync;
+import include.misyncshm;
 import include.randrstr;
 
 int dri3_open(ClientPtr client, ScreenPtr screen, RRProviderPtr provider, int* fd)

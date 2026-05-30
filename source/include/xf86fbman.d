@@ -31,7 +31,7 @@ extern(C): __gshared:
 
  
 public import include.scrnintstr;
-public import regionstr;
+public import include.regionstr;
 
 enum FAVOR_AREA_THEN_WIDTH =		0;
 enum FAVOR_AREA_THEN_HEIGHT =		1;

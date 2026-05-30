@@ -1,4 +1,4 @@
-module registry_priv;
+module dix.registry_priv;
 @nogc nothrow:
 extern(C): __gshared:
 /* SPDX-License-Identifier: MIT OR X11

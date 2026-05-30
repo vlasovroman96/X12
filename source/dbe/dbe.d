@@ -51,7 +51,7 @@ import miext.extinit_priv;
 import include.scrnintstr;
 import include.extnsionst;
 import include.gcstruct;
-import dixstruct;
+import include.dixstruct;
 import dbestruct;
 import midbe;
 import xace;

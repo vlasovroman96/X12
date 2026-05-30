@@ -36,8 +36,8 @@ import os.fmt;
 import include.misc;
 import include.scrnintstr;
 import include.dix;
-import dixstruct;
-import tests_common;
+import include.dixstruct;
+import test.tests_common;
 
 private void dix_version_compare()
 {

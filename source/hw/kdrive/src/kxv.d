@@ -50,13 +50,13 @@ import Xext.xvdix_priv;
 
 import kdrive;
 import include.scrnintstr;
-import regionstr;
+import include.regionstr;
 import include.windowstr;
 import include.pixmapstr;
 import validate;
 import include.resource;
 import include.gcstruct;
-import dixstruct;
+import include.dixstruct;
 import kxv;
 import include.fourcc;
 
