@@ -1,4 +1,4 @@
-module glyphstr_priv;
+module render.glyphstr_priv;
 @nogc nothrow:
 extern(C): __gshared:
 import core.stdc.config: c_long, c_ulong;
@@ -8,12 +8,12 @@ import core.stdc.config: c_long, c_ulong;
  * Copyright © 2000 SuSE, Inc.
  */
  
-public import deimos.X11.extensions.renderproto;
-public import glyphstr;
-public import picture;
-public import screenint;
-public import regionstr;
-public import miscstruct;
+public import externs.x11.X;
+public import include.glyphstr;
+public import render.picture;
+public import include.screenint;
+public import include.regionstr;
+public import include.miscstruct;
 public import include.privates;
 
 enum string GlyphPicture(string glyph) = `(cast(PicturePtr*) ((` ~ glyph ~ `) + 1))`;

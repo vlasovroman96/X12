@@ -1,4 +1,4 @@
-module picturestr_priv;
+module render.picturestr_priv;
 @nogc nothrow:
 extern(C): __gshared:
 /* SPDX-License-Identifier: MIT OR X11
@@ -9,7 +9,7 @@ extern(C): __gshared:
  
 public import include.picturestr;
 public import include.scrnintstr;
-public import glyphstr;
+public import include.glyphstr;
 public import include.resource;
 public import include.privates;
 

@@ -1,4 +1,4 @@
-module picture;
+module rednerpicture;
 @nogc nothrow:
 extern(C): __gshared:
 import core.stdc.config: c_long, c_ulong;
@@ -36,17 +36,17 @@ import os.osdep;
 import include.misc;
 import include.scrnintstr;
 import include.os;
-import regionstr;
-import validate;
+import include.regionstr;
+import include.validate;
 import include.windowstr;
 import include.input;
 import include.resource;
 import include.cursorstr;
-import dixstruct;
+import include.dixstruct;
 import include.gcstruct;
 import include.servermd;
-import picturestr_priv;
-import glyphstr_priv;
+import render.picturestr_priv;
+import render.glyphstr_priv;
 import xace;
 version (XINERAMA) {
 import panoramiXsrv;

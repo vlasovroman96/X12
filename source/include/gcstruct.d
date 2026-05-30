@@ -53,13 +53,13 @@ public import deimos.X11.Xprotostr;
 
 public import include.gc;
 public import include.pixmap;
-public import regionstr;
-public import screenint;
+public import include.regionstr;
+public import include.screenint;
 public import include.privates;
 
 version (_XTYPEDEF_CHARINFOPTR) {} else {
 alias CharInfoPtr = _CharInfo*;  /* also in fonts/include/font.h */
-version = _XTYPEDEF_CHARINFOPTR;
+// version = _XTYPEDEF_CHARINFOPTR;
 }
 
 /*

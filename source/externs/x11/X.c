@@ -4,6 +4,11 @@
 #include <X11/extensions/XI2proto.h>
 #include <X11/extensions/dpmsproto.h>
 #include <X11/Xos.h>
+#include <X11/extensions/renderproto.h>
+#include <X11/Xarch.h>
+#include <X11/extensions/ge.h>
+#include <X11/extensions/geproto.h>
+
 // #endif
 
 

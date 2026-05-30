@@ -49,7 +49,7 @@ import include.os;
 import include.dixstruct;
 import include.extnsionst;
 import include.opaque;
-import dpmsproc;
+import Xext.dpmsproc;
 import include.scrnintstr;
 import include.windowstr;
 import include.protocol_versions;

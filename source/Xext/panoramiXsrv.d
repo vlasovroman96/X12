@@ -5,7 +5,7 @@ import core.stdc.config: c_long, c_ulong;
  
 public import build.dix_config;
 
-public import panoramiX;
+public import Xext.panoramiX;
 
 extern int PanoramiXNumScreens;
 extern int PanoramiXPixWidth;

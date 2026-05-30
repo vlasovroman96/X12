@@ -1,3 +1,6 @@
+module Xext.damage.damageext_priv;
+@nogc nothrow:
+extern(C): __gshared:
 /* SPDX-License-Identifier: MIT OR X11
  *
  * @copyright Enrico Weigelt, metux IT consult <info@metux.net>
@@ -5,12 +8,10 @@
  * Entry points for the generic damage extension.
  * (not part of SDK, not available to external modules).
  */
-#ifndef __XLIBRE_XEXT_DAMAGEEXT_PRIV_H
-#define __XLIBRE_XEXT_DAMAGEEXT_PRIV_H
+ 
+// public import stdbool;
 
-#include <stdbool.h>
-
-#include "include/dix.h"
+public import include.dix;
 
 /*
  * Tell damage extension that upcoming damage events for given clients
@@ -29,12 +30,12 @@ void DamageExtSetCritical(ClientPtr pClient, bool critical);
  * Initialize PanoramiX specific data structures for the damage extension.
  * Only called by PanoramiX extension, when it's initialized and ready run.
  */
-void PanoramiXDamageInit(void);
+void PanoramiXDamageInit();
 
 /*
  * Reset/De-Init PanoramiX specific data strucures for the damage extension.
  * Only called by PanoramiX extension, right before it's shutting down.
  */
-void PanoramiXDamageReset(void);
+void PanoramiXDamageReset();
 
-#endif /* __XLIBRE_XEXT_DAMAGEEXT_PRIV_H */
+ /* __XLIBRE_XEXT_DAMAGEEXT_PRIV_H */

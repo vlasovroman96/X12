@@ -50,7 +50,7 @@ SOFTWARE.
 version (SERVERMD_H) {} else {
 enum SERVERMD_H = 1;
 
-public import deimos.X11.Xarch;		/* for X_LITTLE_ENDIAN/X_BIG_ENDIAN */
+public import externs.x11.X;		/* for X_LITTLE_ENDIAN/X_BIG_ENDIAN */
 
 static if (X_BYTE_ORDER == X_LITTLE_ENDIAN) {
 enum IMAGE_BYTE_ORDER =        LSBFirst;

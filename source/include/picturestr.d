@@ -26,9 +26,9 @@ import core.stdc.config: c_long, c_ulong;
  */
 
  
-public import deimos.X11.extensions.renderproto;
+public import externs.x11.X;
 public import include.scrnintstr;
-public import glyphstr;
+public import include.glyphstr;
 public import include.resource;
 public import include.privates;
 

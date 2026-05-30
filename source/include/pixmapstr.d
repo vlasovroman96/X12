@@ -50,8 +50,8 @@ SOFTWARE.
 
  
 public import include.pixmap;
-public import screenint;
-public import regionstr;
+public import include.screenint;
+public import include.regionstr;
 public import include.privates;
 public import include.damage;
 public import deimos.X11.extensions.randr;

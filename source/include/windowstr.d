@@ -51,15 +51,15 @@ SOFTWARE.
 public import include.xlibre_ptrtypes;
 public import include.window;
 public import include.pixmapstr;
-public import regionstr;
+public import include.regionstr;
 public import include.cursor;
-public import property;
+public import include.property;
 public import include.resource;           /* for ROOT_WINDOW_ID_BASE */
 public import include.dix;
 public import include.privates;
-public import miscstruct;
+public import include.miscstruct;
 public import deimos.X11.Xprotostr;
-public import opaque;
+public import include.opaque;
 
 
 /* used as NULL-terminated list */

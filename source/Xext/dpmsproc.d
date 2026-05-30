@@ -1,4 +1,4 @@
-module dpmsproc;
+module Xext.dpmsproc;
 @nogc nothrow:
 extern(C): __gshared:
 /* Prototypes for functions that the DDX must provide */
@@ -6,7 +6,7 @@ extern(C): __gshared:
  
 public import build.dix_config;
 
-public import dixstruct;
+public import include.dixstruct;
 
 extern int DPMSSet(ClientPtr client, int level);
 extern Bool DPMSSupported();

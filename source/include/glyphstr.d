@@ -26,10 +26,10 @@ extern(C): __gshared:
  */
 
  
-public import deimos.X11.extensions.renderproto;
+public import externs.x11.X;
 
-public import picture;
-public import screenint;
+public import include.picture;
+public import include.screenint;
 
 enum GlyphFormat1 =	0;
 enum GlyphFormat4 =	1;
