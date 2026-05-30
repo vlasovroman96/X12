@@ -65,7 +65,7 @@ public import core.stdc.stdio;
 public import core.stdc.string;
 public import xf86Optionstr;
 
-public import deimos.X11.Xfuncproto;
+// public import deimos.X11.Xfuncproto;
 
 extern _X_EXPORT xf86addNewOption(XF86OptionPtr head, char* name, char* val);
 extern _X_EXPORT xf86optionListDup(XF86OptionPtr opt);

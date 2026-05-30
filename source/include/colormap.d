@@ -1,4 +1,4 @@
-module colormap.h;
+module include.colormap;
 @nogc nothrow:
 extern(C): __gshared:
 /*

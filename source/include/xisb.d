@@ -30,7 +30,7 @@ extern(C): __gshared:
 
 	
 public import core.sys.posix.unistd;
-public import deimos.X11.Xfuncproto;
+// public import deimos.X11.Xfuncproto;
 
 /******************************************************************************
  *		Definitions

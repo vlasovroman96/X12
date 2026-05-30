@@ -61,7 +61,7 @@ version (MONOTONIC_CLOCK) {
 public import core.stdc.time;
 }
 
-public import deimos.X11.Xfuncproto;
+// public import deimos.X11.Xfuncproto;
 
 public import xlibre_ptrtypes;
 public import include.callback;

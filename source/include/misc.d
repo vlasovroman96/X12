@@ -79,8 +79,8 @@ enum MISC_H = 1;
  *
  */
 
-public import deimos.X11.Xosdefs;
-public import deimos.X11.Xfuncproto;
+// public import deimos.X11.Xosdefs;
+// // public import deimos.X11.Xfuncproto;
 public import deimos.X11.Xmd;
 public import deimos.X11.X;
 public import deimos.X11.Xdefs;

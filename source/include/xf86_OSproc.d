@@ -93,7 +93,7 @@ enum XF86_M_DSR =		0x100   /* data set ready */;
 /* Prototypes                                                              */
 /***************************************************************************/
 
-public import deimos.X11.Xfuncproto;
+// public import deimos.X11.Xfuncproto;
 public import opaque;
 public import xf86Optionstr;
 

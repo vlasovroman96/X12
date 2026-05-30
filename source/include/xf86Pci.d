@@ -106,7 +106,7 @@ extern(C): __gshared:
 version (_XF86PCI_H) {} else {
 enum _XF86PCI_H = 1;
 public import deimos.X11.Xarch;
-public import deimos.X11.Xfuncproto;
+// public import deimos.X11.Xfuncproto;
 public import misc;
 public import pciaccess;
 

@@ -3,7 +3,7 @@ module globals.h;
 extern(C): __gshared:
  
 public import deimos.X11.Xdefs;
-public import deimos.X11.Xfuncproto;
+// public import deimos.X11.Xfuncproto;
 
 /* Global X server variables that are visible to mi, dix, os, and ddx */
 

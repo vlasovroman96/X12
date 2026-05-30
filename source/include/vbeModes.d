@@ -32,7 +32,7 @@ extern(C): __gshared:
  */
  
 public import deimos.X11.Xdefs;
-public import deimos.X11.Xfuncproto;
+// public import deimos.X11.Xfuncproto;
 
 /*
  * This is intended to be stored in the DisplayModeRec's private area.

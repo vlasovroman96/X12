@@ -79,7 +79,7 @@ private template HasVersion(string versionId) {
 
  
 public import deimos.X11.Xos;
-public import deimos.X11.Xfuncproto;
+// public import deimos.X11.Xfuncproto;
 
 public import core.stdc.stdio;
 public import core.stdc.ctype;

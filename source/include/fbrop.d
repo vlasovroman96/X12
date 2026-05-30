@@ -24,7 +24,7 @@ extern(C): __gshared:
  */
 
  
-public import deimos.X11.Xfuncproto;
+// public import deimos.X11.Xfuncproto;
 
 struct _mergeRopBits {
     FbBits ca1, cx1, ca2, cx2;

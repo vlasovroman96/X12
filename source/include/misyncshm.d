@@ -25,7 +25,7 @@ extern(C): __gshared:
 
  
 public import deimos.X11.Xdefs;
-public import deimos.X11.Xfuncproto;
+// public import deimos.X11.Xfuncproto;
 
 extern _X_EXPORT miSyncShmScreenInit(ScreenPtr pScreen);
 

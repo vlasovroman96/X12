@@ -48,7 +48,7 @@ public import deimos.X11.extensions.randr;
 public import deimos.X11.extensions.randrproto;
 public import deimos.X11.extensions.render;      /* we share subpixel order information */
 public import picturestr;
-public import deimos.X11.Xfuncproto;
+// public import deimos.X11.Xfuncproto;
 
 /* required for ABI compatibility for now */
 enum RANDR_10_INTERFACE = 1;

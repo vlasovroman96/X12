@@ -5,7 +5,7 @@ import core.stdc.config: c_long, c_ulong;
  
 public import deimos.X11.X;
 public import deimos.X11.Xdefs;
-public import deimos.X11.Xfuncproto;
+// public import deimos.X11.Xfuncproto;
 
 public import colormap;
 public import privates;

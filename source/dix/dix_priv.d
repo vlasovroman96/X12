@@ -14,7 +14,7 @@ import core.stdc.config: c_long, c_ulong;
  */
 
 public import deimos.X11.Xdefs;
-// public import deimos.X11.Xfuncproto;
+// // public import deimos.X11.Xfuncproto;
 public import deimos.X11.extensions.XI;
 
 public import dix.input_priv;

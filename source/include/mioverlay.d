@@ -3,7 +3,7 @@ module mioverlay.h;
 extern(C): __gshared:
  
 public import deimos.X11.Xdefs;
-public import deimos.X11.Xfuncproto;
+// public import deimos.X11.Xfuncproto;
 
 alias miOverlayTransFunc = void function(ScreenPtr, int, BoxPtr);
 alias miOverlayInOverlayFunc = Bool function(WindowPtr);

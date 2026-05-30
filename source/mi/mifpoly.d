@@ -48,7 +48,7 @@ SOFTWARE.
 ******************************************************************/
 
  
-public import deimos.X11.Xfuncproto;
+// public import deimos.X11.Xfuncproto;
 
 private _X_INLINE ICEIL(double x)
 {

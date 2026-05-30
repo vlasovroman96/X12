@@ -17,7 +17,7 @@ import core.stdc.config: c_long, c_ulong;
 public import stdbool;
 public import core.stdc.stdint;
 public import deimos.X11.Xmd;
-public import deimos.X11.Xfuncproto;
+// public import deimos.X11.Xfuncproto;
 
 enum STD_TIMINGS = 8;
 enum DET_TIMINGS = 4;

@@ -42,7 +42,7 @@ extern(C): __gshared:
  */
 
  
-public import deimos.X11.Xfuncproto;
+// public import deimos.X11.Xfuncproto;
 public import deimos.X11.Xdefs;
 public import deimos.X11.Xmd;
 

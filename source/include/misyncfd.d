@@ -25,7 +25,7 @@ extern(C): __gshared:
 
  
 public import deimos.X11.Xdefs;
-public import deimos.X11.Xfuncproto;
+// public import deimos.X11.Xfuncproto;
 
 alias SyncScreenCreateFenceFromFdFunc = int function(ScreenPtr screen, SyncFence* fence, int fd, Bool initially_triggered);
 

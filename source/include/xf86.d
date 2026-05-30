@@ -39,7 +39,7 @@ extern(C): __gshared:
 public import xlibre_ptrtypes;
 public import xf86str;
 public import xf86Opt;
-public import deimos.X11.Xfuncproto;
+// public import deimos.X11.Xfuncproto;
 public import core.stdc.stdarg;
 public import deimos.X11.extensions.randr;
 

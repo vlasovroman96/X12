@@ -43,7 +43,7 @@ version = _INDIRECT_SIZE_H_;
  * \author Ian Romanick <idr@us.ibm.com>
  */
 
-public import deimos.X11.Xfuncproto;
+// public import deimos.X11.Xfuncproto;
 
 // version (__GNUC__) {
 // enum PURE = __attribute__((pure));

@@ -31,7 +31,7 @@ private template HasVersion(string versionId) {
  
 public import core.stdc.stdio;
 public import core.stdc.stdarg;
-public import deimos.X11.Xfuncproto;
+// public import deimos.X11.Xfuncproto;
 
 public import os;
 

@@ -29,7 +29,7 @@ in this Software without prior written authorization from The Open Group.
 
  
 public import deimos.X11.Xdefs;
-public import deimos.X11.Xfuncproto;
+// public import deimos.X11.Xfuncproto;
 
 struct miZeroArcPtRec {
     int x;

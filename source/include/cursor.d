@@ -48,7 +48,7 @@ SOFTWARE.
 ******************************************************************/
 
  
-public import misc;
+public import include.misc;
 public import screenint;
 public import window;
 public import privates;

@@ -23,7 +23,7 @@ extern(C): __gshared:
  * PERFORMANCE OF THIS SOFTWARE.
  */
  
-public import deimos.X11.Xfuncproto;
+// public import deimos.X11.Xfuncproto;
 
 alias DamagePtr = _damage*;
 

@@ -69,7 +69,7 @@ enum BITMAP_SCANLINE_PAD =  32;
 enum LOG2_BITMAP_PAD =		5;
 enum LOG2_BYTES_PER_SCANLINE_PAD =	2;
 
-public import deimos.X11.Xfuncproto;
+// public import deimos.X11.Xfuncproto;
 /*
  *   This returns the number of padding units, for depth d and width w.
  * For bitmaps this can be calculated with the macros above.
