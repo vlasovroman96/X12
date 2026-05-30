@@ -1,4 +1,4 @@
-module screen.c;
+module screen;
 @nogc nothrow:
 extern(C): __gshared:
 /* SPDX-License-Identifier: MIT OR X11

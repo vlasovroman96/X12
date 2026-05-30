@@ -1,4 +1,4 @@
-module xkbout.c;
+module xkbout;
 @nogc nothrow:
 extern(C): __gshared:
 /************************************************************

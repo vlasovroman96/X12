@@ -1,4 +1,4 @@
-module fbpoint.c;
+module fbpoint;
 @nogc nothrow:
 extern(C): __gshared:
 /*

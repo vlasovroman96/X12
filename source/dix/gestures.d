@@ -1,4 +1,4 @@
-module gestures.c;
+module gestures;
 @nogc nothrow:
 extern(C): __gshared:
 /*

@@ -1,4 +1,4 @@
-module shmodule.c;
+module shmodule;
 @nogc nothrow:
 extern(C): __gshared:
 /*

@@ -1,4 +1,4 @@
-module timercheck.c;
+module timercheck;
 @nogc nothrow:
 extern(C): __gshared:
 import dix_config;

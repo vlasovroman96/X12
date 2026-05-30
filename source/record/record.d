@@ -1,4 +1,4 @@
-module record.c;
+module record;
 @nogc nothrow:
 extern(C): __gshared:
 /*

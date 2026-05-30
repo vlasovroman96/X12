@@ -1,4 +1,4 @@
-module present_fake.c;
+module present_fake;
 @nogc nothrow:
 extern(C): __gshared:
 /*

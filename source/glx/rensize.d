@@ -1,4 +1,4 @@
-module rensize.c;
+module rensize;
 @nogc nothrow:
 extern(C): __gshared:
 /*

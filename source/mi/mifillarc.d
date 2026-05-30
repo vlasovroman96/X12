@@ -1,4 +1,4 @@
-module mifillarc.c;
+module mifillarc;
 @nogc nothrow:
 extern(C): __gshared:
 /************************************************************

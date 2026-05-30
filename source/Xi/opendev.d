@@ -1,4 +1,4 @@
-module opendev.c;
+module opendev;
 @nogc nothrow:
 extern(C): __gshared:
 /************************************************************

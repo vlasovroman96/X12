@@ -1,4 +1,4 @@
-module glamor_composite_glyphs.c;
+module glamor_composite_glyphs;
 @nogc nothrow:
 extern(C): __gshared:
 /*

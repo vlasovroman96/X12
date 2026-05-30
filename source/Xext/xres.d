@@ -34,7 +34,7 @@ import include.pixmapstr;
 import include.windowstr;
 import include.gcstruct;
 import include.protocol_versions;
-import list;
+import include.list;
 import include.misc;
 import hashtable;
 import include.picturestr;

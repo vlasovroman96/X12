@@ -1,4 +1,4 @@
-module micopy.c;
+module micopy;
 @nogc nothrow:
 extern(C): __gshared:
 /*

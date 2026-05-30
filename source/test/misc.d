@@ -1,4 +1,4 @@
-module misc.c;
+module misc;
 @nogc nothrow:
 extern(C): __gshared:
 /**

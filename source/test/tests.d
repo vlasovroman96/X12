@@ -1,4 +1,4 @@
-module tests.c;
+module tests;
 @nogc nothrow:
 extern(C): __gshared:
 import core.stdc.string;

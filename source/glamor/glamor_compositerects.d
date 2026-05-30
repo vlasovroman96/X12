@@ -1,4 +1,4 @@
-module glamor_compositerects.c;
+module glamor_compositerects;
 @nogc nothrow:
 extern(C): __gshared:
 /*

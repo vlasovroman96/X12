@@ -1,4 +1,4 @@
-module xf86dri.c;
+module xf86dri;
 @nogc nothrow:
 extern(C): __gshared:
 

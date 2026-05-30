@@ -1,4 +1,4 @@
-module xigrabdev.c;
+module xigrabdev;
 @nogc nothrow:
 extern(C): __gshared:
 /*

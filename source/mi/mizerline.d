@@ -1,4 +1,4 @@
-module mizerline.c;
+module mizerline;
 @nogc nothrow:
 extern(C): __gshared:
 /***********************************************************

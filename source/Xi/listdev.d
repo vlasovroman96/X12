@@ -1,4 +1,4 @@
-module listdev.c;
+module listdev;
 @nogc nothrow:
 extern(C): __gshared:
 /************************************************************

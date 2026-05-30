@@ -1,4 +1,4 @@
-module ephyrvideo.c;
+module ephyrvideo;
 @nogc nothrow:
 extern(C): __gshared:
 /*

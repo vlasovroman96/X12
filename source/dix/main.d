@@ -1,4 +1,4 @@
-module main.c;
+module main;
 @nogc nothrow:
 extern(C): __gshared:
 /***********************************************************

@@ -1,4 +1,4 @@
-module pseudoramiX.c;
+module pseudoramiX;
 @nogc nothrow:
 extern(C): __gshared:
 /*

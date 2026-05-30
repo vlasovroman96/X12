@@ -1,4 +1,4 @@
-module Cursor.c;
+module Cursor;
 @nogc nothrow:
 extern(C): __gshared:
 /*

@@ -1,4 +1,4 @@
-module xiqueryversion.c;
+module xiqueryversion;
 @nogc nothrow:
 extern(C): __gshared:
 /*

@@ -52,7 +52,7 @@ PERFORMANCE OF THIS SOFTWARE.
 ******************************************************************/
 
  
-public import list;
+public import include.list;
 public import misync;
 public import misyncstr;
 

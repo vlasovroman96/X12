@@ -1,4 +1,4 @@
-module Init.c;
+module Init;
 @nogc nothrow:
 extern(C): __gshared:
 /*

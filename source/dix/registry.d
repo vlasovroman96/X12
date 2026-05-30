@@ -1,4 +1,4 @@
-module registry.c;
+module registry;
 @nogc nothrow:
 extern(C): __gshared:
 

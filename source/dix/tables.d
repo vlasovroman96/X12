@@ -1,4 +1,4 @@
-module tables.c;
+module tables;
 @nogc nothrow:
 extern(C): __gshared:
 /***********************************************************

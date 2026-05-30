@@ -1,4 +1,4 @@
-module os.inputthread.c;
+module os.inputthread;
 @nogc nothrow:
 extern(C): __gshared:
 /* inputthread.c -- Threaded generation of input events.

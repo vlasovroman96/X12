@@ -1,4 +1,4 @@
-module kmode.c;
+module kmode;
 @nogc nothrow:
 extern(C): __gshared:
 /*

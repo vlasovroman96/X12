@@ -1,4 +1,4 @@
-module vndcmds.c;
+module vndcmds;
 @nogc nothrow:
 extern(C): __gshared:
 /*

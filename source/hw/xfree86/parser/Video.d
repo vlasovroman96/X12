@@ -1,4 +1,4 @@
-module Video.c;
+module Video;
 @nogc nothrow:
 extern(C): __gshared:
 /*

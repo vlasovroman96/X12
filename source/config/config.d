@@ -1,4 +1,4 @@
-module config.c;
+module config;
 @nogc nothrow:
 extern(C): __gshared:
 

@@ -1,4 +1,4 @@
-module kinput.c;
+module kinput;
 @nogc nothrow:
 extern(C): __gshared:
 

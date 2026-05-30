@@ -1,4 +1,4 @@
-module glxdri2.c;
+module glxdri2;
 @nogc nothrow:
 extern(C): __gshared:
 import core.stdc.config: c_long, c_ulong;

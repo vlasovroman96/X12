@@ -1,4 +1,4 @@
-module getselev.c;
+module getselev;
 @nogc nothrow:
 extern(C): __gshared:
 /************************************************************

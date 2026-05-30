@@ -1,4 +1,4 @@
-module sigio.c;
+module sigio;
 @nogc nothrow:
 extern(C): __gshared:
 

@@ -1,4 +1,4 @@
-module xf86x86emu.c;
+module xf86x86emu;
 @nogc nothrow:
 extern(C): __gshared:
 /*

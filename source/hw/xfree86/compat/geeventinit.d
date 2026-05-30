@@ -1,4 +1,4 @@
-module geeventinit.c;
+module geeventinit;
 @nogc nothrow:
 extern(C): __gshared:
 import dix_config;

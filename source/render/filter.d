@@ -1,4 +1,4 @@
-module filter.c;
+module filter;
 @nogc nothrow:
 extern(C): __gshared:
 /*

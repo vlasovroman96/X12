@@ -1,4 +1,4 @@
-module chgprop.c;
+module chgprop;
 @nogc nothrow:
 extern(C): __gshared:
 /************************************************************

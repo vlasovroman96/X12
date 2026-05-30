@@ -1,4 +1,4 @@
-module xf86pciBus.c;
+module xf86pciBus;
 @nogc nothrow:
 extern(C): __gshared:
 

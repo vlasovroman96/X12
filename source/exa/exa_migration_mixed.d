@@ -1,4 +1,4 @@
-module exa_migration_mixed.c;
+module exa_migration_mixed;
 @nogc nothrow:
 extern(C): __gshared:
 /*

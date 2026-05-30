@@ -1,4 +1,4 @@
-module xorgHelper.c;
+module xorgHelper;
 @nogc nothrow:
 extern(C): __gshared:
 import xorg_config;

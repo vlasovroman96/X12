@@ -1,4 +1,4 @@
-module indirect_texture_compression.c;
+module indirect_texture_compression;
 @nogc nothrow:
 extern(C): __gshared:
 /*

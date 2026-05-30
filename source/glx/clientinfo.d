@@ -1,4 +1,4 @@
-module clientinfo.c;
+module clientinfo;
 @nogc nothrow:
 extern(C): __gshared:
 /*

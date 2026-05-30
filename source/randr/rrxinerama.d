@@ -1,4 +1,4 @@
-module rrxinerama.c;
+module rrxinerama;
 @nogc nothrow:
 extern(C): __gshared:
 /*
@@ -56,7 +56,7 @@ extern(C): __gshared:
  * Author: Thomas Winischhofer <thomas@winischhofer.net>
  *	- driver entirely rewritten since 2001, only basic structure taken from
  *	  old code (except sis_dri.c, sis_shadow.c, sis_accel.c and parts of
- *	  sis_dga.c; these were mostly taken over; sis_dri.c was changed for
+ *	  sis_dga; these were mostly taken over; sis_dri.c was changed for
  *	  new versions of the DRI layer)
  *
  * This notice covers the entire driver code unless indicated otherwise.

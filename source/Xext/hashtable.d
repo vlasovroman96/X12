@@ -1,4 +1,4 @@
-module hashtable.c;
+module hashtable;
 @nogc nothrow:
 extern(C): __gshared:
 import build.dix_config;

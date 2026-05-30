@@ -1,4 +1,4 @@
-module keyboard.c;
+module keyboard;
 @nogc nothrow:
 extern(C): __gshared:
 /*

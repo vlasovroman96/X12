@@ -1,4 +1,4 @@
-module rrinfo.c;
+module rrinfo;
 @nogc nothrow:
 extern(C): __gshared:
 /*

@@ -1,4 +1,4 @@
-module matrix.c;
+module matrix;
 @nogc nothrow:
 extern(C): __gshared:
 /*

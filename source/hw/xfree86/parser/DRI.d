@@ -1,4 +1,4 @@
-module DRI.c;
+module DRI;
 @nogc nothrow:
 extern(C): __gshared:
 /* DRI.c -- DRI Section in XF86Config file

@@ -1,4 +1,4 @@
-module Args.c;
+module Args;
 @nogc nothrow:
 extern(C): __gshared:
 /*

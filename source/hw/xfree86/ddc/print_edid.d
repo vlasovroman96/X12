@@ -1,4 +1,4 @@
-module print_edid.c;
+module print_edid;
 @nogc nothrow:
 extern(C): __gshared:
 /*

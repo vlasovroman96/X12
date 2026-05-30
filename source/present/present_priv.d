@@ -32,7 +32,7 @@ public import include.syncsdk;
 
 public import include.scrnintstr;
 public import include.misc;
-public import list;
+public import include.list;
 public import include.windowstr;
 public import dixstruct;
 public import syncsrv;

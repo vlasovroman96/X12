@@ -1,4 +1,4 @@
-module renderpix.c;
+module renderpix;
 @nogc nothrow:
 extern(C): __gshared:
 /*

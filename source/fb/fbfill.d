@@ -1,4 +1,4 @@
-module fbfill.c;
+module fbfill;
 @nogc nothrow:
 extern(C): __gshared:
 /*

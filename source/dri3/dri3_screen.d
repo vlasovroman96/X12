@@ -1,4 +1,4 @@
-module dri3_screen.c;
+module dri3_screen;
 @nogc nothrow:
 extern(C): __gshared:
 /*

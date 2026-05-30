@@ -1,4 +1,4 @@
-module Color.c;
+module Color;
 @nogc nothrow:
 extern(C): __gshared:
 /*

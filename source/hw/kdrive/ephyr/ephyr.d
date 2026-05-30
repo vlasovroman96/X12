@@ -1,4 +1,4 @@
-module ephyr.c;
+module ephyr;
 @nogc nothrow:
 extern(C): __gshared:
 /*

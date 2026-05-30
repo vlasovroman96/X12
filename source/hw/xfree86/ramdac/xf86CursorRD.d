@@ -1,4 +1,4 @@
-module xf86CursorRD.c;
+module xf86CursorRD;
 @nogc nothrow:
 extern(C): __gshared:
 import xorg_config;

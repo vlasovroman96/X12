@@ -1,4 +1,4 @@
-module Extensions.c;
+module Extensions;
 @nogc nothrow:
 extern(C): __gshared:
 /*

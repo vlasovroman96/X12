@@ -1,4 +1,4 @@
-module os.io.c;
+module os.io;
 @nogc nothrow:
 extern(C): __gshared:
 

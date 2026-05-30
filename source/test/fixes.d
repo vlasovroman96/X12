@@ -1,4 +1,4 @@
-module fixes.c;
+module fixes;
 @nogc nothrow:
 extern(C): __gshared:
 /**

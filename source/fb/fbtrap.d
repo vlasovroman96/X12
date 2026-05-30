@@ -1,4 +1,4 @@
-module fbtrap.c;
+module fbtrap;
 @nogc nothrow:
 extern(C): __gshared:
 /*

@@ -1,4 +1,4 @@
-module xiallowev.c;
+module xiallowev;
 @nogc nothrow:
 extern(C): __gshared:
 /*

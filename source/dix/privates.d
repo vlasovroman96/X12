@@ -1,4 +1,4 @@
-module privates.c;
+module privates;
 @nogc nothrow:
 extern(C): __gshared:
 /*

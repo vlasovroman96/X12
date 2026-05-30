@@ -1,4 +1,4 @@
-module mitrap.c;
+module mitrap;
 @nogc nothrow:
 extern(C): __gshared:
 /*

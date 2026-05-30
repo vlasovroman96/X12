@@ -1,4 +1,4 @@
-module helper_exec.c;
+module helper_exec;
 @nogc nothrow:
 extern(C): __gshared:
 import core.stdc.config: c_long, c_ulong;

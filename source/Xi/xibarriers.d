@@ -63,7 +63,7 @@ import mipointer;
 import include.inputstr;
 import include.windowstr;
 import xace;
-import list;
+import include.list;
 import exglobals;
 import eventstr;
 

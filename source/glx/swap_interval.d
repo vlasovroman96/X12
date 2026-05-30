@@ -1,4 +1,4 @@
-module swap_interval.c;
+module swap_interval;
 @nogc nothrow:
 extern(C): __gshared:
 /*

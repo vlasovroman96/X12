@@ -1,4 +1,4 @@
-module glxmodule.c;
+module glxmodule;
 @nogc nothrow:
 extern(C): __gshared:
 /**************************************************************************

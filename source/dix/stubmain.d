@@ -1,4 +1,4 @@
-module stubmain.c;
+module stubmain;
 @nogc nothrow:
 extern(C): __gshared:
 /***********************************************************

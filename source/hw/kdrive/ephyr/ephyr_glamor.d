@@ -1,4 +1,4 @@
-module ephyr_glamor.c;
+module ephyr_glamor;
 @nogc nothrow:
 extern(C): __gshared:
 /*

@@ -1,4 +1,4 @@
-module glxdricommon.c;
+module glxdricommon;
 @nogc nothrow:
 extern(C): __gshared:
 /*

@@ -1,4 +1,4 @@
-module ddxLoad.c;
+module ddxLoad;
 @nogc nothrow:
 extern(C): __gshared:
 /************************************************************

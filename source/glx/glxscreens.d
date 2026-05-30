@@ -1,4 +1,4 @@
-module glxscreens.c;
+module glxscreens;
 @nogc nothrow:
 extern(C): __gshared:
 /*

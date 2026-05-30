@@ -2,7 +2,7 @@ module include.optionstr.h;
 @nogc nothrow:
 extern(C): __gshared:
  
-public import list;
+public import include.list;
 
 struct _InputOption {
     GenericListRec list;

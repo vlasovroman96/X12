@@ -1,4 +1,4 @@
-module test_xkb.c;
+module test_xkb;
 @nogc nothrow:
 extern(C): __gshared:
 /**

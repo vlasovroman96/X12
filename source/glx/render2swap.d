@@ -1,4 +1,4 @@
-module render2swap.c;
+module render2swap;
 @nogc nothrow:
 extern(C): __gshared:
 import core.stdc.config: c_long, c_ulong;

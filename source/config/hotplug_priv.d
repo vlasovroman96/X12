@@ -34,7 +34,7 @@ extern(C): __gshared:
 
 public import dix.settings_priv;
 
-public import list;
+public import include.list;
 
 /* Bump this each time you add something to the struct
  * so that drivers can easily tell what is available

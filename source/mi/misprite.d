@@ -1,4 +1,4 @@
-module misprite.c;
+module misprite;
 @nogc nothrow:
 extern(C): __gshared:
 /*

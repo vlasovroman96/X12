@@ -1,4 +1,4 @@
-module fbline.c;
+module fbline;
 @nogc nothrow:
 extern(C): __gshared:
 /*

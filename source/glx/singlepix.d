@@ -1,4 +1,4 @@
-module singlepix.c;
+module singlepix;
 @nogc nothrow:
 extern(C): __gshared:
 /*

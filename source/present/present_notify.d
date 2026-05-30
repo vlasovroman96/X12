@@ -1,4 +1,4 @@
-module present_notify.c;
+module present_notify;
 @nogc nothrow:
 extern(C): __gshared:
 /*

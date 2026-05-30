@@ -1,4 +1,4 @@
-module ungrdev.c;
+module ungrdev;
 @nogc nothrow:
 extern(C): __gshared:
 /************************************************************

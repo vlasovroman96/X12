@@ -1,4 +1,4 @@
-module xf86Cursors.c;
+module xf86Cursors;
 @nogc nothrow:
 extern(C): __gshared:
 /*

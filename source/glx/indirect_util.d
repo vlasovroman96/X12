@@ -1,4 +1,4 @@
-module indirect_util.c;
+module indirect_util;
 @nogc nothrow:
 extern(C): __gshared:
 /*

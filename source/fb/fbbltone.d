@@ -1,4 +1,4 @@
-module fbbltone.c;
+module fbbltone;
 @nogc nothrow:
 extern(C): __gshared:
 /*

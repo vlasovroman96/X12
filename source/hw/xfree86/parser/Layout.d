@@ -1,4 +1,4 @@
-module Layout.c;
+module Layout;
 @nogc nothrow:
 extern(C): __gshared:
 /*

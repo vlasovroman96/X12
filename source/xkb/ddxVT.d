@@ -1,4 +1,4 @@
-module ddxVT.c;
+module ddxVT;
 @nogc nothrow:
 extern(C): __gshared:
 /************************************************************

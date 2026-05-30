@@ -1,4 +1,4 @@
-module kcmap.c;
+module kcmap;
 @nogc nothrow:
 extern(C): __gshared:
 /*

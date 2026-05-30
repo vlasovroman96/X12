@@ -1,4 +1,4 @@
-module mitri.c;
+module mitri;
 @nogc nothrow:
 extern(C): __gshared:
 /*

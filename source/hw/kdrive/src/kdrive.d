@@ -1,4 +1,4 @@
-module kdrive.c;
+module kdrive;
 @nogc nothrow:
 extern(C): __gshared:
 

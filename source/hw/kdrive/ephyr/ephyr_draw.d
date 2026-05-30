@@ -1,4 +1,4 @@
-module ephyr_draw.c;
+module ephyr_draw;
 @nogc nothrow:
 extern(C): __gshared:
 /*

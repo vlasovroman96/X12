@@ -1,4 +1,4 @@
-module systemd_logind.c;
+module systemd_logind;
 @nogc nothrow:
 extern(C): __gshared:
 /*

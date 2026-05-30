@@ -1,4 +1,4 @@
-module vnd_dispatch_stubs.c;
+module vnd_dispatch_stubs;
 @nogc nothrow:
 extern(C): __gshared:
 

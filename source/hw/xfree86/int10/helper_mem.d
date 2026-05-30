@@ -1,4 +1,4 @@
-module helper_mem.c;
+module helper_mem;
 @nogc nothrow:
 extern(C): __gshared:
 import core.stdc.config: c_long, c_ulong;

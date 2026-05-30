@@ -1,4 +1,4 @@
-module fbblt.c;
+module fbblt;
 @nogc nothrow:
 extern(C): __gshared:
 /*

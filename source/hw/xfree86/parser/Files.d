@@ -1,4 +1,4 @@
-module Files.c;
+module Files;
 @nogc nothrow:
 extern(C): __gshared:
 /*

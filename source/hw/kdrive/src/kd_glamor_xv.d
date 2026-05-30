@@ -1,4 +1,4 @@
-module kd_glamor_xv.c;
+module kd_glamor_xv;
 @nogc nothrow:
 extern(C): __gshared:
 /*

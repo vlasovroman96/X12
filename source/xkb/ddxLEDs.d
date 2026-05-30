@@ -1,4 +1,4 @@
-module ddxLEDs.c;
+module ddxLEDs;
 @nogc nothrow:
 extern(C): __gshared:
 /************************************************************

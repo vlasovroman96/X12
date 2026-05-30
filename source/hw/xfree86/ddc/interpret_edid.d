@@ -1,4 +1,4 @@
-module interpret_edid.c;
+module interpret_edid;
 @nogc nothrow:
 extern(C): __gshared:
 /*

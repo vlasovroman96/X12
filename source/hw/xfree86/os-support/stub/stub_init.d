@@ -1,4 +1,4 @@
-module stub_init.c;
+module stub_init;
 @nogc nothrow:
 extern(C): __gshared:
 import xorg_config;

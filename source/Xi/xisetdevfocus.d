@@ -1,4 +1,4 @@
-module xisetdevfocus.c;
+module xisetdevfocus;
 @nogc nothrow:
 extern(C): __gshared:
 /*

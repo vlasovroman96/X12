@@ -1,4 +1,4 @@
-module xf86Init.c;
+module xf86Init;
 @nogc nothrow:
 extern(C): __gshared:
 

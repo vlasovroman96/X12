@@ -1,4 +1,4 @@
-module fbpixmap.c;
+module fbpixmap;
 @nogc nothrow:
 extern(C): __gshared:
 /*

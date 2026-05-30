@@ -1,4 +1,4 @@
-module rrprovider.c;
+module rrprovider;
 @nogc nothrow:
 extern(C): __gshared:
 /*

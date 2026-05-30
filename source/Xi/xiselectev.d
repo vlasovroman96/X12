@@ -1,4 +1,4 @@
-module xiselectev.c;
+module xiselectev;
 @nogc nothrow:
 extern(C): __gshared:
 /*

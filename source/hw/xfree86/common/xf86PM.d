@@ -1,4 +1,4 @@
-module xf86PM.c;
+module xf86PM;
 @nogc nothrow:
 extern(C): __gshared:
 /*

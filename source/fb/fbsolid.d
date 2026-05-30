@@ -1,4 +1,4 @@
-module fbsolid.c;
+module fbsolid;
 @nogc nothrow:
 extern(C): __gshared:
 /*

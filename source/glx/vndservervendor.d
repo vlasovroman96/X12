@@ -1,4 +1,4 @@
-module vndservervendor.c;
+module vndservervendor;
 @nogc nothrow:
 extern(C): __gshared:
 /*

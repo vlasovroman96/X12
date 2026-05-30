@@ -1,4 +1,4 @@
-module xkb.c;
+module xkb;
 @nogc nothrow:
 extern(C): __gshared:
 import core.stdc.stdlib;

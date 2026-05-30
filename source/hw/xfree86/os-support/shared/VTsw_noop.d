@@ -1,4 +1,4 @@
-module VTsw_noop.c;
+module VTsw_noop;
 @nogc nothrow:
 extern(C): __gshared:
 /*

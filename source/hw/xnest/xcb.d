@@ -1,4 +1,4 @@
-module xcb.c;
+module xcb;
 @nogc nothrow:
 extern(C): __gshared:
 /* SPDX-License-Identifier: MIT OR X11

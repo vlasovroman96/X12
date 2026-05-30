@@ -1,4 +1,4 @@
-module fbpush.c;
+module fbpush;
 @nogc nothrow:
 extern(C): __gshared:
 /*

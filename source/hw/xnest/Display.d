@@ -1,4 +1,4 @@
-module Display.c;
+module Display;
 @nogc nothrow:
 extern(C): __gshared:
 /*

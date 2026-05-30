@@ -1,4 +1,4 @@
-module miindex.c;
+module miindex;
 @nogc nothrow:
 extern(C): __gshared:
 /*

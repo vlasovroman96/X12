@@ -1,4 +1,4 @@
-module shadowfb.c;
+module shadowfb;
 @nogc nothrow:
 extern(C): __gshared:
 /*

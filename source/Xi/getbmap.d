@@ -1,4 +1,4 @@
-module getbmap.c;
+module getbmap;
 @nogc nothrow:
 extern(C): __gshared:
 /************************************************************

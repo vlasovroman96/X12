@@ -1,4 +1,4 @@
-module xf86gtf.c;
+module xf86gtf;
 @nogc nothrow:
 extern(C): __gshared:
 /*

@@ -1,4 +1,4 @@
-module os.access.c;
+module os.access;
 @nogc nothrow:
 extern(C): __gshared:
 

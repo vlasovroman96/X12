@@ -1,4 +1,4 @@
-module glamor_xf86_xv.c;
+module glamor_xf86_xv;
 @nogc nothrow:
 extern(C): __gshared:
 /*

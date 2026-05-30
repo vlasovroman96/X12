@@ -1,4 +1,4 @@
-module os.ospoll.c;
+module os.ospoll;
 @nogc nothrow:
 extern(C): __gshared:
 
@@ -41,8 +41,8 @@ import core.sys.windows.winsock2;
 import include.fd_notify;
 import os.xserver_poll;
 
-import ospoll;
-import list;
+import os.ospoll;
+import include.list;
 
 static if (!HAVE_OSPOLL && HasVersion!"HAVE_POLLSET_CREATE") {
 import sys.pollset;

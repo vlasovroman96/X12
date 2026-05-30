@@ -1,4 +1,4 @@
-module InputClass.c;
+module InputClass;
 @nogc nothrow:
 extern(C): __gshared:
 /*

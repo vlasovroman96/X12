@@ -1,4 +1,4 @@
-module mioverlay.c;
+module mioverlay;
 @nogc nothrow:
 extern(C): __gshared:
 

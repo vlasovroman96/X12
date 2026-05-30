@@ -1,4 +1,4 @@
-module read.c;
+module read;
 @nogc nothrow:
 extern(C): __gshared:
 /*

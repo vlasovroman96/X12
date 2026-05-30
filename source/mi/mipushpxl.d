@@ -1,4 +1,4 @@
-module mipushpxl.c;
+module mipushpxl;
 @nogc nothrow:
 extern(C): __gshared:
 /***********************************************************

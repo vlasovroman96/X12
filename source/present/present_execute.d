@@ -1,4 +1,4 @@
-module present_execute.c;
+module present_execute;
 @nogc nothrow:
 extern(C): __gshared:
 /*

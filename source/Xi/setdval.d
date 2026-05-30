@@ -1,4 +1,4 @@
-module setdval.c;
+module setdval;
 @nogc nothrow:
 extern(C): __gshared:
 /************************************************************

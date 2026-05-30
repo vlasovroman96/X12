@@ -1,4 +1,4 @@
-module sigiostubs.c;
+module sigiostubs;
 @nogc nothrow:
 extern(C): __gshared:
 /*

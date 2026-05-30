@@ -1,4 +1,4 @@
-module glxcmdsswap.c;
+module glxcmdsswap;
 @nogc nothrow:
 extern(C): __gshared:
 /*

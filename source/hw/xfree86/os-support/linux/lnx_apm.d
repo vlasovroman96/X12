@@ -1,4 +1,4 @@
-module lnx_apm.c;
+module lnx_apm;
 @nogc nothrow:
 extern(C): __gshared:
 import xorg_config;

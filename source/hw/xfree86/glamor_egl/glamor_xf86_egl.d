@@ -1,4 +1,4 @@
-module glamor_xf86_egl.c;
+module glamor_xf86_egl;
 @nogc nothrow:
 extern(C): __gshared:
 /* SPDX-License-Identifier: MIT OR X11

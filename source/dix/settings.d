@@ -1,4 +1,4 @@
-module settings.c;
+module settings;
 @nogc nothrow:
 extern(C): __gshared:
 /* SPDX-License-Identifier: MIT OR X11

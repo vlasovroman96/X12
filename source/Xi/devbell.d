@@ -1,4 +1,4 @@
-module devbell.c;
+module devbell;
 @nogc nothrow:
 extern(C): __gshared:
 /************************************************************

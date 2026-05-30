@@ -1,4 +1,4 @@
-module setmode.c;
+module setmode;
 @nogc nothrow:
 extern(C): __gshared:
 /************************************************************

@@ -1,4 +1,4 @@
-module fballpriv.c;
+module fballpriv;
 @nogc nothrow:
 extern(C): __gshared:
 /*

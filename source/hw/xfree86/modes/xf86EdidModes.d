@@ -1,4 +1,4 @@
-module xf86EdidModes.c;
+module xf86EdidModes;
 @nogc nothrow:
 extern(C): __gshared:
 /*

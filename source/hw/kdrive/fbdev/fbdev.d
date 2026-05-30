@@ -1,4 +1,4 @@
-module fbdev.c;
+module fbdev;
 @nogc nothrow:
 extern(C): __gshared:
 import core.stdc.config: c_long, c_ulong;

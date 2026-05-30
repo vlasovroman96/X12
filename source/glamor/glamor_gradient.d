@@ -1,4 +1,4 @@
-module glamor_gradient.c;
+module glamor_gradient;
 @nogc nothrow:
 extern(C): __gshared:
 /*

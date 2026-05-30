@@ -1,4 +1,4 @@
-module present_event.c;
+module present_event;
 @nogc nothrow:
 extern(C): __gshared:
 /*

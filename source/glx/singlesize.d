@@ -1,4 +1,4 @@
-module singlesize.c;
+module singlesize;
 @nogc nothrow:
 extern(C): __gshared:
 /*

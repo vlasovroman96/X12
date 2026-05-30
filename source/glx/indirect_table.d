@@ -1,4 +1,4 @@
-module indirect_table.c;
+module indirect_table;
 @nogc nothrow:
 extern(C): __gshared:
 /*

@@ -1,4 +1,4 @@
-module chgkmap.c;
+module chgkmap;
 @nogc nothrow:
 extern(C): __gshared:
 /************************************************************

@@ -1,4 +1,4 @@
-module render.c;
+module render;
 @nogc nothrow:
 extern(C): __gshared:
 /*

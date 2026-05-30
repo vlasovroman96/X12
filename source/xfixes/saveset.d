@@ -1,4 +1,4 @@
-module saveset.c;
+module saveset;
 @nogc nothrow:
 extern(C): __gshared:
 /*

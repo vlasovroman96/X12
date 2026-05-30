@@ -1,4 +1,4 @@
-module indirect_size_get.c;
+module indirect_size_get;
 @nogc nothrow:
 extern(C): __gshared:
 

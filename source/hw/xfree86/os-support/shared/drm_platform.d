@@ -1,4 +1,4 @@
-module drm_platform.c;
+module drm_platform;
 @nogc nothrow:
 extern(C): __gshared:
 import xorg_config;

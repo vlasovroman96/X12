@@ -1,4 +1,4 @@
-module present_vblank.c;
+module present_vblank;
 @nogc nothrow:
 extern(C): __gshared:
 /*

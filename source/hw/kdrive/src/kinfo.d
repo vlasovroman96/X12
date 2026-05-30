@@ -1,4 +1,4 @@
-module kinfo.c;
+module kinfo;
 @nogc nothrow:
 extern(C): __gshared:
 /*

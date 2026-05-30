@@ -1,4 +1,4 @@
-module fbtile.c;
+module fbtile;
 @nogc nothrow:
 extern(C): __gshared:
 /*

@@ -1,4 +1,4 @@
-module os.WaitFor.c;
+module os.WaitFor;
 @nogc nothrow:
 extern(C): __gshared:
 /***********************************************************

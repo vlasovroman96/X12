@@ -1,4 +1,4 @@
-module glamor_lines.c;
+module glamor_lines;
 @nogc nothrow:
 extern(C): __gshared:
 /*

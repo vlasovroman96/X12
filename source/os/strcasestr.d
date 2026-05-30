@@ -1,4 +1,4 @@
-module os.strcasestr.c;
+module os.strcasestr;
 @nogc nothrow:
 extern(C): __gshared:
 /*-

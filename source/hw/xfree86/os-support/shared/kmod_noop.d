@@ -1,4 +1,4 @@
-module kmod_noop.c;
+module kmod_noop;
 @nogc nothrow:
 extern(C): __gshared:
 /*

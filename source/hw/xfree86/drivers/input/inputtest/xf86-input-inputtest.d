@@ -1,4 +1,4 @@
-module xf86_input_inputtest.c;
+module xf86_input_inputtest;
 @nogc nothrow:
 extern(C): __gshared:
 /*

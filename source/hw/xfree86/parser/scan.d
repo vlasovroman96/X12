@@ -1,4 +1,4 @@
-module scan.c;
+module scan;
 @nogc nothrow:
 extern(C): __gshared:
 /*

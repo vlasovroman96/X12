@@ -1,4 +1,4 @@
-module miinitext.c;
+module miinitext;
 @nogc nothrow:
 extern(C): __gshared:
 /***********************************************************

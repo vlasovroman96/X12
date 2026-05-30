@@ -1,4 +1,4 @@
-module getdctl.c;
+module getdctl;
 @nogc nothrow:
 extern(C): __gshared:
 /************************************************************

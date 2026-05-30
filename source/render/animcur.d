@@ -1,4 +1,4 @@
-module animcur.c;
+module animcur;
 @nogc nothrow:
 extern(C): __gshared:
 /*

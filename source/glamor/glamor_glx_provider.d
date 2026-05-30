@@ -1,4 +1,4 @@
-module glamor_glx_provider.c;
+module glamor_glx_provider;
 @nogc nothrow:
 extern(C): __gshared:
 /*

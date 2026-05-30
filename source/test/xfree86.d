@@ -1,4 +1,4 @@
-module xfree86.c;
+module xfree86;
 @nogc nothrow:
 extern(C): __gshared:
 /**

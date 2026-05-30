@@ -1,4 +1,4 @@
-module getfctl.c;
+module getfctl;
 @nogc nothrow:
 extern(C): __gshared:
 /************************************************************

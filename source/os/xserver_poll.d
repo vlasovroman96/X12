@@ -1,4 +1,4 @@
-module os.xserver_poll.c;
+module os.xserver_poll;
 @nogc nothrow:
 extern(C): __gshared:
 

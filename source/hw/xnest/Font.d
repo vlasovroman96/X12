@@ -1,4 +1,4 @@
-module Font.c;
+module Font;
 @nogc nothrow:
 extern(C): __gshared:
 /*

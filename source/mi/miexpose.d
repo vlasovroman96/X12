@@ -1,4 +1,4 @@
-module miexpose.c;
+module miexpose;
 @nogc nothrow:
 extern(C): __gshared:
 /***********************************************************

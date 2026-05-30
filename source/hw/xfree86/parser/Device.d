@@ -1,4 +1,4 @@
-module Device.c;
+module Device;
 @nogc nothrow:
 extern(C): __gshared:
 /*

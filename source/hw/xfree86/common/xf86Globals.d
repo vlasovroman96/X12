@@ -1,4 +1,4 @@
-module xf86Globals.c;
+module xf86Globals;
 @nogc nothrow:
 extern(C): __gshared:
 

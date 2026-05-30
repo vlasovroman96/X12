@@ -1,4 +1,4 @@
-module lnx_video.c;
+module lnx_video;
 @nogc nothrow:
 extern(C): __gshared:
 

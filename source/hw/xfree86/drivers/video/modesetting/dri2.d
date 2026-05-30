@@ -42,7 +42,7 @@ import core.stdc.time;
 
 import dix.dix_priv;
 
-import list;
+import include.list;
 import xf86;
 import driver;
 import dri2;

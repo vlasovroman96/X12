@@ -1,4 +1,4 @@
-module ddcProperty.c;
+module ddcProperty;
 @nogc nothrow:
 extern(C): __gshared:
 /*

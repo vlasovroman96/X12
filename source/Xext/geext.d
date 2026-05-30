@@ -1,4 +1,4 @@
-module geext.c;
+module geext;
 @nogc nothrow:
 extern(C): __gshared:
 /*

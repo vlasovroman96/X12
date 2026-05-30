@@ -1,4 +1,4 @@
-module fbglyph.c;
+module fbglyph;
 @nogc nothrow:
 extern(C): __gshared:
 /*

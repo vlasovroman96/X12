@@ -1,4 +1,4 @@
-module xf86int10module.c;
+module xf86int10module;
 @nogc nothrow:
 extern(C): __gshared:
 /*

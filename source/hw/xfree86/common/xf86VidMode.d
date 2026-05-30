@@ -1,4 +1,4 @@
-module xf86VidMode.c;
+module xf86VidMode;
 @nogc nothrow:
 extern(C): __gshared:
 /*

@@ -28,7 +28,7 @@ extern(C): __gshared:
 
  
 public import include.input;
-public import list;
+public import include.list;
 
 void remove_devices(const(char)* backend, const(char)* config_info);
 BOOL device_is_duplicate(const(char)* config_info);

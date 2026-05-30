@@ -1,4 +1,4 @@
-module screen_hooks.c;
+module screen_hooks;
 @nogc nothrow:
 extern(C): __gshared:
 /* SPDX-License-Identifier: MIT OR X11

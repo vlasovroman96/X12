@@ -1,4 +1,4 @@
-module x86emu.c;
+module x86emu;
 @nogc nothrow:
 extern(C): __gshared:
 import xorg_config;

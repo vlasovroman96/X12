@@ -1,4 +1,4 @@
-module render2.c;
+module render2;
 @nogc nothrow:
 extern(C): __gshared:
 import core.stdc.config: c_long, c_ulong;

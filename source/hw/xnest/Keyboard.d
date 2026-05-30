@@ -1,4 +1,4 @@
-module Keyboard.c;
+module Keyboard;
 @nogc nothrow:
 extern(C): __gshared:
 import core.stdc.config: c_long, c_ulong;

@@ -1,4 +1,4 @@
-module cursor.c;
+module cursor;
 @nogc nothrow:
 extern(C): __gshared:
 /*
@@ -63,7 +63,7 @@ import mipointer;
 import include.inputstr;
 import include.windowstr;
 import xace;
-import list;
+import include.list;
 import xibarriers;
 
 private RESTYPE CursorClientType;

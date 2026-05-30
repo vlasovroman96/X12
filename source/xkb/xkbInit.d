@@ -1,4 +1,4 @@
-module xkbInit.c;
+module xkbInit;
 @nogc nothrow:
 extern(C): __gshared:
 

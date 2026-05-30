@@ -1,4 +1,4 @@
-module grabdev.c;
+module grabdev;
 @nogc nothrow:
 extern(C): __gshared:
 /************************************************************

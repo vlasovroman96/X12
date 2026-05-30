@@ -1,4 +1,4 @@
-module extension_string.c;
+module extension_string;
 @nogc nothrow:
 extern(C): __gshared:
 /*

@@ -1,4 +1,4 @@
-module glxext.c;
+module glxext;
 @nogc nothrow:
 extern(C): __gshared:
 /*

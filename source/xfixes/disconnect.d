@@ -1,4 +1,4 @@
-module disconnect.c;
+module disconnect;
 @nogc nothrow:
 extern(C): __gshared:
 /*

@@ -1,4 +1,4 @@
-module xf86Events.c;
+module xf86Events;
 @nogc nothrow:
 extern(C): __gshared:
 /*

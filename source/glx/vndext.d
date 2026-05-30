@@ -1,4 +1,4 @@
-module vndext.c;
+module vndext;
 @nogc nothrow:
 extern(C): __gshared:
 /*

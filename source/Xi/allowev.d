@@ -1,4 +1,4 @@
-module allowev.c;
+module allowev;
 @nogc nothrow:
 extern(C): __gshared:
 /************************************************************

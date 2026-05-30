@@ -1,4 +1,4 @@
-module glamor_glyphblt.c;
+module glamor_glyphblt;
 @nogc nothrow:
 extern(C): __gshared:
 /*

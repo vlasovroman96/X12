@@ -1,4 +1,4 @@
-module vndservermapping.c;
+module vndservermapping;
 @nogc nothrow:
 extern(C): __gshared:
 /*

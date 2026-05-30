@@ -1,4 +1,4 @@
-module present.c;
+module present;
 @nogc nothrow:
 extern(C): __gshared:
 /*

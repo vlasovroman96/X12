@@ -1,4 +1,4 @@
-module renderpixswap.c;
+module renderpixswap;
 @nogc nothrow:
 extern(C): __gshared:
 /*

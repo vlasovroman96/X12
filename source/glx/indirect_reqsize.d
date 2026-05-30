@@ -1,4 +1,4 @@
-module indirect_reqsize.c;
+module indirect_reqsize;
 @nogc nothrow:
 extern(C): __gshared:
 /* DO NOT EDIT - This file generated automatically by glX_proto_size.py (from Mesa) script */

@@ -1,4 +1,4 @@
-module dri3.c;
+module dri3;
 @nogc nothrow:
 extern(C): __gshared:
 /*

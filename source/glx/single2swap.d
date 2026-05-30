@@ -1,4 +1,4 @@
-module single2swap.c;
+module single2swap;
 @nogc nothrow:
 extern(C): __gshared:
 /*

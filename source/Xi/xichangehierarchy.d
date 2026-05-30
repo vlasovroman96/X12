@@ -1,4 +1,4 @@
-module xichangehierarchy.c;
+module xichangehierarchy;
 @nogc nothrow:
 extern(C): __gshared:
 /*

@@ -1,4 +1,4 @@
-module indirect_dispatch_swap.c;
+module indirect_dispatch_swap;
 @nogc nothrow:
 extern(C): __gshared:
 import core.stdc.config: c_long, c_ulong;

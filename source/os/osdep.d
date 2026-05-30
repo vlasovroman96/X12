@@ -82,7 +82,7 @@ enum MILLI_PER_MIN = (1000 * 60);
 enum MILLI_PER_SECOND = (1000);
 
 public import include.dix;
-public import ospoll;
+public import os.ospoll;
 
 extern ospoll* server_poll;
 

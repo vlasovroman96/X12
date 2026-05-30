@@ -1,4 +1,4 @@
-module fbcmap_mi.c;
+module fbcmap_mi;
 @nogc nothrow:
 extern(C): __gshared:
 import core.stdc.config: c_long, c_ulong;

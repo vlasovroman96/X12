@@ -1,4 +1,4 @@
-module glamor_triangles.c;
+module glamor_triangles;
 @nogc nothrow:
 extern(C): __gshared:
 /*

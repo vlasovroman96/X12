@@ -1,4 +1,4 @@
-module exa_unaccel.c;
+module exa_unaccel;
 @nogc nothrow:
 extern(C): __gshared:
 import core.stdc.config: c_long, c_ulong;

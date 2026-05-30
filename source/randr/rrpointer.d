@@ -1,4 +1,4 @@
-module rrpointer.c;
+module rrpointer;
 @nogc nothrow:
 extern(C): __gshared:
 /*

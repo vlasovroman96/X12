@@ -1,4 +1,4 @@
-module getvers.c;
+module getvers;
 @nogc nothrow:
 extern(C): __gshared:
 /************************************************************

@@ -1,4 +1,4 @@
-module write.c;
+module write;
 @nogc nothrow:
 extern(C): __gshared:
 /*

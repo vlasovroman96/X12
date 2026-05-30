@@ -1,4 +1,4 @@
-module ddc.c;
+module ddc;
 @nogc nothrow:
 extern(C): __gshared:
 /* xf86DDC.c

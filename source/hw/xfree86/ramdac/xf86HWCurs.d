@@ -1,4 +1,4 @@
-module xf86HWCurs.c;
+module xf86HWCurs;
 @nogc nothrow:
 extern(C): __gshared:
 import xorg_config;

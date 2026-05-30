@@ -1,4 +1,4 @@
-module gtmotion.c;
+module gtmotion;
 @nogc nothrow:
 extern(C): __gshared:
 /************************************************************

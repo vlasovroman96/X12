@@ -1,4 +1,4 @@
-module ioperm_noop.c;
+module ioperm_noop;
 @nogc nothrow:
 extern(C): __gshared:
 /*

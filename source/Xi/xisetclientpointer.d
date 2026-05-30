@@ -1,4 +1,4 @@
-module xisetclientpointer.c;
+module xisetclientpointer;
 @nogc nothrow:
 extern(C): __gshared:
 /*

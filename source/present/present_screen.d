@@ -1,4 +1,4 @@
-module present_screen.c;
+module present_screen;
 @nogc nothrow:
 extern(C): __gshared:
 /*

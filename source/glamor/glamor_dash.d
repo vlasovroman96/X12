@@ -1,4 +1,4 @@
-module glamor_dash.c;
+module glamor_dash;
 @nogc nothrow:
 extern(C): __gshared:
 /*

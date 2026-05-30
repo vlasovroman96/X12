@@ -1,4 +1,4 @@
-module input.c;
+module input;
 @nogc nothrow:
 extern(C): __gshared:
 

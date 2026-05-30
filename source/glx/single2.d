@@ -1,4 +1,4 @@
-module single2.c;
+module single2;
 @nogc nothrow:
 extern(C): __gshared:
 /*

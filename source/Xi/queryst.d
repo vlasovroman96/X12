@@ -1,4 +1,4 @@
-module queryst.c;
+module queryst;
 @nogc nothrow:
 extern(C): __gshared:
 /*

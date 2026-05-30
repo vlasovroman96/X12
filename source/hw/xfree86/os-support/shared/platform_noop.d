@@ -1,4 +1,4 @@
-module platform_noop.c;
+module platform_noop;
 @nogc nothrow:
 extern(C): __gshared:
 import xorg_config;

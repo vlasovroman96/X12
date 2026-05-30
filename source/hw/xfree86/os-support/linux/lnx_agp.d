@@ -1,4 +1,4 @@
-module lnx_agp.c;
+module lnx_agp;
 @nogc nothrow:
 extern(C): __gshared:
 

@@ -1,4 +1,4 @@
-module os.utils.c;
+module os.utils;
 @nogc nothrow:
 extern(C): __gshared:
 
@@ -139,7 +139,7 @@ version = X_INCLUDE_NETDB_H;
 import deimos.X11.Xos_r;
 
 import core.stdc.errno;
-import dpms.c;
+import dpms;
 
 Bool CoreDump;
 

@@ -1,4 +1,4 @@
-module xkbVT.c;
+module xkbVT;
 @nogc nothrow:
 extern(C): __gshared:
 /************************************************************

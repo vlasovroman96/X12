@@ -1,4 +1,4 @@
-module selection.c;
+module selection;
 @nogc nothrow:
 extern(C): __gshared:
 /************************************************************

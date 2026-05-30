@@ -1,4 +1,4 @@
-module xkbfmisc.c;
+module xkbfmisc;
 @nogc nothrow:
 extern(C): __gshared:
 /************************************************************

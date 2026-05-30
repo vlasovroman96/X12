@@ -1,4 +1,4 @@
-module xtest.c;
+module xtest;
 @nogc nothrow:
 extern(C): __gshared:
 /**

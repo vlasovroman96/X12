@@ -1,4 +1,4 @@
-module present_fence.c;
+module present_fence;
 @nogc nothrow:
 extern(C): __gshared:
 /*

@@ -1,4 +1,4 @@
-module sha1.c;
+module sha1;
 @nogc nothrow:
 extern(C): __gshared:
 /* SPDX-License-Identifier: MIT

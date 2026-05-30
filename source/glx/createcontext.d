@@ -1,4 +1,4 @@
-module createcontext.c;
+module createcontext;
 @nogc nothrow:
 extern(C): __gshared:
 /*

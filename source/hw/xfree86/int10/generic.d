@@ -1,4 +1,4 @@
-module generic.c;
+module generic;
 @nogc nothrow:
 extern(C): __gshared:
 /*

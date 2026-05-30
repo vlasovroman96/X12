@@ -1,4 +1,4 @@
-module midbe.c;
+module midbe;
 @nogc nothrow:
 extern(C): __gshared:
 /******************************************************************************

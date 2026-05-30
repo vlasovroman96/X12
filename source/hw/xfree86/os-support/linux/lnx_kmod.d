@@ -1,4 +1,4 @@
-module lnx_kmod.c;
+module lnx_kmod;
 @nogc nothrow:
 extern(C): __gshared:
 import xorg_config;

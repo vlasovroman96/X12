@@ -1,4 +1,4 @@
-module display.c;
+module display;
 @nogc nothrow:
 extern(C): __gshared:
 /* SPDX-License-Identifier: MIT OR X11

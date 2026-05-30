@@ -1,4 +1,4 @@
-module fbbits.c;
+module fbbits;
 @nogc nothrow:
 extern(C): __gshared:
 /*

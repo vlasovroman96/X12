@@ -1,4 +1,4 @@
-module chgkbd.c;
+module chgkbd;
 @nogc nothrow:
 extern(C): __gshared:
 /************************************************************

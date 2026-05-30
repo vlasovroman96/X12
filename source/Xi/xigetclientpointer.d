@@ -1,4 +1,4 @@
-module xigetclientpointer.c;
+module xigetclientpointer;
 @nogc nothrow:
 extern(C): __gshared:
 /*

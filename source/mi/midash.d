@@ -1,4 +1,4 @@
-module midash.c;
+module midash;
 @nogc nothrow:
 extern(C): __gshared:
 /***********************************************************

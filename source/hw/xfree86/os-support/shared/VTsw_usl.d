@@ -1,4 +1,4 @@
-module VTsw_usl.c;
+module VTsw_usl;
 @nogc nothrow:
 extern(C): __gshared:
 /*

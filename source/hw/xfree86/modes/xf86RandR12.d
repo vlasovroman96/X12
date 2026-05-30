@@ -1,4 +1,4 @@
-module xf86RandR12.c;
+module xf86RandR12;
 @nogc nothrow:
 extern(C): __gshared:
 /*

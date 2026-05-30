@@ -1,4 +1,4 @@
-module touch.c;
+module touch;
 @nogc nothrow:
 extern(C): __gshared:
 /*

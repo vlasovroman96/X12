@@ -1,4 +1,4 @@
-module getprop.c;
+module getprop;
 @nogc nothrow:
 extern(C): __gshared:
 /************************************************************

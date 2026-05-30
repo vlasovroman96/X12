@@ -1,4 +1,4 @@
-module mipolyrect.c;
+module mipolyrect;
 @nogc nothrow:
 extern(C): __gshared:
 /***********************************************************

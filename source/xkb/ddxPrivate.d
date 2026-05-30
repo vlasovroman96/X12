@@ -1,4 +1,4 @@
-module ddxPrivate.c;
+module ddxPrivate;
 @nogc nothrow:
 extern(C): __gshared:
 

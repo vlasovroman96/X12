@@ -1,4 +1,4 @@
-module lnx_init.c;
+module lnx_init;
 @nogc nothrow:
 extern(C): __gshared:
 /*

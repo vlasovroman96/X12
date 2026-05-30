@@ -1,4 +1,4 @@
-module posix_tty.c;
+module posix_tty;
 @nogc nothrow:
 extern(C): __gshared:
 /*

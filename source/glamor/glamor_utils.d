@@ -1,4 +1,4 @@
-module glamor_utils.c;
+module glamor_utils;
 @nogc nothrow:
 extern(C): __gshared:
 import core.stdc.config: c_long, c_ulong;

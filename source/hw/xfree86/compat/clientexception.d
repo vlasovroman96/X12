@@ -1,4 +1,4 @@
-module clientexception.c;
+module clientexception;
 @nogc nothrow:
 extern(C): __gshared:
 import dix_config;

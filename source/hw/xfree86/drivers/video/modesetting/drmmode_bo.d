@@ -1,4 +1,4 @@
-module drmmode_bo.c;
+module drmmode_bo;
 @nogc nothrow:
 extern(C): __gshared:
 /* SPDX-License-Identifier: MIT OR X11

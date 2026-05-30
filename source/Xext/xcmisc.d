@@ -1,4 +1,4 @@
-module xcmisc.c;
+module xcmisc;
 @nogc nothrow:
 extern(C): __gshared:
 /*

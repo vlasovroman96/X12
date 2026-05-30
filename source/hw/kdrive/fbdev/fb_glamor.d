@@ -1,4 +1,4 @@
-module fb_glamor.c;
+module fb_glamor;
 @nogc nothrow:
 extern(C): __gshared:
 /* SPDX-License-Identifier: MIT OR X11

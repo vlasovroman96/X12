@@ -1,4 +1,4 @@
-module fbarc.c;
+module fbarc;
 @nogc nothrow:
 extern(C): __gshared:
 /*

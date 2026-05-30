@@ -1,4 +1,4 @@
-module list.c;
+module list;
 @nogc nothrow:
 extern(C): __gshared:
 /**
@@ -28,7 +28,7 @@ extern(C): __gshared:
 import build.dix_config;
 
 import deimos.X11.Xlib;
-import list;
+import include.list;
 import core.stdc.string;
 import core.stdc.assert_;
 import core.stdc.stdlib;

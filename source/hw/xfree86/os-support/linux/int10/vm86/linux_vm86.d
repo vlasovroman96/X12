@@ -1,4 +1,4 @@
-module linux_vm86.c;
+module linux_vm86;
 @nogc nothrow:
 extern(C): __gshared:
 import xorg_config;

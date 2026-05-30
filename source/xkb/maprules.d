@@ -1,4 +1,4 @@
-module maprules.c;
+module maprules;
 @nogc nothrow:
 extern(C): __gshared:
 /************************************************************

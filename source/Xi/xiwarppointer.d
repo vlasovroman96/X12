@@ -1,4 +1,4 @@
-module xiwarppointer.c;
+module xiwarppointer;
 @nogc nothrow:
 extern(C): __gshared:
 /*

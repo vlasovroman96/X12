@@ -1,4 +1,4 @@
-module symbol_test.c;
+module symbol_test;
 @nogc nothrow:
 extern(C): __gshared:
 /*

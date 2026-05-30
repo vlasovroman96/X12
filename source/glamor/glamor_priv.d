@@ -77,7 +77,7 @@ public import glamor_debug;
 public import glamor_context;
 public import glamor_program;
 
-public import list;
+public import include.list;
 
 struct glamor_pixmap_private;
 

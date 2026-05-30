@@ -1,4 +1,4 @@
-module compoverlay.c;
+module compoverlay;
 @nogc nothrow:
 extern(C): __gshared:
 /*

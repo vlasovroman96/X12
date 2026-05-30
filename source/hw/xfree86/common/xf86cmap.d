@@ -1,4 +1,4 @@
-module xf86cmap.c;
+module xf86cmap;
 @nogc nothrow:
 extern(C): __gshared:
 /*

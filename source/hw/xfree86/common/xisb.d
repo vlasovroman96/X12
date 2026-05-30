@@ -1,4 +1,4 @@
-module xisb.c;
+module xisb;
 @nogc nothrow:
 extern(C): __gshared:
 /*

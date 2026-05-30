@@ -1,4 +1,4 @@
-module xf86DPMS.c;
+module xf86DPMS;
 @nogc nothrow:
 extern(C): __gshared:
 /*

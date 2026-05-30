@@ -1,4 +1,4 @@
-module xiquerypointer.c;
+module xiquerypointer;
 @nogc nothrow:
 extern(C): __gshared:
 /*

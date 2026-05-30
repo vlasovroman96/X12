@@ -1,4 +1,4 @@
-module glxdriswrast.c;
+module glxdriswrast;
 @nogc nothrow:
 extern(C): __gshared:
 

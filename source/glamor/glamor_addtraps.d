@@ -1,4 +1,4 @@
-module glamor_addtraps.c;
+module glamor_addtraps;
 @nogc nothrow:
 extern(C): __gshared:
 /*

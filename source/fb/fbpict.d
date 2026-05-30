@@ -1,4 +1,4 @@
-module fbpict.c;
+module fbpict;
 @nogc nothrow:
 extern(C): __gshared:
 /*

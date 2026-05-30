@@ -1,4 +1,4 @@
-module xf86noBus.c;
+module xf86noBus;
 @nogc nothrow:
 extern(C): __gshared:
 /*

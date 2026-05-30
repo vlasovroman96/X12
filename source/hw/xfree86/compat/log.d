@@ -1,4 +1,4 @@
-module log.c;
+module log;
 @nogc nothrow:
 extern(C): __gshared:
 import dix_config;

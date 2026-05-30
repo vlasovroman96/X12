@@ -1,4 +1,4 @@
-module kshadow.c;
+module kshadow;
 @nogc nothrow:
 extern(C): __gshared:
 /*

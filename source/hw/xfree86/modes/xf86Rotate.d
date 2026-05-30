@@ -1,4 +1,4 @@
-module xf86Rotate.c;
+module xf86Rotate;
 @nogc nothrow:
 extern(C): __gshared:
 /*

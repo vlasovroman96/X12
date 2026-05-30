@@ -1,4 +1,4 @@
-module fbdevhwstub.c;
+module fbdevhwstub;
 @nogc nothrow:
 extern(C): __gshared:
 import xorg_config;

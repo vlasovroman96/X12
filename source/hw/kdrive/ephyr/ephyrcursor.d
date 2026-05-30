@@ -1,4 +1,4 @@
-module ephyrcursor.c;
+module ephyrcursor;
 @nogc nothrow:
 extern(C): __gshared:
 /*

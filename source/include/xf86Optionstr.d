@@ -26,7 +26,7 @@ extern(C): __gshared:
  */
 
  
-public import list;
+public import include.list;
 
 /*
  * All options are stored using this data type.

@@ -1,4 +1,4 @@
-module pm_noop.c;
+module pm_noop;
 @nogc nothrow:
 extern(C): __gshared:
 /*

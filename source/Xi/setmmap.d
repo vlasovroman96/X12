@@ -1,4 +1,4 @@
-module setmmap.c;
+module setmmap;
 @nogc nothrow:
 extern(C): __gshared:
 /************************************************************

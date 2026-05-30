@@ -1,4 +1,4 @@
-module os.busfault.c;
+module os.busfault;
 @nogc nothrow:
 extern(C): __gshared:
 /*
@@ -31,7 +31,7 @@ import deimos.X11.Xdefs;
 import os.busfault;
 
 import include.misc;
-import list;
+import include.list;
 import core.stdc.stddef;
 import core.stdc.stdlib;
 import core.stdc.stdint;

@@ -1,4 +1,4 @@
-module os.transport.c;
+module os.transport;
 @nogc nothrow:
 extern(C): __gshared:
 /*

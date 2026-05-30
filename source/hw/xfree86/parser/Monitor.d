@@ -1,4 +1,4 @@
-module Monitor.c;
+module Monitor;
 @nogc nothrow:
 extern(C): __gshared:
 /*

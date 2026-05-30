@@ -1,4 +1,4 @@
-module mipolyseg.c;
+module mipolyseg;
 @nogc nothrow:
 extern(C): __gshared:
 /***********************************************************

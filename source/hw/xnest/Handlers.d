@@ -1,4 +1,4 @@
-module Handlers.c;
+module Handlers;
 @nogc nothrow:
 extern(C): __gshared:
 /*

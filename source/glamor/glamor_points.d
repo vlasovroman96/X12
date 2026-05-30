@@ -1,4 +1,4 @@
-module glamor_points.c;
+module glamor_points;
 @nogc nothrow:
 extern(C): __gshared:
 /*

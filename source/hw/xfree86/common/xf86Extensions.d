@@ -1,4 +1,4 @@
-module xf86Extensions.c;
+module xf86Extensions;
 @nogc nothrow:
 extern(C): __gshared:
 /*

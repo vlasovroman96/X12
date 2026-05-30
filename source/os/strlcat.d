@@ -1,4 +1,4 @@
-module os.strlcat.c;
+module os.strlcat;
 @nogc nothrow:
 extern(C): __gshared:
 /*

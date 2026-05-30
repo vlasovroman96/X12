@@ -1,4 +1,4 @@
-module kxv.c;
+module kxv;
 @nogc nothrow:
 extern(C): __gshared:
 import core.stdc.config: c_long, c_ulong;

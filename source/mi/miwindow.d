@@ -1,4 +1,4 @@
-module miwindow.c;
+module miwindow;
 @nogc nothrow:
 extern(C): __gshared:
 

@@ -1,4 +1,4 @@
-module mivaltree.c;
+module mivaltree;
 @nogc nothrow:
 extern(C): __gshared:
 /*

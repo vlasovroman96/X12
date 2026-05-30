@@ -1,4 +1,4 @@
-module os.fmt.c;
+module os.fmt;
 @nogc nothrow:
 extern(C): __gshared:
 /* SPDX-License-Identifier: MIT OR X11

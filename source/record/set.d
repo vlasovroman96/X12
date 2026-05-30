@@ -1,4 +1,4 @@
-module set.c;
+module set;
 @nogc nothrow:
 extern(C): __gshared:
 

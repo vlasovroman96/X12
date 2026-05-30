@@ -1,4 +1,4 @@
-module fbinit.c;
+module fbinit;
 @nogc nothrow:
 extern(C): __gshared:
 /*

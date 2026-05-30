@@ -1,4 +1,4 @@
-module driver.c;
+module driver;
 @nogc nothrow:
 extern(C): __gshared:
 

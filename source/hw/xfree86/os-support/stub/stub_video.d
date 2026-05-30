@@ -1,4 +1,4 @@
-module stub_video.c;
+module stub_video;
 @nogc nothrow:
 extern(C): __gshared:
 import xor_config;

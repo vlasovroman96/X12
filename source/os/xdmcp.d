@@ -1,4 +1,4 @@
-module os.xdmcp.c;
+module os.xdmcp;
 @nogc nothrow:
 extern(C): __gshared:
 

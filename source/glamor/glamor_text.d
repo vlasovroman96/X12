@@ -1,4 +1,4 @@
-module glamor_text.c;
+module glamor_text;
 @nogc nothrow:
 extern(C): __gshared:
 import core.stdc.config: c_long, c_ulong;

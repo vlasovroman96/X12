@@ -1,4 +1,4 @@
-module exa_driver.c;
+module exa_driver;
 @nogc nothrow:
 extern(C): __gshared:
 /*

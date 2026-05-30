@@ -1,4 +1,4 @@
-module vgaHWmodule.c;
+module vgaHWmodule;
 @nogc nothrow:
 extern(C): __gshared:
 /*

@@ -1,4 +1,4 @@
-module evdev_autodetect.c;
+module evdev_autodetect;
 @nogc nothrow:
 extern(C): __gshared:
 /* SPDX-License-Identifier: MIT OR X11
