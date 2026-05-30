@@ -6,7 +6,7 @@ extern(C): __gshared:
  */
 
  
-public import dix;
+public import include.dix;
 
 int PanoramiXCreateWindow(ClientPtr client);
 int PanoramiXChangeWindowAttributes(ClientPtr client);

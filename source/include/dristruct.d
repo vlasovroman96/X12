@@ -1,4 +1,4 @@
-module dristruct.h;
+module include.dristruct;
 @nogc nothrow:
 extern(C): __gshared:
 import core.stdc.config: c_long, c_ulong;
@@ -36,10 +36,10 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
  
-public import dri;
-public import sarea;
-public import xf86drm;
-public import xf86Crtc;
+public import include.dri;
+public import include.sarea;
+public import include.xf86drm;
+public import include.xf86Crtc;
 
 enum string DRI_DRAWABLE_PRIV_FROM_WINDOW(string pWin) = `(cast(DRIDrawablePrivPtr) 
     dixLookupPrivate(&(` ~ pWin ~ `).devPrivates, DRIWindowPrivKey))`;

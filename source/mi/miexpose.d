@@ -91,11 +91,11 @@ import Xext.panoramiXsrv;
 
 import misc;
 import regionstr;
-import scrnintstr;
-import gcstruct;
+import include.scrnintstr;
+import include.gcstruct;
 import windowstr;
-import pixmap;
-import input;
+import include.pixmap;
+import include.input;
 import dixstruct;
 import globals;
 

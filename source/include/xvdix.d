@@ -55,7 +55,7 @@ SOFTWARE.
 **
 */
 
-public import scrnintstr;
+public import include.scrnintstr;
 public import deimos.X11.extensions.Xvproto;
 
 struct _XvRationalRec {

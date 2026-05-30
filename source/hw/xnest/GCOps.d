@@ -28,11 +28,11 @@ import xcb.xcb;
 import xcb.xcb_aux;
 
 import regionstr;
-import gcstruct;
-import scrnintstr;
+import include.gcstruct;
+import include.scrnintstr;
 import windowstr;
 import pixmapstr;
-import servermd;
+import include.servermd;
 
 import xnest_xcb;
 

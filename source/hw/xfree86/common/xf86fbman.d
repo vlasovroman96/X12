@@ -40,7 +40,7 @@ import os.log_priv;
 
 import misc;
 import xf86;
-import scrnintstr;
+import include.scrnintstr;
 import regionstr;
 import xf86fbman;
 

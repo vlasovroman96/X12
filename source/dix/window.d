@@ -127,21 +127,21 @@ import Xext.panoramiX;
 import Xext.panoramiXsrv;
 
 import misc;
-import scrnintstr;
+import include.scrnintstr;
 import os;
 import regionstr;
 import validate;
 import windowstr;
 import propertyst;
-import inputstr;
-import resource;
+import include.inputstr;
+import include.resource;
 import include.cursorstr;
 import dixstruct;
-import gcstruct;
-import servermd;
+import include.gcstruct;
+import include.servermd;
 import globals;
 import compint;
-import privates;
+import include.privates;
 import xace;
 
 import deimos.X11.Xatom;          /* must come after server includes */

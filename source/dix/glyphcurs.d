@@ -56,13 +56,13 @@ import dix.screenint_priv;
 import misc;
 import deimos.X11.fonts.fontstruct;
 import dixfontstr;
-import scrnintstr;
-import gcstruct;
-import resource;
-import dix;
+import include.scrnintstr;
+import include.gcstruct;
+import include.resource;
+import include.dix;
 import include.cursorstr;
 import opaque;
-import servermd;
+import include.servermd;
 
 /*
     get the bits out of the font in a portable way.  to avoid

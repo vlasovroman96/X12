@@ -147,10 +147,10 @@ import Xext.panoramiXsrv;
 import xkb.xkbsrv_priv;
 
 import misc;
-import resource;
+import include.resource;
 import windowstr;
-import inputstr;
-import scrnintstr;
+import include.inputstr;
+import include.scrnintstr;
 import include.cursorstr;
 import dixstruct;
 import globals;

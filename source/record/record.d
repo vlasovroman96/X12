@@ -58,8 +58,8 @@ import dixstruct;
 import extnsionst;
 import set;
 import swaprep;
-import inputstr;
-import scrnintstr;
+import include.inputstr;
+import include.scrnintstr;
 import globals;
 import include.cursor;
 

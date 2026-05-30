@@ -5,7 +5,7 @@ import xorg_config;
 
 version (XSERVER_PLATFORM_BUS) {
 
-import xf86drm;
+import include.xf86drm;
 import core.sys.posix.fcntl;
 import core.sys.posix.unistd;
 import core.stdc.errno;

@@ -12,7 +12,7 @@ import hashtable;
 import include.list;
 
 /* HashResourceID */
-import resource;
+import include.resource;
 
 enum INITHASHSIZE = 6;
 enum MAXHASHSIZE = 11;

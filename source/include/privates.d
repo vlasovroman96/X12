@@ -185,8 +185,8 @@ pragma(inline, true) private void dixSetPrivate(PrivatePtr* privates, const(DevP
     *cast(void**) dixGetPrivateAddr(privates, key) = val;
 }
 
-public import dix;
-public import resource;
+public import include.dix;
+public import include.resource;
 
 /*
  * Lookup a pointer to the private record.

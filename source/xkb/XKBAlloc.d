@@ -37,7 +37,7 @@ import core.stdc.string;
 import xkb.xkbsrv_priv;
 
 import misc;
-import inputstr;
+import include.inputstr;
 import xkbgeom_priv;
 import os;
 

@@ -41,8 +41,8 @@ import deimos.X11.extensions.XKMformat;
 import xkb.xkbtext_priv;
 
 import misc;
-import inputstr;
-import dix;
+import include.inputstr;
+import include.dix;
 import xkbstr;
 import xkbsrv;
 import xkbgeom_priv;

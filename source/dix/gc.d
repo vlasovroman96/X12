@@ -59,14 +59,14 @@ import dix.gc_priv;
 import os.osdep;
 
 import misc;
-import resource;
-import gcstruct;
+import include.resource;
+import include.gcstruct;
 import pixmapstr;
 import dixfontstr;
-import scrnintstr;
+import include.scrnintstr;
 import dixstruct;
-import privates;
-import dix;
+import include.privates;
+import include.dix;
 import xace;
 
 extern FontPtr defaultFont;

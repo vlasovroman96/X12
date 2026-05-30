@@ -42,8 +42,8 @@ import mi.mi_priv;
 import os.bug_priv;
 import os.log_priv;
 
-import inputstr;
-import scrnintstr;
+import include.inputstr;
+import include.scrnintstr;
 import eventstr;
 import exglobals;
 import windowstr;

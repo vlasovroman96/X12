@@ -33,7 +33,7 @@ import deimos.X11.Xproto;
 
 import dix.registry_priv;
 
-import resource;
+import include.resource;
 
 enum BASE_SIZE = 16;
 

@@ -49,8 +49,8 @@ import xkb.xkbfmisc_priv;
 import xkb.xkbrules_priv;
 import xkb.xkbsrv_priv;
 
-import inputstr;
-import scrnintstr;
+import include.inputstr;
+import include.scrnintstr;
 import windowstr;
 
 enum	PRE_ERROR_MSG = "\"The XKEYBOARD keymap compiler (xkbcomp) reports:\"";

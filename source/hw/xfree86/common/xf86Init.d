@@ -68,9 +68,9 @@ import os.log_priv;
 import os.osdep;
 import randr.randrstr_priv;
 
-import servermd;
+import include.servermd;
 import windowstr;
-import scrnintstr;
+import include.scrnintstr;
 import os_support.linux.systemd_logind;
 import seatd_libseat;
 
@@ -88,8 +88,8 @@ import mipointer;
 import xf86Extensions;
 import xf86Xinput;
 import xf86InPriv;
-import xf86Crtc;
-import picturestr;
+import include.xf86Crtc;
+import include.picturestr;
 import xf86Bus;
 import globals;
 import xserver_properties;

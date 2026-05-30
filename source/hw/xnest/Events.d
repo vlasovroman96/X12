@@ -25,12 +25,12 @@ import dix.inpututils_priv;
 import mi.mi_priv;
 
 import screenint;
-import input;
+import include.input;
 import misc;
-import scrnintstr;
+import include.scrnintstr;
 import windowstr;
-import servermd;
-import inputstr;
+import include.servermd;
+import include.inputstr;
 
 import xnest_xcb;
 
@@ -40,7 +40,7 @@ import Color;
 import Display;
 import Screen;
 import XNWindow;
-import Events;
+import include.events;
 import Keyboard;
 import Pointer;
 import mipointer;

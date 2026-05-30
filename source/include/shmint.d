@@ -28,8 +28,8 @@ public import deimos.X11.Xmd;
 public import deimos.X11.extensions.shmproto;
 
 public import screenint;
-public import pixmap;
-public import gc;
+public import include.pixmap;
+public import include.gc;
 
 enum string XSHM_PUT_IMAGE_ARGS = "
     DrawablePtr,		/* dst */,

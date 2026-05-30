@@ -49,7 +49,7 @@ import sys.mkdev;          /* for major() & minor() on Solaris */
 }
 
 version (WITH_LIBDRM) {
-import xf86drm;
+import include.xf86drm;
 import drm_fourcc;
 }
 

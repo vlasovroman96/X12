@@ -53,13 +53,13 @@ public import deimos.X11.fonts.font;
 
 public import regionstr;
 public import validate;
-public import window;
-public import gc;
-public import input;
+public import include.window;
+public import include.gc;
+public import include.input;
 public import include.cursor;
-public import privates;
+public import include.privates;
 public import colormap;
-public import events;
+public import include.events;
 
 enum MiBits =	CARD32;
 

@@ -52,7 +52,7 @@ public import deimos.X11.X;              /* for GContext, Mask */
 public import deimos.X11.Xdefs;          /* for Bool */
 public import deimos.X11.Xproto;
 public import screenint;          /* for ScreenPtr */
-public import pixmap;             /* for DrawablePtr */
+public import include.pixmap;             /* for DrawablePtr */
 
 /* clientClipType field in GC */
 enum CT_NONE =			0;

@@ -22,10 +22,10 @@ import Xext.xvdix_priv;
 import misc;
 import os;
 import dixstruct;
-import resource;
-import scrnintstr;
+import include.resource;
+import include.scrnintstr;
 import extnsionst;
-import servermd;
+import include.servermd;
 
 enum SERVER_XVMC_MAJOR_VERSION =               1;
 enum SERVER_XVMC_MINOR_VERSION =               1;

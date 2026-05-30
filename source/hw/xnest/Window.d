@@ -29,11 +29,11 @@ import dix.window_priv;
 import include.regionstr;
 import mi.mi_priv;
 
-import gcstruct;
-import window;
+import include.gcstruct;
+import include.window;
 import windowstr;
 import pixmapstr;
-import scrnintstr;
+import include.scrnintstr;
 
 import xnest_xcb;
 
@@ -43,7 +43,7 @@ import Screen;
 import XNGC;
 import Drawable;
 import Color;
-import Events;
+import include.events;
 import Args;
 
 DevPrivateKeyRec xnestWindowPrivateKeyRec;

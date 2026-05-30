@@ -29,12 +29,12 @@ import build.dix_config;
 import include.mipict;
 import os.osdep;
 
-import scrnintstr;
-import gcstruct;
+import include.scrnintstr;
+import include.gcstruct;
 import pixmapstr;
 import windowstr;
 import mi;
-import picturestr;
+import include.picturestr;
 
 int miCreatePicture(PicturePtr pPicture)
 {

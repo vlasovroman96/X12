@@ -34,9 +34,9 @@ from The Open Group.
  
 public import deimos.X11.extensions.secur;
 
-public import input;              /* for DeviceIntPtr */
-public import pixmap;             /* for DrawablePtr */
-public import resource;           /* for RESTYPE */
+public import include.input;              /* for DeviceIntPtr */
+public import include.pixmap;             /* for DrawablePtr */
+public import include.resource;           /* for RESTYPE */
 
 /* resource type to pass in LookupIDByType for authorizations */
 extern RESTYPE SecurityAuthorizationResType;

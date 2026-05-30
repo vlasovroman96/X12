@@ -42,7 +42,7 @@ import dix.dix_priv;
 import os.fmt;
 import present.present_priv;
 
-import inputstr;
+import include.inputstr;
 import xf86str;
 import X11.Xatom;
 import mi;
@@ -52,8 +52,8 @@ import xf86DDC_priv;
 import drm_fourcc;
 import drm_mode;
 
-import xf86drm;
-import xf86Crtc;
+import include.xf86drm;
+import include.xf86Crtc;
 import drmmode_bo;
 
 import include.cursorstr;

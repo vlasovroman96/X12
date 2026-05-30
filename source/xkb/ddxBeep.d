@@ -38,8 +38,8 @@ import deimos.X11.extensions.XI;
 import dix.dix_priv;
 import xkb.xkbsrv_priv;
 
-import inputstr;
-import scrnintstr;
+import include.inputstr;
+import include.scrnintstr;
 import windowstr;
 import xkbsrv;
 

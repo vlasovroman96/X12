@@ -19,11 +19,11 @@ import xorg_config;
 import X11.X;
 import X11.Xproto;
 import screenint;
-import inputstr;
-import input;
+import include.inputstr;
+import include.input;
 import misc;
-import scrnintstr;
-import servermd;
+import include.scrnintstr;
+import include.servermd;
 import mipointer;
 
 import xnest_xcb;

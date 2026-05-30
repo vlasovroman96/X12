@@ -99,8 +99,8 @@ import misc;
 import windowstr;
 import dixstruct;
 import pixmapstr;
-import gcstruct;
-import scrnintstr;
+import include.gcstruct;
+import include.scrnintstr;
 import xace;
 
 /*

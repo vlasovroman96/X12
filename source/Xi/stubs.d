@@ -61,7 +61,7 @@ import build.dix_config;
 
 import deimos.X11.X;
 import deimos.X11.Xproto;
-import inputstr;
+import include.inputstr;
 import deimos.X11.extensions.XI;
 import deimos.X11.extensions.XIproto;
 import XIstubs;

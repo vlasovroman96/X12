@@ -76,14 +76,14 @@ import os.osdep;
 import xkb.xkbsrv_priv;
 
 import misc;
-import resource;
+import include.resource;
 import windowstr;
-import inputstr;
-import scrnintstr;
+import include.inputstr;
+import include.scrnintstr;
 import include.cursorstr;
 import dixstruct;
 import ptrveloc;
-import privates;
+import include.privates;
 import dispatch;
 import swaprep;
 import mipointer;

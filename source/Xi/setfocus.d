@@ -59,7 +59,7 @@ import deimos.X11.extensions.XI;
 import deimos.X11.extensions.XIproto;
 
 import windowstr;          /* focus struct      */
-import inputstr;           /* DeviceIntPtr      */
+import include.inputstr;           /* DeviceIntPtr      */
 
 import dix.dix_priv;
 import dix.request_priv;

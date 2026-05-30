@@ -52,11 +52,11 @@ import os.fmt;
 import Xext.panoramiXsrv;
 import Xi.handlers;
 
-import inputstr;           /* DeviceIntPtr      */
+import include.inputstr;           /* DeviceIntPtr      */
 import windowstr;          /* window structure  */
 import extnsionst;
 import exglobals;
-import scrnintstr;
+import include.scrnintstr;
 import xkbsrv;
 
 /***********************************************************************

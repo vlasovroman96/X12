@@ -50,7 +50,7 @@ SOFTWARE.
  
 public import deimos.X11.Xproto;
 
-public import xlibre_ptrtypes;
+public import include.xlibre_ptrtypes;
 public import misc;
 public import regionstr;
 public import screenint;

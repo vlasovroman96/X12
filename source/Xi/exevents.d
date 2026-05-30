@@ -107,13 +107,13 @@ import os.log_priv;
 import os.osdep;
 import xkb.xkbsrv_priv;
 
-import inputstr;
+import include.inputstr;
 import windowstr;
 import miscstruct;
 import extnsionst;
 import exglobals;
 import eventstr;
-import scrnintstr;
+import include.scrnintstr;
 import xace;
 import xiquerydevice;      /* For List*Info */
 import eventstr;

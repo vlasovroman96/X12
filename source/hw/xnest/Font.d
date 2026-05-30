@@ -30,7 +30,7 @@ import dix.dix_priv;
 import misc;
 import regionstr;
 import dixfontstr;
-import scrnintstr;
+import include.scrnintstr;
 
 import xnest_xcb;
 

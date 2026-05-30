@@ -33,7 +33,7 @@ import core.stdc.config: c_long, c_ulong;
  
 public import deimos.X11.Xdefs;
 
-public import randrstr;
+public import include.randrstr;
 
 extern int RREventBase, RRErrorBase;
 

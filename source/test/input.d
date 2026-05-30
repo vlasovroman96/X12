@@ -47,9 +47,9 @@ import mi.mi_priv;
 import os.fmt;
 
 import misc;
-import resource;
+import include.resource;
 import windowstr;
-import inputstr;
+import include.inputstr;
 import exglobals;
 import eventstr;
 // import assert;

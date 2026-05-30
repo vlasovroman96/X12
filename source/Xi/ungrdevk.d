@@ -63,7 +63,7 @@ import dix.dixgrabs_priv;
 import dix.request_priv;
 import Xi.handlers;
 
-import inputstr;           /* DeviceIntPtr      */
+import include.inputstr;           /* DeviceIntPtr      */
 import windowstr;          /* window structure  */
 import exglobals;
 import xkbsrv;

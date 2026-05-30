@@ -37,11 +37,11 @@ import os.bug_priv;
 
 import exglobals;
 import misc;
-import inputstr;
+import include.inputstr;
 import xkbsrv;
 import xkbstr;
 import eventstr;
-import scrnintstr;
+import include.scrnintstr;
 import optionstr;
 
 /* Check if a button map change is okay with the device.

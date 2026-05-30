@@ -38,10 +38,10 @@ public import deimos.X11.Xmd;
 public import misc;
 public import dixstruct;
 public import pixmapstr;
-public import gcstruct;
+public import include.gcstruct;
 public import extnsionst;
-public import resource;
-public import scrnintstr;
+public import include.resource;
+public import include.scrnintstr;
 
 public import GL.gl;
 public import GL.glext;

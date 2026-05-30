@@ -61,10 +61,10 @@ import deimos.X11.extensions.XIproto;
 import dix.request_priv;
 import Xi.handlers;
 
-import inputstr;           /* DeviceIntPtr      */
+import include.inputstr;           /* DeviceIntPtr      */
 import XIstubs;
 import windowstr;          /* window structure  */
-import scrnintstr;         /* screen structure  */
+import include.scrnintstr;         /* screen structure  */
 import exevents;
 import exglobals;
 import chgptr;

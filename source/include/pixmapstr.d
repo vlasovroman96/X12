@@ -49,13 +49,13 @@ SOFTWARE.
 ******************************************************************/
 
  
-public import pixmap;
+public import include.pixmap;
 public import screenint;
 public import regionstr;
-public import privates;
-public import damage;
+public import include.privates;
+public import include.damage;
 public import deimos.X11.extensions.randr;
-public import picturestr;
+public import include.picturestr;
 
 struct DrawableRec {
     ubyte type;         /* DRAWABLE_<type> */

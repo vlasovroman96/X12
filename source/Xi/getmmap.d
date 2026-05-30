@@ -64,7 +64,7 @@ import dix.rpcbuf_priv;
 import dix.request_priv;
 import Xi.handlers;
 
-import inputstr;           /* DeviceIntPtr      */
+import include.inputstr;           /* DeviceIntPtr      */
 
 /***********************************************************************
  *

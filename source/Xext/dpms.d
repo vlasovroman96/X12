@@ -50,7 +50,7 @@ import dixstruct;
 import extnsionst;
 import opaque;
 import dpmsproc;
-import scrnintstr;
+import include.scrnintstr;
 import windowstr;
 import include.protocol_versions;
 

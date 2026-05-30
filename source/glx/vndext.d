@@ -34,7 +34,7 @@ import build.dix_config;
 import vndserver_priv;
 
 import core.stdc.string;
-import scrnintstr;
+import include.scrnintstr;
 import windowstr;
 import dixstruct;
 import extnsionst;

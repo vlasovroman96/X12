@@ -31,10 +31,10 @@ import xf86;
 import xf86_OSproc;
 import dgaproc;
 import dgaproc_priv;
-import xf86Crtc;
+import include.xf86Crtc;
 import xf86Modes;
-import gcstruct;
-import scrnintstr;
+import include.gcstruct;
+import include.scrnintstr;
 import windowstr;
 
 private Bool xf86_dga_get_modes(ScreenPtr pScreen)

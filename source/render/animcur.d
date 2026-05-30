@@ -43,14 +43,14 @@ import dix.cursor_priv;
 import dix.input_priv;
 import dix.screen_hooks_priv;
 
-import servermd;
-import scrnintstr;
+import include.servermd;
+import include.scrnintstr;
 import dixstruct;
 import include.cursorstr;
 import dixfontstr;
 import opaque;
 import picturestr_priv;
-import inputstr;
+import include.inputstr;
 import xace;
 
 struct AnimCurElt {

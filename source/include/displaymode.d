@@ -1,8 +1,8 @@
-module displaymode.h;
+module include.displaymode;
 @nogc nothrow:
 extern(C): __gshared:
  
-public import scrnintstr;
+public import include.scrnintstr;
 
 enum MAXCLOCKS =   128;
 

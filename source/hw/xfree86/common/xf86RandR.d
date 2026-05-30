@@ -38,8 +38,8 @@ import xf86_priv;
 import xf86str;
 import xf86Priv;
 import mipointer;
-import randrstr;
-import inputstr;
+import include.randrstr;
+import include.inputstr;
 
 struct _xf86RandRInfo {
     int virtualX;

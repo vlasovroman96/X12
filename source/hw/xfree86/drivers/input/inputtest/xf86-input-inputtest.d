@@ -39,7 +39,7 @@ import X11.Xatom;
 import include.xorgVersion;
 
 import exevents;
-import input;
+import include.input;
 import xkbsrv;
 import xf86;
 import xf86Xinput_priv;

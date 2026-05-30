@@ -60,8 +60,8 @@ import deimos.X11.Xfuncproto;
 import mi.mi_priv;
 
 import misc;
-import gcstruct;
-import scrnintstr;
+import include.gcstruct;
+import include.scrnintstr;
 import pixmapstr;
 import windowstr;
 import mifpoly;

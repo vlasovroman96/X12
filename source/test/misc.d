@@ -34,8 +34,8 @@ import dix.screenint_priv;
 import os.fmt;
 
 import misc;
-import scrnintstr;
-import dix;
+import include.scrnintstr;
+import include.dix;
 import dixstruct;
 import tests_common;
 

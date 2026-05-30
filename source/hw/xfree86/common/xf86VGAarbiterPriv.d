@@ -32,17 +32,17 @@ public import misc;
 public import xf86;
 public import xf86_OSproc;
 public import X11.X;
-public import scrnintstr;
+public import include.scrnintstr;
 public import screenint;
-public import gcstruct;
+public import include.gcstruct;
 public import pixmapstr;
-public import pixmap;
+public import include.pixmap;
 public import windowstr;
-public import window;
+public import include.window;
 public import xf86str;
 public import mipointer;
 public import mipointrst;
-public import picturestr;
+public import include.picturestr;
 
 enum string WRAP_SCREEN(string x,string y) = `{pScreenPriv.` ~ x ~ ` = pScreen.` ~ x ~ `; pScreen.` ~ x ~ ` = ` ~ y ~ `;}`;
 

@@ -92,9 +92,9 @@ import include.extinit;
 import os.log_priv;
 
 import xf86Modes;
-import xf86Crtc;
+import include.xf86Crtc;
 import os;
-import servermd;
+import include.servermd;
 import globals;
 import xf86_priv;
 import xf86Priv;

@@ -49,12 +49,12 @@ SOFTWARE.
 import build.dix_config;
 
 import deimos.X11.X;
-import gcstruct;
-import scrnintstr;
+import include.gcstruct;
+import include.scrnintstr;
 import pixmapstr;
 import regionstr;
 import mi;
-import servermd;
+import include.servermd;
 
 enum NPT = 128;
 

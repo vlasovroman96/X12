@@ -51,7 +51,7 @@ SOFTWARE.
 version (RESOURCE_H) {} else {
 enum RESOURCE_H = 1;
 
-public import xlibre_ptrtypes;
+public import include.xlibre_ptrtypes;
 
 public import include.callback;
 public import misc;

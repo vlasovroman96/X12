@@ -42,7 +42,7 @@ import os.client_priv;
 import glxserver;
 import windowstr;
 import propertyst;
-import privates;
+import include.privates;
 import os;
 import glx_extinit;
 import unpack;

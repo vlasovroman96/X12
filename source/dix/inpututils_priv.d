@@ -25,7 +25,7 @@ extern(C): __gshared:
  *
  */
  
-public import input;
+public import include.input;
 public import eventstr;
 public import deimos.X11.extensions.XI2proto;
 

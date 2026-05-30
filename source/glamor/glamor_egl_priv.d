@@ -16,7 +16,7 @@ version = EGL_NO_X11;
 public import epoxy.gl;
 public import epoxy.egl;
 
-public import scrnintstr;
+public import include.scrnintstr;
 public import glamor_egl_ext;
 
 version (GLAMOR_HAS_GBM) {

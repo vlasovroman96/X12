@@ -9,7 +9,7 @@ extern(C): __gshared:
 public import X11.Xdefs;
 public import X11.extensions.render;
 
-public import randrstr;
+public import include.randrstr;
 public import xf86RandR12;
 
 void xf86RandR12LoadPalette(ScrnInfoPtr pScrn, int numColors, int* indices, LOCO* colors, VisualPtr pVisual);

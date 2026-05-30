@@ -19,14 +19,14 @@ import xorg_config;
 import X11.X;
 import X11.Xproto;
 import screenint;
-import input;
+import include.input;
 import misc;
-import scrnintstr;
+import include.scrnintstr;
 import windowstr;
-import servermd;
+import include.servermd;
 
 import Display;
-import Events;
+import include.events;
 import Handlers;
 
 void xnestBlockHandler(void* blockData, void* timeout)

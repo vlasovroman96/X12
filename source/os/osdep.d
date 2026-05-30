@@ -81,7 +81,7 @@ enum string __has_builtin(string x) = `0     /* Compatibility with older compile
 enum MILLI_PER_MIN = (1000 * 60);
 enum MILLI_PER_SECOND = (1000);
 
-public import dix;
+public import include.dix;
 public import ospoll;
 
 extern ospoll* server_poll;

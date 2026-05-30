@@ -26,18 +26,18 @@ extern(C): __gshared:
 import build.dix_config;
 
 import misc;
-import scrnintstr;
+import include.scrnintstr;
 import os;
 import regionstr;
 import validate;
 import windowstr;
-import input;
-import resource;
+import include.input;
+import include.resource;
 import include.cursorstr;
 import dixstruct;
-import gcstruct;
-import servermd;
-import picturestr;
+import include.gcstruct;
+import include.servermd;
+import include.picturestr;
 
 void PictTransform_from_xRenderTransform(PictTransformPtr pict, xRenderTransform* render)
 {

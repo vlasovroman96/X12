@@ -26,12 +26,12 @@ import core.stdc.config: c_long, c_ulong;
  */
  
 public import edid;
-public import randrstr;
+public import include.randrstr;
 public import xf86Modes;
 public import xf86Cursor;
 public import xf86i2c;
-public import damage;
-public import picturestr;
+public import include.damage;
+public import include.picturestr;
 
 /* Compat definitions for older X Servers. */
 enum M_T_PREFERRED =	0x08;

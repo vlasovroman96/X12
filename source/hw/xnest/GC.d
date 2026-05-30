@@ -29,10 +29,10 @@ import xcb.xcb_aux;
 
 import include.regionstr;
 
-import gcstruct;
+import include.gcstruct;
 import windowstr;
 import pixmapstr;
-import scrnintstr;
+import include.scrnintstr;
 import mistruct;
 
 import xnest_xcb;

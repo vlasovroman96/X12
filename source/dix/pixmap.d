@@ -37,16 +37,16 @@ import deimos.X11.extensions.render;
 
 import mi.mi_priv;
 
-import scrnintstr;
+import include.scrnintstr;
 import misc;
 import os;
 import windowstr;
-import resource;
+import include.resource;
 import dixstruct;
-import gcstruct;
-import servermd;
-import picturestr;
-import randrstr;
+import include.gcstruct;
+import include.servermd;
+import include.picturestr;
+import include.randrstr;
 /*
  * Scratch pixmap APIs are provided for source and binary compatibility.  In
  * older versions, DIX would store a freed scratch pixmap for future use.  This

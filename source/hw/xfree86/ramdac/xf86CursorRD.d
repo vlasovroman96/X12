@@ -19,7 +19,7 @@ import include.cursorstr;
  *
  * Externing inputInfo is not the nice way to do it but it works.
  */
-import inputstr;
+import include.inputstr;
 
 DevPrivateKeyRec xf86CursorScreenKeyRec;
 DevScreenPrivateKeyRec xf86ScreenCursorBitsKeyRec;

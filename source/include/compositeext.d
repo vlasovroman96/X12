@@ -1,4 +1,4 @@
-module compositeext.h;
+module include.compositeext;
 @nogc nothrow:
 extern(C): __gshared:
 /*
@@ -24,8 +24,8 @@ extern(C): __gshared:
  * SOFTWARE.
  */
  
-public import misc;
-public import scrnintstr;
+public import include.misc;
+public import include.scrnintstr;
 
 extern _X_EXPORT CompositeRegisterAlternateVisuals(ScreenPtr pScreen, VisualID* vids, int nVisuals);
 

@@ -30,7 +30,7 @@ extern(C): __gshared:
 
  
 public import xf86xv;
-public import privates;
+public import include.privates;
 
 /*** These are DDX layer privates ***/
 

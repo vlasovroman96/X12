@@ -41,7 +41,7 @@ import os.ddx_priv;
 import os.log_priv;
 import os.ossock;
 
-import inputstr;
+import include.inputstr;
 import opaque;
 import osdep;
 

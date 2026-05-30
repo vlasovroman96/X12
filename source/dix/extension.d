@@ -60,10 +60,10 @@ import dix.request_priv;
 import misc;
 import dixstruct;
 import extnsionst;
-import gcstruct;
-import scrnintstr;
+import include.gcstruct;
+import include.scrnintstr;
 import dispatch;
-import privates;
+import include.privates;
 import xace;
 
 enum LAST_ERROR = 255;

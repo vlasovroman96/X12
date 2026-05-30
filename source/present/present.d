@@ -27,7 +27,7 @@ import build.dix_config;
 import present.present_priv;
 import randr.randrstr_priv;
 
-import gcstruct;
+import include.gcstruct;
 
 uint present_query_capabilities(RRCrtcPtr crtc)
 {

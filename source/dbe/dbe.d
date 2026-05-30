@@ -48,9 +48,9 @@ import dix.screenint_priv;
 import dix.window_priv;
 import miext.extinit_priv;
 
-import scrnintstr;
+import include.scrnintstr;
 import extnsionst;
-import gcstruct;
+import include.gcstruct;
 import dixstruct;
 import dbestruct;
 import midbe;

@@ -46,8 +46,8 @@ import dix.exevents_priv;
 import dix.extension_priv;
 import dix.inpututils_priv;
 
-import dix;
-import inputstr;
+import include.dix;
+import include.inputstr;
 import misc;
 import eventstr;
 import exglobals;

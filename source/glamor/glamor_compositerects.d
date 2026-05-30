@@ -34,7 +34,7 @@ import build.dix_config;
 import include.mipict;
 
 import glamor_priv;
-import damage;
+import include.damage;
 
 /** @file glamor_compositerects.
  *

@@ -26,10 +26,10 @@ extern(C): __gshared:
  
 public import core.stdc.stdint;
 
-public import xlibre_ptrtypes;
-public import dix;
+public import include.xlibre_ptrtypes;
+public import include.dix;
 public import misync;
-public import scrnintstr;
+public import include.scrnintstr;
 public import deimos.X11.extensions.syncconst;
 
 /* Sync object types */

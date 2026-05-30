@@ -71,7 +71,7 @@ import xf86;
 import xf86Priv;
 import xf86_os_support;
 import xf86_OSlib;
-import inputstr;
+import include.inputstr;
 
 version (HAVE_STROPTS_H) {
 import stropts;

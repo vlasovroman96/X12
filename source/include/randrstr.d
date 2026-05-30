@@ -33,21 +33,21 @@ import core.stdc.config: c_long, c_ulong;
 public import deimos.X11.X;
 public import deimos.X11.Xproto;
 
-public import xlibre_ptrtypes;
+public import include.xlibre_ptrtypes;
 public import misc;
 public import os;
 public import dixstruct;
-public import resource;
-public import scrnintstr;
+public import include.resource;
+public import include.scrnintstr;
 public import windowstr;
 public import pixmapstr;
 public import extnsionst;
-public import servermd;
+public import include.servermd;
 public import rrtransform;
 public import deimos.X11.extensions.randr;
 public import deimos.X11.extensions.randrproto;
 public import deimos.X11.extensions.render;      /* we share subpixel order information */
-public import picturestr;
+public import include.picturestr;
 // public import deimos.X11.Xfuncproto;
 
 /* required for ABI compatibility for now */

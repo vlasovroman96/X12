@@ -16,8 +16,8 @@ import core.stdc.config: c_long, c_ulong;
  
 public import deimos.X11.X;
 public import misc;
-public import input;
-public import scrnintstr;
+public import include.input;
+public import include.scrnintstr;
 
 public import xf86str;
 public import xf86Pci;

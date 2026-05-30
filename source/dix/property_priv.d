@@ -55,8 +55,8 @@ SOFTWARE.
  
 public import deimos.X11.X;
 
-public import dix;
-public import window;
+public import include.dix;
+public import include.window;
 public import property;
 
 struct PropertyStateRec {

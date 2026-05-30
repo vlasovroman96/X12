@@ -1,4 +1,4 @@
-module damage.h;
+module include.damage;
 @nogc nothrow:
 extern(C): __gshared:
 /*

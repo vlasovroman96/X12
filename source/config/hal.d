@@ -38,8 +38,8 @@ import config.hotplug_priv;
 import config.dbus_core;
 import os.fmt;
 
-import input;
-import inputstr;
+import include.input;
+import include.inputstr;
 import config.config_backends;
 import os;
 

@@ -28,12 +28,12 @@ import build.dix_config;
 
 import include.mipict;
 
-import scrnintstr;
-import gcstruct;
+import include.scrnintstr;
+import include.gcstruct;
 import pixmapstr;
 import windowstr;
 import mi;
-import picturestr;
+import include.picturestr;
 
 void miPointFixedBounds(int npoint, xPointFixed* points, BoxPtr bounds)
 {

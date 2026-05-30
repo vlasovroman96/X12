@@ -58,13 +58,13 @@ import dix.dix_priv;
 import dix.screenint_priv;
 import os.bug_priv;
 
-import servermd;
-import scrnintstr;
+import include.servermd;
+import include.scrnintstr;
 import dixstruct;
 import include.cursorstr;
 import dixfontstr;
 import opaque;
-import inputstr;
+import include.inputstr;
 import xace;
 
 struct _GlyphShare {

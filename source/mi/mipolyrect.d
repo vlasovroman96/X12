@@ -51,8 +51,8 @@ import build.dix_config;
 import deimos.X11.X;
 import deimos.X11.Xprotostr;
 import regionstr;
-import gcstruct;
-import pixmap;
+import include.gcstruct;
+import include.pixmap;
 import mi;
 
 void miPolyRectangle(DrawablePtr pDraw, GCPtr pGC, int nrects, xRectangle* pRects)

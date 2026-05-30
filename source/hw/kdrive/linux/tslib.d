@@ -38,8 +38,8 @@ import kdrive_config;
 
 import X11.X;
 import X11.Xproto;
-import inputstr;
-import scrnintstr;
+import include.inputstr;
+import include.scrnintstr;
 import kdrive;
 import core.sys.posix.sys.ioctl;
 import tslib;

@@ -70,12 +70,12 @@ import dix.extension_priv;
 import miext.extinit_priv;
 import Xext.geext_priv;
 
-import inputstr;
-import gcstruct;           /* pointer for extnsionst.h */
+import include.inputstr;
+import include.gcstruct;           /* pointer for extnsionst.h */
 import extnsionst;         /* extension entry   */
 import exglobals;
 import swaprep;
-import privates;
+import include.privates;
 import include.protocol_versions;
 
 /* modules local to Xi */

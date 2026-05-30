@@ -1,4 +1,4 @@
-module dixfontstr.h;
+module include.dixfontstr;
 @nogc nothrow:
 extern(C): __gshared:
 /***********************************************************
@@ -25,8 +25,8 @@ SOFTWARE.
 ******************************************************************/
 
  
-public import servermd;
-public import dixfont;
+public import include.servermd;
+public import include.dixfont;
 public import deimos.X11.fonts.fontstruct;
 public import deimos.X11.Xproto;         /* for xQueryFontReply */
 

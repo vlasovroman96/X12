@@ -11,15 +11,15 @@ import core.stdc.stdint;
 
 import dix_config;
 
-import dix; /* ARRAY_SIZE() */
+import include.dix; /* ARRAY_SIZE() */
 
 import dix.dix_priv;
 
 import drm_fourcc;
 import drm_mode;
 
-import xf86drm;
-import xf86Crtc;
+import include.xf86drm;
+import include.xf86Crtc;
 
 import driver;
 import drmmode_bo;

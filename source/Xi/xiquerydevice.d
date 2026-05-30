@@ -47,12 +47,12 @@ import dix.rpcbuf_priv;
 import os.fmt;
 import Xi.handlers;
 
-import inputstr;
+import include.inputstr;
 import xkbstr;
 import xkbsrv;
 import xserver_properties;
 import exglobals;
-import privates;
+import include.privates;
 import xiquerydevice;
 
 static Bool ShouldSkipDevice(ClientPtr client, int deviceid, DeviceIntPtr d);

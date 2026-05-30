@@ -15,12 +15,12 @@ import dix.screensaver_priv;
 import dix.window_priv;
 import mi.mi_priv;
 
-import scrnintstr;
+import include.scrnintstr;
 import validate;
 import windowstr;
-import gcstruct;
+import include.gcstruct;
 import regionstr;
-import privates;
+import include.privates;
 import mioverlay;
 import migc;
 

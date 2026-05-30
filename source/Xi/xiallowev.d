@@ -44,7 +44,7 @@ import dix.request_priv;
 import os.fmt;
 import Xi.handlers;
 
-import inputstr;           /* DeviceIntPtr      */
+import include.inputstr;           /* DeviceIntPtr      */
 import windowstr;          /* window structure  */
 import mi;
 import eventstr;

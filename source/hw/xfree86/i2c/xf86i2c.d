@@ -23,13 +23,13 @@ import xf86_OSproc;
 import X11.X;
 import X11.Xos;
 import X11.Xproto;
-import scrnintstr;
+import include.scrnintstr;
 import regionstr;
 import windowstr;
 import pixmapstr;
 import validate;
-import resource;
-import gcstruct;
+import include.resource;
+import include.gcstruct;
 import dixstruct;
 
 import xf86i2c;

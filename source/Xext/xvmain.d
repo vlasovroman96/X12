@@ -94,15 +94,15 @@ import Xext.xvdix_priv;
 
 import misc;
 import os;
-import scrnintstr;
+import include.scrnintstr;
 import windowstr;
 import pixmapstr;
-import gcstruct;
+import include.gcstruct;
 import extnsionst;
 import dixstruct;
-import resource;
+import include.resource;
 import opaque;
-import input;
+import include.input;
 import xvdisp;
 
 enum string SCREEN_PROLOGUE(string pScreen, string field) = `((` ~ pScreen ~ `).` ~ field ~ ` = (cast(XvScreenPtr) 

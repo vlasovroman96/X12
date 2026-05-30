@@ -40,15 +40,15 @@ import dix.screen_hooks_priv;
 import mi.mi_priv;
 
 import misc;
-import scrnintstr;
-import resource;
+import include.scrnintstr;
+import include.resource;
 
 import xf86;
 import xf86_OSproc;
 import xf86str;
 import micmap;
 import xf86RandR12_priv;
-import xf86Crtc;
+import include.xf86Crtc;
 
 version (XFreeXDGA) {
 import X11.extensions.xf86dgaproto;

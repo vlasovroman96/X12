@@ -26,11 +26,11 @@ import xcb.xcb;
 import xcb.xcb_aux;
 
 import screenint;
-import input;
+import include.input;
 import misc;
 import include.cursorstr;
-import scrnintstr;
-import servermd;
+import include.scrnintstr;
+import include.servermd;
 import mipointrst;
 
 import xnest_xcb;

@@ -30,8 +30,8 @@ extern(C): __gshared:
 import xorg_config;
 
 import X11.X;
-import input;
-import scrnintstr;
+import include.input;
+import include.scrnintstr;
 
 import xf86;
 import xf86Priv;

@@ -30,7 +30,7 @@ in this Software without prior written authorization from The Open Group.
 
  
 public import screenint;
-public import privates;
+public import include.privates;
 
 /*
  * Public definitions used for configuring basic pixelization aspects

@@ -38,11 +38,11 @@ import deimos.X11.extensions.shm;
 import include.shmint;
 import mi.mi_priv;
 
-import servermd;
+import include.servermd;
 import misc;
-import scrnintstr;
+import include.scrnintstr;
 import pixmapstr;
-import dix;
+import include.dix;
 import miline;
 
 /* We use this structure to propagate some information from miScreenInit to

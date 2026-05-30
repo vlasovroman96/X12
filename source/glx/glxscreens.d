@@ -44,7 +44,7 @@ import include.extinit;
 import windowstr;
 import os;
 
-import privates;
+import include.privates;
 import glxserver;
 import glxutil;
 import glxext;

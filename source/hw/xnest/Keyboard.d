@@ -32,10 +32,10 @@ import xcb.xkb;
 import os.osdep;
 
 import screenint;
-import inputstr;
+import include.inputstr;
 import misc;
-import scrnintstr;
-import servermd;
+import include.scrnintstr;
+import include.servermd;
 
 import xnest_xcb;
 
@@ -44,7 +44,7 @@ import Display;
 import Screen;
 import Keyboard;
 import Args;
-import Events;
+import include.events;
 import xkbsrv;
 
 DeviceIntPtr xnestKeyboardDevice = null;

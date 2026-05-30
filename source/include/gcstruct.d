@@ -51,11 +51,11 @@ SOFTWARE.
  
 public import deimos.X11.Xprotostr;
 
-public import gc;
-public import pixmap;
+public import include.gc;
+public import include.pixmap;
 public import regionstr;
 public import screenint;
-public import privates;
+public import include.privates;
 
 version (_XTYPEDEF_CHARINFOPTR) {} else {
 alias CharInfoPtr = _CharInfo*;  /* also in fonts/include/font.h */

@@ -109,19 +109,19 @@ import os.screensaver;
 import os.serverlock;
 import Xext.panoramiXsrv;
 
-import scrnintstr;
+import include.scrnintstr;
 import misc;
 import os;
 import windowstr;
-import resource;
+import include.resource;
 import dixstruct;
-import gcstruct;
+import include.gcstruct;
 import extension;
 import include.cursorstr;
-import servermd;
-import dixfont;
+import include.servermd;
+import include.dixfont;
 import extnsionst;
-import privates;
+import include.privates;
 import exevents;
 
 version (DPMSExtension) {

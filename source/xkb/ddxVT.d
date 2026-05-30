@@ -36,8 +36,8 @@ import deimos.X11.keysym;
 
 import xkb.xkbsrv_priv;
 
-import inputstr;
-import scrnintstr;
+import include.inputstr;
+import include.scrnintstr;
 import windowstr;
 
 int XkbDDXSwitchScreen(DeviceIntPtr dev, KeyCode key, XkbAction* act)

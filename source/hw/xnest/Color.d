@@ -26,10 +26,10 @@ import dix.colormap_priv;
 import os.osdep;
 import dix.window_priv;
 
-import scrnintstr;
-import window;
+import include.scrnintstr;
+import include.window;
 import windowstr;
-import resource;
+import include.resource;
 
 import xnest_xcb;
 

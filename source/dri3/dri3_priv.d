@@ -25,12 +25,12 @@ extern(C): __gshared:
 
  
 public import deimos.X11.X;
-public import scrnintstr;
+public import include.scrnintstr;
 public import misc;
 public import list;
 public import windowstr;
 public import dixstruct;
-public import randrstr;
+public import include.randrstr;
 public import dri3;
 
 extern DevPrivateKeyRec dri3_screen_private_key;

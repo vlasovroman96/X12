@@ -58,7 +58,7 @@ import dix.dix_priv;
 
 import misc;
 import dixstruct;
-import scrnintstr;
+import include.scrnintstr;
 import swaprep;
 import globals;
 

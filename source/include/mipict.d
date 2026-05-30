@@ -26,7 +26,7 @@ extern(C): __gshared:
  */
 
  
-public import picturestr;
+public import include.picturestr;
 
 enum MI_MAX_INDEXED =	256     /* XXX depth must be <= 8 */;
 

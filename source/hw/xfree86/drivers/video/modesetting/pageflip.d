@@ -30,7 +30,7 @@ import core.stdc.errno;
 
 import os.xserver_poll;
 
-import xf86drm;
+import include.xf86drm;
 
 import driver;
 import drmmode_bo;

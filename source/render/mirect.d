@@ -29,12 +29,12 @@ import build.dix_config;
 
 import include.mipict;
 
-import scrnintstr;
-import gcstruct;
+import include.scrnintstr;
+import include.gcstruct;
 import pixmapstr;
 import windowstr;
 import mi;
-import picturestr;
+import include.picturestr;
 
 private void miColorRects(PicturePtr pDst, PicturePtr pClipPict, xRenderColor* color, int nRect, xRectangle* rects, int xoff, int yoff)
 {

@@ -10,12 +10,12 @@ import core.stdc.config: c_long, c_ulong;
  
 public import deimos.X11.Xmd;
 
-public import dix;
-public import resource;
+public import include.dix;
+public import include.resource;
 public import include.cursor;
-public import gc;
-public import pixmap;
-public import privates;
+public import include.gc;
+public import include.pixmap;
+public import include.privates;
 public import dixstruct;
 
 pragma(inline, true) private void SetReqFds(ClientPtr client, int req_fds) {

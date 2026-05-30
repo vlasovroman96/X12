@@ -44,13 +44,13 @@ import dix.dix_priv;
 import dix.request_priv;
 import Xi.handlers;
 
-import inputstr;           /* DeviceIntPtr      */
+import include.inputstr;           /* DeviceIntPtr      */
 import windowstr;          /* window structure  */
-import scrnintstr;         /* screen structure  */
+import include.scrnintstr;         /* screen structure  */
 import extnsionst;
 import exevents;
 import exglobals;
-import input;
+import include.input;
 
 /***********************************************************************
  *

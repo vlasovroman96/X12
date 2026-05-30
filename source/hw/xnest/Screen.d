@@ -29,10 +29,10 @@ import xcb.xcb_icccm;
 import mi.mi_priv;
 import mi.mipointer_priv;
 
-import scrnintstr;
-import dix;
+import include.scrnintstr;
+import include.dix;
 import micmap;
-import resource;
+import include.resource;
 
 import xnest_xcb;
 
@@ -45,7 +45,7 @@ import Drawable;
 import XNFont;
 import Color;
 import XNCursor;
-import Events;
+import include.events;
 import Init;
 import mipointer;
 import Args;

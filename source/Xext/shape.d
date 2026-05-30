@@ -49,13 +49,13 @@ import Xext.panoramiXsrv;
 import misc;
 import os;
 import windowstr;
-import scrnintstr;
+import include.scrnintstr;
 import pixmapstr;
 import extnsionst;
 import dixstruct;
 import opaque;
 import regionstr;
-import gcstruct;
+import include.gcstruct;
 import include.protocol_versions;
 
 Bool noShapeExtension = FALSE;

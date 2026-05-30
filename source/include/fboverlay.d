@@ -26,7 +26,7 @@ extern(C): __gshared:
  */
 
  
-public import privates;
+public import include.privates;
 
 extern DevPrivateKey fbOverlayGetScreenPrivateKey(void);
 

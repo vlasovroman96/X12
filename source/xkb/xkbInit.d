@@ -54,10 +54,10 @@ import os.log_priv;
 import xkb.xkbsrv_priv;
 
 import misc;
-import inputstr;
+import include.inputstr;
 import opaque;
 import property;
-import scrnintstr;
+import include.scrnintstr;
 import xkbgeom_priv;
 
 enum      _XKB_RF_NAMES_PROP_ATOM =         "_XKB_RULES_NAMES";

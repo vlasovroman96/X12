@@ -33,4 +33,4 @@ extern(C): __gshared:
 import build.dix_config;
 
 import core.stdc.ctype;
-import dix;
+import include.dix;

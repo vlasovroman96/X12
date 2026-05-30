@@ -48,15 +48,15 @@ SOFTWARE.
 ******************************************************************/
 
  
-public import xlibre_ptrtypes;
-public import window;
+public import include.xlibre_ptrtypes;
+public import include.window;
 public import pixmapstr;
 public import regionstr;
 public import include.cursor;
 public import property;
-public import resource;           /* for ROOT_WINDOW_ID_BASE */
-public import dix;
-public import privates;
+public import include.resource;           /* for ROOT_WINDOW_ID_BASE */
+public import include.dix;
+public import include.privates;
 public import miscstruct;
 public import deimos.X11.Xprotostr;
 public import opaque;

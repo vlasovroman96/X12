@@ -23,11 +23,11 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  
 public import dix.selection_priv;
 
-public import dix;
-public import resource;
+public import include.dix;
+public import include.resource;
 public import extnsionst;
-public import window;
-public import input;
+public import include.window;
+public import include.input;
 public import property;
 public import xace;
 

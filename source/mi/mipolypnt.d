@@ -51,7 +51,7 @@ import build.dix_config;
 import deimos.X11.X;
 import deimos.X11.Xprotostr;
 import pixmapstr;
-import gcstruct;
+import include.gcstruct;
 import windowstr;
 import mi;
 

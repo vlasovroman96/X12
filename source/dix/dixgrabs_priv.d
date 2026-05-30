@@ -9,8 +9,8 @@ extern(C): __gshared:
 public import deimos.X11.extensions.XIproto;
 
 public import misc;
-public import window;
-public import input;
+public import include.window;
+public import include.input;
 public import include.cursor;
 
 /* @brief tells which client ID currently has a grab

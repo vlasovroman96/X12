@@ -68,7 +68,7 @@ import os.client_priv;
 
 import misc;
 import windowstr;
-import inputstr;
+import include.inputstr;
 import include.cursorstr;
 import exglobals;
 

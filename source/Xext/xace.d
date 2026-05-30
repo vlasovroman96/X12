@@ -27,11 +27,11 @@ import core.stdc.stdarg;
 
 import os.client_priv;
 
-import scrnintstr;
+import include.scrnintstr;
 import extnsionst;
 import pixmapstr;
 import regionstr;
-import gcstruct;
+import include.gcstruct;
 import xacestr;
 
 CallbackListPtr[XACE_NUM_HOOKS] XaceHooks = 0;

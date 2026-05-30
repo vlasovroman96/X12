@@ -1,11 +1,11 @@
-module dgaproc.h;
+module include.dgaproc;
 @nogc nothrow:
 extern(C): __gshared:
 import core.stdc.config: c_long, c_ulong;
 
  
 public import deimos.X11.Xproto;
-public import pixmap;
+public import include.pixmap;
 
 enum DGA_CONCURRENT_ACCESS =	0x00000001;
 enum DGA_FILL_RECT =		0x00000002;

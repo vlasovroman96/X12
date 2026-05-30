@@ -70,13 +70,13 @@ import Xext.shm_priv;
 import misc;
 import os;
 import dixstruct_priv;
-import resource;
-import scrnintstr;
+import include.resource;
+import include.scrnintstr;
 import windowstr;
 import pixmapstr;
-import gcstruct;
+import include.gcstruct;
 import extnsionst;
-import servermd;
+import include.servermd;
 import xace;
 import include.protocol_versions;
 

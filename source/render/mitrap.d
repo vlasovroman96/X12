@@ -28,13 +28,13 @@ import build.dix_config;
 
 import include.mipict;
 
-import scrnintstr;
-import gcstruct;
+import include.scrnintstr;
+import include.gcstruct;
 import pixmapstr;
 import windowstr;
-import servermd;
+import include.servermd;
 import mi;
-import picturestr;
+import include.picturestr;
 
 private xFixed miLineFixedX(xLineFixed* l, xFixed y, Bool ceil)
 {

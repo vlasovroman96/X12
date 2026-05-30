@@ -47,12 +47,12 @@ import Xext.shm_priv;
 import Xext.xvdix_priv;
 
 import misc;
-import scrnintstr;
+import include.scrnintstr;
 import windowstr;
 import pixmapstr;
-import gcstruct;
+import include.gcstruct;
 import dixstruct;
-import resource;
+import include.resource;
 import opaque;
 
 import xvdisp;

@@ -1,4 +1,4 @@
-module eventstr.h;
+module include.eventstr;
 @nogc nothrow:
 extern(C): __gshared:
 /*
@@ -26,8 +26,8 @@ extern(C): __gshared:
  */
 
  
-public import inputstr;
-public import events;
+public import include.inputstr;
+public import include.events;
 /**
  * @file events.h
  * This file describes the event structures used internally by the X

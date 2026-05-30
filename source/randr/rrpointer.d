@@ -28,8 +28,8 @@ import dix.cursor_priv;
 import dix.input_priv;
 import randr.randrstr_priv;
 
-import randrstr;
-import inputstr;
+import include.randrstr;
+import include.inputstr;
 
 /*
  * Find the CRTC nearest the specified position, ignoring 'skip'

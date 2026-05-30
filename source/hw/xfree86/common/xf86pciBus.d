@@ -41,7 +41,7 @@ import core.stdc.ctype;
 import core.sys.posix.dirent;
 import core.stdc.stdlib;
 import core.sys.posix.unistd;
-import pciaccess;
+import include.pciaccess;
 import X11.X;
 
 import os.log_priv;

@@ -64,7 +64,7 @@ import dix.request_priv;
 import dix.rpcbuf_priv;
 import Xi.handlers;
 
-import inputstr;           /* DeviceIntPtr      */
+import include.inputstr;           /* DeviceIntPtr      */
 import XIstubs;
 import windowstr;          /* window structure  */
 import exglobals;

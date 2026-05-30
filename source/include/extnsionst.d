@@ -48,13 +48,13 @@ SOFTWARE.
 ******************************************************************/
 
  
-public import xlibre_ptrtypes;
-public import dix;
+public import include.xlibre_ptrtypes;
+public import include.dix;
 public import misc;
 public import screenint;
 public import extension;
-public import gc;
-public import privates;
+public import include.gc;
+public import include.privates;
 
 struct ExtensionEntry {
     int index;

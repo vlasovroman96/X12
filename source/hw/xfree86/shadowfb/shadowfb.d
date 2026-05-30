@@ -19,17 +19,17 @@ import dix.screen_hooks_priv;
 
 import misc;
 import pixmapstr;
-import input;
+import include.input;
 import mi;
-import scrnintstr;
+import include.scrnintstr;
 import windowstr;
-import gcstruct;
+import include.gcstruct;
 import dixfontstr;
 import xf86;
 import xf86str;
 import shadowfb;
 
-import picturestr;
+import include.picturestr;
 
 
 

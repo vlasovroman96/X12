@@ -33,11 +33,11 @@ import core.stdc.config: c_long, c_ulong;
  */
 
  
-public import scrnintstr;
+public import include.scrnintstr;
 public import pixmapstr;
 public import windowstr;
-public import gcstruct;
-public import picturestr;
+public import include.gcstruct;
+public import include.picturestr;
 public import fb;
 
 enum EXA_VERSION_MAJOR =   2;

@@ -108,7 +108,7 @@ enum _XF86PCI_H = 1;
 public import deimos.X11.Xarch;
 // public import deimos.X11.Xfuncproto;
 public import misc;
-public import pciaccess;
+public import include.pciaccess;
 
 /*
  * PCI cfg space definitions (e.g. stuff right out of the PCI spec)

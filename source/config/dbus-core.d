@@ -33,7 +33,7 @@ import core.sys.posix.sys.select;
 
 import os.log_priv;
 
-import dix;
+import include.dix;
 import os;
 
 import config.dbus_core;

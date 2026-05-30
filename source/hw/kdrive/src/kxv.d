@@ -49,13 +49,13 @@ import include.extinit;
 import Xext.xvdix_priv;
 
 import kdrive;
-import scrnintstr;
+import include.scrnintstr;
 import regionstr;
 import windowstr;
 import pixmapstr;
 import validate;
-import resource;
-import gcstruct;
+import include.resource;
+import include.gcstruct;
 import dixstruct;
 import kxv;
 import fourcc;

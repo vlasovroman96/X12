@@ -45,9 +45,9 @@ import GL.gl;
 import GL.internal.dri_interface;
 import GL.glxtokens;
 
-import scrnintstr;
+import include.scrnintstr;
 import pixmapstr;
-import gcstruct;
+import include.gcstruct;
 import os;
 
 import glxserver;

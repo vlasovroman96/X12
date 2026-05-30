@@ -34,11 +34,11 @@ import Xext.panoramiX;
 import Xext.panoramiXsrv;
 
 import xfixesint;
-import scrnintstr;
+import include.scrnintstr;
 
 import regionstr;
-import gcstruct;
-import window;
+import include.gcstruct;
+import include.window;
 
 RESTYPE RegionResType;
 

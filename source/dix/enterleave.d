@@ -44,9 +44,9 @@ import dix.window_priv;
 import include.extinit;
 import os.bug_priv;
 
-import inputstr;
+import include.inputstr;
 import windowstr;
-import scrnintstr;
+import include.scrnintstr;
 import exglobals;
 import enterleave;
 import xkbsrv;

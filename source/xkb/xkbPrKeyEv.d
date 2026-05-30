@@ -41,10 +41,10 @@ import os.log_priv;
 import xkb.xkbsrv_priv;
 
 import misc;
-import inputstr;
+import include.inputstr;
 import exevents;
 import eventstr;
-import events;
+import include.events;
 
 void XkbProcessKeyboardEvent(DeviceEvent* event, DeviceIntPtr keybd)
 {

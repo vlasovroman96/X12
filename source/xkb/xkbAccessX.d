@@ -48,7 +48,7 @@ import dix.inpututils_priv;
 import os.log_priv;
 import xkb.xkbsrv_priv;
 
-import inputstr;
+import include.inputstr;
 import eventstr;
 
 int XkbDfltRepeatDelay = 660;

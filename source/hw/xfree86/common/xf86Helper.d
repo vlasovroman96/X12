@@ -54,11 +54,11 @@ import os.log_priv;
 import os.osdep;
 
 import os;
-import servermd;
+import include.servermd;
 import pixmapstr;
 import windowstr;
 import propertyst;
-import gcstruct;
+import include.gcstruct;
 import loaderProcs;
 import xf86_priv;
 import xf86Priv;

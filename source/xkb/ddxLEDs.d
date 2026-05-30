@@ -37,8 +37,8 @@ import deimos.X11.extensions.XI;
 
 import xkb.xkbsrv_priv;
 
-import inputstr;
-import scrnintstr;
+import include.inputstr;
+import include.scrnintstr;
 import windowstr;
 
 private void XkbDDXUpdateIndicators(DeviceIntPtr dev, CARD32 new_)

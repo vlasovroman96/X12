@@ -32,7 +32,7 @@ import core.stdc.config: c_long, c_ulong;
 import kdrive_config;
 import xkb_config;
 import kdrive;
-import inputstr;
+import include.inputstr;
 
 version = XK_PUBLISHING;
 import X11.keysym;

@@ -29,8 +29,8 @@ import core.stdc.errno;
 import linux.input;
 import X11.X;
 import X11.Xproto;
-import inputstr;
-import scrnintstr;
+import include.inputstr;
+import include.scrnintstr;
 import kdrive;
 import evdev;
 

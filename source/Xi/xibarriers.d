@@ -56,11 +56,11 @@ import os.bug_priv;
 import Xi.handlers;
 
 import xibarriers;
-import scrnintstr;
+import include.scrnintstr;
 import include.cursorstr;
-import servermd;
+import include.servermd;
 import mipointer;
-import inputstr;
+import include.inputstr;
 import windowstr;
 import xace;
 import list;

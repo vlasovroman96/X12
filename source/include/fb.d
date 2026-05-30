@@ -29,19 +29,19 @@ import core.stdc.config: c_long, c_ulong;
 public import deimos.X11.X;
 public import pixman;
 
-public import scrnintstr;
-public import pixmap;
+public import include.scrnintstr;
+public import include.pixmap;
 public import pixmapstr;
 public import regionstr;
-public import gcstruct;
+public import include.gcstruct;
 public import colormap;
 public import miscstruct;
-public import servermd;
+public import include.servermd;
 public import windowstr;
-public import privates;
+public import include.privates;
 public import mi;
 public import migc;
-public import picturestr;
+public import include.picturestr;
 
 version (FB_ACCESS_WRAPPER) {
 

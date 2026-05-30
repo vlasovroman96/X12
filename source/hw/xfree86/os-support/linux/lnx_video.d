@@ -37,8 +37,8 @@ import core.stdc.string;
 import core.sys.posix.sys.mman;
 import X11.X;
 
-import input;
-import scrnintstr;
+import include.input;
+import include.scrnintstr;
 
 import xf86;
 import xf86_os_support;

@@ -39,11 +39,11 @@ import xf86Modes;
 import xf86Priv;
 import mipointer;
 import windowstr;
-import inputstr;
+import include.inputstr;
 import randrstr_priv;
 
 import xf86cmap;
-import xf86Crtc;
+import include.xf86Crtc;
 import xf86RandR12_priv;
 
 struct _xf86RandR12Info {

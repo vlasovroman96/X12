@@ -47,14 +47,14 @@ import Xext.panoramiXsrv;
 
 import windowstr;
 import dixfontstr;
-import gcstruct;
-import scrnintstr;
+import include.gcstruct;
+import include.scrnintstr;
 import opaque;
-import inputstr;
+import include.inputstr;
 import migc;
 import misc;
 import dixstruct;
-import resource;
+import include.resource;
 import panoramiXh;
 
 enum XINERAMA_IMAGE_BUFSIZE = (256*1024);

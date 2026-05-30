@@ -83,7 +83,7 @@ import build.dix_config;
 import regionstr;
 import deimos.X11.Xprotostr;
 import deimos.X11.Xfuncproto;
-import gc;
+import include.gc;
 import pixman;
 
 version (REGION_DEBUG) {

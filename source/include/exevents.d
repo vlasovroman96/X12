@@ -33,7 +33,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
  
 public import deimos.X11.extensions.XIproto;
-public import inputstr;
+public import include.inputstr;
 
 /***************************************************************
  *              Interface available to drivers                 *

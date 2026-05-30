@@ -30,7 +30,7 @@ extern(C): __gshared:
  */
 
  
-public import xlibre_ptrtypes;
+public import include.xlibre_ptrtypes;
 public import xvdix;
 public import xf86str;
 

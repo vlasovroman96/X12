@@ -36,9 +36,9 @@ extern(C): __gshared:
  */
 
  
-public import xlibre_ptrtypes;
+public import include.xlibre_ptrtypes;
 public import xf86Privstr;
-public import input;
+public import include.input;
 
 extern _X_EXPORT xf86FbBpp;
 extern _X_EXPORT xf86Depth;

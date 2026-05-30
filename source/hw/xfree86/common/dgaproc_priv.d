@@ -7,7 +7,7 @@ extern(C): __gshared:
  */
  
 public import screenint;
-public import input;
+public import include.input;
 
 Bool DGAScreenAvailable(ScreenPtr pScreen);
 Bool DGAActive(int Index);

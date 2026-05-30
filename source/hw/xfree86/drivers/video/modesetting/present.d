@@ -40,8 +40,8 @@ import core.stdc.time;
 import include.present;
 
 import xf86;
-import xf86Crtc;
-import xf86drm;
+import include.xf86Crtc;
+import include.xf86drm;
 import xf86str;
 
 import driver;

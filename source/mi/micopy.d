@@ -26,9 +26,9 @@ extern(C): __gshared:
 import build.dix_config;
 
 import mi;
-import scrnintstr;
-import gcstruct;
-import pixmap;
+import include.scrnintstr;
+import include.gcstruct;
+import include.pixmap;
 import pixmapstr;
 import windowstr;
 

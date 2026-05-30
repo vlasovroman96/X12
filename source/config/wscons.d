@@ -36,8 +36,8 @@ import core.sys.posix.fcntl;
 import core.stdc.string;
 import core.sys.posix.unistd;
 
-import input;
-import inputstr;
+import include.input;
+import include.inputstr;
 import os;
 import config.config_backends;
 

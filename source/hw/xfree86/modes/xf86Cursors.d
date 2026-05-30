@@ -37,13 +37,13 @@ import X11.extensions.dpmsconst;
 import include.xf86DDC;
 
 import xf86;
-import xf86Crtc;
+import include.xf86Crtc;
 import xf86Modes;
 import xf86RandR12;
 import xf86CursorPriv;
-import picturestr;
+import include.picturestr;
 import include.cursorstr;
-import inputstr;
+import include.inputstr;
 
 /*
  * Returns the rotation being performed by the server.  If the driver indicates

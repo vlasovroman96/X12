@@ -33,7 +33,7 @@ import xorg_config;
 version (XSERVER_PLATFORM_BUS) {
 import core.stdc.errno;
 
-import pciaccess;
+import include.pciaccess;
 import core.sys.posix.fcntl;
 import core.sys.posix.unistd;
 
@@ -58,7 +58,7 @@ import Pci;
 import xf86platformBus_priv;
 import xf86Xinput_priv;
 import xf86Config;
-import xf86Crtc;
+import include.xf86Crtc;
 
 int xf86_num_platform_devices;
 

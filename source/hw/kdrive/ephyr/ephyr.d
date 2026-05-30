@@ -38,8 +38,8 @@ import os.osdep;
 import os.serverlock;
 
 import ephyr;
-import inputstr;
-import scrnintstr;
+import include.inputstr;
+import include.scrnintstr;
 import ephyrlog;
 
 version (GLAMOR) {

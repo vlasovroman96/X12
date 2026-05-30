@@ -1,4 +1,4 @@
-module colormapst.h;
+module include.colormapst;
 @nogc nothrow:
 extern(C): __gshared:
 /*

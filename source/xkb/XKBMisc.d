@@ -38,7 +38,7 @@ import xkb.xkbfmisc_priv;
 import xkb.xkbsrv_priv;
 
 import misc;
-import inputstr;
+import include.inputstr;
 
 /***====================================================================***/
 

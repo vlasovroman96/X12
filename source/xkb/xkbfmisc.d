@@ -43,8 +43,8 @@ import xkb.xkbfmisc_priv;
 import xkb.xkbout_priv;
 
 import misc;
-import inputstr;
-import dix;
+import include.inputstr;
+import include.dix;
 import xkbstr;
 import xkbsrv;
 import xkbgeom_priv;

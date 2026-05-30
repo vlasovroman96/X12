@@ -8,11 +8,11 @@ import X11.X;
 import include.xorgVersion;
 
 import os;
-import servermd;
+import include.servermd;
 import pixmapstr;
 import windowstr;
 import propertyst;
-import gcstruct;
+import include.gcstruct;
 import loaderProcs;
 import xf86;
 import xf86Priv;

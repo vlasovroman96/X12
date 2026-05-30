@@ -41,8 +41,8 @@ import mi.mi_priv;
 import os.bug_priv;
 import os.osdep;
 
-import scrnintstr;
-import resource;
+import include.scrnintstr;
+import include.resource;
 import globals;
 import micmap;
 

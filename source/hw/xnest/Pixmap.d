@@ -23,10 +23,10 @@ import X11.Xproto;
 
 import regionstr;
 import pixmapstr;
-import scrnintstr;
-import gc;
-import servermd;
-import privates;
+import include.scrnintstr;
+import include.gc;
+import include.servermd;
+import include.privates;
 import mi;
 
 import xnest_xcb;

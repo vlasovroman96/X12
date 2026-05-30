@@ -60,9 +60,9 @@ extern(C): __gshared:
  */
 
  
-public import xlibre_ptrtypes;
+public import include.xlibre_ptrtypes;
 
-public import scrnintstr;
+public import include.scrnintstr;
 public import extnsionst;
 public import GL.glxproto;
 

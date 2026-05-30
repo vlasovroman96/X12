@@ -34,7 +34,7 @@ import core.stdc.errno;
 import core.sys.posix.unistd;
 
 import xf86;
-import xf86Crtc;
+import include.xf86Crtc;
 import driver;
 import drmmode_display;
 

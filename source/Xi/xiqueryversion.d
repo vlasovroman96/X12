@@ -44,7 +44,7 @@ import dix.request_priv;
 import os.fmt;
 import Xi.handlers;
 
-import inputstr;
+import include.inputstr;
 import exglobals;
 import misc;
 

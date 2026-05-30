@@ -71,7 +71,7 @@ import mi.mi_priv;
 import os.osdep;
 
 import windowstr;
-import gcstruct;
+import include.gcstruct;
 import regionstr;
 import miwideline;
 

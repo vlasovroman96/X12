@@ -1,4 +1,4 @@
-module dixfont.h;
+module include.dixfont;
 @nogc nothrow:
 extern(C): __gshared:
 import core.stdc.config: c_long, c_ulong;
@@ -28,9 +28,9 @@ SOFTWARE.
 version (DIXFONT_H) {} else {
 enum DIXFONT_H = 1;
 
-public import xlibre_ptrtypes;
+public import include.xlibre_ptrtypes;
 
-public import dix;
+public import include.dix;
 public import deimos.X11.fonts.font;
 public import deimos.X11.fonts.fontstruct;
 

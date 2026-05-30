@@ -39,8 +39,8 @@ import X11.Xproto;
 import dix.screen_hooks_priv;
 import include.extinit;
 
-import scrnintstr;
-import resource;
+import include.scrnintstr;
+import include.resource;
 import dixstruct;
 
 import xf86xvpriv;

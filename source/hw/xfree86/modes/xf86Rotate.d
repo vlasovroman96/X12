@@ -38,7 +38,7 @@ import mi.mi_priv;
 
 import xf86;
 import windowstr;
-import xf86Crtc;
+import include.xf86Crtc;
 import xf86Modes;
 import xf86RandR12;
 

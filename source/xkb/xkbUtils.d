@@ -68,7 +68,7 @@ import xkb.xkbsrv_priv;
 
 import os;
 import misc;
-import inputstr;
+import include.inputstr;
 import eventstr;
 import xkbgeom_priv;
 

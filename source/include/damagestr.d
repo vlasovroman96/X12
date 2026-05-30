@@ -1,4 +1,4 @@
-module damagestr.h;
+module include.damagestr;
 @nogc nothrow:
 extern(C): __gshared:
 /*
@@ -23,10 +23,10 @@ extern(C): __gshared:
  * PERFORMANCE OF THIS SOFTWARE.
  */
  
-public import damage;
-public import gcstruct;
-public import privates;
-public import picturestr;
+public import include.damage;
+public import include.gcstruct;
+public import include.privates;
+public import include.picturestr;
 
 struct DamageRec {
     DamagePtr pNext;

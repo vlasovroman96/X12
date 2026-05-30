@@ -59,8 +59,8 @@ import dix.atom_priv;
 import dix.dix_priv;
 
 import misc;
-import resource;
-import dix;
+import include.resource;
+import include.dix;
 
 enum InitialTableSize = 256;
 

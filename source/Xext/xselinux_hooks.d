@@ -49,8 +49,8 @@ import dix.server_priv;
 import os.client_priv;
 // import include.clang;
 
-import inputstr;
-import scrnintstr;
+import include.inputstr;
+import include.scrnintstr;
 import windowstr;
 import propertyst;
 import extnsionst;

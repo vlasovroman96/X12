@@ -37,7 +37,7 @@ import edid_priv;
 import xf86_priv;
 import xf86DDC_priv;
 import xf86Config;
-import xf86Crtc;
+import include.xf86Crtc;
 import xf86Modes;
 import xf86Opt_priv;
 import xf86Priv;
@@ -45,7 +45,7 @@ import xf86RandR12_priv;
 import X11.extensions.render;
 import X11.extensions.dpmsconst;
 import X11.Xatom;
-import picturestr;
+import include.picturestr;
 
 version (XV) {
 import xf86xv;

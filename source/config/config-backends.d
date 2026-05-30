@@ -27,7 +27,7 @@ extern(C): __gshared:
  */
 
  
-public import input;
+public import include.input;
 public import list;
 
 void remove_devices(const(char)* backend, const(char)* config_info);

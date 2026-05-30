@@ -24,7 +24,7 @@ extern(C): __gshared:
  */
 
  
-public import randrstr;
+public import include.randrstr;
 public import deimos.X11.extensions.render;
 
 extern _X_EXPORT xf86RandR12Init(ScreenPtr pScreen);

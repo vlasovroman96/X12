@@ -30,7 +30,7 @@ extern(C): __gshared:
  */
 
  
-public import scrnintstr;
+public import include.scrnintstr;
 public import regionstr;
 
 enum FAVOR_AREA_THEN_WIDTH =		0;

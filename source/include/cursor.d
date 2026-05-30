@@ -49,9 +49,9 @@ SOFTWARE.
 
  
 public import include.misc;
-public import screenint;
-public import window;
-public import privates;
+public import include.screenint;
+public import include.window;
+public import include.privates;
 
 enum NullCursor = cast(CursorPtr)null;
 

@@ -12,7 +12,7 @@ import randr.randrstr_priv;
 import misc;
 import xf86;
 import xf86_OSproc;
-import scrnintstr;
+import include.scrnintstr;
 import pixmapstr;
 import windowstr;
 import xf86str;
@@ -20,7 +20,7 @@ import include.cursorstr;
 import mi;
 import mipointer;
 import xf86CursorPriv;
-import servermd;
+import include.servermd;
 
 
 

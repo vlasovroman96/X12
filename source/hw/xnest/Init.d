@@ -31,11 +31,11 @@ import os.log_priv;
 import os.osdep;
 
 import screenint;
-import input;
+import include.input;
 import misc;
-import scrnintstr;
+import include.scrnintstr;
 import windowstr;
-import servermd;
+import include.servermd;
 import dixfontstr;
 
 import xnest_xcb;
@@ -45,7 +45,7 @@ import Screen;
 import Pointer;
 import Keyboard;
 import Handlers;
-import Events;
+import include.events;
 import Init;
 import Args;
 import Drawable;

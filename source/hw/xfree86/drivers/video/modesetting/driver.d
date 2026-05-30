@@ -65,7 +65,7 @@ import mipointrst;
 import micmap;
 import fb;
 import xf86i2c;
-import xf86Crtc;
+import include.xf86Crtc;
 import miscstruct;
 import dixstruct;
 import xf86xv;
@@ -74,7 +74,7 @@ version (XSERVER_PLATFORM_BUS) {
 import xf86platformBus_priv;
 }
 version (XSERVER_LIBPCIACCESS) {
-import pciaccess;
+import include.pciaccess;
 }
 
 version (SEATD_LIBSEAT) {

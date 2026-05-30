@@ -32,9 +32,9 @@ import core.stdc.stdint;
 import dix.atom_priv;
 import dix.input_priv;
 
-import inputstr;
+import include.inputstr;
 // import assert;
-import scrnintstr;
+import include.scrnintstr;
 import tests_common;
 
 private void free_device(DeviceIntPtr dev)

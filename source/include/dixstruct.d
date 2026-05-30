@@ -1,4 +1,4 @@
-module dixstruct.h;
+module include.dixstruct;
 @nogc nothrow:
 extern(C): __gshared:
 /***********************************************************
@@ -27,15 +27,15 @@ SOFTWARE.
  
 public import deimos.X11.Xmd;
 
-public import xlibre_ptrtypes;
+public import include.xlibre_ptrtypes;
 
 public import include.callback;
-public import dix;
-public import resource;
+public import include.dix;
+public import include.resource;
 public import include.cursor;
-public import gc;
-public import pixmap;
-public import privates;
+public import include.gc;
+public import include.pixmap;
+public import include.privates;
 
 /*
  * 	direct-mapped hash table, used by resource manager to store

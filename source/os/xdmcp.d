@@ -50,7 +50,7 @@ import misc;
 import osdep;
 import xdmcp;
 import xdmauth;
-import input;
+import include.input;
 import dixstruct;
 
 import os.Xtrans;

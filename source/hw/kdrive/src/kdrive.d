@@ -43,11 +43,11 @@ import os.osdep;
 
 import kdrive;
 import dixstruct;
-import privates;
+import include.privates;
 
 /* workaround for <windows.h> being included somewhere and conflicting with us */
 version (RANDR) {
-import randrstr;
+import include.randrstr;
 }
 import glx_extinit;
 

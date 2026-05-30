@@ -35,20 +35,20 @@ public import deimos.X11.Xproto;
 
 public import include.shmint;
 
-public import scrnintstr;
+public import include.scrnintstr;
 public import pixmapstr;
 public import windowstr;
-public import servermd;
-public import gcstruct;
-public import input;
+public import include.servermd;
+public import include.gcstruct;
+public import include.input;
 public import mipointer;
 public import mi;
-public import dix;
+public import include.dix;
 public import fb;
 public import fboverlay;
 public import fbpict;
 public import glyphstr;
-public import damage;
+public import include.damage;
 
 enum DEBUG_TRACE_FALL =	0;
 enum DEBUG_MIGRATE =		0;

@@ -84,8 +84,8 @@ import os.Xtrans;
 
 import core.sys.posix.libgen;
 
-import input;
-import dixfont;
+import include.input;
+import include.dixfont;
 import deimos.X11.fonts.libxfont2;
 import osdep;
 

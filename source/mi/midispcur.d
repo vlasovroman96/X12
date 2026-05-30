@@ -54,7 +54,7 @@ import   mipointer;
 import   misprite;
 import   gcstruct;
 import   picturestr;
-import inputstr;
+import include.inputstr;
 
 /* per-screen private data */
 private DevPrivateKeyRec miDCScreenKeyRec;

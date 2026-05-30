@@ -61,7 +61,7 @@ import deimos.X11.extensions.XIproto;
 import dix.request_priv;
 import Xi.handlers;
 
-import inputstr;           /* DeviceIntPtr      */
+import include.inputstr;           /* DeviceIntPtr      */
 import XIstubs;
 import globals;
 import exevents;

@@ -40,8 +40,8 @@ import X11.extensions.XI;
 import hw.xfree86.common.action_priv;
 import xkb.xkbsrv_priv;
 
-import inputstr;
-import scrnintstr;
+import include.inputstr;
+import include.scrnintstr;
 import windowstr;
 
 import xf86_priv;

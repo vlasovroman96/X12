@@ -8,7 +8,7 @@ public import deimos.X11.Xdefs;
 // public import deimos.X11.Xfuncproto;
 
 public import colormap;
-public import privates;
+public import include.privates;
 public import screenint;
 
 extern DevPrivateKeyRec micmapScrPrivateKeyRec;

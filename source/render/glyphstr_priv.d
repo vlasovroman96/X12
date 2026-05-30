@@ -14,7 +14,7 @@ public import picture;
 public import screenint;
 public import regionstr;
 public import miscstruct;
-public import privates;
+public import include.privates;
 
 enum string GlyphPicture(string glyph) = `(cast(PicturePtr*) ((` ~ glyph ~ `) + 1))`;
 

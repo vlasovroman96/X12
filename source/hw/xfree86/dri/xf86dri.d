@@ -58,12 +58,12 @@ import misc;
 import dixstruct;
 import extnsionst;
 import include.cursorstr;
-import scrnintstr;
-import servermd;
+import include.scrnintstr;
+import include.servermd;
 import swaprep;
 import xf86str;
 import dri_priv;
-import xf86drm;
+import include.xf86drm;
 import protocol_versions;
 import xf86Extensions;
 

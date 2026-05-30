@@ -39,7 +39,7 @@ import mi.mipointer_priv;
 
 import include.cursor;
 import mipointer;
-import scrnintstr;
+import include.scrnintstr;
 import globals;
 
 import xf86_priv;

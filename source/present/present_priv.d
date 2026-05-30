@@ -30,14 +30,14 @@ public import deimos.X11.Xmd;
 public import include.present;
 public import include.syncsdk;
 
-public import scrnintstr;
+public import include.scrnintstr;
 public import misc;
 public import list;
 public import windowstr;
 public import dixstruct;
 public import syncsrv;
 public import xfixes;
-public import randrstr;
+public import include.randrstr;
 public import core.stdc.inttypes;
 public import dri3;
 

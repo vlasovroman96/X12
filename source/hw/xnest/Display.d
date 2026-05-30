@@ -26,10 +26,10 @@ import os.client_priv;
 import os.osdep;
 
 import screenint;
-import input;
+import include.input;
 import misc;
-import scrnintstr;
-import servermd;
+import include.scrnintstr;
+import include.servermd;
 
 import xnest_xcb;
 

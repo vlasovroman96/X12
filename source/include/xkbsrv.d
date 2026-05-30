@@ -33,11 +33,11 @@ enum XkbFreeKeyboard =			SrvXkbFreeKeyboard;
 public import deimos.X11.Xdefs;
 public import deimos.X11.extensions.XKBproto;
 
-public import xlibre_ptrtypes;
+public import include.xlibre_ptrtypes;
 public import xkbstr;
 public import xkbrules;
-public import inputstr;
-public import events;
+public import include.inputstr;
+public import include.events;
 
 struct _XkbInterest {
     DeviceIntPtr dev;

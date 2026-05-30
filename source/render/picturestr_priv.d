@@ -7,11 +7,11 @@ extern(C): __gshared:
  * Copyright © 2000 SuSE, Inc.
  */
  
-public import picturestr;
-public import scrnintstr;
+public import include.picturestr;
+public import include.scrnintstr;
 public import glyphstr;
-public import resource;
-public import privates;
+public import include.resource;
+public import include.privates;
 
 enum PICT_GRADIENT_STOPTABLE_SIZE = 1024;
 

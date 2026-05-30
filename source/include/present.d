@@ -28,7 +28,7 @@ extern(C): __gshared:
 public import deimos.X11.Xmd;
 public import deimos.X11.extensions.presentproto;
 
-public import randrstr;
+public import include.randrstr;
 
 enum PresentFlipReason {
     PRESENT_FLIP_REASON_UNKNOWN,

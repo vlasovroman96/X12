@@ -1,4 +1,4 @@
-module dri2.h;
+module include.dri2;
 @nogc nothrow:
 extern(C): __gshared:
 /*
@@ -36,7 +36,7 @@ extern(C): __gshared:
  
 public import deimos.X11.extensions.dri2tokens;
 
-public import dix;
+public import include.dix;
 
 /* Version 2 structure (with format at the end) */
 struct _DRI2BufferRec {

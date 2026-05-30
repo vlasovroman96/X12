@@ -60,9 +60,9 @@ import include.regionstr;
 import mi.mi_priv;
 
 import windowstr;
-import scrnintstr;
+import include.scrnintstr;
 import pixmapstr;
-import inputstr;
+import include.inputstr;
 
 void miClearToBackground(WindowPtr pWin, int x, int y, int w, int h, Bool generateExposures)
 {

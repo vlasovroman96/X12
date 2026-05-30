@@ -66,13 +66,13 @@ import os.osdep;
 import os.bug_priv;
 
 import misc;
-import dix;
+import include.dix;
 import dixstruct;
 import os;
-import scrnintstr;
-import resource;
+import include.scrnintstr;
+import include.resource;
 import windowstr;
-import privates;
+import include.privates;
 import xace;
 
 enum REDMAP = 0;

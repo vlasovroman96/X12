@@ -24,10 +24,10 @@ import miext.extinit_priv;
 import os.ddx_priv;
 
 import screenint;
-import input;
+import include.input;
 import misc;
-import scrnintstr;
-import servermd;
+import include.scrnintstr;
+import include.servermd;
 import extinit;
 
 import xnest_xcb;

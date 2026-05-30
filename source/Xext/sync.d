@@ -70,15 +70,15 @@ import miext.extinit_priv;
 import os.bug_priv;
 import os.osdep;
 
-import scrnintstr;
+import include.scrnintstr;
 import os;
 import extnsionst;
 import dixstruct;
 import pixmapstr;
-import resource;
+import include.resource;
 import syncsrv;
 import include.protocol_versions;
-import inputstr;
+import include.inputstr;
 import misync_priv;
 
 /*

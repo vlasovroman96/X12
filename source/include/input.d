@@ -49,16 +49,16 @@ SOFTWARE.
 ********************************************************/
 
  
-public import xlibre_ptrtypes;
+public import include.xlibre_ptrtypes;
 
 public import misc;
 public import screenint;
 public import deimos.X11.Xmd;
 public import deimos.X11.Xproto;
 public import core.stdc.stdint;
-public import window;             /* for WindowPtr */
+public import include.window;             /* for WindowPtr */
 public import xkbrules;
-public import events;
+public import include.events;
 public import list;
 public import os;
 public import deimos.X11.extensions.XI2;

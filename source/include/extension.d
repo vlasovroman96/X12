@@ -77,7 +77,7 @@ SOFTWARE.
  
 // public import deimos.X11.Xfuncproto;
 
-public import xlibre_ptrtypes;
+public import include.xlibre_ptrtypes;
 public import dixstruct;
 
 alias InitExtension = void function();

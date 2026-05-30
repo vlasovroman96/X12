@@ -26,7 +26,7 @@ extern(C): __gshared:
  */
 
  
-public import input;
+public import include.input;
 
 /* constants for acceleration profiles */
 

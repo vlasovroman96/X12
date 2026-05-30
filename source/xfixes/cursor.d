@@ -56,11 +56,11 @@ import dix.screen_hooks_priv;
 import dix.screenint_priv;
 
 import xfixesint;
-import scrnintstr;
+import include.scrnintstr;
 import include.cursorstr;
-import servermd;
+import include.servermd;
 import mipointer;
-import inputstr;
+import include.inputstr;
 import windowstr;
 import xace;
 import list;

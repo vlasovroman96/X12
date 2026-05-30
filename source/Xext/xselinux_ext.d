@@ -28,7 +28,7 @@ import dix.request_priv;
 import dix.selection_priv;
 import miext.extinit_priv;
 
-import inputstr;
+import include.inputstr;
 import windowstr;
 import propertyst;
 import extnsionst;

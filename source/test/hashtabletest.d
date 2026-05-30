@@ -8,7 +8,7 @@ import misc;
 import core.stdc.stdlib;
 import core.stdc.stdio;
 import hashtable;
-import resource;
+import include.resource;
 
 import tests_common;
 

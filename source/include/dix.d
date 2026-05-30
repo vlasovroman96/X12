@@ -1,4 +1,4 @@
-module dix.h;
+module include.dix;
 @nogc nothrow:
 extern(C): __gshared:
 /***********************************************************
@@ -50,14 +50,14 @@ SOFTWARE.
  
 public import deimos.X11.extensions.XI;
 
-public import xlibre_ptrtypes;
+public import include.xlibre_ptrtypes;
 
 public import include.callback;
-public import gc;
-public import window;
-public import input;
+public import include.gc;
+public import include.window;
+public import include.input;
 public import include.cursor;
-public import events;
+public import include.events;
 
 enum EARLIER = -1;
 enum SAMETIME = 0;

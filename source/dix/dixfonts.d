@@ -74,14 +74,14 @@ import include.gcstruct;
 import os.auth;
 import os.log_priv;
 
-import scrnintstr;
-import resource;
+import include.scrnintstr;
+import include.resource;
 import dixstruct;
 import include.cursorstr;
 import misc;
 import opaque;
 import dixfontstr;
-import dixfont;
+import include.dixfont;
 import xace;
 
 version (XF86BIGFONT) {

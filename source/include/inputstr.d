@@ -52,11 +52,11 @@ SOFTWARE.
 public import deimos.X11.extensions.XI2proto;
 
 public import pixman;
-public import input;
-public import window;
+public import include.input;
+public import include.window;
 public import dixstruct;
 public import include.cursorstr;
-public import privates;
+public import include.privates;
 
 enum string BitIsOn(string ptr, string bit) = `(!!((cast(const(BYTE)*) (` ~ ptr ~ `))[(` ~ bit ~ `)>>3] & (1 << ((` ~ bit ~ `) & 7))))`;
 enum string SetBit(string ptr, string bit) = `((cast(BYTE*) (` ~ ptr ~ `))[(` ~ bit ~ `)>>3] |= (1 << ((` ~ bit ~ `) & 7)))`;

@@ -139,17 +139,17 @@ import Xext.panoramiXsrv;
 
 import misc;
 import os;
-import resource;
+import include.resource;
 import dixstruct;
 import opaque;
 import windowstr;
-import dixfont;
+import include.dixfont;
 import colormap;
-import inputstr;
+import include.inputstr;
 import include.cursor;
 import xace;
 import core.stdc.assert_;
-import gcstruct;
+import include.gcstruct;
 
 version (XSERVER_DTRACE) {
 

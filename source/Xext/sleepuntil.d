@@ -40,7 +40,7 @@ import misc;
 import windowstr;
 import dixstruct;
 import pixmapstr;
-import scrnintstr;
+import include.scrnintstr;
 
 struct _Sertafied {
     _Sertafied* next;

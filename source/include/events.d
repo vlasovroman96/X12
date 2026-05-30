@@ -1,4 +1,4 @@
-module events.h;
+module include.events;
 @nogc nothrow:
 extern(C): __gshared:
 /*

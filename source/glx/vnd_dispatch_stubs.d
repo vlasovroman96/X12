@@ -11,7 +11,7 @@ import build.dix_config;
 import dix.dix_priv;
 import dix.screenint_priv;
 
-import dix;
+import include.dix;
 import vndserver;
 
 // HACK: The opcode in old glxproto.h has a typo in it.

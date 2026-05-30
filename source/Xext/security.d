@@ -48,11 +48,11 @@ import os.auth;
 import os.client_priv;
 import os.osdep;
 
-import scrnintstr;
-import inputstr;
+import include.scrnintstr;
+import include.inputstr;
 import windowstr;
 import propertyst;
-import privates;
+import include.privates;
 import xacestr;
 import securitysrv;
 import include.protocol_versions;

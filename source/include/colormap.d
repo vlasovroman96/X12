@@ -51,8 +51,8 @@ version (CMAP_H) {} else {
 enum CMAP_H = 1;
 
 public import deimos.X11.Xproto;
-public import screenint;
-public import window;
+public import include.screenint;
+public import include.window;
 
 enum DynamicClass =  1;
 

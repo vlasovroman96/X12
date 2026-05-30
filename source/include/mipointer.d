@@ -28,8 +28,8 @@ in this Software without prior written authorization from The Open Group.
 
  
 public import include.cursor;
-public import input;
-public import privates;
+public import include.input;
+public import include.privates;
 
 struct _miPointerSpriteFuncRec {
     Bool function(DeviceIntPtr, ScreenPtr, CursorPtr) RealizeCursor;

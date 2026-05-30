@@ -75,7 +75,7 @@ import misc;
 import os;
 import os.osdep;
 import dixstruct;
-import gcstruct;
+import include.gcstruct;
 import dixfontstr;
 import extnsionst;
 import include.protocol_versions;

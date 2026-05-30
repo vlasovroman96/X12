@@ -30,8 +30,8 @@ import include.mipict;
 
 import fb;
 
-import picturestr;
-import damage;
+import include.picturestr;
+import include.damage;
 
 void fbAddTraps(PicturePtr pPicture, INT16 x_off, INT16 y_off, int ntrap, xTrap* traps)
 {

@@ -50,7 +50,7 @@ SOFTWARE.
  
 public import misc;
 public import property;
-public import privates;
+public import include.privates;
 /*
  *   PROPERTY -- property element
  */

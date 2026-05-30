@@ -30,8 +30,8 @@ import core.sys.posix.termios;
 import X11.X;
 import X11.Xproto;
 import os.xserver_poll;
-import inputstr;
-import scrnintstr;
+import include.inputstr;
+import include.scrnintstr;
 import kdrive;
 
 enum KBUFIO_SIZE = 256;

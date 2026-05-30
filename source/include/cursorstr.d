@@ -1,4 +1,4 @@
-module cursorstr.h;
+module include.cursorstr;
 @nogc nothrow:
 extern(C): __gshared:
 /***********************************************************
@@ -49,7 +49,7 @@ SOFTWARE.
 
  
 public import include.cursor;
-public import privates;
+public import include.privates;
 /*
  * device-independent cursor storage
  */

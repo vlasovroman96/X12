@@ -80,7 +80,7 @@ import dgaproc;
 import dgaproc_priv;
 }
 
-import inputstr;
+import include.inputstr;
 import xf86Xinput_priv;
 import mipointer;
 import xkbsrv;

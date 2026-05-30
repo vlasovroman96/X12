@@ -40,10 +40,10 @@ import core.stdc.config: c_long, c_ulong;
  */
 
  
-public import xlibre_ptrtypes;
+public import include.xlibre_ptrtypes;
 public import misc;
-public import input;
-public import scrnintstr;
+public import include.input;
+public import include.scrnintstr;
 public import pixmapstr;
 public import colormapst;
 public import xf86Module;

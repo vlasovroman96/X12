@@ -29,12 +29,12 @@ import build.dix_config;
 import dix.colormap_priv;
 import include.mipict;
 
-import scrnintstr;
-import gcstruct;
+import include.scrnintstr;
+import include.gcstruct;
 import pixmapstr;
 import windowstr;
 import mi;
-import picturestr;
+import include.picturestr;
 
 enum NUM_CUBE_LEVELS =	4;
 enum NUM_GRAY_LEVELS =	13;

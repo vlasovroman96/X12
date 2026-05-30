@@ -1,4 +1,4 @@
-module dri.h;
+module include.dri;
 @nogc nothrow:
 extern(C): __gshared:
 import core.stdc.config: c_long, c_ulong;
@@ -36,10 +36,10 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
  
-public import pciaccess;
+public import include.pciaccess;
 
-public import scrnintstr;
-public import xf86dri;
+public import include.scrnintstr;
+public import include.xf86dri;
 
 /* Prototypes for DRI functions */
 

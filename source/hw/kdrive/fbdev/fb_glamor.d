@@ -10,7 +10,7 @@ import kdrive_config;
 
 import X11.Xfuncproto;
 
-import scrnintstr;
+import include.scrnintstr;
 
 import glamor;
 import glamor_egl;
@@ -22,7 +22,7 @@ import kxv;
 }
 
 version (WITH_LIBDRM) {
-import xf86drm;
+import include.xf86drm;
 }
 
 import core.stdc.errno;

@@ -35,7 +35,7 @@ import core.stdc.math;
 import deimos.X11.X;
 import deimos.X11.Xprotostr;
 import regionstr;
-import gcstruct;
+import include.gcstruct;
 import pixmapstr;
 import mi;
 import mifillarc;

@@ -51,10 +51,10 @@ import build.dix_config;
 import deimos.X11.X;
 
 import misc;
-import scrnintstr;
-import gcstruct;
+import include.scrnintstr;
+import include.gcstruct;
 import windowstr;
-import pixmap;
+import include.pixmap;
 import mi;
 import miline;
 

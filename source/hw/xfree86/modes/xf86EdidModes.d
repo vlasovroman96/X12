@@ -37,7 +37,7 @@ import xf86DDC_priv;
 import X11.Xatom;
 import property;
 import propertyst;
-import xf86Crtc;
+import include.xf86Crtc;
 import core.stdc.string;
 import core.stdc.math;
 import edid_priv;

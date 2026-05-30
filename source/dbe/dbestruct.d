@@ -38,7 +38,7 @@ public import deimos.X11.Xmd;
 public import deimos.X11.extensions.dbeproto;
 
 public import windowstr;
-public import privates;
+public import include.privates;
 
 struct XdbeVisualInfo {
     VisualID visual;            /* one visual ID that supports double-buffering */

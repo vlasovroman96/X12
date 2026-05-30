@@ -60,9 +60,9 @@ import dix.settings_priv;
 
 import misc;
 import windowstr;
-import scrnintstr;
-import input;
-import dixfont;
+import include.scrnintstr;
+import include.input;
+import include.dixfont;
 import dixstruct;
 import os;
 

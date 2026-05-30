@@ -13,10 +13,10 @@ public import deimos.X11.Xmd;
 
 public import xkb.xkbrules_priv;
 
-public import dix;
-public import input;
+public import include.dix;
+public import include.input;
 public import misc;
-public import privates;
+public import include.privates;
 public import xkbsrv;
 public import xkbstr;
 

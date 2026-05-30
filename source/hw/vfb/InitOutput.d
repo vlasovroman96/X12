@@ -51,12 +51,12 @@ import os.ddx_priv;
 import os.osdep;
 import os.xhostname;
 
-import scrnintstr;
-import servermd;
+import include.scrnintstr;
+import include.servermd;
 enum PSZ = 8;
 import fb;
-import gcstruct;
-import input;
+import include.gcstruct;
+import include.input;
 import mipointer;
 import micmap;
 import core.sys.posix.sys.types;
@@ -75,10 +75,10 @@ version (CONFIG_MITSHM) {
 import core.sys.posix.sys.ipc;
 import core.sys.posix.sys.shm;
 } /* CONFIG-MITSHM */
-import dix;
+import include.dix;
 import miline;
 import glx_extinit;
-import randrstr;
+import include.randrstr;
 
 version (GLAMOR) {
 import glamor;

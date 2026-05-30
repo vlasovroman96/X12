@@ -64,7 +64,7 @@ import dix.rpcbuf_priv;
 import dix.window_priv;
 import Xi.handlers;
 
-import inputstr;           /* DeviceIntPtr      */
+import include.inputstr;           /* DeviceIntPtr      */
 import windowstr;          /* window structs    */
 import swaprep;
 import getprop;

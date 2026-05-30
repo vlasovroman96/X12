@@ -25,11 +25,11 @@ extern(C): __gshared:
  */
 
  
-public import scrnintstr;
+public import include.scrnintstr;
 
-public import picturestr;
+public import include.picturestr;
 
-public import damage;
+public import include.damage;
 public import damagestr;
 alias shadowBufPtr = _shadowBuf*;
 

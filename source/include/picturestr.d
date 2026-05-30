@@ -27,10 +27,10 @@ import core.stdc.config: c_long, c_ulong;
 
  
 public import deimos.X11.extensions.renderproto;
-public import scrnintstr;
+public import include.scrnintstr;
 public import glyphstr;
-public import resource;
-public import privates;
+public import include.resource;
+public import include.privates;
 
 struct DirectFormatRec {
     CARD16 red, redMask;

@@ -49,8 +49,8 @@ SOFTWARE.
 ******************************************************************/
 
  
-public import xlibre_ptrtypes;
-public import window;
+public import include.xlibre_ptrtypes;
+public import include.window;
 
 extern _X_EXPORT dixChangeWindowProperty(ClientPtr pClient, WindowPtr pWin, Atom property, Atom type, int format, int mode, c_ulong len, const(void)* value, Bool sendevent);
 

@@ -44,8 +44,8 @@ import dix.request_priv;
 import dix.rpcbuf_priv;
 import Xi.handlers;
 
-import dix;
-import inputstr;
+import include.dix;
+import include.inputstr;
 import exglobals;
 import swaprep;
 import xiproperty;

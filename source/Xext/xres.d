@@ -32,12 +32,12 @@ import extnsionst;
 import swaprep;
 import pixmapstr;
 import windowstr;
-import gcstruct;
+import include.gcstruct;
 import include.protocol_versions;
 import list;
 import misc;
 import hashtable;
-import picturestr;
+import include.picturestr;
 import compint;
 
 Bool noResExtension = FALSE;

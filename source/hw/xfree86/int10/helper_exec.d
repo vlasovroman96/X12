@@ -38,7 +38,7 @@ import x86emu.x86emui;
 } else {
 enum string DEBUG_IO_TRACE() = `0`;
 }
-import pciaccess;
+import include.pciaccess;
 
 
 

@@ -47,7 +47,7 @@ import xkb.xkbfmisc_priv;
 import xkb.xkbsrv_priv;
 
 import misc;
-import inputstr;
+import include.inputstr;
 import extnsionst;
 import xkb.xkb_procs;
 import include.protocol_versions;
