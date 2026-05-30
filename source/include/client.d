@@ -1,4 +1,4 @@
-module client.h;
+module include.client;
 @nogc nothrow:
 extern(C): __gshared:
 /*
