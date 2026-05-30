@@ -1,4 +1,4 @@
-module configProcs.h;
+module configProcs;
 @nogc nothrow:
 extern(C): __gshared:
 /*

@@ -1,4 +1,4 @@
-module xf86sbusBus_priv.h;
+module xf86sbusBus_priv;
 @nogc nothrow:
 extern(C): __gshared:
 /* SPDX-License-Identifier: MIT OR X11

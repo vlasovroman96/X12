@@ -1,4 +1,4 @@
-module ephyrlog.h;
+module ephyrlog;
 @nogc nothrow:
 extern(C): __gshared:
 /*

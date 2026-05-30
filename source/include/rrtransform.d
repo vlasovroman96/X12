@@ -1,4 +1,4 @@
-module include.rrtransform.h;
+module include.rrtransform;
 @nogc nothrow:
 extern(C): __gshared:
 /*

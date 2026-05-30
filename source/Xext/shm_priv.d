@@ -1,4 +1,4 @@
-module shm_priv.h;
+module shm_priv;
 @nogc nothrow:
 extern(C): __gshared:
 import core.stdc.config: c_long, c_ulong;

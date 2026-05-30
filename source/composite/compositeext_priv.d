@@ -1,4 +1,4 @@
-module compositeext_priv.h;
+module compositeext_priv;
 @nogc nothrow:
 extern(C): __gshared:
 /* SPDX-License-Identifier: MIT OR X11

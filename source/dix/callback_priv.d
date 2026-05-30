@@ -1,4 +1,4 @@
-module callback_priv.h;
+module callback_priv;
 @nogc nothrow:
 extern(C): __gshared:
 /* SPDX-License-Identifier: MIT OR X11

@@ -1,4 +1,4 @@
-module include.shadowfb.h;
+module include.shadowfb;
 @nogc nothrow:
 extern(C): __gshared:
 

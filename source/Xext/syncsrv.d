@@ -1,4 +1,4 @@
-module syncsrv.h;
+module syncsrv;
 @nogc nothrow:
 extern(C): __gshared:
 /*

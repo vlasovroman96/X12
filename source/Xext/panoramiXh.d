@@ -1,4 +1,4 @@
-module panoramiXh.h;
+module panoramiXh;
 @nogc nothrow:
 extern(C): __gshared:
 /*

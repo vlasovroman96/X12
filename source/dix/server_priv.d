@@ -1,4 +1,4 @@
-module server_priv.h;
+module server_priv;
 @nogc nothrow:
 extern(C): __gshared:
 /* SPDX-License-Identifier: MIT OR X11

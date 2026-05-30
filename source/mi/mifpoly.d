@@ -1,4 +1,4 @@
-module mifpoly.h;
+module mifpoly;
 @nogc nothrow:
 extern(C): __gshared:
 /***********************************************************

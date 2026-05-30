@@ -1,4 +1,4 @@
-module XNFont.h;
+module XNFont;
 @nogc nothrow:
 extern(C): __gshared:
 /*

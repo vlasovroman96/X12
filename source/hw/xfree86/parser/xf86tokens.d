@@ -1,4 +1,4 @@
-module xf86tokens.h;
+module xf86tokens;
 @nogc nothrow:
 extern(C): __gshared:
 /*

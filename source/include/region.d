@@ -1,4 +1,4 @@
-module include.region.h;
+module include.region;
 @nogc nothrow:
 extern(C): __gshared:
 /***********************************************************

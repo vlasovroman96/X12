@@ -1,4 +1,4 @@
-module atom_priv.h;
+module atom_priv;
 @nogc nothrow:
 extern(C): __gshared:
 /* SPDX-License-Identifier: MIT OR X11

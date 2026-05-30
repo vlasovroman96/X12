@@ -63,7 +63,7 @@ import	scrnintstr;
 import	pixmap;
 import	servermd;
 import        mi;
-import dixfontstr.h;
+import dixfontstr;
 
 /*
     machine-independent glyph blt.

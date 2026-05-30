@@ -1,4 +1,4 @@
-module xacestr.h;
+module xacestr;
 @nogc nothrow:
 extern(C): __gshared:
 /************************************************************

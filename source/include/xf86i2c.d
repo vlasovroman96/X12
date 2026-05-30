@@ -1,4 +1,4 @@
-module include.xf86i2c.h;
+module include.xf86i2c;
 @nogc nothrow:
 extern(C): __gshared:
 /*

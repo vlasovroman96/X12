@@ -1,4 +1,4 @@
-module fbpict_priv.h;
+module fbpict_priv;
 @nogc nothrow:
 extern(C): __gshared:
 /* SPDX-License-Identifier: MIT OR X11

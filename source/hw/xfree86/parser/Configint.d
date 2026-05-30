@@ -1,4 +1,4 @@
-module Configint.h;
+module Configint;
 @nogc nothrow:
 extern(C): __gshared:
 /*

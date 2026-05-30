@@ -1,4 +1,4 @@
-module selection_priv.h;
+module selection_priv;
 @nogc nothrow:
 extern(C): __gshared:
 /* SPDX-License-Identifier: MIT OR X11

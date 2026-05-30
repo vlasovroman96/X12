@@ -1,4 +1,4 @@
-module include.shmint.h;
+module include.shmint;
 @nogc nothrow:
 extern(C): __gshared:
 /*

@@ -1,4 +1,4 @@
-module xselinux.h;
+module xselinux;
 @nogc nothrow:
 extern(C): __gshared:
 /************************************************************

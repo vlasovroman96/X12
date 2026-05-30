@@ -1,4 +1,4 @@
-module Drawable.h;
+module Drawable;
 @nogc nothrow:
 extern(C): __gshared:
 /*

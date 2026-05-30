@@ -46,9 +46,9 @@ import Xext.geext_priv;
 
 import include.misc;
 import include.os;
-import dixstruct;
+import include.dixstruct;
 import include.extnsionst;
-import opaque;
+import include.opaque;
 import dpmsproc;
 import include.scrnintstr;
 import include.windowstr;

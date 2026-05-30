@@ -1,4 +1,4 @@
-module window_priv.h;
+module window_priv;
 @nogc nothrow:
 extern(C): __gshared:
 /* SPDX-License-Identifier: MIT OR X11

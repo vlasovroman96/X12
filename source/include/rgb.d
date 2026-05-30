@@ -1,4 +1,4 @@
-module include.rgb.h;
+module include.rgb;
 @nogc nothrow:
 extern(C): __gshared:
 /***********************************************************

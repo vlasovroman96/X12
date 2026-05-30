@@ -1,4 +1,4 @@
-module xf86MatchDrivers.h;
+module xf86MatchDrivers;
 @nogc nothrow:
 extern(C): __gshared:
 /*

@@ -1,4 +1,4 @@
-module glamor_context.h;
+module glamor_context;
 @nogc nothrow:
 extern(C): __gshared:
 /*

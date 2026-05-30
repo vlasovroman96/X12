@@ -1,4 +1,4 @@
-module action_priv.h;
+module action_priv;
 @nogc nothrow:
 extern(C): __gshared:
 /* SPDX-License-Identifier: MIT OR X11

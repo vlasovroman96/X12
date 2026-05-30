@@ -614,7 +614,7 @@ private double tailX(double K, arc_def* def, arc_bound* bounds, accelerators* ac
     double* xp = void;
 
     w = def.w;
-    h = def.h;
+    h = def;
     r = def.l;
     rs = r * r;
     Hs = acc.h2;
@@ -2545,7 +2545,7 @@ private void computeAcc(xArc* tarc, int lw, arc_def* def, accelerators* acc)
     def.w = (cast(double) tarc.width) / 2.0;
     def.h = (cast(double) tarc.height) / 2.0;
     def.l = (cast(double) lw) / 2.0;
-    acc.h2 = def.h * def.h;
+    acc.h2 = def.h * def;
     acc.w2 = def.w * def.w;
     acc.h4 = acc.h2 * acc.h2;
     acc.w4 = acc.w2 * acc.w2;
@@ -2573,8 +2573,8 @@ private void computeBound(arc_def* def, arc_bound* bound, accelerators* acc, miA
     bound innerx = void, outerx = void;
     bound ellipsex = void;
 
-    bound.ellipse.min = mixin(Dsin!(`def.a0`)) * def.h;
-    bound.ellipse.max = mixin(Dsin!(`def.a1`)) * def.h;
+    bound.ellipse.min = mixin(Dsin!(`def.a0`)) * def;
+    bound.ellipse.max = mixin(Dsin!(`def.a1`)) * def;
     if (def.a0 == 45 && def.w == def.h)
         ellipsex.min = bound.ellipse.min;
     else

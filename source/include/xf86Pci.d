@@ -1,4 +1,4 @@
-module include.xf86Pci.h;
+module include.xf86Pci;
 @nogc nothrow:
 extern(C): __gshared:
 /*

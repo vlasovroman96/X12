@@ -1,4 +1,4 @@
-module dbestruct.h;
+module dbestruct;
 @nogc nothrow:
 extern(C): __gshared:
 /******************************************************************************

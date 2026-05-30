@@ -1,4 +1,4 @@
-module include.xf86fbman.h;
+module include.xf86fbman;
 @nogc nothrow:
 extern(C): __gshared:
 

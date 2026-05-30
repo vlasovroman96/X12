@@ -1,4 +1,4 @@
-module include.xf86Xinput.h;
+module include.xf86Xinput;
 @nogc nothrow:
 extern(C): __gshared:
 /*

@@ -1,4 +1,4 @@
-module miscanfill.h;
+module miscanfill;
 @nogc nothrow:
 extern(C): __gshared:
 /*

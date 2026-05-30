@@ -1,4 +1,4 @@
-module os.Xtransint.h;
+module os.Xtransint;
 @nogc nothrow:
 extern(C): __gshared:
 

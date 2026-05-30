@@ -1,4 +1,4 @@
-module include.xaarop.h;
+module include.xaarop;
 @nogc nothrow:
 extern(C): __gshared:
  

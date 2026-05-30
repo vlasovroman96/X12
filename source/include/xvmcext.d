@@ -1,4 +1,4 @@
-module include.xvmcext.h;
+module include.xvmcext;
 @nogc nothrow:
 extern(C): __gshared:
 

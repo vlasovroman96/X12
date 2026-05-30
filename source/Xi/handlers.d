@@ -1,4 +1,4 @@
-module handlers.h;
+module handlers;
 @nogc nothrow:
 extern(C): __gshared:
 /* SPDX-License-Identifier: MIT OR X11

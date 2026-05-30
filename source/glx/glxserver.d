@@ -1,4 +1,4 @@
-module glxserver.h;
+module glxserver;
 @nogc nothrow:
 extern(C): __gshared:
  

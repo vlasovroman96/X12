@@ -1,4 +1,4 @@
-module xnest_xkb.h;
+module xnest_xkb;
 @nogc nothrow:
 extern(C): __gshared:
 /* SPDX-License-Identifier: MIT OR X11

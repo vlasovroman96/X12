@@ -1,4 +1,4 @@
-module compint.h;
+module compint;
 @nogc nothrow:
 extern(C): __gshared:
 /*

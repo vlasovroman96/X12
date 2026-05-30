@@ -1,4 +1,4 @@
-module dpmsproc.h;
+module dpmsproc;
 @nogc nothrow:
 extern(C): __gshared:
 /* Prototypes for functions that the DDX must provide */

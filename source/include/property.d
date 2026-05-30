@@ -1,4 +1,4 @@
-module include.property.h;
+module include.property;
 @nogc nothrow:
 extern(C): __gshared:
 import core.stdc.config: c_long, c_ulong;

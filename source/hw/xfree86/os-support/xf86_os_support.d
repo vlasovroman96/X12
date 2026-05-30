@@ -1,4 +1,4 @@
-module xf86_os_support.h;
+module xf86_os_support;
 @nogc nothrow:
 extern(C): __gshared:
 /* SPDX-License-Identifier: MIT OR X11

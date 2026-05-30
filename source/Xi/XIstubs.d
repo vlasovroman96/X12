@@ -1,4 +1,4 @@
-module XIstubs.h;
+module XIstubs;
 @nogc nothrow:
 extern(C): __gshared:
 /************************************************************

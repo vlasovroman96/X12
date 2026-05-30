@@ -1,4 +1,4 @@
-module xfixesint.h;
+module xfixesint;
 @nogc nothrow:
 extern(C): __gshared:
 /*

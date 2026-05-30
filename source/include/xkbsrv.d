@@ -1,4 +1,4 @@
-module include.xkbsrv.h;
+module include.xkbsrv;
 @nogc nothrow:
 extern(C): __gshared:
 /************************************************************

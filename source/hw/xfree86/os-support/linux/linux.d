@@ -1,4 +1,4 @@
-module linux.h;
+module hw.xfree.os_support.linux.linux;
 @nogc nothrow:
 extern(C): __gshared:
 /*

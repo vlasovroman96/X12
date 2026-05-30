@@ -1,4 +1,4 @@
-module glxutil.h;
+module glxutil;
 @nogc nothrow:
 extern(C): __gshared:
  

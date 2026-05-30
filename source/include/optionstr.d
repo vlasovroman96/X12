@@ -1,4 +1,4 @@
-module include.optionstr.h;
+module include.optionstr;
 @nogc nothrow:
 extern(C): __gshared:
  

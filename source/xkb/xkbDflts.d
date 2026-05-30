@@ -1,4 +1,4 @@
-module xkbDflts.h;
+module xkbDflts;
 @nogc nothrow:
 extern(C): __gshared:
 version (DEFAULT_H) {} else {

@@ -1,4 +1,4 @@
-module include.mioverlay.h;
+module include.mioverlay;
 @nogc nothrow:
 extern(C): __gshared:
  

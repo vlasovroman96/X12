@@ -1,4 +1,4 @@
-module include.vndserver.h;
+module include.vndserver;
 @nogc nothrow:
 extern(C): __gshared:
 /*

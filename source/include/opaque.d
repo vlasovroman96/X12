@@ -1,4 +1,4 @@
-module include.opaque.h;
+module include.opaque;
 @nogc nothrow:
 extern(C): __gshared:
 /*

@@ -1,4 +1,4 @@
-module glamor_egl_ext.h;
+module glamor_egl_ext;
 @nogc nothrow:
 extern(C): __gshared:
 /*

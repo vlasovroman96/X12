@@ -1,4 +1,4 @@
-module xf86_compat.h;
+module xf86_compat;
 @nogc nothrow:
 extern(C): __gshared:
 /* SPDX-License-Identifier: MIT OR X11

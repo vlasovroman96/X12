@@ -1,4 +1,4 @@
-module inpututils_priv.h;
+module inpututils_priv;
 @nogc nothrow:
 extern(C): __gshared:
 /*

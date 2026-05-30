@@ -1,4 +1,4 @@
-module include.mistruct.h;
+module include.mistruct;
 @nogc nothrow:
 extern(C): __gshared:
 /***********************************************************

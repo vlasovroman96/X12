@@ -1,4 +1,4 @@
-module include.glyphstr.h;
+module include.glyphstr;
 @nogc nothrow:
 extern(C): __gshared:
 /*

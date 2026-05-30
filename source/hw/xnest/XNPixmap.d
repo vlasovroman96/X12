@@ -1,4 +1,4 @@
-module XNPixmap.h;
+module XNPixmap;
 @nogc nothrow:
 extern(C): __gshared:
 /*

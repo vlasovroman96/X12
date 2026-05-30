@@ -1,4 +1,4 @@
-module include.misync.h;
+module include.misync;
 @nogc nothrow:
 extern(C): __gshared:
 /*

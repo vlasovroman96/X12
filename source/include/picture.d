@@ -1,4 +1,4 @@
-module include.picture.h;
+module include.picture;
 @nogc nothrow:
 extern(C): __gshared:
 /*

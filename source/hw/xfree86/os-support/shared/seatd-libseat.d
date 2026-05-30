@@ -1,4 +1,4 @@
-module seatd_libseat;
+module hw.xfree.os_support.shrd.seatd_libseat;
 @nogc nothrow:
 extern(C): __gshared:
 /*

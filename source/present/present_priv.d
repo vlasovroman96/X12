@@ -1,4 +1,4 @@
-module present_priv.h;
+module present_priv;
 @nogc nothrow:
 extern(C): __gshared:
 /*

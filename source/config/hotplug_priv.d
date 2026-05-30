@@ -1,4 +1,4 @@
-module hotplug_priv.h;
+module hotplug_priv;
 @nogc nothrow:
 extern(C): __gshared:
 /* SPDX-License-Identifier: MIT OR X11

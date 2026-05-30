@@ -1,4 +1,4 @@
-module seatd_libseat.h;
+module seatd_libseat;
 @nogc nothrow:
 extern(C): __gshared:
 /*

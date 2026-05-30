@@ -1,4 +1,4 @@
-module dgaproc_priv.h;
+module dgaproc_priv;
 @nogc nothrow:
 extern(C): __gshared:
 /* SPDX-License-Identifier: MIT OR X11

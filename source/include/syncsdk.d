@@ -1,4 +1,4 @@
-module include.syncsdk.h;
+module include.syncsdk;
 @nogc nothrow:
 extern(C): __gshared:
 /*

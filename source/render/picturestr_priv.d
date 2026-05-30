@@ -1,4 +1,4 @@
-module picturestr_priv.h;
+module picturestr_priv;
 @nogc nothrow:
 extern(C): __gshared:
 /* SPDX-License-Identifier: MIT OR X11

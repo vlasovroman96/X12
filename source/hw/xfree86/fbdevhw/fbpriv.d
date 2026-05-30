@@ -1,4 +1,4 @@
-module fbpriv.h;
+module fbpriv;
 @nogc nothrow:
 extern(C): __gshared:
 /*

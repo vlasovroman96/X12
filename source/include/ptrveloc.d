@@ -1,4 +1,4 @@
-module include.ptrveloc.h;
+module include.ptrveloc;
 @nogc nothrow:
 extern(C): __gshared:
 /*

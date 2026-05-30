@@ -1,4 +1,4 @@
-module include.mi.h;
+module include.mi;
 @nogc nothrow:
 extern(C): __gshared:
 /***********************************************************

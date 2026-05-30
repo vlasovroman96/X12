@@ -1,4 +1,4 @@
-module edid_priv.h;
+module edid_priv;
 @nogc nothrow:
 extern(C): __gshared:
 /*

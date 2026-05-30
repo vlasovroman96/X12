@@ -1,4 +1,4 @@
-module xkbgeom_priv.h;
+module xkbgeom_priv;
 @nogc nothrow:
 extern(C): __gshared:
 /************************************************************

@@ -1,4 +1,4 @@
-module include.micoord.h;
+module include.micoord;
 @nogc nothrow:
 extern(C): __gshared:
 /*

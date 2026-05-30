@@ -1,4 +1,4 @@
-module include.mipict.h;
+module include.mipict;
 @nogc nothrow:
 extern(C): __gshared:
 /*

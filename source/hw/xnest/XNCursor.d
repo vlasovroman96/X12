@@ -1,4 +1,4 @@
-module XNCursor.h;
+module XNCursor;
 @nogc nothrow:
 extern(C): __gshared:
 /*

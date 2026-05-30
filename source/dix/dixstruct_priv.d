@@ -1,4 +1,4 @@
-module dixstruct_priv.h;
+module dixstruct_priv;
 @nogc nothrow:
 extern(C): __gshared:
 import core.stdc.config: c_long, c_ulong;

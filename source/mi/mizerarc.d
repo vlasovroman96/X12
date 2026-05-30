@@ -384,9 +384,9 @@ private DDXPointPtr miZeroArcPts(xArc* arc, DDXPointPtr pts)
         info.end = info.altend;
     }
     if (do360 && (arc.width == arc.height) && !(arc.width & 1)) {
-        int yorgh = info.yorg + info.h;
-        int xorghp = info.xorg + info.h;
-        int xorghn = info.xorg - info.h;
+        int yorgh = info.yorg + info;
+        int xorghp = info.xorg + info;
+        int xorghn = info.xorg - info;
 
         while (1) {
             mixin(Pixelate!(`info.xorg + x`, `info.yorg + y`));
@@ -405,7 +405,7 @@ private DDXPointPtr miZeroArcPts(xArc* arc, DDXPointPtr pts)
         if (x > 1 && pts[-1].x == pts[-5].x && pts[-1].y == pts[-5].y)
             pts -= 4;
         x = info.w;
-        y = info.h;
+        y = info;
     }
     else if (do360) {
         while (y < info.h || x < info.w) {

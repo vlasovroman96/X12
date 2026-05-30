@@ -1,4 +1,4 @@
-module include.sarea.h;
+module include.sarea;
 @nogc nothrow:
 extern(C): __gshared:
 /**

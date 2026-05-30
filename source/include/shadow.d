@@ -1,4 +1,4 @@
-module include.shadow.h;
+module include.shadow;
 @nogc nothrow:
 extern(C): __gshared:
 /*

@@ -1,4 +1,4 @@
-module include.mipointer.h;
+module include.mipointer;
 @nogc nothrow:
 extern(C): __gshared:
 /*

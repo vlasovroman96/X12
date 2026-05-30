@@ -1,4 +1,4 @@
-module include.xf86str.h;
+module include.xf86str;
 @nogc nothrow:
 extern(C): __gshared:
 
