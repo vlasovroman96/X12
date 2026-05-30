@@ -11,7 +11,7 @@ import core.stdc.config: c_long, c_ulong;
  * Copyright (c) 2000 by Conectiva S.A. (http://www.conectiva.com)
  * Authors: Paulo César Pereira de Andrade <pcpa@conectiva.com.br>
  */
-import xorg_config;
+import build.xorg_config;
 
 import core.stdc.string;
 

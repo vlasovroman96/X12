@@ -39,7 +39,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *   Rickard E. (Rik) Faith <faith@valinux.com>
  *
  */
-import xorg_config;
+import build.xorg_config;
 
 import core.stdc.errno;
 import core.stdc.stdio;

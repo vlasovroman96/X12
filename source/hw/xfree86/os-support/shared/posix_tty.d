@@ -54,7 +54,7 @@ extern(C): __gshared:
  * in this Software without prior written authorization from Metro Link.
  *
  */
-import xorg_config;
+import build.xorg_config;
 
 import core.stdc.errno;
 import X11.X;

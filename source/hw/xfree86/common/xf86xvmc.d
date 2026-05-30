@@ -27,7 +27,7 @@ extern(C): __gshared:
  * the sale, use or other dealings in this Software without prior written
  * authorization from the copyright holder(s) and author(s).
  */
-import xorg_config;
+import build.xorg_config;
 
 import include.misc;
 import xf86;

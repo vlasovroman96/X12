@@ -11,7 +11,7 @@ import core.stdc.config: c_long, c_ulong;
  *   Copyright 1990,91 by Thomas Roell, Dinkelscherben, Germany.
  *
  */
-import xorg_config;
+import build.xorg_config;
 
 import core.stdc.stdlib;
 import core.stdc.string;

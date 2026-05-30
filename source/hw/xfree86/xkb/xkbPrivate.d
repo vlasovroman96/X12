@@ -1,7 +1,7 @@
 module xkbPrivate;
 @nogc nothrow:
 extern(C): __gshared:
-import xorg_config;
+import build.xorg_config;
 
 import core.stdc.stdio;
 import X11.X;

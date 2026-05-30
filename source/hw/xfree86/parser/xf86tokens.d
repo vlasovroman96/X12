@@ -55,7 +55,7 @@ extern(C): __gshared:
  * authorization from the copyright holder(s) and author(s).
  */
  
-public import xorg_config;
+public import build.xorg_config;
 
 /*
  * Each token should have a unique value regardless of the section

@@ -38,7 +38,7 @@ import include.list;
 import include.misc;
 import hashtable;
 import include.picturestr;
-import compint;
+import composite.compint;
 
 Bool noResExtension = FALSE;
 

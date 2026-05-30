@@ -7,7 +7,7 @@ extern(C): __gshared:
  */
 
  
-public import xorg_config;
+public import build.xorg_config;
 
 public import c_asm.types;
 

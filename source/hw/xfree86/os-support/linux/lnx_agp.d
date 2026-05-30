@@ -14,7 +14,7 @@ import core.stdc.config: c_long, c_ulong;
  * Copyright © 2000 VA Linux Systems, Inc.
  * Copyright © 2001 The XFree86 Project, Inc.
  */
-import xorg_config;
+import build.xorg_config;
 
 import core.stdc.errno;
 import X11.X;

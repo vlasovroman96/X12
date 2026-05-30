@@ -14,7 +14,7 @@ the suitability of this software for any purpose.  It is provided "as
 is" without express or implied warranty.
 
 */
-import xorg_config;
+import build.xorg_config;
 
 import X11.X;
 import X11.Xproto;

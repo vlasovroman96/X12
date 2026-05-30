@@ -6,7 +6,7 @@ import core.stdc.config: c_long, c_ulong;
  * linux specific part of the int10 module
  * Copyright 1999, 2000, 2001, 2002, 2003, 2004, 2008 Egbert Eich
  */
-import xorg_config;
+import build.xorg_config;
 
 import xf86;
 import xf86_OSproc;

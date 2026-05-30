@@ -54,8 +54,8 @@ import include.extinit;
 import os.osdep;
 import Xext.panoramiXsrv;
 
-import compint;
-import compositeext_priv;
+import composite.compint;
+import composite.compositeext_priv;
 
 version (COMPOSITE_DEBUG) {
 private int compCheckWindow(WindowPtr pWin, void* data)

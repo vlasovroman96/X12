@@ -26,7 +26,7 @@ extern(C): __gshared:
  *
  * print_edid.c: print out all information retrieved from display device
  */
-import xorg_config;
+import build.xorg_config;
 
 import include.misc;
 import xf86;

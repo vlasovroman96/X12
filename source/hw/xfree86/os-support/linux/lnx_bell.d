@@ -26,7 +26,7 @@ import core.stdc.config: c_long, c_ulong;
  *
  * Author: Daniel Stone <daniel@fooishbar.org>
  */
-import xorg_config;
+import build.xorg_config;
 
 import core.sys.posix.sys.ioctl;
 import linux.kd;

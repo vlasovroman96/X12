@@ -53,7 +53,7 @@ import dix.screen_hooks_priv;
 import include.extinit;
 import os.osdep;
 
-import compint;
+import composite.compint;
 import compositeext;
 
 Bool noCompositeExtension = FALSE;

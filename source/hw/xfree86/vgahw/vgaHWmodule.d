@@ -4,7 +4,7 @@ extern(C): __gshared:
 /*
  * Copyright 1998 by The XFree86 Project, Inc
  */
-import xorg_config;
+import build.xorg_config;
 
 import xf86Module;
 

@@ -35,7 +35,7 @@ private template HasVersion(string versionId) {
  *
  * Author: David Dawes <dawes@XFree86.Org>.
  */
-import xorg_config;
+import build.xorg_config;
 
 import os.osdep;
 

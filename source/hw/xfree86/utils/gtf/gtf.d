@@ -105,7 +105,7 @@ extern(C): __gshared:
  * o Error checking.
  *
  */
-import xorg_config;
+import build.xorg_config;
 
 import core.stdc.stdio;
 import core.stdc.stdlib;

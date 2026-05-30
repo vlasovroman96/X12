@@ -25,7 +25,7 @@ extern(C): __gshared:
  *
  * Author: Daniel Stone <daniel@fooishbar.org>
  */
-import xorg_config;
+import build.xorg_config;
 
 import include.extension;
 import include.globals;

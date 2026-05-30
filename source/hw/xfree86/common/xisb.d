@@ -31,7 +31,7 @@ extern(C): __gshared:
 	X Input Serial Buffer routines for use in any XInput driver that accesses
 	a serial device.
 */
-import xorg_config;
+import build.xorg_config;
 
 import include.misc;
 import xf86;

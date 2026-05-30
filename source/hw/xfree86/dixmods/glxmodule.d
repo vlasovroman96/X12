@@ -32,7 +32,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *   Kevin E. Martin <kevin@precisioninsight.com>
  *
  */
-import xorg_config;
+import build.xorg_config;
 
 import xf86Module;
 import xf86Priv;

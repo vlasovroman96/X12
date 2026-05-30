@@ -35,7 +35,7 @@ import core.stdc.config: c_long, c_ulong;
 /*
  * This file contains the interfaces to the bus-specific code
  */
-import xorg_config;
+import build.xorg_config;
 
 import core.stdc.ctype;
 import core.sys.posix.dirent;

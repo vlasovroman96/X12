@@ -32,7 +32,7 @@ enum DEBUG_VERB = 2;
  * Authors: David Dawes <dawes@xfree86.org>
  *
  */
-import xorg_config;
+import build.xorg_config;
 
 import core.stdc.stdio;
 import core.stdc.string;

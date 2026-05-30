@@ -29,7 +29,7 @@ private template HasVersion(string versionId) {
  * Author:  Alan Hourihane, alanh@fairlite.demon.co.uk
  *
  */
-import xorg_config;
+import build.xorg_config;
 
 import core.stdc.errno;
 

@@ -83,7 +83,7 @@ import core.stdc.config: c_long, c_ulong;
  *
  * This file includes helper functions for mode related things.
  */
-import xorg_config;
+import build.xorg_config;
 
 import X11.X;
 

@@ -36,7 +36,7 @@ extern(C): __gshared:
  * so that two version of code that do similar things don't have to be
  * maintained.
  */
-import xorg_config;
+import build.xorg_config;
 
 import X11.X;
 

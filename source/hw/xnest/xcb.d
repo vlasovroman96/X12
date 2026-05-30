@@ -5,7 +5,7 @@ extern(C): __gshared:
  *
  * Copyright © 2024 Enrico Weigelt, metux IT consult <info@metux.net>
  */
-import xorg_config;
+import build.xorg_config;
 
 import stdbool;
 import xcb.xcb;

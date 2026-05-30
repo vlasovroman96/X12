@@ -69,7 +69,7 @@ import include.xf86Crtc;
 import miscstruct;
 import dixstruct;
 import xf86xv;
-import xorg_config;
+import build.xorg_config;
 version (XSERVER_PLATFORM_BUS) {
 import xf86platformBus_priv;
 }

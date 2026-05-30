@@ -29,7 +29,7 @@ extern(C): __gshared:
  */
 
 /* Stubs for the OS-support layer power-management functions. */
-import xorg_config;
+import build.xorg_config;
 
 import X11.X;
 

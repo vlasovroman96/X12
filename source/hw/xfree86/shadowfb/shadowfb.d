@@ -8,7 +8,7 @@ extern(C): __gshared:
    Written by Mark Vojkovich (mvojkovi@ucsd.edu)
    Pre-fb-write callbacks and RENDER support - Nolan Leake (nolan@vmware.com)
 */
-import xorg_config;
+import build.xorg_config;
 
 import X11.X;
 import X11.Xproto;

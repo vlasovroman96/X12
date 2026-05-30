@@ -30,7 +30,7 @@ extern(C): __gshared:
  * information into a list of modes, including applying monitor-specific
  * quirks to fix broken EDID data.
  */
-import xorg_config;
+import build.xorg_config;
 
 import xf86;
 import xf86DDC_priv;

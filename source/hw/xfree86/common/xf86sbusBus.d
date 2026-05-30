@@ -23,7 +23,7 @@ extern(C): __gshared:
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-import xorg_config;
+import build.xorg_config;
 
 import core.stdc.ctype;
 import core.stdc.stdio;

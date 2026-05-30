@@ -30,7 +30,7 @@ import core.stdc.config: c_long, c_ulong;
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  *
  */
-import xorg_config;
+import build.xorg_config;
 
 import core.stdc.errno;
 import core.stdc.string;

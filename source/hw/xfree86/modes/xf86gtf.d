@@ -63,7 +63,7 @@ extern(C): __gshared:
 
 /* Ruthlessly converted to server code by Adam Jackson <ajax@redhat.com> */
 
-import xorg_config;
+import build.xorg_config;
 
 import xf86;
 import xf86Modes;

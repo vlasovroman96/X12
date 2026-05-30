@@ -60,7 +60,7 @@ extern(C): __gshared:
  * they should not be visible outside of the parser.
  */
  
-public import xorg_config;
+public import build.xorg_config;
 
 public import core.stdc.stdio;
 public import core.stdc.string;

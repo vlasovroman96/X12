@@ -2,7 +2,7 @@ module lnx_acpi;
 @nogc nothrow:
 extern(C): __gshared:
 import core.stdc.config: c_long, c_ulong;
-import xorg_config;
+import build.xorg_config;
 
 import core.sys.posix.sys.ioctl;
 import core.sys.posix.sys.types;

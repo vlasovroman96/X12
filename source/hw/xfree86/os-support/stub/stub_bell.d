@@ -1,7 +1,7 @@
 module hw.xfree86.os_support.stub.stub_bell;
 @nogc nothrow:
 extern(C): __gshared:
-import xorg_config;
+import build.xorg_config;
 
 import xf86_os_support;
 

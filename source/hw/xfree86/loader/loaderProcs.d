@@ -50,7 +50,7 @@ import core.stdc.config: c_long, c_ulong;
  * authorization from the copyright holder(s) and author(s).
  */
  
-public import xorg_config;
+public import build.xorg_config;
 
 public import xf86Module;
 

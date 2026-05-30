@@ -15,7 +15,7 @@ import core.stdc.config: c_long, c_ulong;
  *   Slowbcopy(char *src, char *dst, int count)
  *
  */
-import xorg_config;
+import build.xorg_config;
 
 import X11.X;
 import xf86;

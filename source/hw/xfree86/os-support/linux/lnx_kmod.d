@@ -1,7 +1,7 @@
 module lnx_kmod;
 @nogc nothrow:
 extern(C): __gshared:
-import xorg_config;
+import build.xorg_config;
 
 import core.stdc.errno;
 import core.sys.posix.fcntl;

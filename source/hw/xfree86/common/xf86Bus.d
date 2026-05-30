@@ -35,7 +35,7 @@ private template HasVersion(string versionId) {
 /*
  * This file contains the interfaces to the bus-specific code
  */
-import xorg_config;
+import build.xorg_config;
 
 import core.stdc.ctype;
 import core.stdc.stdlib;

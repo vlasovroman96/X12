@@ -23,7 +23,7 @@ extern(C): __gshared:
  * PERFORMANCE OF THIS SOFTWARE.
  *
  */
-import xorg_config;
+import build.xorg_config;
 
 import X11.X;
 

@@ -64,7 +64,7 @@ import include.servermd;
 import include.resource;
 import picturestr_priv;
 import xfixesint;
-import compint;
+import composite.compint;
 import include.protocol_versions;
 
 /* Xinerama is disabled by default unless enabled via +xinerama */

@@ -24,7 +24,7 @@ extern(C): __gshared:
  * NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
  * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-import xorg_config;
+import build.xorg_config;
 
 import core.stdc.errno;
 import core.sys.posix.fcntl;

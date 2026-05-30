@@ -31,7 +31,7 @@ extern(C): __gshared:
 /*
  * This file contains all the XFree86 global variables.
  */
-import xorg_config;
+import build.xorg_config;
 
 import X11.X;
 import include.os;

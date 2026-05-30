@@ -1,4 +1,4 @@
-module compoverlay;
+module composite.compoverlay;
 @nogc nothrow:
 extern(C): __gshared:
 /*
@@ -51,7 +51,7 @@ import dix.window_priv;
 import include.extinit;
 import Xext.panoramiXsrv;
 
-import compint;
+import composite.compint;
 import xace;
 
 /*

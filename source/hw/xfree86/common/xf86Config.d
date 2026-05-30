@@ -48,7 +48,7 @@ private template HasVersion(string versionId) {
  *      Egbert Eich <eich@XFree86.Org>
  *      ... and others
  */
-import xorg_config;
+import build.xorg_config;
 
 import core.sys.posix.sys.stat;
 import core.sys.posix.sys.types;

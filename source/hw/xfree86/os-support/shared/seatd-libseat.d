@@ -26,7 +26,7 @@ extern(C): __gshared:
  * Authors: Mark Hindley <mark@hindley.org.uk>
  *          Ralph Ronnquist <ralph.ronnquist@gmail.com>
  */
-import xorg_config;
+import build.xorg_config;
 
 import core.stdc.stdio;
 import core.stdc.string;

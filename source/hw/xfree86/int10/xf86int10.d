@@ -7,7 +7,7 @@ import core.stdc.config: c_long, c_ulong;
  *   execute BIOS int 10h calls in x86 real mode environment
  *                 Copyright 1999 Egbert Eich
  */
-import xorg_config;
+import build.xorg_config;
 
 import xf86;
 import compiler;

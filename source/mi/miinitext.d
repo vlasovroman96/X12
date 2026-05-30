@@ -77,7 +77,7 @@ SOFTWARE.
 import build.dix_config;
 
 version (HAVE_XORG_CONFIG_H) {
-import xorg_config;
+import build.xorg_config;
 import xf86Extensions;
 }
 

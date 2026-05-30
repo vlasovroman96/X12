@@ -6,7 +6,7 @@ extern(C): __gshared:
  * Copyright (c) 2025 Oleh Nykyforchyn <oleh.nyk@gmail.com>
  *
  */
-import xorg_config;
+import build.xorg_config;
 
 import core.stdc.stdio;
 import core.stdc.stdlib;

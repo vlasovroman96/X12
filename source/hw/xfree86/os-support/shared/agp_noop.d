@@ -33,7 +33,7 @@ import core.stdc.config: c_long, c_ulong;
  * Abstraction of the AGP GART interface.  Stubs for platforms without
  * AGP GART support.
  */
-import xorg_config;
+import build.xorg_config;
 
 import X11.X;
 

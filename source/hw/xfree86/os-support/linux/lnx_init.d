@@ -25,7 +25,7 @@ extern(C): __gshared:
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  *
  */
-import xorg_config;
+import build.xorg_config;
 
 import core.stdc.errno;
 import X11.X;

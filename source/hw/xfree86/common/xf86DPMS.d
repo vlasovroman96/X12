@@ -30,7 +30,7 @@ extern(C): __gshared:
 /*
  * This file contains the DPMS functions required by the extension.
  */
-import xorg_config;
+import build.xorg_config;
 
 import X11.X;
 import include.os;

@@ -9,7 +9,7 @@ import core.stdc.config: c_long, c_ulong;
  * the I2C driver from the Linux kernel.
  *      (c) 1998 Gerd Knorr <kraxel@cs.tu-berlin.de>
  */
-import xorg_config;
+import build.xorg_config;
 
 import core.sys.posix.sys.time;
 import core.stdc.string;

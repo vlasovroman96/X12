@@ -26,7 +26,7 @@ extern(C): __gshared:
  * dealings in this Software without prior written authorization from the
  * XFree86 Project.
  */
-import xorg_config;
+import build.xorg_config;
 
 import xf86Module;
 import include.fb;

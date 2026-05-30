@@ -2,7 +2,7 @@ module hw.xfree86.ramdac.xf86CursorPriv;
 @nogc nothrow:
 extern(C): __gshared:
  
-public import xorg_config;
+public import build.xorg_config;
 
 public import xf86Cursor;
 public import mipointrst;

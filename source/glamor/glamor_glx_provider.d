@@ -42,7 +42,7 @@ version = EGL_NO_X11;
 import epoxy.egl;
 import glxserver;
 import glxutil;
-import compint;
+import composite.compint;
 import deimos.X11.extensions.composite;
 import glamor_priv;
 import include.glamor;

@@ -34,7 +34,7 @@ import core.stdc.config: c_long, c_ulong;
  *
  * This file includes public option handling functions.
  */
-import xorg_config;
+import build.xorg_config;
 
 import core.stdc.stdlib;
 import core.stdc.ctype;

@@ -29,7 +29,7 @@ THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 import dix_config;
 
-import xorg_config;
+import build.xorg_config;
 
 import core.stdc.stdio;
 import X11.X;

@@ -1,7 +1,7 @@
 module xf86CursorRD;
 @nogc nothrow:
 extern(C): __gshared:
-import xorg_config;
+import build.xorg_config;
 
 import dix.colormap_priv;
 import dix.cursor_priv;

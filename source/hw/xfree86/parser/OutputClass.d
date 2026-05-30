@@ -25,7 +25,7 @@ extern(C): __gshared:
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
  */
-import xorg_config;
+import build.xorg_config;
 
 import os.fmt;
 

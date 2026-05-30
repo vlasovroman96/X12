@@ -27,7 +27,7 @@ extern(C): __gshared:
  *    Eric Anholt <anholt@FreeBSD.org>
  *
  */
-import xorg_config;
+import build.xorg_config;
 
 import core.stdc.string;
 

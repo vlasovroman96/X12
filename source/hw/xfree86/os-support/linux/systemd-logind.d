@@ -25,7 +25,7 @@ extern(C): __gshared:
  *
  * Author: Hans de Goede <hdegoede@redhat.com>
  */
-import xorg_config;
+import build.xorg_config;
 
 import dbus.dbus;
 import core.stdc.string;

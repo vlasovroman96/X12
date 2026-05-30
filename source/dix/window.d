@@ -140,7 +140,7 @@ import dixstruct;
 import include.gcstruct;
 import include.servermd;
 import include.globals;
-import compint;
+import composite.compint;
 import include.privates;
 import xace;
 

@@ -26,7 +26,7 @@ extern(C): __gshared:
  *
  * interpret_edid.c: interpret a primary EDID block
  */
-import xorg_config;
+import build.xorg_config;
 
 import stdbool;
 import core.stdc.stdint;

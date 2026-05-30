@@ -51,7 +51,7 @@ extern(C): __gshared:
  */
 
 /* [JCH-96/01/21] Extended std reverse map to four buttons. */
-import xorg_config;
+import build.xorg_config;
 
 import core.stdc.errno;
 import X11.X;

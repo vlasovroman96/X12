@@ -16,7 +16,7 @@ import core.stdc.config: c_long, c_ulong;
  * in xf86EnableIO(). Otherwise we won't trap
  * on PIO.
  */
-import xorg_config;
+import build.xorg_config;
 
 enum PRINT_PORT = 0;
 

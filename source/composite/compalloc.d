@@ -52,7 +52,7 @@ import dix.resource_priv;
 import os.bug_priv;
 import Xext.damage.damageext_priv;
 
-import compint;
+import composite.compint;
 
 private Bool compScreenUpdate(ClientPtr pClient, void* closure)
 {

@@ -1,7 +1,7 @@
 module drm_platform;
 @nogc nothrow:
 extern(C): __gshared:
-import xorg_config;
+import build.xorg_config;
 
 version (XSERVER_PLATFORM_BUS) {
 

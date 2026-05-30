@@ -52,7 +52,7 @@ import dix.screenint_priv;
 import miext.extinit_priv;
 import Xext.panoramiXsrv;
 
-import compint;
+import composite.compint;
 import xace;
 import include.protocol_versions;
 

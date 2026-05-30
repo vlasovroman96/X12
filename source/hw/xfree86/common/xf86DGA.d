@@ -40,7 +40,7 @@ import core.stdc.config: c_long, c_ulong;
  * someone actually cares about DGA, it'd be nice to clean this up.  But trust
  * me, I am not that person.
  */
-import xorg_config;
+import build.xorg_config;
 
 import core.stdc.string;
 import X11.X;

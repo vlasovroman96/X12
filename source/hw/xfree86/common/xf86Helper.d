@@ -40,7 +40,7 @@ private template HasVersion(string versionId) {
  * This file includes the helper functions that the server provides for
  * different drivers.
  */
-import xorg_config;
+import build.xorg_config;
 
 import core.sys.posix.sys.stat;
 import X11.X;

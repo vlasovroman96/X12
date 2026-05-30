@@ -29,7 +29,7 @@ extern(C): __gshared:
  *
  *
  */
-import xorg_config;
+import build.xorg_config;
 
 import include.os;
 import xf86Parser;

@@ -28,7 +28,7 @@ extern(C): __gshared:
  * or the permissions are implicit with opening/enabling the console.
  */
 
-import xorg_config;
+import build.xorg_config;
 
 import X11.X;
 import xf86;

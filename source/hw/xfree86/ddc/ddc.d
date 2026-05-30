@@ -12,7 +12,7 @@ extern(C): __gshared:
  * introduces extension blocks.  EDID is the old display identification
  * block, DisplayID is the new one.
  */
-import xorg_config;
+import build.xorg_config;
 
 import include.xf86DDC;
 import os.osdep;

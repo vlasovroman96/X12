@@ -1,7 +1,7 @@
 module hw.xfree86.shadowfb.sfbmodule;
 @nogc nothrow:
 extern(C): __gshared:
-import xorg_config;
+import build.xorg_config;
 
 import xf86Module;
 

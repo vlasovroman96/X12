@@ -23,7 +23,7 @@ import core.stdc.config: c_long, c_ulong;
  * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE
  * OF THIS SOFTWARE.
  */
-import xorg_config;
+import build.xorg_config;
 
 import include.xf86DDC;
 

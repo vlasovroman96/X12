@@ -33,7 +33,7 @@ extern(C): __gshared:
  *   Kevin E. Martin <kem@redhat.com>
  *
  */
-import xorg_config;
+import build.xorg_config;
 
 import include.os;
 import xf86Parser;
