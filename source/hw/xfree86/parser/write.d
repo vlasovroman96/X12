@@ -1,3 +1,6 @@
+module write.c;
+@nogc nothrow:
+extern(C): __gshared:
 /*
  * Copyright (c) 1997  Metro Link Incorporated
  *
@@ -50,80 +53,78 @@
  * the sale, use or other dealings in this Software without prior written
  * authorization from the copyright holder(s) and author(s).
  */
-#include <xorg-config.h>
+import xorg_config;
 
-#include "os.h"
-#include "xf86Parser_priv.h"
-#include "xf86tokens.h"
-#include "Configint.h"
+import os;
+import xf86Parser_priv;
+import xf86tokens;
+import Configint;
 
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <errno.h>
+import core.sys.posix.unistd;
+import core.sys.posix.sys.types;
+import core.sys.posix.sys.wait;
+import core.stdc.errno;
 
-static int
-doWriteConfigFile(const char *filename, XF86ConfigPtr cptr)
+private int doWriteConfigFile(const(char)* filename, XF86ConfigPtr cptr)
 {
-    FILE *cf;
+    FILE* cf = void;
 
-    if ((cf = fopen(filename, "w")) == NULL) {
+    if ((cf = fopen(filename, "w")) == null) {
         return 0;
     }
 
-    if (cptr->conf_comment)
-        fprintf(cf, "%s\n", cptr->conf_comment);
+    if (cptr.conf_comment)
+        fprintf(cf, "%s\n", cptr.conf_comment);
 
-    xf86printLayoutSection(cf, cptr->conf_layout_lst);
+    xf86printLayoutSection(cf, cptr.conf_layout_lst);
 
-    if (cptr->conf_files != NULL) {
+    if (cptr.conf_files != null) {
         fprintf(cf, "Section \"Files\"\n");
-        xf86printFileSection(cf, cptr->conf_files);
+        xf86printFileSection(cf, cptr.conf_files);
         fprintf(cf, "EndSection\n\n");
     }
 
-    if (cptr->conf_modules != NULL) {
+    if (cptr.conf_modules != null) {
         fprintf(cf, "Section \"Module\"\n");
-        xf86printModuleSection(cf, cptr->conf_modules);
+        xf86printModuleSection(cf, cptr.conf_modules);
         fprintf(cf, "EndSection\n\n");
     }
 
-    xf86printVendorSection(cf, cptr->conf_vendor_lst);
+    xf86printVendorSection(cf, cptr.conf_vendor_lst);
 
-    xf86printServerFlagsSection(cf, cptr->conf_flags);
+    xf86printServerFlagsSection(cf, cptr.conf_flags);
 
-    xf86printInputSection(cf, cptr->conf_input_lst);
+    xf86printInputSection(cf, cptr.conf_input_lst);
 
-    xf86printInputClassSection(cf, cptr->conf_inputclass_lst);
+    xf86printInputClassSection(cf, cptr.conf_inputclass_lst);
 
-    xf86printOutputClassSection(cf, cptr->conf_outputclass_lst);
+    xf86printOutputClassSection(cf, cptr.conf_outputclass_lst);
 
-    xf86printVideoAdaptorSection(cf, cptr->conf_videoadaptor_lst);
+    xf86printVideoAdaptorSection(cf, cptr.conf_videoadaptor_lst);
 
-    xf86printModesSection(cf, cptr->conf_modes_lst);
+    xf86printModesSection(cf, cptr.conf_modes_lst);
 
-    xf86printMonitorSection(cf, cptr->conf_monitor_lst);
+    xf86printMonitorSection(cf, cptr.conf_monitor_lst);
 
-    xf86printDeviceSection(cf, cptr->conf_device_lst);
+    xf86printDeviceSection(cf, cptr.conf_device_lst);
 
-    xf86printScreenSection(cf, cptr->conf_screen_lst);
+    xf86printScreenSection(cf, cptr.conf_screen_lst);
 
-    xf86printDRISection(cf, cptr->conf_dri);
+    xf86printDRISection(cf, cptr.conf_dri);
 
-    xf86printExtensionsSection(cf, cptr->conf_extensions);
+    xf86printExtensionsSection(cf, cptr.conf_extensions);
 
     fclose(cf);
     return 1;
 }
 
-int
-xf86writeConfigFile(const char *filename, XF86ConfigPtr cptr)
+int xf86writeConfigFile(const(char)* filename, XF86ConfigPtr cptr)
 {
-#ifndef WIN32
-    int ret;
+version (Windows) {} else {
+    int ret = void;
 
     if (getuid() != geteuid()) {
-        int ruid, euid;
+        int ruid = void, euid = void;
 
         ruid = getuid();
         euid = geteuid();
@@ -142,6 +143,7 @@ xf86writeConfigFile(const char *filename, XF86ConfigPtr cptr)
         return ret;
     }
     else
-#endif                          /* WIN32 */
         return doWriteConfigFile(filename, cptr);
 }
+        return doWriteConfigFile(filename, cptr);
+}                          /* WIN32 */

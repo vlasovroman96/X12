@@ -1,3 +1,6 @@
+module Files.c;
+@nogc nothrow:
+extern(C): __gshared:
 /*
  * Copyright (c) 1997  Metro Link Incorporated
  *
@@ -50,17 +53,17 @@
  * the sale, use or other dealings in this Software without prior written
  * authorization from the copyright holder(s) and author(s).
  */
-#include <xorg-config.h>
+import xorg_config;
 
-#include <assert.h>
+import core.stdc.assert_;
 
-#include <X11/Xos.h>
-#include "xf86Parser.h"
-#include "xf86tokens.h"
-#include "Configint.h"
+import X11.Xos;
+import xf86Parser;
+import xf86tokens;
+import Configint;
 
 
-static const xf86ConfigSymTabRec FilesTab[] = {
+private const(xf86ConfigSymTabRec)[9] FilesTab = [
     {ENDSECTION, "endsection"},
     {FONTPATH, "fontpath"},
     {MODULEPATH, "modulepath"},
@@ -70,99 +73,98 @@ static const xf86ConfigSymTabRec FilesTab[] = {
     {OBSOLETE_TOKEN, "rgbpath"},
     {OBSOLETE_TOKEN, "inputdevices"},
     {-1, ""},
-};
+];
 
-#define CLEANUP xf86freeFiles
+enum CLEANUP = xf86freeFiles;
 
-XF86ConfFilesPtr
-xf86parseFilesSection(XF86ConfFilesPtr ptr)
+XF86ConfFilesPtr xf86parseFilesSection(XF86ConfFilesPtr ptr)
 {
-    int i, j;
-    int k, l;
-    char *str;
-    int token;
+    int i = void, j = void;
+    int k = void, l = void;
+    char* str = void;
+    int token = void;
 
-    if (ptr == NULL)
+    if (ptr == null)
     {
-        if((ptr=calloc(1, sizeof(XF86ConfFilesRec))) == NULL)
+        if((ptr=calloc(1, XF86ConfFilesRec.sizeof)) == null)
         {
-            return NULL;
+            return null;
         }
     }
 
-    while ((token = xf86getToken(FilesTab)) != ENDSECTION) {
+    while ((token = xf86getToken(FilesTab.ptr)) != ENDSECTION) {
         switch (token) {
         case COMMENT:
-            ptr->file_comment = xf86addComment(ptr->file_comment, xf86_lex_val.str);
+            ptr.file_comment = xf86addComment(ptr.file_comment, xf86_lex_val.str);
             free(xf86_lex_val.str);
-            xf86_lex_val.str = NULL;
+            xf86_lex_val.str = null;
             break;
         case FONTPATH:
-            if (xf86getSubToken(&(ptr->file_comment)) != XF86_TOKEN_STRING)
+            if (xf86getSubToken(&(ptr.file_comment)) != XF86_TOKEN_STRING)
                 Error(QUOTE_MSG, "FontPath");
             j = FALSE;
             str = xf86_lex_val.str;
-            if (ptr->file_fontpath == NULL) {
-                ptr->file_fontpath = calloc(1, 1);
+            if (ptr.file_fontpath == null) {
+                ptr.file_fontpath = calloc(1, 1);
                 i = strlen(str) + 1;
             }
             else {
-                i = strlen(ptr->file_fontpath) + strlen(str) + 1;
-                if (ptr->file_fontpath[strlen(ptr->file_fontpath) - 1] != ',') {
+                i = strlen(ptr.file_fontpath) + strlen(str) + 1;
+                if (ptr.file_fontpath[strlen(ptr.file_fontpath) - 1] != ',') {
                     i++;
                     j = TRUE;
                 }
             }
-            ptr->file_fontpath = realloc(ptr->file_fontpath, i);
-            assert(ptr->file_fontpath);
+            ptr.file_fontpath = realloc(ptr.file_fontpath, i);
+            assert(ptr.file_fontpath);
             if (j)
-                strcat(ptr->file_fontpath, ",");
-            strcat(ptr->file_fontpath, str);
+                strcat(ptr.file_fontpath, ",");
+            strcat(ptr.file_fontpath, str);
             free(xf86_lex_val.str);
             break;
         case MODULEPATH:
-            if (xf86getSubToken(&(ptr->file_comment)) != XF86_TOKEN_STRING)
+            if (xf86getSubToken(&(ptr.file_comment)) != XF86_TOKEN_STRING)
                 Error(QUOTE_MSG, "ModulePath");
             l = FALSE;
             str = xf86_lex_val.str;
-            if (ptr->file_modulepath == NULL) {
-                ptr->file_modulepath = calloc(1, 1);
-                assert(ptr->file_modulepath);
-                ptr->file_modulepath[0] = '\0';
+            if (ptr.file_modulepath == null) {
+                ptr.file_modulepath = calloc(1, 1);
+                assert(ptr.file_modulepath);
+                ptr.file_modulepath[0] = '\0';
                 k = strlen(str) + 1;
             }
             else {
-                k = strlen(ptr->file_modulepath) + strlen(str) + 1;
-                if (ptr->file_modulepath[strlen(ptr->file_modulepath) - 1] !=
+                k = strlen(ptr.file_modulepath) + strlen(str) + 1;
+                if (ptr.file_modulepath[strlen(ptr.file_modulepath) - 1] !=
                     ',') {
                     k++;
                     l = TRUE;
                 }
             }
-            ptr->file_modulepath = realloc(ptr->file_modulepath, k);
-            assert(ptr->file_modulepath);
+            ptr.file_modulepath = realloc(ptr.file_modulepath, k);
+            assert(ptr.file_modulepath);
             if (l)
-                strcat(ptr->file_modulepath, ",");
+                strcat(ptr.file_modulepath, ",");
 
-            strcat(ptr->file_modulepath, str);
+            strcat(ptr.file_modulepath, str);
             free(xf86_lex_val.str);
             break;
         case LOGFILEPATH:
-            if (xf86getSubToken(&(ptr->file_comment)) != XF86_TOKEN_STRING)
+            if (xf86getSubToken(&(ptr.file_comment)) != XF86_TOKEN_STRING)
                 Error(QUOTE_MSG, "LogFile");
-            ptr->file_logfile = xf86_lex_val.str;
+            ptr.file_logfile = xf86_lex_val.str;
             break;
         case XKBDIR:
-            if (xf86getSubToken(&(ptr->file_xkbdir)) != XF86_TOKEN_STRING)
+            if (xf86getSubToken(&(ptr.file_xkbdir)) != XF86_TOKEN_STRING)
                 Error(QUOTE_MSG, "XkbDir");
-            ptr->file_xkbdir = xf86_lex_val.str;
+            ptr.file_xkbdir = xf86_lex_val.str;
             break;
         case EOF_TOKEN:
             Error(UNEXPECTED_EOF_MSG);
             break;
         case OBSOLETE_TOKEN:
             xf86parseError(OBSOLETE_MSG, xf86tokenString());
-            xf86getSubToken(&(ptr->file_comment));
+            xf86getSubToken(&(ptr.file_comment));
             break;
         default:
             Error(INVALID_KEYWORD_MSG, xf86tokenString());
@@ -170,29 +172,26 @@ xf86parseFilesSection(XF86ConfFilesPtr ptr)
         }
     }
 
-#ifdef DEBUG
+version (DEBUG) {
     printf("File section parsed\n");
-#endif
+}
 
     return ptr;
 }
 
-#undef CLEANUP
-
-void
-xf86printFileSection(FILE * cf, XF86ConfFilesPtr ptr)
+void xf86printFileSection(FILE* cf, XF86ConfFilesPtr ptr)
 {
-    char *p, *s;
+    char* p = void, s = void;
 
-    if (ptr == NULL)
+    if (ptr == null)
         return;
 
-    if (ptr->file_comment)
-        fprintf(cf, "%s", ptr->file_comment);
-    if (ptr->file_logfile)
-        fprintf(cf, "\tLogFile      \"%s\"\n", ptr->file_logfile);
-    if (ptr->file_modulepath) {
-        s = ptr->file_modulepath;
+    if (ptr.file_comment)
+        fprintf(cf, "%s", ptr.file_comment);
+    if (ptr.file_logfile)
+        fprintf(cf, "\tLogFile      \"%s\"\n", ptr.file_logfile);
+    if (ptr.file_modulepath) {
+        s = ptr.file_modulepath;
         p = index(s, ',');
         while (p) {
             *p = '\000';
@@ -204,8 +203,8 @@ xf86printFileSection(FILE * cf, XF86ConfFilesPtr ptr)
         }
         fprintf(cf, "\tModulePath   \"%s\"\n", s);
     }
-    if (ptr->file_fontpath) {
-        s = ptr->file_fontpath;
+    if (ptr.file_fontpath) {
+        s = ptr.file_fontpath;
         p = index(s, ',');
         while (p) {
             *p = '\000';
@@ -217,21 +216,20 @@ xf86printFileSection(FILE * cf, XF86ConfFilesPtr ptr)
         }
         fprintf(cf, "\tFontPath     \"%s\"\n", s);
     }
-    if (ptr->file_xkbdir)
-        fprintf(cf, "\tXkbDir		\"%s\"\n", ptr->file_xkbdir);
+    if (ptr.file_xkbdir)
+        fprintf(cf, "\tXkbDir		\"%s\"\n", ptr.file_xkbdir);
 }
 
-void
-xf86freeFiles(XF86ConfFilesPtr p)
+void xf86freeFiles(XF86ConfFilesPtr p)
 {
-    if (p == NULL)
+    if (p == null)
         return;
 
-    TestFree(p->file_logfile);
-    TestFree(p->file_modulepath);
-    TestFree(p->file_fontpath);
-    TestFree(p->file_comment);
-    TestFree(p->file_xkbdir);
+    TestFree(p.file_logfile);
+    TestFree(p.file_modulepath);
+    TestFree(p.file_fontpath);
+    TestFree(p.file_comment);
+    TestFree(p.file_xkbdir);
 
     free(p);
 }

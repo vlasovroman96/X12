@@ -1,3 +1,6 @@
+module read.c;
+@nogc nothrow:
+extern(C): __gshared:
 /*
  *
  * Copyright (c) 1997  Metro Link Incorporated
@@ -51,27 +54,26 @@
  * the sale, use or other dealings in this Software without prior written
  * authorization from the copyright holder(s) and author(s).
  */
-#include <xorg-config.h>
+import xorg_config;
 
-#include "xf86Config.h"
-#include "xf86Parser_priv.h"
-#include "xf86tokens.h"
-#include "Configint.h"
+import xf86Config;
+import xf86Parser_priv;
+import xf86tokens;
+import Configint;
 
 
-static const xf86ConfigSymTabRec TopLevelTab[] = {
+private const(xf86ConfigSymTabRec)[3] TopLevelTab = [
     {SECTION, "section"},
     {-1, ""},
-};
+];
 
-#define CLEANUP xf86freeConfig
+enum CLEANUP = xf86freeConfig;
 
 /*
  * This function resolves name references and reports errors if the named
  * objects cannot be found.
  */
-static int
-xf86validateConfig(XF86ConfigPtr p)
+private int xf86validateConfig(XF86ConfigPtr p)
 {
     if (!xf86validateScreen(p))
         return FALSE;
@@ -83,130 +85,129 @@ xf86validateConfig(XF86ConfigPtr p)
     return TRUE;
 }
 
-XF86ConfigPtr
-xf86readConfigFile(void)
+XF86ConfigPtr xf86readConfigFile()
 {
-    int token;
-    XF86ConfigPtr ptr = NULL;
+    int token = void;
+    XF86ConfigPtr ptr = null;
 
-    if ((ptr = xf86allocateConfig()) == NULL) {
-        return NULL;
+    if ((ptr = xf86allocateConfig()) == null) {
+        return null;
     }
 
-    while ((token = xf86getToken(TopLevelTab)) != EOF_TOKEN) {
+    while ((token = xf86getToken(TopLevelTab.ptr)) != EOF_TOKEN) {
         switch (token) {
         case COMMENT:
-            ptr->conf_comment = xf86addComment(ptr->conf_comment, xf86_lex_val.str);
+            ptr.conf_comment = xf86addComment(ptr.conf_comment, xf86_lex_val.str);
             free(xf86_lex_val.str);
-            xf86_lex_val.str = NULL;
+            xf86_lex_val.str = null;
             break;
         case SECTION:
-            if (xf86getSubToken(&(ptr->conf_comment)) != XF86_TOKEN_STRING) {
+            if (xf86getSubToken(&(ptr.conf_comment)) != XF86_TOKEN_STRING) {
                 xf86parseError(QUOTE_MSG, "Section");
                 CLEANUP(ptr);
-                return NULL;
+                return null;
             }
             xf86setSection(xf86_lex_val.str);
             if (xf86nameCompare(xf86_lex_val.str, "files") == 0) {
                 free(xf86_lex_val.str);
-                xf86_lex_val.str = NULL;
-                HANDLE_RETURN(conf_files, xf86parseFilesSection(ptr->conf_files));
+                xf86_lex_val.str = null;
+                HANDLE_RETURN(conf_files, xf86parseFilesSection(ptr.conf_files));
             }
             else if (xf86nameCompare(xf86_lex_val.str, "serverflags") == 0) {
                 free(xf86_lex_val.str);
-                xf86_lex_val.str = NULL;
-                HANDLE_RETURN(conf_flags, xf86parseFlagsSection(ptr->conf_flags));
+                xf86_lex_val.str = null;
+                HANDLE_RETURN(conf_flags, xf86parseFlagsSection(ptr.conf_flags));
             }
             else if (xf86nameCompare(xf86_lex_val.str, "pointer") == 0) {
                 free(xf86_lex_val.str);
-                xf86_lex_val.str = NULL;
+                xf86_lex_val.str = null;
                 HANDLE_LIST(conf_input_lst, xf86parsePointerSection,
                             XF86ConfInputPtr);
             }
             else if (xf86nameCompare(xf86_lex_val.str, "videoadaptor") == 0) {
                 free(xf86_lex_val.str);
-                xf86_lex_val.str = NULL;
+                xf86_lex_val.str = null;
                 HANDLE_LIST(conf_videoadaptor_lst, xf86parseVideoAdaptorSection,
                             XF86ConfVideoAdaptorPtr);
             }
             else if (xf86nameCompare(xf86_lex_val.str, "device") == 0) {
                 free(xf86_lex_val.str);
-                xf86_lex_val.str = NULL;
+                xf86_lex_val.str = null;
                 HANDLE_LIST(conf_device_lst, xf86parseDeviceSection,
                             XF86ConfDevicePtr);
             }
             else if (xf86nameCompare(xf86_lex_val.str, "monitor") == 0) {
                 free(xf86_lex_val.str);
-                xf86_lex_val.str = NULL;
+                xf86_lex_val.str = null;
                 HANDLE_LIST(conf_monitor_lst, xf86parseMonitorSection,
                             XF86ConfMonitorPtr);
             }
             else if (xf86nameCompare(xf86_lex_val.str, "modes") == 0) {
                 free(xf86_lex_val.str);
-                xf86_lex_val.str = NULL;
+                xf86_lex_val.str = null;
                 HANDLE_LIST(conf_modes_lst, xf86parseModesSection,
                             XF86ConfModesPtr);
             }
             else if (xf86nameCompare(xf86_lex_val.str, "screen") == 0) {
                 free(xf86_lex_val.str);
-                xf86_lex_val.str = NULL;
+                xf86_lex_val.str = null;
                 HANDLE_LIST(conf_screen_lst, xf86parseScreenSection,
                             XF86ConfScreenPtr);
             }
             else if (xf86nameCompare(xf86_lex_val.str, "inputdevice") == 0) {
                 free(xf86_lex_val.str);
-                xf86_lex_val.str = NULL;
+                xf86_lex_val.str = null;
                 HANDLE_LIST(conf_input_lst, xf86parseInputSection,
                             XF86ConfInputPtr);
             }
             else if (xf86nameCompare(xf86_lex_val.str, "inputclass") == 0) {
                 free(xf86_lex_val.str);
-                xf86_lex_val.str = NULL;
+                xf86_lex_val.str = null;
                 HANDLE_LIST(conf_inputclass_lst,
                             xf86parseInputClassSection, XF86ConfInputClassPtr);
             }
             else if (xf86nameCompare(xf86_lex_val.str, "outputclass") == 0) {
                 free(xf86_lex_val.str);
-                xf86_lex_val.str = NULL;
+                xf86_lex_val.str = null;
                 HANDLE_LIST(conf_outputclass_lst, xf86parseOutputClassSection,
                             XF86ConfOutputClassPtr);
             }
             else if (xf86nameCompare(xf86_lex_val.str, "module") == 0) {
                 free(xf86_lex_val.str);
-                xf86_lex_val.str = NULL;
-                HANDLE_RETURN(conf_modules, xf86parseModuleSection(ptr->conf_modules));
+                xf86_lex_val.str = null;
+                HANDLE_RETURN(conf_modules, xf86parseModuleSection(ptr.conf_modules));
             }
             else if (xf86nameCompare(xf86_lex_val.str, "serverlayout") == 0) {
                 free(xf86_lex_val.str);
-                xf86_lex_val.str = NULL;
+                xf86_lex_val.str = null;
                 HANDLE_LIST(conf_layout_lst, xf86parseLayoutSection,
                             XF86ConfLayoutPtr);
             }
             else if (xf86nameCompare(xf86_lex_val.str, "vendor") == 0) {
                 free(xf86_lex_val.str);
-                xf86_lex_val.str = NULL;
+                xf86_lex_val.str = null;
                 HANDLE_LIST(conf_vendor_lst, xf86parseVendorSection,
                             XF86ConfVendorPtr);
             }
             else if (xf86nameCompare(xf86_lex_val.str, "dri") == 0) {
                 free(xf86_lex_val.str);
-                xf86_lex_val.str = NULL;
+                xf86_lex_val.str = null;
                 HANDLE_RETURN(conf_dri, xf86parseDRISection());
             }
             else if (xf86nameCompare(xf86_lex_val.str, "extensions") == 0) {
                 free(xf86_lex_val.str);
-                xf86_lex_val.str = NULL;
+                xf86_lex_val.str = null;
                 HANDLE_RETURN(conf_extensions, xf86parseExtensionsSection());
             }
             else {
                 free(xf86_lex_val.str);
-                xf86_lex_val.str = NULL;
+                xf86_lex_val.str = null;
                 Error(INVALID_SECTION_MSG, xf86tokenString());
             }
             break;
         default:
             free(xf86_lex_val.str);
-            xf86_lex_val.str = NULL;
+            xf86_lex_val.str = null;
             Error(INVALID_KEYWORD_MSG, xf86tokenString());
         }
     }
@@ -215,11 +216,9 @@ xf86readConfigFile(void)
         return ptr;
     else {
         CLEANUP(ptr);
-        return NULL;
+        return null;
     }
 }
-
-#undef CLEANUP
 
 /*
  * adds an item to the end of the linked list. Any record whose first field
@@ -227,44 +226,42 @@ xf86readConfigFile(void)
  * A pointer to the head of the list is returned to handle the addition of
  * the first item.
  */
-GenericListPtr
-xf86addListItem(GenericListPtr head, GenericListPtr new)
+GenericListPtr xf86addListItem(GenericListPtr head, GenericListPtr new_)
 {
     GenericListPtr p = head;
-    GenericListPtr last = NULL;
+    GenericListPtr last = null;
 
     while (p) {
         last = p;
-        p = p->next;
+        p = p.next;
     }
 
     if (last) {
-        last->next = new;
+        last.next = new_;
         return head;
     }
     else
-        return new;
+        return new_;
 }
 
 /*
  * Test if one chained list contains the other.
  * In this case both list have the same endpoint (provided they don't loop)
  */
-int
-xf86itemNotSublist(GenericListPtr list_1, GenericListPtr list_2)
+int xf86itemNotSublist(GenericListPtr list_1, GenericListPtr list_2)
 {
     GenericListPtr p = list_1;
-    GenericListPtr last_1 = NULL, last_2 = NULL;
+    GenericListPtr last_1 = null, last_2 = null;
 
     while (p) {
         last_1 = p;
-        p = p->next;
+        p = p.next;
     }
 
     p = list_2;
     while (p) {
         last_2 = p;
-        p = p->next;
+        p = p.next;
     }
 
     return (!(last_1 == last_2));
@@ -275,34 +272,33 @@ xf86itemNotSublist(GenericListPtr list_1, GenericListPtr list_2)
  * if it's not already there.  In either event, return the pointer
  * to the global config struct.
  */
-XF86ConfigPtr xf86allocateConfig(void)
+XF86ConfigPtr xf86allocateConfig()
 {
     if (!xf86configptr) {
-        xf86configptr = calloc(1, sizeof(XF86ConfigRec));
+        xf86configptr = calloc(1, XF86ConfigRec.sizeof);
     }
     return xf86configptr;
 }
 
-void
-xf86freeConfig(XF86ConfigPtr p)
+void xf86freeConfig(XF86ConfigPtr p)
 {
-    if (p == NULL)
+    if (p == null)
         return;
 
-    xf86freeFiles(p->conf_files);
-    xf86freeModules(p->conf_modules);
-    xf86freeFlags(p->conf_flags);
-    xf86freeMonitorList(p->conf_monitor_lst);
-    xf86freeModesList(p->conf_modes_lst);
-    xf86freeVideoAdaptorList(p->conf_videoadaptor_lst);
-    xf86freeDeviceList(p->conf_device_lst);
-    xf86freeScreenList(p->conf_screen_lst);
-    xf86freeLayoutList(p->conf_layout_lst);
-    xf86freeInputList(p->conf_input_lst);
-    xf86freeVendorList(p->conf_vendor_lst);
-    xf86freeDRI(p->conf_dri);
-    xf86freeExtensions(p->conf_extensions);
-    TestFree(p->conf_comment);
+    xf86freeFiles(p.conf_files);
+    xf86freeModules(p.conf_modules);
+    xf86freeFlags(p.conf_flags);
+    xf86freeMonitorList(p.conf_monitor_lst);
+    xf86freeModesList(p.conf_modes_lst);
+    xf86freeVideoAdaptorList(p.conf_videoadaptor_lst);
+    xf86freeDeviceList(p.conf_device_lst);
+    xf86freeScreenList(p.conf_screen_lst);
+    xf86freeLayoutList(p.conf_layout_lst);
+    xf86freeInputList(p.conf_input_lst);
+    xf86freeVendorList(p.conf_vendor_lst);
+    xf86freeDRI(p.conf_dri);
+    xf86freeExtensions(p.conf_extensions);
+    TestFree(p.conf_comment);
 
     free(p);
 }

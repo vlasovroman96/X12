@@ -1,3 +1,6 @@
+module Input.c;
+@nogc nothrow:
+extern(C): __gshared:
 /*
  *
  * Copyright (c) 1997  Metro Link Incorporated
@@ -51,59 +54,58 @@
  * the sale, use or other dealings in this Software without prior written
  * authorization from the copyright holder(s) and author(s).
  */
-#include <xorg-config.h>
+import xorg_config;
 
-#include "os.h"
-#include "xf86Parser.h"
-#include "xf86tokens.h"
-#include "Configint.h"
+import os;
+import xf86Parser;
+import xf86tokens;
+import Configint;
 
 
-static const xf86ConfigSymTabRec InputTab[] = {
+private const(xf86ConfigSymTabRec)[6] InputTab = [
     {ENDSECTION, "endsection"},
     {IDENTIFIER, "identifier"},
     {OPTION, "option"},
     {DRIVER, "driver"},
     {-1, ""},
-};
+];
 
-#define CLEANUP xf86freeInputList
+enum CLEANUP = xf86freeInputList;
 
-XF86ConfInputPtr
-xf86parseInputSection(void)
+XF86ConfInputPtr xf86parseInputSection()
 {
     int has_ident = FALSE;
-    int token;
+    int token = void;
 
-    parsePrologue(XF86ConfInputPtr, XF86ConfInputRec)
+    parsePrologue(XF86ConfInputPtr, XF86ConfInputRec);
 
-        while ((token = xf86getToken(InputTab)) != ENDSECTION) {
+        while ((token = xf86getToken(InputTab.ptr)) != ENDSECTION) {
         switch (token) {
         case COMMENT:
-            ptr->inp_comment = xf86addComment(ptr->inp_comment, xf86_lex_val.str);
+            ptr.inp_comment = xf86addComment(ptr.inp_comment, xf86_lex_val.str);
             free(xf86_lex_val.str);
-            xf86_lex_val.str = NULL;
+            xf86_lex_val.str = null;
             break;
         case IDENTIFIER:
-            if (xf86getSubToken(&(ptr->inp_comment)) != XF86_TOKEN_STRING)
+            if (xf86getSubToken(&(ptr.inp_comment)) != XF86_TOKEN_STRING)
                 Error(QUOTE_MSG, "Identifier");
             if (has_ident == TRUE)
                 Error(MULTIPLE_MSG, "Identifier");
-            ptr->inp_identifier = xf86_lex_val.str;
+            ptr.inp_identifier = xf86_lex_val.str;
             has_ident = TRUE;
             break;
         case DRIVER:
-            if (xf86getSubToken(&(ptr->inp_comment)) != XF86_TOKEN_STRING)
+            if (xf86getSubToken(&(ptr.inp_comment)) != XF86_TOKEN_STRING)
                 Error(QUOTE_MSG, "Driver");
             if (strcmp(xf86_lex_val.str, "keyboard") == 0) {
-                ptr->inp_driver = strdup("kbd");
+                ptr.inp_driver = strdup("kbd");
                 free(xf86_lex_val.str);
             }
             else
-                ptr->inp_driver = xf86_lex_val.str;
+                ptr.inp_driver = xf86_lex_val.str;
             break;
         case OPTION:
-            ptr->inp_option_lst = xf86parseOption(ptr->inp_option_lst);
+            ptr.inp_option_lst = xf86parseOption(ptr.inp_option_lst);
             break;
         case EOF_TOKEN:
             Error(UNEXPECTED_EOF_MSG);
@@ -117,85 +119,78 @@ xf86parseInputSection(void)
     if (!has_ident)
         Error(NO_IDENT_MSG);
 
-#ifdef DEBUG
+version (DEBUG) {
     printf("InputDevice section parsed\n");
-#endif
+}
 
     return ptr;
 }
 
-#undef CLEANUP
-
-void
-xf86printInputSection(FILE * cf, XF86ConfInputPtr ptr)
+void xf86printInputSection(FILE* cf, XF86ConfInputPtr ptr)
 {
     while (ptr) {
         fprintf(cf, "Section \"InputDevice\"\n");
-        if (ptr->inp_comment)
-            fprintf(cf, "%s", ptr->inp_comment);
-        if (ptr->inp_identifier)
-            fprintf(cf, "\tIdentifier  \"%s\"\n", ptr->inp_identifier);
-        if (ptr->inp_driver)
-            fprintf(cf, "\tDriver      \"%s\"\n", ptr->inp_driver);
-        xf86printOptionList(cf, ptr->inp_option_lst, 1);
+        if (ptr.inp_comment)
+            fprintf(cf, "%s", ptr.inp_comment);
+        if (ptr.inp_identifier)
+            fprintf(cf, "\tIdentifier  \"%s\"\n", ptr.inp_identifier);
+        if (ptr.inp_driver)
+            fprintf(cf, "\tDriver      \"%s\"\n", ptr.inp_driver);
+        xf86printOptionList(cf, ptr.inp_option_lst, 1);
         fprintf(cf, "EndSection\n\n");
-        ptr = ptr->list.next;
+        ptr = ptr.list.next;
     }
 }
 
-void
-xf86freeInputList(XF86ConfInputPtr ptr)
+void xf86freeInputList(XF86ConfInputPtr ptr)
 {
-    XF86ConfInputPtr prev;
+    XF86ConfInputPtr prev = void;
 
     while (ptr) {
-        TestFree(ptr->inp_identifier);
-        TestFree(ptr->inp_driver);
-        TestFree(ptr->inp_comment);
-        xf86optionListFree(ptr->inp_option_lst);
+        TestFree(ptr.inp_identifier);
+        TestFree(ptr.inp_driver);
+        TestFree(ptr.inp_comment);
+        xf86optionListFree(ptr.inp_option_lst);
 
         prev = ptr;
-        ptr = ptr->list.next;
+        ptr = ptr.list.next;
         free(prev);
     }
 }
 
-int
-xf86validateInput(XF86ConfigPtr p)
+int xf86validateInput(XF86ConfigPtr p)
 {
-    XF86ConfInputPtr input = p->conf_input_lst;
+    XF86ConfInputPtr input = p.conf_input_lst;
 
     while (input) {
-        if (!input->inp_driver) {
+        if (!input.inp_driver) {
             xf86validationError(UNDEFINED_INPUTDRIVER_MSG,
-                                input->inp_identifier);
+                                input.inp_identifier);
             return FALSE;
         }
-        input = input->list.next;
+        input = input.list.next;
     }
     return TRUE;
 }
 
-XF86ConfInputPtr
-xf86findInput(const char *ident, XF86ConfInputPtr p)
+XF86ConfInputPtr xf86findInput(const(char)* ident, XF86ConfInputPtr p)
 {
     while (p) {
-        if (xf86nameCompare(ident, p->inp_identifier) == 0)
+        if (xf86nameCompare(ident, p.inp_identifier) == 0)
             return p;
 
-        p = p->list.next;
+        p = p.list.next;
     }
-    return NULL;
+    return null;
 }
 
-XF86ConfInputPtr
-xf86findInputByDriver(const char *driver, XF86ConfInputPtr p)
+XF86ConfInputPtr xf86findInputByDriver(const(char)* driver, XF86ConfInputPtr p)
 {
     while (p) {
-        if (xf86nameCompare(driver, p->inp_driver) == 0)
+        if (xf86nameCompare(driver, p.inp_driver) == 0)
             return p;
 
-        p = p->list.next;
+        p = p.list.next;
     }
-    return NULL;
+    return null;
 }

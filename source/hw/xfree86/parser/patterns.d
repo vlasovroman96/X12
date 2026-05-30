@@ -1,16 +1,19 @@
+module patterns.c;
+@nogc nothrow:
+extern(C): __gshared:
 /* SPDX-License-Identifier: MIT or X11
  *
  * Copyright (c) 2025 Oleh Nykyforchyn <oleh.nyk@gmail.com>
  *
  */
-#include <xorg-config.h>
+import xorg_config;
 
-#include <stdio.h>
-#include <stdlib.h>
-#include "misc.h"
-#include "xf86Parser_priv.h"
-#include "configProcs.h"
-#include "os.h"
+import core.stdc.stdio;
+import core.stdc.stdlib;
+import misc;
+import xf86Parser_priv;
+import configProcs;
+import os;
 
 /*
  *  Utilities used by InputClass.c and OutputClass.c
@@ -43,90 +46,88 @@
  * They are kept in pattern.str '\0'-separated, with a final second '\0'.
  */
 
-#define LOG_OR '|'
-#define LOG_AND '&'
+enum LOG_OR = '|';
+enum LOG_AND = '&';
 
-#define NEG_FLAG '!'
-#define REGEX_FLAG '~'
+enum NEG_FLAG = '!';
+enum REGEX_FLAG = '~';
 
 
-xf86MatchGroup*
-xf86createMatchGroup(const char *arg, xf86MatchMode pref_mode,
-             Bool negated)
+xf86MatchGroup* xf86createMatchGroup(const(char)* arg, xf86MatchMode pref_mode, Bool negated)
  {
-    xf86MatchPattern *pattern;
-    xf86MatchGroup *group;
-    const char *str = arg;
-    unsigned n;
-    static const char sep_or[2]  = { LOG_OR,  '\0' };
-    static const char sep_and[2] = { LOG_AND, '\0' };
+    xf86MatchPattern* pattern = void;
+    xf86MatchGroup* group = void;
+    const(char)* str = arg;
+    uint n = void;
+    static const(char)[2] sep_or = [ LOG_OR,  '\0' ];
+    static const(char)[2] sep_and = [ LOG_AND, '\0' ];
 
     if (!str)
-        return NULL;
+        return null;
 
-    group = malloc(sizeof(*group));
-    if (!group) return NULL;
-    xorg_list_init(&group->patterns);
-    xorg_list_init(&group->entry);
-    group->is_negated = negated;
+    group = cast(xf86MatchGroup*) malloc(typeof(*group).sizeof);
+    if (!group) return null;
+    xorg_list_init(&group.patterns);
+    xorg_list_init(&group.entry);
+    group.is_negated = negated;
 
   again:
     /* start new pattern */
-    if ((pattern = malloc(sizeof(*pattern))) == NULL)
+    if ((pattern = cast(xf86MatchPattern*) malloc(typeof(*pattern).sizeof)) == null)
         goto fail;
 
-    xorg_list_add(&pattern->entry, &group->patterns);
+    xorg_list_add(&pattern.entry, &group.patterns);
 
     /* Pattern starting with '!' should NOT be matched */
     if (*str == NEG_FLAG) {
-        pattern->is_negated = TRUE;
+        pattern.is_negated = TRUE;
         str++;
     }
     else
-        pattern->is_negated = FALSE;
+        pattern.is_negated = FALSE;
 
-    pattern->str = NULL;
-    pattern->regex = NULL;
+    pattern.str = null;
+    pattern.regex = null;
 
     /* Check if there is a regex prefix */
     if (*str == REGEX_FLAG) {
-        pattern->mode = MATCH_REGEX;
+        pattern.mode = MATCH_REGEX;
         str ++;
         if (*str) {
-            char *last;
+            char* last = void;
             last = strchr(str+1, *str);
             if (last)
                 n = last-str-1;
             else
                 n = strlen(str+1);
-            pattern->str = strndup(str+1, n);
-            if (pattern->str == NULL)
+            pattern.str = strndup(str+1, n);
+            if (pattern.str == null)
                 goto fail;
-            *(pattern->str+n) = '\0';
+            *(pattern.str+n) = '\0';
             str += n+1;
             if (*str) str++;
         }
         else {
         /* no regex, notning to match against */
-            pattern->mode = MATCH_IS_INVALID;
+            pattern.mode = MATCH_IS_INVALID;
             LogMessageVerb(X_ERROR, 1,
                 "No regular expression supplied after \'%c\' in \"%s\", ignoring\n",
                 REGEX_FLAG, arg);
-            free(pattern->str);
-            pattern->str = NULL;
+            free(pattern.str);
+            pattern.str = null;
         }
     }
     else {
-        n = strcspn(str, sep_or);
-        if (n > strcspn(str, sep_and)) {
-            pattern->mode = MATCH_SUBSTRINGS_SEQUENCE;
-            pattern->str = malloc(n+2);
-            if (pattern->str) {
-                char *s, *d;
-                strncpy(pattern->str, str, n);
+        n = strcspn(str, sep_or.ptr);
+        if (n > strcspn(str, sep_and.ptr)) {
+            pattern.mode = MATCH_SUBSTRINGS_SEQUENCE;
+            pattern.str = malloc(n+2);
+            if (pattern.str) {
+                char* s = void, d = void;
+                strncpy(pattern.str, str, n);
                 str += n;
-                *(pattern->str+n) = '\0';
-                s = d = pattern->str;
+                *(pattern.str+n) = '\0';
+                s = d = pattern.str;
                 n = 0;
               next_chunk:
                 while ((*s) && (*s != LOG_AND)) {
@@ -142,12 +143,12 @@ xf86createMatchGroup(const char *arg, xf86MatchMode pref_mode,
                     n = -1;
                     goto next_chunk;
                 }
-                if (d == pattern->str) {
+                if (d == pattern.str) {
                 /* All chunks are empty */
-                    pattern->mode = MATCH_IS_INVALID;
+                    pattern.mode = MATCH_IS_INVALID;
                     LogMessageVerb(X_ERROR, 1,
                         "No non-empty substrings supplied in the alternative \"%s\" of \"%s\", ignoring\n",
-                        pattern->str, arg);
+                        pattern.str, arg);
                 }
                 *(++d) = '\0';
             }
@@ -155,11 +156,11 @@ xf86createMatchGroup(const char *arg, xf86MatchMode pref_mode,
                 goto fail;
         }
         else {
-            pattern->mode = pref_mode;
-            pattern->str = strndup(str, n);
-            if (pattern->str == NULL)
+            pattern.mode = pref_mode;
+            pattern.str = strndup(str, n);
+            if (pattern.str == null)
                 goto fail;
-            *(pattern->str+n) = '\0'; /* should already be, but to be sure */
+            *(pattern.str+n) = '\0'; /* should already be, but to be sure */
             str += n;
         }
     }
@@ -174,27 +175,26 @@ xf86createMatchGroup(const char *arg, xf86MatchMode pref_mode,
 
   fail:
     xf86freeMatchGroup(group);
-    return NULL;
+    return null;
 }
 
-void
-xf86printMatchPattern(FILE * cf, const xf86MatchPattern *pattern, Bool not_first)
+void xf86printMatchPattern(FILE* cf, const(xf86MatchPattern)* pattern, Bool not_first)
 {
     if (!pattern) return;
     if (not_first)
         fprintf(cf, "%c", LOG_OR);
-    if (pattern->is_negated)
+    if (pattern.is_negated)
         fprintf(cf, "%c", NEG_FLAG);
-    if (pattern->mode == MATCH_IS_INVALID)
+    if (pattern.mode == MATCH_IS_INVALID)
         fprintf(cf, "invalid:%s",
-            pattern->str ? pattern->str : "(none)");
-    else if (pattern->mode == MATCH_REGEX)
+            pattern.str ? pattern.str : "(none)");
+    else if (pattern.mode == MATCH_REGEX)
     /* FIXME: Hope there is no '~' in the pattern */
         fprintf(cf, "%c%s%c", REGEX_FLAG,
-            pattern->str ? pattern->str : "(none)", REGEX_FLAG);
-    else if (pattern->mode == MATCH_SUBSTRINGS_SEQUENCE) {
+            pattern.str ? pattern.str : "(none)", REGEX_FLAG);
+    else if (pattern.mode == MATCH_SUBSTRINGS_SEQUENCE) {
         Bool after = FALSE;
-        char *str = pattern->str;
+        char* str = pattern.str;
         while (*str) {
             if (after)
                 fprintf(cf, "%c", LOG_AND);
@@ -206,5 +206,5 @@ xf86printMatchPattern(FILE * cf, const xf86MatchPattern *pattern, Bool not_first
     }
     else
         fprintf(cf, "%s",
-            pattern->str ? pattern->str : "(none)");
+            pattern.str ? pattern.str : "(none)");
 }

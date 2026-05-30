@@ -1,3 +1,6 @@
+module Extensions.c;
+@nogc nothrow:
+extern(C): __gshared:
 /*
  * Copyright 2004 Red Hat Inc., Raleigh, North Carolina.
  *
@@ -30,42 +33,41 @@
  *   Kevin E. Martin <kem@redhat.com>
  *
  */
-#include <xorg-config.h>
+import xorg_config;
 
-#include "os.h"
-#include "xf86Parser.h"
-#include "xf86tokens.h"
-#include "Configint.h"
+import os;
+import xf86Parser;
+import xf86tokens;
+import Configint;
 
 
-static const xf86ConfigSymTabRec ExtensionsTab[] = {
+private const(xf86ConfigSymTabRec)[4] ExtensionsTab = [
     {ENDSECTION, "endsection"},
     {OPTION, "option"},
     {-1, ""},
-};
+];
 
-#define CLEANUP xf86freeExtensions
+enum CLEANUP = xf86freeExtensions;
 
-XF86ConfExtensionsPtr
-xf86parseExtensionsSection(void)
+XF86ConfExtensionsPtr xf86parseExtensionsSection()
 {
-    int token;
+    int token = void;
 
     parsePrologue(XF86ConfExtensionsPtr, XF86ConfExtensionsRec);
 
-    while ((token = xf86getToken(ExtensionsTab)) != ENDSECTION) {
+    while ((token = xf86getToken(ExtensionsTab.ptr)) != ENDSECTION) {
         switch (token) {
         case OPTION:
-            ptr->ext_option_lst = xf86parseOption(ptr->ext_option_lst);
+            ptr.ext_option_lst = xf86parseOption(ptr.ext_option_lst);
             break;
         case EOF_TOKEN:
             Error(UNEXPECTED_EOF_MSG);
             break;
         case COMMENT:
-            ptr->extensions_comment =
-                xf86addComment(ptr->extensions_comment, xf86_lex_val.str);
+            ptr.extensions_comment =
+                xf86addComment(ptr.extensions_comment, xf86_lex_val.str);
             free(xf86_lex_val.str);
-            xf86_lex_val.str = NULL;
+            xf86_lex_val.str = null;
             break;
         default:
             Error(INVALID_KEYWORD_MSG, xf86tokenString());
@@ -73,38 +75,34 @@ xf86parseExtensionsSection(void)
         }
     }
 
-#ifdef DEBUG
+version (DEBUG) {
     ErrorF("Extensions section parsed\n");
-#endif
+}
 
     return ptr;
 }
 
-#undef CLEANUP
-
-void
-xf86printExtensionsSection(FILE * cf, XF86ConfExtensionsPtr ptr)
+void xf86printExtensionsSection(FILE* cf, XF86ConfExtensionsPtr ptr)
 {
-    XF86OptionPtr p;
+    XF86OptionPtr p = void;
 
-    if (ptr == NULL || ptr->ext_option_lst == NULL)
+    if (ptr == null || ptr.ext_option_lst == null)
         return;
 
-    p = ptr->ext_option_lst;
+    p = ptr.ext_option_lst;
     fprintf(cf, "Section \"Extensions\"\n");
-    if (ptr->extensions_comment)
-        fprintf(cf, "%s", ptr->extensions_comment);
+    if (ptr.extensions_comment)
+        fprintf(cf, "%s", ptr.extensions_comment);
     xf86printOptionList(cf, p, 1);
     fprintf(cf, "EndSection\n\n");
 }
 
-void
-xf86freeExtensions(XF86ConfExtensionsPtr ptr)
+void xf86freeExtensions(XF86ConfExtensionsPtr ptr)
 {
-    if (ptr == NULL)
+    if (ptr == null)
         return;
 
-    xf86optionListFree(ptr->ext_option_lst);
-    TestFree(ptr->extensions_comment);
+    xf86optionListFree(ptr.ext_option_lst);
+    TestFree(ptr.extensions_comment);
     free(ptr);
 }

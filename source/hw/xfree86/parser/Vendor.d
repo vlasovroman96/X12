@@ -1,3 +1,6 @@
+module Vendor.c;
+@nogc nothrow:
+extern(C): __gshared:
 /*
  *
  * Copyright (c) 1997  Metro Link Incorporated
@@ -51,63 +54,61 @@
  * the sale, use or other dealings in this Software without prior written
  * authorization from the copyright holder(s) and author(s).
  */
-#include <xorg-config.h>
+import xorg_config;
 
-#include "xf86Parser.h"
-#include "xf86tokens.h"
-#include "Configint.h"
+import xf86Parser;
+import xf86tokens;
+import Configint;
 
 
-static const xf86ConfigSymTabRec VendorSubTab[] = {
+private const(xf86ConfigSymTabRec)[5] VendorSubTab = [
     {ENDSUBSECTION, "endsubsection"},
     {IDENTIFIER, "identifier"},
     {OPTION, "option"},
     {-1, ""},
-};
+];
 
-static void
-xf86freeVendorSubList(XF86ConfVendSubPtr ptr)
+private void xf86freeVendorSubList(XF86ConfVendSubPtr ptr)
 {
-    XF86ConfVendSubPtr prev;
+    XF86ConfVendSubPtr prev = void;
 
     while (ptr) {
-        TestFree(ptr->vs_identifier);
-        TestFree(ptr->vs_name);
-        TestFree(ptr->vs_comment);
-        xf86optionListFree(ptr->vs_option_lst);
+        TestFree(ptr.vs_identifier);
+        TestFree(ptr.vs_name);
+        TestFree(ptr.vs_comment);
+        xf86optionListFree(ptr.vs_option_lst);
         prev = ptr;
-        ptr = ptr->list.next;
+        ptr = ptr.list.next;
         free(prev);
     }
 }
 
-#define CLEANUP xf86freeVendorSubList
+enum CLEANUP = xf86freeVendorSubList;
 
-static XF86ConfVendSubPtr
-xf86parseVendorSubSection(void)
+private XF86ConfVendSubPtr xf86parseVendorSubSection()
 {
     int has_ident = FALSE;
-    int token;
+    int token = void;
 
-    parsePrologue(XF86ConfVendSubPtr, XF86ConfVendSubRec)
+    parsePrologue(XF86ConfVendSubPtr, XF86ConfVendSubRec);
 
-        while ((token = xf86getToken(VendorSubTab)) != ENDSUBSECTION) {
+        while ((token = xf86getToken(VendorSubTab.ptr)) != ENDSUBSECTION) {
         switch (token) {
         case COMMENT:
-            ptr->vs_comment = xf86addComment(ptr->vs_comment, xf86_lex_val.str);
+            ptr.vs_comment = xf86addComment(ptr.vs_comment, xf86_lex_val.str);
             free(xf86_lex_val.str);
-            xf86_lex_val.str = NULL;
+            xf86_lex_val.str = null;
             break;
         case IDENTIFIER:
-            if (xf86getSubToken(&(ptr->vs_comment)))
+            if (xf86getSubToken(&(ptr.vs_comment)))
                 Error(QUOTE_MSG, "Identifier");
             if (has_ident == TRUE)
                 Error(MULTIPLE_MSG, "Identifier");
-            ptr->vs_identifier = xf86_lex_val.str;
+            ptr.vs_identifier = xf86_lex_val.str;
             has_ident = TRUE;
             break;
         case OPTION:
-            ptr->vs_option_lst = xf86parseOption(ptr->vs_option_lst);
+            ptr.vs_option_lst = xf86parseOption(ptr.vs_option_lst);
             break;
 
         case EOF_TOKEN:
@@ -119,56 +120,53 @@ xf86parseVendorSubSection(void)
         }
     }
 
-#ifdef DEBUG
+version (DEBUG) {
     printf("Vendor subsection parsed\n");
-#endif
+}
 
     return ptr;
 }
 
-#undef CLEANUP
-
-static const xf86ConfigSymTabRec VendorTab[] = {
+private const(xf86ConfigSymTabRec)[6] VendorTab = [
     {ENDSECTION, "endsection"},
     {IDENTIFIER, "identifier"},
     {OPTION, "option"},
     {SUBSECTION, "subsection"},
     {-1, ""},
-};
+];
 
-#define CLEANUP xf86freeVendorList
+enum CLEANUP = xf86freeVendorList;
 
-XF86ConfVendorPtr
-xf86parseVendorSection(void)
+XF86ConfVendorPtr xf86parseVendorSection()
 {
     int has_ident = FALSE;
-    int token;
+    int token = void;
 
-    parsePrologue(XF86ConfVendorPtr, XF86ConfVendorRec)
+    parsePrologue(XF86ConfVendorPtr, XF86ConfVendorRec);
 
-        while ((token = xf86getToken(VendorTab)) != ENDSECTION) {
+        while ((token = xf86getToken(VendorTab.ptr)) != ENDSECTION) {
         switch (token) {
         case COMMENT:
-            ptr->vnd_comment = xf86addComment(ptr->vnd_comment, xf86_lex_val.str);
+            ptr.vnd_comment = xf86addComment(ptr.vnd_comment, xf86_lex_val.str);
             free(xf86_lex_val.str);
-            xf86_lex_val.str = NULL;
+            xf86_lex_val.str = null;
             break;
         case IDENTIFIER:
-            if (xf86getSubToken(&(ptr->vnd_comment)) != XF86_TOKEN_STRING)
+            if (xf86getSubToken(&(ptr.vnd_comment)) != XF86_TOKEN_STRING)
                 Error(QUOTE_MSG, "Identifier");
             if (has_ident == TRUE)
                 Error(MULTIPLE_MSG, "Identifier");
-            ptr->vnd_identifier = xf86_lex_val.str;
+            ptr.vnd_identifier = xf86_lex_val.str;
             has_ident = TRUE;
             break;
         case OPTION:
-            ptr->vnd_option_lst = xf86parseOption(ptr->vnd_option_lst);
+            ptr.vnd_option_lst = xf86parseOption(ptr.vnd_option_lst);
             break;
         case SUBSECTION:
-            if (xf86getSubToken(&(ptr->vnd_comment)) != XF86_TOKEN_STRING)
+            if (xf86getSubToken(&(ptr.vnd_comment)) != XF86_TOKEN_STRING)
                 Error(QUOTE_MSG, "SubSection");
             {
-                HANDLE_LIST(vnd_sub_lst, xf86parseVendorSubSection,
+                HANDLE_LIST(vnd_sub_lst, &xf86parseVendorSubSection,
                             XF86ConfVendSubPtr);
             }
             break;
@@ -185,50 +183,46 @@ xf86parseVendorSection(void)
     if (!has_ident)
         Error(NO_IDENT_MSG);
 
-#ifdef DEBUG
+version (DEBUG) {
     printf("Vendor section parsed\n");
-#endif
+}
 
     return ptr;
 }
 
-#undef CLEANUP
-
-void
-xf86printVendorSection(FILE * cf, XF86ConfVendorPtr ptr)
+void xf86printVendorSection(FILE* cf, XF86ConfVendorPtr ptr)
 {
-    XF86ConfVendSubPtr pptr;
+    XF86ConfVendSubPtr pptr = void;
 
     while (ptr) {
         fprintf(cf, "Section \"Vendor\"\n");
-        if (ptr->vnd_comment)
-            fprintf(cf, "%s", ptr->vnd_comment);
-        if (ptr->vnd_identifier)
-            fprintf(cf, "\tIdentifier     \"%s\"\n", ptr->vnd_identifier);
+        if (ptr.vnd_comment)
+            fprintf(cf, "%s", ptr.vnd_comment);
+        if (ptr.vnd_identifier)
+            fprintf(cf, "\tIdentifier     \"%s\"\n", ptr.vnd_identifier);
 
-        xf86printOptionList(cf, ptr->vnd_option_lst, 1);
-        for (pptr = ptr->vnd_sub_lst; pptr; pptr = pptr->list.next) {
+        xf86printOptionList(cf, ptr.vnd_option_lst, 1);
+        for (pptr = ptr.vnd_sub_lst; pptr; pptr = pptr.list.next) {
             fprintf(cf, "\tSubSection \"Vendor\"\n");
-            if (pptr->vs_comment)
-                fprintf(cf, "%s", pptr->vs_comment);
-            if (pptr->vs_identifier)
-                fprintf(cf, "\t\tIdentifier \"%s\"\n", pptr->vs_identifier);
-            xf86printOptionList(cf, pptr->vs_option_lst, 2);
+            if (pptr.vs_comment)
+                fprintf(cf, "%s", pptr.vs_comment);
+            if (pptr.vs_identifier)
+                fprintf(cf, "\t\tIdentifier \"%s\"\n", pptr.vs_identifier);
+            xf86printOptionList(cf, pptr.vs_option_lst, 2);
             fprintf(cf, "\tEndSubSection\n");
         }
         fprintf(cf, "EndSection\n\n");
-        ptr = ptr->list.next;
+        ptr = ptr.list.next;
     }
 }
 
-void
-xf86freeVendorList(XF86ConfVendorPtr p)
+void xf86freeVendorList(XF86ConfVendorPtr p)
 {
-    if (p == NULL)
+    if (p == null)
         return;
-    xf86freeVendorSubList(p->vnd_sub_lst);
-    TestFree(p->vnd_identifier);
-    TestFree(p->vnd_comment);
-    xf86optionListFree(p->vnd_option_lst);
+    xf86freeVendorSubList(p.vnd_sub_lst);
+    TestFree(p.vnd_identifier);
+    TestFree(p.vnd_comment);
+    xf86optionListFree(p.vnd_option_lst);
     free(p);
 }
