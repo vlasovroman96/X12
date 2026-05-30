@@ -34,8 +34,8 @@ import core.stdc.stdlib;
 import include.shmint;
 import mi.mi_priv;
 
-import fb;
-import fboverlay;
+import include.fb;
+import include.fboverlay;
 
 private DevPrivateKeyRec fbOverlayScreenPrivateKeyRec;
 

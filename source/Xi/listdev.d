@@ -69,8 +69,8 @@ import Xi.handlers;
 
 import include.inputstr;           /* DeviceIntPtr      */
 import XIstubs;
-import extnsionst;
-import exevents;
+import include.extnsionst;
+import include.exevents;
 import xkbsrv;
 import xkbstr;
 

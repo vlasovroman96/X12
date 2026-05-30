@@ -45,7 +45,7 @@ import miext.extinit_priv;
 import misc;
 import os;
 import dixstruct;
-import extnsionst;
+import include.extnsionst;
 import swaprep;
 
 private int ProcXCMiscGetVersion(ClientPtr client)

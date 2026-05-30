@@ -29,7 +29,7 @@ extern(C): __gshared:
 import xorg_config;
 
 import xf86Module;
-import fb;
+import include.fb;
 
 private XF86ModuleVersionInfo VersRec = {
     vendor: MODULEVENDORSTRING,

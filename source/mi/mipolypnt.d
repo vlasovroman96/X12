@@ -50,9 +50,9 @@ import build.dix_config;
 
 import deimos.X11.X;
 import deimos.X11.Xprotostr;
-import pixmapstr;
+import include.pixmapstr;
 import include.gcstruct;
-import windowstr;
+import include.windowstr;
 import mi;
 
 void miPolyPoint(DrawablePtr pDrawable, GCPtr pGC, int mode, int npt, xPoint* pptInit)

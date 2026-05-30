@@ -50,8 +50,8 @@ import present.present_priv;
 
 import glxserver;
 import unpack;
-import pixmapstr;
-import windowstr;
+import include.pixmapstr;
+import include.windowstr;
 import glxutil;
 import glxext;
 import indirect_dispatch;

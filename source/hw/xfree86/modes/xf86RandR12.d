@@ -38,7 +38,7 @@ import globals;
 import xf86Modes;
 import xf86Priv;
 import mipointer;
-import windowstr;
+import include.windowstr;
 import include.inputstr;
 import randrstr_priv;
 

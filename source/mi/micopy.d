@@ -29,8 +29,8 @@ import mi;
 import include.scrnintstr;
 import include.gcstruct;
 import include.pixmap;
-import pixmapstr;
-import windowstr;
+import include.pixmapstr;
+import include.windowstr;
 
 void miCopyRegion(DrawablePtr pSrcDrawable, DrawablePtr pDstDrawable, GCPtr pGC, RegionPtr pDstRegion, int dx, int dy, miCopyProc copyProc, Pixel bitPlane, void* closure)
 {

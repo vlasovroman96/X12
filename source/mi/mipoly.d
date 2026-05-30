@@ -54,9 +54,9 @@ SOFTWARE.
 import build.dix_config;
 
 import deimos.X11.X;
-import windowstr;
+import include.windowstr;
 import include.gcstruct;
-import pixmapstr;
+import include.pixmapstr;
 import mi;
 import miscanfill;
 import mipoly;

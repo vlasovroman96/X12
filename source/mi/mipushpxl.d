@@ -51,7 +51,7 @@ import build.dix_config;
 import deimos.X11.X;
 import include.gcstruct;
 import include.scrnintstr;
-import pixmapstr;
+import include.pixmapstr;
 import regionstr;
 import mi;
 import include.servermd;

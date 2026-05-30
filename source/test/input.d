@@ -48,7 +48,7 @@ import os.fmt;
 
 import misc;
 import include.resource;
-import windowstr;
+import include.windowstr;
 import include.inputstr;
 import exglobals;
 import eventstr;

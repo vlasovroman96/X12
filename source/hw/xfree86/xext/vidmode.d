@@ -50,7 +50,7 @@ import os.osdep;
 
 import misc;
 import dixstruct;
-import extnsionst;
+import include.extnsionst;
 import include.scrnintstr;
 import include.servermd;
 import vidmodestr;

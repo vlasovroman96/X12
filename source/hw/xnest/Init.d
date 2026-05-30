@@ -34,7 +34,7 @@ import screenint;
 import include.input;
 import misc;
 import include.scrnintstr;
-import windowstr;
+import include.windowstr;
 import include.servermd;
 import dixfontstr;
 

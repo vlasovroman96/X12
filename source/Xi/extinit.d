@@ -72,7 +72,7 @@ import Xext.geext_priv;
 
 import include.inputstr;
 import include.gcstruct;           /* pointer for extnsionst.h */
-import extnsionst;         /* extension entry   */
+import include.extnsionst;         /* extension entry   */
 import exglobals;
 import swaprep;
 import include.privates;

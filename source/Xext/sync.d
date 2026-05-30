@@ -72,9 +72,9 @@ import os.osdep;
 
 import include.scrnintstr;
 import os;
-import extnsionst;
+import include.extnsionst;
 import dixstruct;
-import pixmapstr;
+import include.pixmapstr;
 import include.resource;
 import syncsrv;
 import include.protocol_versions;

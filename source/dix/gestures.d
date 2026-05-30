@@ -42,9 +42,9 @@ import os.bug_priv;
 import include.inputstr;
 import include.scrnintstr;
 import eventstr;
-import exevents;
+import include.exevents;
 import exglobals;
-import windowstr;
+import include.windowstr;
 
 enum GESTURE_HISTORY_SIZE = 100;
 

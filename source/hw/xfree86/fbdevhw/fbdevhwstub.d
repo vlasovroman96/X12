@@ -5,7 +5,7 @@ import xorg_config;
 
 import xf86;
 import xf86cmap;
-import fbdevhw;
+import include.fbdevhw;
 
 /* Stubs for the static server on platforms that don't support fbdev */
 

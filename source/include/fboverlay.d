@@ -1,4 +1,4 @@
-module fboverlay.h;
+module include.fboverlay;
 @nogc nothrow:
 extern(C): __gshared:
 /*

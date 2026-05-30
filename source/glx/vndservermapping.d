@@ -33,7 +33,7 @@ import build.dix_config;
 
 import vndserver_priv;
 
-import pixmapstr;
+import include.pixmapstr;
 
 import vndservervendor;
 

@@ -53,8 +53,8 @@ import Xext.panoramiXsrv;
 import Xi.handlers;
 
 import include.inputstr;           /* DeviceIntPtr      */
-import windowstr;          /* window structure  */
-import extnsionst;
+import include.windowstr;          /* window structure  */
+import include.extnsionst;
 import exglobals;
 import include.scrnintstr;
 import xkbsrv;

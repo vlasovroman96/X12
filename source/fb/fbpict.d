@@ -33,7 +33,7 @@ import core.stdc.string;
 import fb.fbpict_priv;
 import include.mipict;
 
-import fb;
+import include.fb;
 import glyphstr_priv;
 import include.picturestr;
 

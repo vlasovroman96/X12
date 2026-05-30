@@ -35,7 +35,7 @@ import Pointer;
 import Args;
 
 import xserver_properties;
-import exevents;           /* For XIGetKnownProperty */
+import include.exevents;           /* For XIGetKnownProperty */
 
 DeviceIntPtr xnestPointerDevice = null;
 

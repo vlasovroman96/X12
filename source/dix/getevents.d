@@ -64,10 +64,10 @@ import globals;
 import mipointer;
 import eventstr;
 import eventconvert;
-import windowstr;
+import include.windowstr;
 import xkbsrv;
 import exglobals;
-import extnsionst;
+import include.extnsionst;
 
 /* Number of motion history events to store. */
 enum MOTION_HISTORY_SIZE = 256;

@@ -1,4 +1,4 @@
-module extnsionst.h;
+module include.extnsionst;
 @nogc nothrow:
 extern(C): __gshared:
 /***********************************************************
@@ -52,7 +52,7 @@ public import include.xlibre_ptrtypes;
 public import include.dix;
 public import misc;
 public import screenint;
-public import extension;
+public import include.extension;
 public import include.gc;
 public import include.privates;
 

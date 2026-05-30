@@ -43,7 +43,7 @@ version = GLAMOR_FOR_XORG;
 import glamor_priv;
 
 import X11.extensions.Xv;
-import fourcc;
+import include.fourcc;
 
 enum NUM_FORMATS = 4;
 

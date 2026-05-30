@@ -7,7 +7,7 @@ extern(C): __gshared:
  * Copyright © 2024 Enrico Weigelt, metux IT consult <info@metux.net>
  */
  
-public import extinit;
+public import include.extinit;
 
 version (DRI2) {
 public import deimos.X11.extensions.dri2proto;

@@ -46,7 +46,7 @@ import glamor_transform;
 import glamor_transfer;
 
 import deimos.X11.extensions.Xv;
-import fourcc;
+import include.fourcc;
 /* Reference color space transform data */
 struct REF_TRANSFORM {
     float RefLuma = 0;

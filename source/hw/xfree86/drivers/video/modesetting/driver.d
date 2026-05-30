@@ -63,7 +63,7 @@ import xf86Pci;
 import mipointer;
 import mipointrst;
 import micmap;
-import fb;
+import include.fb;
 import xf86i2c;
 import include.xf86Crtc;
 import miscstruct;

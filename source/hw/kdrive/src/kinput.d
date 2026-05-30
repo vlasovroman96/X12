@@ -58,7 +58,7 @@ import os.cmdline;
 
 import xkbsrv;
 import XIstubs;            /* even though we don't use stubs.  cute, no? */
-import exevents;
+import include.exevents;
 import exglobals;
 import eventstr;
 import xserver_properties;

@@ -75,7 +75,7 @@ import loaderProcs;
 import os_support.linux.systemd_logind;
 import seatd_libseat;
 
-import exevents;           /* AddInputDevice */
+import include.exevents;           /* AddInputDevice */
 import exglobals;
 import eventstr;
 import optionstr;

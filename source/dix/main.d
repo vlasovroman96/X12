@@ -112,17 +112,17 @@ import Xext.panoramiXsrv;
 import include.scrnintstr;
 import misc;
 import os;
-import windowstr;
+import include.windowstr;
 import include.resource;
 import dixstruct;
 import include.gcstruct;
-import extension;
+import include.extension;
 import include.cursorstr;
 import include.servermd;
 import include.dixfont;
-import extnsionst;
+import include.extnsionst;
 import include.privates;
-import exevents;
+import include.exevents;
 
 version (DPMSExtension) {
 import deimos.X11.extensions.dpmsconst;

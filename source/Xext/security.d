@@ -50,7 +50,7 @@ import os.osdep;
 
 import include.scrnintstr;
 import include.inputstr;
-import windowstr;
+import include.windowstr;
 import propertyst;
 import include.privates;
 import xacestr;

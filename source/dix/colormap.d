@@ -71,7 +71,7 @@ import dixstruct;
 import os;
 import include.scrnintstr;
 import include.resource;
-import windowstr;
+import include.windowstr;
 import include.privates;
 import xace;
 

@@ -30,7 +30,7 @@ import build.dix_config;
 import core.stdc.string;
 
 import exa_priv;
-import exa;
+import include.exa;
 
 void exaCreateDriverPixmap_mixed(PixmapPtr pPixmap)
 {

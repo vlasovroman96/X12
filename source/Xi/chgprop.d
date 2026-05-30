@@ -65,8 +65,8 @@ import dix.window_priv;
 import Xi.handlers;
 
 import include.inputstr;           /* DeviceIntPtr      */
-import windowstr;
-import exevents;
+import include.windowstr;
+import include.exevents;
 import exglobals;
 import grabdev;
 

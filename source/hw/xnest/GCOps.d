@@ -30,8 +30,8 @@ import xcb.xcb_aux;
 import regionstr;
 import include.gcstruct;
 import include.scrnintstr;
-import windowstr;
-import pixmapstr;
+import include.windowstr;
+import include.pixmapstr;
 import include.servermd;
 
 import xnest_xcb;

@@ -59,7 +59,7 @@ import dix.reqhandlers_priv;
 
 import misc;
 import dixstruct;
-import extnsionst;         /* for SendEvent */
+import include.extnsionst;         /* for SendEvent */
 import swapreq;
 
 /* Thanks to Jack Palevich for testing and subsequently rewriting all this */

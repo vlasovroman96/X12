@@ -38,7 +38,7 @@ import xkb.xkbsrv_priv;
 
 import include.inputstr;
 import include.scrnintstr;
-import windowstr;
+import include.windowstr;
 
 int XkbDDXTerminateServer(DeviceIntPtr dev, KeyCode key, XkbAction* act)
 {

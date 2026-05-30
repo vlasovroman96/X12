@@ -39,7 +39,7 @@ import dix.window_priv;
 import Xi.handlers;
 
 import dixstruct;
-import windowstr;
+import include.windowstr;
 
 /**
  * Ruleset:

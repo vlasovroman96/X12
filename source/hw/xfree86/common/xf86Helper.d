@@ -55,8 +55,8 @@ import os.osdep;
 
 import os;
 import include.servermd;
-import pixmapstr;
-import windowstr;
+import include.pixmapstr;
+import include.windowstr;
 import propertyst;
 import include.gcstruct;
 import loaderProcs;

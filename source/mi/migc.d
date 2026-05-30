@@ -34,8 +34,8 @@ import build.dix_config;
 
 import include.scrnintstr;
 import include.gcstruct;
-import pixmapstr;
-import windowstr;
+import include.pixmapstr;
+import include.windowstr;
 import migc;
 
 /* ARGSUSED */

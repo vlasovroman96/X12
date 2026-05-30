@@ -70,7 +70,7 @@ import deimos.X11.X;
 import mi.mi_priv;
 import os.osdep;
 
-import windowstr;
+import include.windowstr;
 import include.gcstruct;
 import regionstr;
 import miwideline;

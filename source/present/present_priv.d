@@ -33,7 +33,7 @@ public import include.syncsdk;
 public import include.scrnintstr;
 public import misc;
 public import list;
-public import windowstr;
+public import include.windowstr;
 public import dixstruct;
 public import syncsrv;
 public import xfixes;

@@ -24,7 +24,7 @@ import os;
 import dixstruct;
 import include.resource;
 import include.scrnintstr;
-import extnsionst;
+import include.extnsionst;
 import include.servermd;
 
 enum SERVER_XVMC_MAJOR_VERSION =               1;

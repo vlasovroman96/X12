@@ -36,7 +36,7 @@ import deimos.X11.X;
 import deimos.X11.Xprotostr;
 import regionstr;
 import include.gcstruct;
-import pixmapstr;
+import include.pixmapstr;
 import mi;
 import mifillarc;
 

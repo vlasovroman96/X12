@@ -31,8 +31,8 @@ import mi.mi_priv;
 
 import include.gcstruct;
 import include.window;
-import windowstr;
-import pixmapstr;
+import include.windowstr;
+import include.pixmapstr;
 import include.scrnintstr;
 
 import xnest_xcb;

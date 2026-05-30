@@ -1,4 +1,4 @@
-module fbdevhw.h;
+module include.fbdevhw;
 @nogc nothrow:
 extern(C): __gshared:
 

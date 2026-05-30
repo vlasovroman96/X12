@@ -9,7 +9,7 @@ import X11.X;
 import hw.xfree86.common.action_priv;
 import xkb.xkbsrv_priv;
 
-import windowstr;
+import include.windowstr;
 import os;
 import xf86_priv;
 

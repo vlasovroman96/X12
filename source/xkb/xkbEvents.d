@@ -45,7 +45,7 @@ import xkb.xkbsrv_priv;
 
 import include.inputstr;
 import exglobals;
-import windowstr;
+import include.windowstr;
 
 /***====================================================================***/
 

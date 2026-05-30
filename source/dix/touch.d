@@ -46,7 +46,7 @@ import include.inputstr;
 import include.scrnintstr;
 import eventstr;
 import exglobals;
-import windowstr;
+import include.windowstr;
 
 enum TOUCH_HISTORY_SIZE = 100;
 

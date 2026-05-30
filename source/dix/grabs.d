@@ -67,7 +67,7 @@ import os.auth;
 import os.client_priv;
 
 import misc;
-import windowstr;
+import include.windowstr;
 import include.inputstr;
 import include.cursorstr;
 import exglobals;

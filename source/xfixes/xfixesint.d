@@ -55,8 +55,8 @@ public import dix.selection_priv;
 public import misc;
 public import os;
 public import dixstruct;
-public import extnsionst;
-public import windowstr;
+public import include.extnsionst;
+public import include.windowstr;
 public import xfixes;
 
 extern int XFixesEventBase;

@@ -1,4 +1,4 @@
-module fourcc.h;
+module include.fourcc;
 @nogc nothrow:
 extern(C): __gshared:
 

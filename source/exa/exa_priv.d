@@ -28,7 +28,7 @@ import core.stdc.config: c_long, c_ulong;
  */
 
  
-public import exa;
+public import include.exa;
 
 public import deimos.X11.X;
 public import deimos.X11.Xproto;
@@ -36,17 +36,17 @@ public import deimos.X11.Xproto;
 public import include.shmint;
 
 public import include.scrnintstr;
-public import pixmapstr;
-public import windowstr;
+public import include.pixmapstr;
+public import include.windowstr;
 public import include.servermd;
 public import include.gcstruct;
 public import include.input;
 public import mipointer;
 public import mi;
 public import include.dix;
-public import fb;
-public import fboverlay;
-public import fbpict;
+public import include.fb;
+public import include.fboverlay;
+public import include.fbpict;
 public import glyphstr;
 public import include.damage;
 

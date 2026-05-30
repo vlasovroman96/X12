@@ -37,9 +37,9 @@ public import deimos.X11.Xproto;
 public import deimos.X11.Xmd;
 public import misc;
 public import dixstruct;
-public import pixmapstr;
+public import include.pixmapstr;
 public import include.gcstruct;
-public import extnsionst;
+public import include.extnsionst;
 public import include.resource;
 public import include.scrnintstr;
 

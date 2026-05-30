@@ -38,7 +38,7 @@ import X11.Xatom;
 
 import include.xorgVersion;
 
-import exevents;
+import include.exevents;
 import include.input;
 import xkbsrv;
 import xf86;

@@ -39,7 +39,7 @@ import xkb.xkbsrv_priv;
 
 import include.inputstr;
 import include.scrnintstr;
-import windowstr;
+import include.windowstr;
 
 void XkbDDXKeybdCtrlProc(DeviceIntPtr dev, KeybdCtrl* ctrl)
 {

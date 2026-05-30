@@ -37,9 +37,9 @@ import sleepuntil;
 import deimos.X11.X;
 import deimos.X11.Xmd;
 import misc;
-import windowstr;
+import include.windowstr;
 import dixstruct;
-import pixmapstr;
+import include.pixmapstr;
 import include.scrnintstr;
 
 struct _Sertafied {

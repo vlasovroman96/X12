@@ -8,7 +8,7 @@ import deimos.X11.X;
 
 import xkb.xkbsrv_priv;
 
-import windowstr;
+import include.windowstr;
 
 int XkbDDXPrivate(DeviceIntPtr dev, KeyCode key, XkbAction* act)
 {

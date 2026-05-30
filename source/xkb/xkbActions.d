@@ -49,7 +49,7 @@ import xkb.xkbsrv_priv;
 
 import misc;
 import include.inputstr;
-import exevents;
+import include.exevents;
 import eventstr;
 import mipointer;
 

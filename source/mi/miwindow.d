@@ -59,9 +59,9 @@ import dix.window_priv;
 import include.regionstr;
 import mi.mi_priv;
 
-import windowstr;
+import include.windowstr;
 import include.scrnintstr;
-import pixmapstr;
+import include.pixmapstr;
 import include.inputstr;
 
 void miClearToBackground(WindowPtr pWin, int x, int y, int w, int h, Bool generateExposures)

@@ -28,8 +28,8 @@ import core.stdc.stdarg;
 import os.client_priv;
 
 import include.scrnintstr;
-import extnsionst;
-import pixmapstr;
+import include.extnsionst;
+import include.pixmapstr;
 import regionstr;
 import include.gcstruct;
 import xacestr;

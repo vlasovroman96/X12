@@ -50,7 +50,7 @@ SOFTWARE.
  
 public import include.xlibre_ptrtypes;
 public import include.window;
-public import pixmapstr;
+public import include.pixmapstr;
 public import regionstr;
 public import include.cursor;
 public import property;

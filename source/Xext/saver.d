@@ -53,10 +53,10 @@ import Xext.panoramiXsrv;
 
 import misc;
 import os;
-import windowstr;
+import include.windowstr;
 import include.scrnintstr;
-import pixmapstr;
-import extnsionst;
+import include.pixmapstr;
+import include.extnsionst;
 import dixstruct;
 import include.resource;
 import include.gcstruct;

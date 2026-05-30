@@ -35,9 +35,9 @@ import vndserver_priv;
 
 import core.stdc.string;
 import include.scrnintstr;
-import windowstr;
+import include.windowstr;
 import dixstruct;
-import extnsionst;
+import include.extnsionst;
 import glx_extinit;
 
 import GL.glxproto;

@@ -42,7 +42,7 @@ import include.mipict;
 import os.bug_priv;
 
 import glamor_priv;
-import fbpict;
+import include.fbpict;
 version (none) {
 //#define DEBUGF(str, ...)  do {} while(0)
 enum string DEBUGF(string str) = `ErrorF(` ~ str ~ `, ##__VA_ARGS__)`;

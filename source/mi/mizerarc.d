@@ -45,7 +45,7 @@ import mi.mi_priv;
 
 import regionstr;
 import include.gcstruct;
-import pixmapstr;
+import include.pixmapstr;
 import mizerarc;
 
 enum FULLCIRCLE = (360 * 64);

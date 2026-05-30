@@ -32,7 +32,7 @@ import xf86Pci;
 
 import xf86cmap;
 
-import fbdevhw;
+import include.fbdevhw;
 import fbpriv;
 import globals;
 import X11.extensions.dpmsconst;

@@ -53,7 +53,7 @@ import deimos.X11.X;
 import misc;
 import include.scrnintstr;
 import include.gcstruct;
-import windowstr;
+import include.windowstr;
 import include.pixmap;
 import mi;
 import miline;

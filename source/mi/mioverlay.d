@@ -17,7 +17,7 @@ import mi.mi_priv;
 
 import include.scrnintstr;
 import validate;
-import windowstr;
+import include.windowstr;
 import include.gcstruct;
 import regionstr;
 import include.privates;

@@ -28,7 +28,7 @@ public import deimos.X11.X;
 public import include.scrnintstr;
 public import misc;
 public import list;
-public import windowstr;
+public import include.windowstr;
 public import dixstruct;
 public import include.randrstr;
 public import dri3;

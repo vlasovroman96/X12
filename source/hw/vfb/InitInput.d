@@ -45,7 +45,7 @@ import include.inputstr;
 import mipointer;
 import xkbsrv;
 import xserver_properties;
-import exevents;
+import include.exevents;
 
 void ProcessInputEvents()
 {

@@ -9,7 +9,7 @@ import core.stdc.config: c_long, c_ulong;
  */
  
 public import deimos.X11.extensions.XIproto;
-public import exevents;
+public import include.exevents;
 
 /**
  * Attached to the devPrivates of each client. Specifies the version number as

@@ -32,7 +32,7 @@ import kdrive_config;
 
 import ephyr;
 import exa_priv;
-import fbpict;
+import include.fbpict;
 
 enum EPHYR_TRACE_DRAW = 0;
 

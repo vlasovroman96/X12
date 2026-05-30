@@ -65,7 +65,7 @@ import dix.request_priv;
 import Xi.handlers;
 
 import include.inputstr;           /* DeviceIntPtr      */
-import windowstr;          /* window structure  */
+import include.windowstr;          /* window structure  */
 import exglobals;
 import grabdev;
 

@@ -44,7 +44,7 @@ public import include.xlibre_ptrtypes;
 public import misc;
 public import include.input;
 public import include.scrnintstr;
-public import pixmapstr;
+public import include.pixmapstr;
 public import colormapst;
 public import xf86Module;
 public import xf86Opt;

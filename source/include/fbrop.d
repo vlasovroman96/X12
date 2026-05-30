@@ -1,4 +1,4 @@
-module fbrop.h;
+module include.fbrop;
 @nogc nothrow:
 extern(C): __gshared:
 /*

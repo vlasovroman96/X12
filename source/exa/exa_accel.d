@@ -35,7 +35,7 @@ import build.dix_config;
 import exa_priv;
 import deimos.X11.fonts.fontstruct;
 import dixfontstr;
-import exa;
+import include.exa;
 
 private void exaFillSpans(DrawablePtr pDrawable, GCPtr pGC, int n, DDXPointPtr ppt, int* pwidth, int fSorted)
 {

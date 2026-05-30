@@ -58,7 +58,7 @@ import build.dix_config;
 import deimos.X11.extensions.XI;
 import deimos.X11.extensions.XIproto;
 
-import windowstr;          /* focus struct      */
+import include.windowstr;          /* focus struct      */
 import include.inputstr;           /* DeviceIntPtr      */
 
 import dix.dix_priv;

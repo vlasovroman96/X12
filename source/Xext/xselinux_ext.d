@@ -29,9 +29,9 @@ import dix.selection_priv;
 import miext.extinit_priv;
 
 import include.inputstr;
-import windowstr;
+import include.windowstr;
 import propertyst;
-import extnsionst;
+import include.extnsionst;
 import xselinuxint;
 
 enum CTX_DEV = offsetof(SELinuxSubjectRec, dev_create_sid);

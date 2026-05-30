@@ -26,7 +26,7 @@ extern(C): __gshared:
 import build.dix_config;
 
 import core.stdc.string;
-import fb;
+import include.fb;
 
 version (FB_ACCESS_WRAPPER) {
 

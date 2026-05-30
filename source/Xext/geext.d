@@ -36,7 +36,7 @@ import dix.request_priv;
 import miext.extinit_priv;
 import Xext.geext_priv;
 
-import windowstr;
+import include.windowstr;
 import include.protocol_versions;
 
 enum MAXEXTENSIONS =   128;

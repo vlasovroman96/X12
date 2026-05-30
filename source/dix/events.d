@@ -148,7 +148,7 @@ import xkb.xkbsrv_priv;
 
 import misc;
 import include.resource;
-import windowstr;
+import include.windowstr;
 import include.inputstr;
 import include.scrnintstr;
 import include.cursorstr;
@@ -156,7 +156,7 @@ import dixstruct;
 import globals;
 import xace;
 import exglobals;
-import extnsionst;
+import include.extnsionst;
 import dispatch;
 import dixstruct_priv;
 import eventstr;

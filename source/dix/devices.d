@@ -77,7 +77,7 @@ import xkb.xkbsrv_priv;
 
 import misc;
 import include.resource;
-import windowstr;
+import include.windowstr;
 import include.inputstr;
 import include.scrnintstr;
 import include.cursorstr;

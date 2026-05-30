@@ -35,7 +35,7 @@ import include.xf86Crtc;
 import xf86Modes;
 import include.gcstruct;
 import include.scrnintstr;
-import windowstr;
+import include.windowstr;
 
 private Bool xf86_dga_get_modes(ScreenPtr pScreen)
 {

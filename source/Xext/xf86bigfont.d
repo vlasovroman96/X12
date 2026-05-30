@@ -77,7 +77,7 @@ import os.osdep;
 import dixstruct;
 import include.gcstruct;
 import dixfontstr;
-import extnsionst;
+import include.extnsionst;
 import include.protocol_versions;
 
 import xf86bigfontsrv;

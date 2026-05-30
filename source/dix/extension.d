@@ -59,7 +59,7 @@ import dix.request_priv;
 
 import misc;
 import dixstruct;
-import extnsionst;
+import include.extnsionst;
 import include.gcstruct;
 import include.scrnintstr;
 import dispatch;

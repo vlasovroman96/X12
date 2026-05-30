@@ -51,14 +51,14 @@ import Xext.xvdix_priv;
 import kdrive;
 import include.scrnintstr;
 import regionstr;
-import windowstr;
-import pixmapstr;
+import include.windowstr;
+import include.pixmapstr;
 import validate;
 import include.resource;
 import include.gcstruct;
 import dixstruct;
 import kxv;
-import fourcc;
+import include.fourcc;
 
 /* XvAdaptorRec fields */
 

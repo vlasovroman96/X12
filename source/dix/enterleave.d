@@ -45,7 +45,7 @@ import include.extinit;
 import os.bug_priv;
 
 import include.inputstr;
-import windowstr;
+import include.windowstr;
 import include.scrnintstr;
 import exglobals;
 import enterleave;

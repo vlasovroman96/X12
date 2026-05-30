@@ -54,7 +54,7 @@ import os.xhostname;
 import include.scrnintstr;
 import include.servermd;
 enum PSZ = 8;
-import fb;
+import include.fb;
 import include.gcstruct;
 import include.input;
 import mipointer;

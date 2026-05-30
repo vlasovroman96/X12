@@ -45,7 +45,7 @@ import dix.resource_priv;
 import Xi.handlers;
 
 import include.inputstr;           /* DeviceIntPtr      */
-import windowstr;          /* window structure  */
+import include.windowstr;          /* window structure  */
 import exglobals;          /* BadDevice */
 
 int ProcXIGrabDevice(ClientPtr client)

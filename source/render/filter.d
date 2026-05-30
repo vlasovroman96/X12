@@ -35,7 +35,7 @@ import include.scrnintstr;
 import os;
 import regionstr;
 import validate;
-import windowstr;
+import include.windowstr;
 import include.input;
 import include.resource;
 import include.cursorstr;

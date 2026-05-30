@@ -41,8 +41,8 @@ import glxutil;
 import unpack;
 import indirect_dispatch;
 import GL.gl;
-import pixmapstr;
-import windowstr;
+import include.pixmapstr;
+import include.windowstr;
 import dixfontstr;
 
 /*

@@ -28,7 +28,7 @@ import include.input;
 import misc;
 import include.scrnintstr;
 import include.servermd;
-import extinit;
+import include.extinit;
 
 import xnest_xcb;
 

@@ -1,4 +1,4 @@
-module exa.h;
+module include.exa;
 @nogc nothrow:
 extern(C): __gshared:
 import core.stdc.config: c_long, c_ulong;
@@ -34,11 +34,11 @@ import core.stdc.config: c_long, c_ulong;
 
  
 public import include.scrnintstr;
-public import pixmapstr;
-public import windowstr;
+public import include.pixmapstr;
+public import include.windowstr;
 public import include.gcstruct;
 public import include.picturestr;
-public import fb;
+public import include.fb;
 
 enum EXA_VERSION_MAJOR =   2;
 enum EXA_VERSION_MINOR =   6;

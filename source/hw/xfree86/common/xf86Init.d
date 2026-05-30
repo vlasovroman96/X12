@@ -69,7 +69,7 @@ import os.osdep;
 import randr.randrstr_priv;
 
 import include.servermd;
-import windowstr;
+import include.windowstr;
 import include.scrnintstr;
 import os_support.linux.systemd_logind;
 import seatd_libseat;

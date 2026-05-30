@@ -47,11 +47,11 @@ import Xext.geext_priv;
 import misc;
 import os;
 import dixstruct;
-import extnsionst;
+import include.extnsionst;
 import opaque;
 import dpmsproc;
 import include.scrnintstr;
-import windowstr;
+import include.windowstr;
 import include.protocol_versions;
 
 Bool noDPMSExtension = FALSE;

@@ -55,7 +55,7 @@ import Xext.panoramiX;
 import Xext.panoramiXsrv;
 
 import dixstruct;
-import extnsionst;
+import include.extnsionst;
 import set;
 import swaprep;
 import include.inputstr;

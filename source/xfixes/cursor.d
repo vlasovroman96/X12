@@ -61,7 +61,7 @@ import include.cursorstr;
 import include.servermd;
 import mipointer;
 import include.inputstr;
-import windowstr;
+import include.windowstr;
 import xace;
 import list;
 import xibarriers;

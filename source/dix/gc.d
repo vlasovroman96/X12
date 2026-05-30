@@ -61,7 +61,7 @@ import os.osdep;
 import misc;
 import include.resource;
 import include.gcstruct;
-import pixmapstr;
+import include.pixmapstr;
 import dixfontstr;
 import include.scrnintstr;
 import dixstruct;

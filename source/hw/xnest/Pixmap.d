@@ -22,7 +22,7 @@ import X11.Xdefs;
 import X11.Xproto;
 
 import regionstr;
-import pixmapstr;
+import include.pixmapstr;
 import include.scrnintstr;
 import include.gc;
 import include.servermd;

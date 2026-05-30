@@ -64,8 +64,8 @@ import dix.request_priv;
 import Xi.handlers;
 
 import include.inputstr;           /* DeviceIntPtr      */
-import windowstr;          /* Window            */
-import extnsionst;         /* EventSwapPtr      */
+import include.windowstr;          /* Window            */
+import include.extnsionst;         /* EventSwapPtr      */
 import grabdev;
 
 extern int lastEvent;           /* Defined in extension.c */

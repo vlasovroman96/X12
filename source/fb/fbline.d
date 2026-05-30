@@ -25,7 +25,7 @@ extern(C): __gshared:
 
 import build.dix_config;
 
-import fb;
+import include.fb;
 
 private void fbZeroLine(DrawablePtr pDrawable, GCPtr pGC, int mode, int npt, DDXPointPtr ppt)
 {

@@ -55,8 +55,8 @@ import deimos.X11.Xproto;
 import dix.dix_priv;
 import dix.reqhandlers_priv;
 
-import windowstr;
-import extnsionst;
+import include.windowstr;
+import include.extnsionst;
 import dixstruct;
 import dixstruct_priv;
 import dispatch;

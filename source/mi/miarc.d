@@ -62,8 +62,8 @@ import mi.mi_priv;
 import misc;
 import include.gcstruct;
 import include.scrnintstr;
-import pixmapstr;
-import windowstr;
+import include.pixmapstr;
+import include.windowstr;
 import mifpoly;
 import mifillarc;
 

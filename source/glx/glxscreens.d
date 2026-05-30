@@ -41,7 +41,7 @@ import GL.glxtokens;
 import dix.colormap_priv;
 import include.extinit;
 
-import windowstr;
+import include.windowstr;
 import os;
 
 import include.privates;

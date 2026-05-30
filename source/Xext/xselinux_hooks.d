@@ -51,9 +51,9 @@ import os.client_priv;
 
 import include.inputstr;
 import include.scrnintstr;
-import windowstr;
+import include.windowstr;
 import propertyst;
-import extnsionst;
+import include.extnsionst;
 import xacestr;
 version = _XSELINUX_NEED_FLASK_MAP;
 import xselinuxint;

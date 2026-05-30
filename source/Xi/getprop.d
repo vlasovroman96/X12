@@ -65,7 +65,7 @@ import dix.window_priv;
 import Xi.handlers;
 
 import include.inputstr;           /* DeviceIntPtr      */
-import windowstr;          /* window structs    */
+import include.windowstr;          /* window structs    */
 import swaprep;
 import getprop;
 

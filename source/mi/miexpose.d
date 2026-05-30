@@ -93,7 +93,7 @@ import misc;
 import regionstr;
 import include.scrnintstr;
 import include.gcstruct;
-import windowstr;
+import include.windowstr;
 import include.pixmap;
 import include.input;
 import dixstruct;

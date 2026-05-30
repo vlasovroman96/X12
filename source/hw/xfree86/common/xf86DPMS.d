@@ -35,7 +35,7 @@ import xorg_config;
 import X11.X;
 import os;
 import globals;
-import windowstr;
+import include.windowstr;
 import xf86;
 import xf86Priv;
 import xf86Opt_priv;

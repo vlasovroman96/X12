@@ -1,4 +1,4 @@
-module extension.h;
+module include.extension;
 @nogc nothrow:
 extern(C): __gshared:
 /***********************************************************

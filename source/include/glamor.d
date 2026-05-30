@@ -32,10 +32,10 @@ import core.stdc.config: c_long, c_ulong;
 
  
 public import include.scrnintstr;
-public import pixmapstr;
+public import include.pixmapstr;
 public import include.gcstruct;
 public import include.picturestr;
-public import fb;
+public import include.fb;
 version (GLAMOR_FOR_XORG) {
 public import xf86xv;
 }

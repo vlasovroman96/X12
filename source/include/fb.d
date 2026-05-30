@@ -1,4 +1,4 @@
-module fb.h;
+module include.fb;
 @nogc nothrow:
 extern(C): __gshared:
 import core.stdc.config: c_long, c_ulong;
@@ -31,13 +31,13 @@ public import pixman;
 
 public import include.scrnintstr;
 public import include.pixmap;
-public import pixmapstr;
+public import include.pixmapstr;
 public import regionstr;
 public import include.gcstruct;
 public import colormap;
 public import miscstruct;
 public import include.servermd;
-public import windowstr;
+public import include.windowstr;
 public import include.privates;
 public import mi;
 public import migc;
@@ -90,7 +90,7 @@ alias FbStip = FbBits;
 
 alias FbStride = int;
 
-public import fbrop;
+public import include.fbrop;
 
 static if (BITMAP_BIT_ORDER == LSBFirst) {
 enum string FbScrLeft(string x,string n) = `((` ~ x ~ `) >> (` ~ n ~ `))`;

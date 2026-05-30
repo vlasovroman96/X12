@@ -131,7 +131,7 @@ import include.scrnintstr;
 import os;
 import regionstr;
 import validate;
-import windowstr;
+import include.windowstr;
 import propertyst;
 import include.inputstr;
 import include.resource;

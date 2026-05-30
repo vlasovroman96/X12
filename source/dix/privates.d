@@ -58,14 +58,14 @@ import core.stdc.stddef;
 import dix.colormap_priv;
 import dix.screenint_priv;
 
-import windowstr;
+import include.windowstr;
 import include.resource;
 import include.privates;
 import include.gcstruct;
 import include.cursorstr;
 import include.inputstr;
 import include.scrnintstr;
-import extnsionst;
+import include.extnsionst;
 import include.inputstr;
 
 private DevPrivateSetRec[PRIVATE_LAST] global_keys;

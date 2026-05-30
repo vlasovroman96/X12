@@ -142,7 +142,7 @@ import os;
 import include.resource;
 import dixstruct;
 import opaque;
-import windowstr;
+import include.windowstr;
 import include.dixfont;
 import colormap;
 import include.inputstr;

@@ -63,7 +63,7 @@ extern(C): __gshared:
 public import include.xlibre_ptrtypes;
 
 public import include.scrnintstr;
-public import extnsionst;
+public import include.extnsionst;
 public import GL.glxproto;
 
 /*!

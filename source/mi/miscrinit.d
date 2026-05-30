@@ -41,7 +41,7 @@ import mi.mi_priv;
 import include.servermd;
 import misc;
 import include.scrnintstr;
-import pixmapstr;
+import include.pixmapstr;
 import include.dix;
 import miline;
 

@@ -25,7 +25,7 @@ extern(C): __gshared:
 
 import build.dix_config;
 
-import fb;
+import include.fb;
 
 void fbFillSpans(DrawablePtr pDrawable, GCPtr pGC, int n, DDXPointPtr ppt, int* pwidth, int fSorted)
 {

@@ -30,7 +30,7 @@ import build.dix_config;
 import core.stdc.string;
 
 import exa_priv;
-import exa;
+import include.exa;
 
 /* This file holds the driver allocated pixmaps + better initial placement code.
  */

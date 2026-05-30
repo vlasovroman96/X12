@@ -132,13 +132,13 @@ import os.osdep;
 import os.probes_priv;
 import os.screensaver;
 
-import windowstr;
+import include.windowstr;
 import dixfontstr;
 import include.gcstruct;
 import include.cursorstr;
 import include.scrnintstr;
 import include.servermd;
-import extnsionst;
+import include.extnsionst;
 import include.dixfont;
 import dispatch;
 import swaprep;

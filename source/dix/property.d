@@ -62,7 +62,7 @@ import include.extinit;
 import Xext.panoramiX;
 import Xext.panoramiXsrv;
 
-import windowstr;
+import include.windowstr;
 import propertyst;
 import dixstruct;
 import dispatch;

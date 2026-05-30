@@ -45,7 +45,7 @@ import dix.request_priv;
 import miext.extinit_priv;
 
 import pseudoramiX;
-import extnsionst;
+import include.extnsionst;
 import dixstruct;
 import include.window;
 import deimos.X11.extensions.panoramiXproto;

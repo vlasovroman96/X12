@@ -37,7 +37,7 @@ import GL.gl;
 import GL.internal.dri_interface;
 import GL.glxtokens;
 
-import windowstr;
+import include.windowstr;
 import os;
 
 import xf86;

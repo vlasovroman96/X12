@@ -31,8 +31,8 @@ import os.osdep;
 
 import include.scrnintstr;
 import include.gcstruct;
-import pixmapstr;
-import windowstr;
+import include.pixmapstr;
+import include.windowstr;
 import mi;
 import include.picturestr;
 

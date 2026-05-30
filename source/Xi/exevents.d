@@ -108,9 +108,9 @@ import os.osdep;
 import xkb.xkbsrv_priv;
 
 import include.inputstr;
-import windowstr;
+import include.windowstr;
 import miscstruct;
-import extnsionst;
+import include.extnsionst;
 import exglobals;
 import eventstr;
 import include.scrnintstr;

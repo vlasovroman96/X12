@@ -40,7 +40,7 @@ import mi.mi_priv;
 import include.scrnintstr;
 import misc;
 import os;
-import windowstr;
+import include.windowstr;
 import include.resource;
 import dixstruct;
 import include.gcstruct;

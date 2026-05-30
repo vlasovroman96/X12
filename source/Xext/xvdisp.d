@@ -48,8 +48,8 @@ import Xext.xvdix_priv;
 
 import misc;
 import include.scrnintstr;
-import windowstr;
-import pixmapstr;
+import include.windowstr;
+import include.pixmapstr;
 import include.gcstruct;
 import dixstruct;
 import include.resource;

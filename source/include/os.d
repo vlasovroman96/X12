@@ -113,7 +113,7 @@ extern _X_EXPORT WriteToClient(ClientPtr, int, const(void)*);
 
 alias NotifyFdProcPtr = void function(int fd, int ready, void* data);
 
-public import fd_notify;
+public import include.fd_notify;
 
 extern _X_EXPORT SetNotifyFd(int fd, NotifyFdProcPtr notify_fd, int mask, void* data);
 

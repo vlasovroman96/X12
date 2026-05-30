@@ -18,11 +18,11 @@ import X11.fonts.fontstruct;
 import dix.screen_hooks_priv;
 
 import misc;
-import pixmapstr;
+import include.pixmapstr;
 import include.input;
 import mi;
 import include.scrnintstr;
-import windowstr;
+import include.windowstr;
 import include.gcstruct;
 import dixfontstr;
 import xf86;

@@ -66,9 +66,9 @@ import Xi.handlers;
 
 import include.inputstr;           /* DeviceIntPtr      */
 import XIstubs;
-import windowstr;          /* window structure  */
+import include.windowstr;          /* window structure  */
 import exglobals;
-import exevents;
+import include.exevents;
 
 extern CARD8[1] event_base;
 

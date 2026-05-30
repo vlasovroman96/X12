@@ -45,7 +45,7 @@ import os.fmt;
 import Xi.handlers;
 
 import include.inputstr;           /* DeviceIntPtr      */
-import windowstr;          /* window structure  */
+import include.windowstr;          /* window structure  */
 import mi;
 import eventstr;
 import exglobals;          /* BadDevice */

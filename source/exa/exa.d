@@ -39,7 +39,7 @@ import core.stdc.stdlib;
 import dix.screen_hooks_priv;
 
 import exa_priv;
-import exa;
+import include.exa;
 
 DevPrivateKeyRec exaScreenPrivateKeyRec;
 

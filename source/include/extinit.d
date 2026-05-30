@@ -1,4 +1,4 @@
-module extinit.h;
+module include.extinit;
 @nogc nothrow:
 extern(C): __gshared:
 /************************************************************
@@ -52,7 +52,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
  
-public import extnsionst;
+public import include.extnsionst;
 
 /* required by: libglx */
 extern _X_EXPORT noCompositeExtension;
