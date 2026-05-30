@@ -56,7 +56,7 @@ import xf86drm;
 import xf86Crtc;
 import drmmode_bo;
 
-import cursorstr;
+import include.cursorstr;
 
 import X11.extensions.dpmsconst;
 

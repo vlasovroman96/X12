@@ -69,7 +69,7 @@ import os.client_priv;
 import misc;
 import windowstr;
 import inputstr;
-import cursorstr;
+import include.cursorstr;
 import exglobals;
 
 enum MasksPerDetailMask = 8;    /* 256 keycodes and 256 possible;

@@ -135,7 +135,7 @@ import windowstr;
 import propertyst;
 import inputstr;
 import resource;
-import cursorstr;
+import include.cursorstr;
 import dixstruct;
 import gcstruct;
 import servermd;

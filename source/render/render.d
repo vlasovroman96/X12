@@ -56,7 +56,7 @@ import extnsionst;
 import servermd;
 import picturestr_priv;
 import glyphstr_priv;
-import cursorstr;
+import include.cursorstr;
 import xace;
 import include.protocol_versions;
 

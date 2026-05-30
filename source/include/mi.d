@@ -56,7 +56,7 @@ public import validate;
 public import window;
 public import gc;
 public import input;
-public import cursor;
+public import include.cursor;
 public import privates;
 public import colormap;
 public import events;

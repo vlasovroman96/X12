@@ -54,7 +54,7 @@ public import validate;
 public import windowstr;
 public import input;
 public import resource;
-public import cursorstr;
+public import include.cursorstr;
 public import dixstruct;
 public import gcstruct;
 public import servermd;

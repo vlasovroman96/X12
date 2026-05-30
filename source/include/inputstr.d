@@ -55,7 +55,7 @@ public import pixman;
 public import input;
 public import window;
 public import dixstruct;
-public import cursorstr;
+public import include.cursorstr;
 public import privates;
 
 enum string BitIsOn(string ptr, string bit) = `(!!((cast(const(BYTE)*) (` ~ ptr ~ `))[(` ~ bit ~ `)>>3] & (1 << ((` ~ bit ~ `) & 7))))`;

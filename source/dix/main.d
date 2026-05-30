@@ -117,7 +117,7 @@ import resource;
 import dixstruct;
 import gcstruct;
 import extension;
-import cursorstr;
+import include.cursorstr;
 import servermd;
 import dixfont;
 import extnsionst;

@@ -58,7 +58,7 @@ import misc;
 import resource;
 import inputstr;
 import scrnintstr;
-import cursorstr;
+import include.cursorstr;
 import dixstruct;
 import globals;
 import mipointer;

@@ -1,4 +1,4 @@
-module cursor.h;
+module include.cursor;
 @nogc nothrow:
 extern(C): __gshared:
 /***********************************************************

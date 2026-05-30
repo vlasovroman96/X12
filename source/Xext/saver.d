@@ -60,7 +60,7 @@ import extnsionst;
 import dixstruct;
 import resource;
 import gcstruct;
-import cursorstr;
+import include.cursorstr;
 import xace;
 import inputstr;
 version (DPMSExtension) {

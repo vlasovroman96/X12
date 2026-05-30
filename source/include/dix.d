@@ -56,7 +56,7 @@ public import callback;
 public import gc;
 public import window;
 public import input;
-public import cursor;
+public import include.cursor;
 public import events;
 
 enum EARLIER = -1;

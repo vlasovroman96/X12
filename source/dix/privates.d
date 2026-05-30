@@ -62,7 +62,7 @@ import windowstr;
 import resource;
 import privates;
 import gcstruct;
-import cursorstr;
+import include.cursorstr;
 import inputstr;
 import scrnintstr;
 import extnsionst;

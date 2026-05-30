@@ -52,7 +52,7 @@ public import xlibre_ptrtypes;
 public import window;
 public import pixmapstr;
 public import regionstr;
-public import cursor;
+public import include.cursor;
 public import property;
 public import resource;           /* for ROOT_WINDOW_ID_BASE */
 public import dix;

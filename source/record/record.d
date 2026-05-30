@@ -61,7 +61,7 @@ import swaprep;
 import inputstr;
 import scrnintstr;
 import globals;
-import cursor;
+import include.cursor;
 
 import include.protocol_versions;
 

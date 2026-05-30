@@ -135,7 +135,7 @@ import os.screensaver;
 import windowstr;
 import dixfontstr;
 import gcstruct;
-import cursorstr;
+import include.cursorstr;
 import scrnintstr;
 import servermd;
 import extnsionst;

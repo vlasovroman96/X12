@@ -80,7 +80,7 @@ import resource;
 import windowstr;
 import inputstr;
 import scrnintstr;
-import cursorstr;
+import include.cursorstr;
 import dixstruct;
 import ptrveloc;
 import privates;

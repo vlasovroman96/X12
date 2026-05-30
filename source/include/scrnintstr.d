@@ -53,7 +53,7 @@ public import xlibre_ptrtypes;
 public import screenint;
 public import regionstr;
 public import colormap;
-public import cursor;
+public import include.cursor;
 public import validate;
 public import deimos.X11.Xproto;
 public import dix;

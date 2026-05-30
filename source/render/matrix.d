@@ -33,7 +33,7 @@ import validate;
 import windowstr;
 import input;
 import resource;
-import cursorstr;
+import include.cursorstr;
 import dixstruct;
 import gcstruct;
 import servermd;

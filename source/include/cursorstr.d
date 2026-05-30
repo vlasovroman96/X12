@@ -48,7 +48,7 @@ SOFTWARE.
 ******************************************************************/
 
  
-public import cursor;
+public import include.cursor;
 public import privates;
 /*
  * device-independent cursor storage

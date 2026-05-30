@@ -37,7 +37,7 @@ import mi.mipointer_priv;
 import ephyr;
 import ephyrlog;
 import hostx;
-import cursorstr;
+import include.cursorstr;
 
 private DevPrivateKeyRec ephyrCursorPrivateKey;
 

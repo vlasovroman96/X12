@@ -16,7 +16,7 @@ import scrnintstr;
 import pixmapstr;
 import windowstr;
 import xf86str;
-import cursorstr;
+import include.cursorstr;
 import mi;
 import mipointer;
 import xf86CursorPriv;

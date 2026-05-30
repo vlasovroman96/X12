@@ -42,7 +42,7 @@ import xf86Modes;
 import xf86RandR12;
 import xf86CursorPriv;
 import picturestr;
-import cursorstr;
+import include.cursorstr;
 import inputstr;
 
 /*

@@ -60,7 +60,7 @@ import scrnintstr;
 import gcstruct;
 import resource;
 import dix;
-import cursorstr;
+import include.cursorstr;
 import opaque;
 import servermd;
 

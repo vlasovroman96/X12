@@ -146,7 +146,7 @@ import windowstr;
 import dixfont;
 import colormap;
 import inputstr;
-import cursor;
+import include.cursor;
 import xace;
 import core.stdc.assert_;
 import gcstruct;

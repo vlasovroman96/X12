@@ -12,7 +12,7 @@ public import deimos.X11.Xmd;
 
 public import dix;
 public import resource;
-public import cursor;
+public import include.cursor;
 public import gc;
 public import pixmap;
 public import privates;

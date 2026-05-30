@@ -10,7 +10,7 @@ import mi.mipointer_priv;
 
 import xf86;
 import xf86CursorPriv;
-import cursorstr;
+import include.cursorstr;
 
 /* FIXME: This was added with the ABI change of the miPointerSpriteFuncs for
  * MPX.

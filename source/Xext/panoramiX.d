@@ -49,8 +49,8 @@ import Xext.panoramiX;
 import Xext.panoramiXsrv;
 
 import misc;
-import cursor;
-import cursorstr;
+import include.cursor;
+import include.cursorstr;
 import extnsionst;
 import dixstruct;
 import gc;

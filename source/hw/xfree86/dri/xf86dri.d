@@ -57,7 +57,7 @@ import xf86;
 import misc;
 import dixstruct;
 import extnsionst;
-import cursorstr;
+import include.cursorstr;
 import scrnintstr;
 import servermd;
 import swaprep;

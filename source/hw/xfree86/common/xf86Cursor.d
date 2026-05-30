@@ -37,7 +37,7 @@ import X11.extensions.XIproto;
 import dix.input_priv;
 import mi.mipointer_priv;
 
-import cursor;
+import include.cursor;
 import mipointer;
 import scrnintstr;
 import globals;

@@ -73,7 +73,7 @@ import xf86Extensions;
 import misc;
 import dixstruct;
 import extnsionst;
-import cursorstr;
+import include.cursorstr;
 import scrnintstr;
 import swaprep;
 import dgaproc;
