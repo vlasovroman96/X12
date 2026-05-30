@@ -1,3 +1,6 @@
+module xkbVT.c;
+@nogc nothrow:
+extern(C): __gshared:
 /************************************************************
 Copyright (c) 1993 by Silicon Graphics Computer Systems, Inc.
 
@@ -23,36 +26,35 @@ OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION  WITH
 THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 ********************************************************/
-#include <xorg-config.h>
+import xorg_config;
 
-#include <stdio.h>
-#include <X11/X.h>
-#include <X11/Xproto.h>
-#include <X11/keysym.h>
-#include <X11/extensions/XI.h>
+import core.stdc.stdio;
+import X11.X;
+import X11.Xproto;
+import X11.keysym;
+import X11.extensions.XI;
 
-#include "hw/xfree86/common/action_priv.h"
-#include "xkb/xkbsrv_priv.h"
+import hw.xfree86.common.action_priv;
+import xkb.xkbsrv_priv;
 
-#include "inputstr.h"
-#include "scrnintstr.h"
-#include "windowstr.h"
+import inputstr;
+import scrnintstr;
+import windowstr;
 
-#include "xf86_priv.h"
+import xf86_priv;
 
-int
-XkbDDXSwitchScreen(DeviceIntPtr dev, KeyCode key, XkbAction *act)
+int XkbDDXSwitchScreen(DeviceIntPtr dev, KeyCode key, XkbAction* act)
 {
-    int scrnnum = XkbSAScreen(&act->screen);
+    int scrnnum = XkbSAScreen(&act.screen);
 
-    if (act->screen.flags & XkbSA_SwitchApplication) {
-        if (act->screen.flags & XkbSA_SwitchAbsolute)
-            xf86ProcessActionEvent(ACTION_SWITCHSCREEN, (void *) &scrnnum);
+    if (act.screen.flags & XkbSA_SwitchApplication) {
+        if (act.screen.flags & XkbSA_SwitchAbsolute)
+            xf86ProcessActionEvent(ACTION_SWITCHSCREEN, cast(void*) &scrnnum);
         else {
             if (scrnnum < 0)
-                xf86ProcessActionEvent(ACTION_SWITCHSCREEN_PREV, NULL);
+                xf86ProcessActionEvent(ACTION_SWITCHSCREEN_PREV, null);
             else
-                xf86ProcessActionEvent(ACTION_SWITCHSCREEN_NEXT, NULL);
+                xf86ProcessActionEvent(ACTION_SWITCHSCREEN_NEXT, null);
         }
     }
 
