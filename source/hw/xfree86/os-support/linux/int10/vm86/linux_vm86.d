@@ -1,53 +1,56 @@
-#include <xorg-config.h>
+module linux_vm86.c;
+@nogc nothrow:
+extern(C): __gshared:
+import xorg_config;
 
-#include <errno.h>
-#include <string.h>
+import core.stdc.errno;
+import core.stdc.string;
 
-#include "xf86.h"
-#include "xf86_OSproc.h"
-#include "xf86Pci.h"
-#include "compiler.h"
-#define _INT10_PRIVATE
-#include "xf86int10.h"
+import xf86;
+import xf86_OSproc;
+import xf86Pci;
+import compiler;
+version = _INT10_PRIVATE;
+import xf86int10;
 
-#define REG pInt
+enum REG = pInt;
 
-#ifdef _VM86_LINUX
-#include "int10Defines.h"
+version (_VM86_LINUX) {
+import int10Defines;
 
-static int vm86_rep(struct vm86_struct *ptr);
-static struct vm86_struct vm86_s;
 
-Bool
-xf86Int10ExecSetup(xf86Int10InfoPtr pInt)
+private vm86_struct vm86_s;
+
+Bool xf86Int10ExecSetup(xf86Int10InfoPtr pInt)
 {
-#define VM86S ((struct vm86_struct *)pInt->cpuRegs)
+    auto VM86S() => cast(vm86_struct *)pInt.cpuRegs;
 
-    pInt->cpuRegs = &vm86_s;
-    VM86S->flags = 0;
-    VM86S->screen_bitmap = 0;
-    VM86S->cpu_type = CPU_586;
-    memset(&VM86S->int_revectored, 0xff, sizeof(VM86S->int_revectored));
-    memset(&VM86S->int21_revectored, 0xff, sizeof(VM86S->int21_revectored));
+    pInt.cpuRegs = &vm86_s;
+    VM86S.flags = 0;
+    VM86S.screen_bitmap = 0;
+    VM86S.cpu_type = CPU_586;
+    memset(&VM86S.int_revectored, 0xff, typeof(VM86S.int_revectored).sizeof);
+    memset(&VM86S.int21_revectored, 0xff, typeof(VM86S.int21_revectored).sizeof);
     return TRUE;
 }
 
 /* get the linear address */
-#define LIN_PREF_SI ((pref_seg << 4) + X86_SI)
-#define LWECX       ((prefix66 ^ prefix67) ? X86_ECX : X86_CX)
-#define LWECX_ZERO  {if (prefix66 ^ prefix67) X86_ECX = 0; else X86_CX = 0;}
-#define DF (1 << 10)
+enum LIN_PREF_SI = ((pref_seg << 4) + X86_SI);
+enum LWECX =       ((prefix66 ^ prefix67) ? X86_ECX : X86_CX);
+enum LWECX_ZERO =  {if (prefix66 ^ prefix67) X86_ECX = 0; else X86_CX = 0;};
+enum DF = (1 << 10);
 
 /* vm86 fault handling */
-static Bool
-vm86_GP_fault(xf86Int10InfoPtr pInt)
+private Bool vm86_GP_fault(xf86Int10InfoPtr pInt)
 {
-    unsigned char *csp, *lina;
-    CARD32 org_eip;
-    int pref_seg;
-    int done, is_rep, prefix66, prefix67;
+    ubyte* csp = void, lina = void;
+    CARD32 org_eip = void;
+    int pref_seg = void;
+    int done = void, is_rep = void, prefix66 = void, prefix67 = void;
 
-    csp = lina = SEG_ADR((unsigned char *), X86_CS, IP);
+    // csp = lina = SEG_ADR(cast(ubyte*), X86_CS, IP);
+    csp = lina = SEG_ADR(X86_CS, IP);
+
 
     is_rep = 0;
     prefix66 = prefix67 = 0;
@@ -56,7 +59,7 @@ vm86_GP_fault(xf86Int10InfoPtr pInt)
     /* eat up prefixes */
     done = 0;
     do {
-        switch (MEM_RB(pInt, (int) csp++)) {
+        switch (MEM_RB(pInt, cast(int) csp++)) {
         case 0x66:             /* operand prefix */
             prefix66 = 1;
             break;
@@ -95,7 +98,7 @@ vm86_GP_fault(xf86Int10InfoPtr pInt)
     org_eip = X86_EIP;
     X86_IP += (csp - lina);
 
-    switch (MEM_RB(pInt, (int) csp)) {
+    switch (MEM_RB(pInt, cast(int) csp)) {
     case 0x6c:                 /* insb */
         /* NOTE: ES can't be overwritten; prefixes 66,67 should use esi,edi,ecx
          * but is anyone using extended regs in real mode? */
@@ -127,7 +130,7 @@ vm86_GP_fault(xf86Int10InfoPtr pInt)
         if (pref_seg < 0)
             pref_seg = X86_DS;
         /* WARNING: no test for _SI wrapping! */
-        X86_SI += port_rep_outb(pInt, X86_DX, (CARD32) LIN_PREF_SI,
+        X86_SI += port_rep_outb(pInt, X86_DX, cast(CARD32) LIN_PREF_SI,
                                 X86_FLAGS & DF, is_rep ? LWECX : 1);
         if (is_rep)
             LWECX_ZERO;
@@ -139,11 +142,11 @@ vm86_GP_fault(xf86Int10InfoPtr pInt)
             pref_seg = X86_DS;
         /* WARNING: no test for _SI wrapping! */
         if (prefix66) {
-            X86_SI += port_rep_outl(pInt, X86_DX, (CARD32) LIN_PREF_SI,
+            X86_SI += port_rep_outl(pInt, X86_DX, cast(CARD32) LIN_PREF_SI,
                                     X86_EFLAGS & DF, is_rep ? LWECX : 1);
         }
         else {
-            X86_SI += port_rep_outw(pInt, X86_DX, (CARD32) LIN_PREF_SI,
+            X86_SI += port_rep_outw(pInt, X86_DX, cast(CARD32) LIN_PREF_SI,
                                     X86_FLAGS & DF, is_rep ? LWECX : 1);
         }
         if (is_rep)
@@ -208,28 +211,27 @@ vm86_GP_fault(xf86Int10InfoPtr pInt)
         return FALSE;
 
     case 0x0f:
-        xf86DrvMsg(pInt->pScrn->scrnIndex, X_ERROR,
+        xf86DrvMsg(pInt.pScrn.scrnIndex, X_ERROR,
                    "CPU 0x0f Trap at CS:EIP=0x%4.4x:0x%8.8lx\n", X86_CS,
                    X86_EIP);
         goto op0ferr;
 
     default:
-        xf86DrvMsg(pInt->pScrn->scrnIndex, X_ERROR, "unknown reason for exception\n");
+        xf86DrvMsg(pInt.pScrn.scrnIndex, X_ERROR, "unknown reason for exception\n");
 
  op0ferr:
         dump_registers(pInt);
         stack_trace(pInt);
         dump_code(pInt);
-        xf86DrvMsg(pInt->pScrn->scrnIndex, X_ERROR, "cannot continue\n");
+        xf86DrvMsg(pInt.pScrn.scrnIndex, X_ERROR, "cannot continue\n");
         return FALSE;
     }                           /* end of switch() */
     return TRUE;
 }
 
-static int
-do_vm86(xf86Int10InfoPtr pInt)
+private int do_vm86(xf86Int10InfoPtr pInt)
 {
-    int retval;
+    int retval = void;
 
     retval = vm86_rep(VM86S);
 
@@ -239,15 +241,15 @@ do_vm86(xf86Int10InfoPtr pInt)
             return 0;
         break;
     case VM86_STI:
-        xf86DrvMsg(pInt->pScrn->scrnIndex, X_ERROR, "vm86_sti :-((\n");
+        xf86DrvMsg(pInt.pScrn.scrnIndex, X_ERROR, "vm86_sti :-((\n");
         dump_registers(pInt);
         dump_code(pInt);
         stack_trace(pInt);
         return 0;
     case VM86_INTx:
-        pInt->num = VM86_ARG(retval);
+        pInt.num = VM86_ARG(retval);
         if (!int_handler(pInt)) {
-            xf86DrvMsg(pInt->pScrn->scrnIndex, X_ERROR,
+            xf86DrvMsg(pInt.pScrn.scrnIndex, X_ERROR,
                        "Unknown vm86_int: 0x%X\n\n", VM86_ARG(retval));
             dump_registers(pInt);
             dump_code(pInt);
@@ -262,10 +264,10 @@ do_vm86(xf86Int10InfoPtr pInt)
          * we used to warn here and bail out - but now the sigio stuff
          * always fires signals at us. So we just ignore them for now.
          */
-        xf86DrvMsg(pInt->pScrn->scrnIndex, X_WARNING, "received signal\n");
+        xf86DrvMsg(pInt.pScrn.scrnIndex, X_WARNING, "received signal\n");
         return 0;
     default:
-        xf86DrvMsg(pInt->pScrn->scrnIndex, X_ERROR, "unknown type(0x%x)=0x%x\n",
+        xf86DrvMsg(pInt.pScrn.scrnIndex, X_ERROR, "unknown type(0x%x)=0x%x\n",
                    VM86_ARG(retval), VM86_TYPE(retval));
         dump_registers(pInt);
         dump_code(pInt);
@@ -276,38 +278,55 @@ do_vm86(xf86Int10InfoPtr pInt)
     return 1;
 }
 
-void
-xf86ExecX86int10(xf86Int10InfoPtr pInt)
+void xf86ExecX86int10(xf86Int10InfoPtr pInt)
 {
     int sig = setup_int(pInt);
 
     if (int_handler(pInt))
         while (do_vm86(pInt)) {
-        };
+        }{}
 
     finish_int(pInt, sig);
 }
 
-static int
-vm86_rep(struct vm86_struct *ptr)
+private int vm86_rep(vm86_struct* ptr)
 {
-    int __res;
+    int __res = void;
 
-#ifdef __PIC__
-    /* When compiling with -fPIC, we can't use asm constraint "b" because
-       %ebx is already taken by gcc. */
-    __asm__ __volatile__("pushl %%ebx\n\t"
-                         "push %%gs\n\t"
-                         "movl %2,%%ebx\n\t"
-                         "movl %1,%%eax\n\t"
-                         "int $0x80\n\t" "pop %%gs\n\t" "popl %%ebx":"=a"(__res)
-                         :"n"((int) 113), "r"((struct vm86_struct *) ptr));
-#else
-    __asm__ __volatile__("push %%gs\n\t"
-                         "int $0x80\n\t"
-                         "pop %%gs":"=a"(__res):"a"((int) 113),
-                         "b"((struct vm86_struct *) ptr));
-#endif
+version (__PIC__)
+{
+    asm
+    {
+        push EBX;
+        push GS;
+
+        mov EBX, ptr;
+        mov EAX, 113;
+
+        int 0x80;
+
+        pop GS;
+        pop EBX;
+
+        mov __res, EAX;
+    }
+}
+else
+{
+    asm
+    {
+        push GS;
+
+        mov EAX, 113;
+        mov EBX, ptr;
+
+        int 0x80;
+
+        pop GS;
+
+        mov __res, EAX;
+    }
+}
 
     if (__res < 0) {
         errno = -__res;
@@ -318,4 +337,4 @@ vm86_rep(struct vm86_struct *ptr)
     return __res;
 }
 
-#endif
+}

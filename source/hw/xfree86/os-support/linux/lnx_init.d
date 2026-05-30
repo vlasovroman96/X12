@@ -1,3 +1,6 @@
+module lnx_init.c;
+@nogc nothrow:
+extern(C): __gshared:
 /*
  * Copyright 1992 by Orest Zborowski <obz@Kodak.com>
  * Copyright 1993 by David Wexelblat <dwex@goblin.org>
@@ -22,54 +25,51 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  *
  */
-#include <xorg-config.h>
+import xorg_config;
 
-#include <errno.h>
-#include <X11/X.h>
-#include <X11/Xmd.h>
+import core.stdc.errno;
+import X11.X;
+import X11.Xmd;
 
-#include "os/cmdline.h"
-#include "os/osdep.h"
+import os.cmdline;
+import os.osdep;
 
-#include "compiler.h"
-#include "linux.h"
-#include "xf86_priv.h"
-#include "xf86Priv.h"
-#include "xf86_os_support.h"
-#include "xf86_OSlib.h"
+import compiler;
+import linux;
+import xf86_priv;
+import xf86Priv;
+import xf86_os_support;
+import xf86_OSlib;
 
-#include "seatd-libseat.h"
+import seatd_libseat;
 
 
-#include <sys/stat.h>
-#ifdef HAVE_SYS_SYSMACROS_H
-#include <sys/sysmacros.h>
-#endif
+import core.sys.posix.sys.stat;
+version (HAVE_SYS_SYSMACROS_H) {
+import sys.sysmacros;
+}
 
-#ifndef K_OFF
-#define K_OFF 0x4
-#endif
+enum K_OFF = 0x4;
 
-static Bool KeepTty = FALSE;
-static int activeVT = -1;
 
-static char vtname[11];
-static struct termios tty_attr; /* tty state to restore */
-static int tty_mode;            /* kbd mode to restore */
+private Bool KeepTty = FALSE;
+private int activeVT = -1;
 
-static void
-drain_console(int fd, void *closure)
+private char[11] vtname = 0;
+private termios tty_attr; /* tty state to restore */
+private int tty_mode;            /* kbd mode to restore */
+
+private void drain_console(int fd, void* closure)
 {
     errno = 0;
     if (tcflush(fd, TCIOFLUSH) == -1 && errno == EIO) {
-        xf86SetConsoleHandler(NULL, NULL);
+        xf86SetConsoleHandler(null, null);
     }
 }
 
-static int
-switch_to(int vt, const char *from)
+private int switch_to(int vt, const(char)* from)
 {
-    int ret;
+    int ret = void;
 
     SYSCALL(ret = ioctl(xf86Info.consoleFd, VT_ACTIVATE, vt));
     if (ret < 0) {
@@ -86,15 +86,14 @@ switch_to(int vt, const char *from)
     return 1;
 }
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wformat-nonliteral"
+// #pragma GCC diagnostic push
+// #pragma GCC diagnostic ignored "-Wformat-nonliteral"
 
-int
-linux_parse_vt_settings(int may_fail)
+int linux_parse_vt_settings(int may_fail)
 {
-    int i, fd = -1, ret, current_vt = -1;
-    struct vt_stat vts;
-    struct stat st;
+    int i = void, fd = -1, ret = void, current_vt = -1;
+    vt_stat vts = void;
+    stat st = void;
     MessageType from = X_PROBED;
 
     /* Only do this once */
@@ -124,7 +123,7 @@ linux_parse_vt_settings(int may_fail)
                 if (may_fail)
                     return 0;
                 FatalError("parse_vt_settings: Cannot find the current"
-                           " VT (%s)\n", strerror(errno));
+                           ~ " VT (%s)\n", strerror(errno));
             }
             xf86Info.vtno = vts.v_active;
         }
@@ -134,7 +133,7 @@ linux_parse_vt_settings(int may_fail)
                 if (may_fail)
                     return 0;
                 FatalError("parse_vt_settings: Cannot find a free VT: "
-                           "%s\n", strerror(errno));
+                           ~ "%s\n", strerror(errno));
             }
             if (xf86Info.vtno == -1) {
                 if (may_fail)
@@ -167,26 +166,24 @@ linux_parse_vt_settings(int may_fail)
     return 1;
 }
 
-Bool
-xf86VTKeepTtyIsSet(void)
+Bool xf86VTKeepTtyIsSet()
 {
     return KeepTty;
 }
 
-void
-xf86OpenConsole(void)
+void xf86OpenConsole()
 {
-    int i, ret;
-    struct vt_stat vts;
-    struct vt_mode VT;
-    const char *vcs[] = { "/dev/vc/%d", "/dev/tty%d", NULL };
+    int i = void, ret = void;
+    vt_stat vts = void;
+    vt_mode VT = void;
+    const(char)*[3] vcs = [ "/dev/vc/%d", "/dev/tty%d", null ];
 
     if (serverGeneration == 1) {
         linux_parse_vt_settings(FALSE);
 
         if (!KeepTty) {
             pid_t ppid = getppid();
-            pid_t ppgid;
+            pid_t ppgid = void;
 
             ppgid = getpgid(ppid);
 
@@ -206,9 +203,9 @@ xf86OpenConsole(void)
         }
 
         i = 0;
-        while (vcs[i] != NULL) {
-            snprintf(vtname, sizeof(vtname), vcs[i], xf86Info.vtno);    /* /dev/tty1-64 */
-            if ((xf86Info.consoleFd = open(vtname, O_RDWR | O_NDELAY, 0)) >= 0)
+        while (vcs[i] != null) {
+            snprintf(vtname.ptr, vtname.sizeof, vcs[i], xf86Info.vtno);    /* /dev/tty1-64 */
+            if ((xf86Info.consoleFd = open(vtname.ptr, O_RDWR | O_NDELAY, 0)) >= 0)
                 break;
             i++;
         }
@@ -220,7 +217,7 @@ xf86OpenConsole(void)
 
         if (xf86Info.consoleFd < 0)
             FatalError("xf86OpenConsole: Cannot open virtual console"
-                       " %d (%s)\n", xf86Info.vtno, strerror(errno));
+                       ~ " %d (%s)\n", xf86Info.vtno, strerror(errno));
 
         /*
          * Linux doesn't switch to an active vt after the last close of a vt,
@@ -234,7 +231,7 @@ xf86OpenConsole(void)
             activeVT = vts.v_active;
 
         if (!xf86Info.ShareVTs) {
-            struct termios nTty;
+            termios nTty = void;
 
             /*
              * now get the VT.  This _must_ succeed, or else fail completely.
@@ -278,7 +275,7 @@ xf86OpenConsole(void)
                                strerror(errno));
 
                 /* ... and drain events, else the kernel gets angry */
-                xf86SetConsoleHandler(drain_console, NULL);
+                xf86SetConsoleHandler(&drain_console, null);
             }
 
             nTty = tty_attr;
@@ -302,14 +299,13 @@ xf86OpenConsole(void)
     }
 }
 
-#pragma GCC diagnostic pop
+// #pragma GCC diagnostic pop
 
-void
-xf86CloseConsole(void)
+void xf86CloseConsole()
 {
-    struct vt_mode VT;
-    struct vt_stat vts;
-    int ret;
+    vt_mode VT = void;
+    vt_stat vts = void;
+    int ret = void;
 
     if (xf86Info.ShareVTs || seatd_libseat_controls_session()) {
         close(xf86Info.consoleFd);
@@ -320,7 +316,7 @@ xf86CloseConsole(void)
      * unregister the drain_console handler
      * - what to do if someone else changed it in the meantime?
      */
-    xf86SetConsoleHandler(NULL, NULL);
+    xf86SetConsoleHandler(null, null);
 
     /* Back to text mode ... */
     SYSCALL(ret = ioctl(xf86Info.consoleFd, KDSETMODE, KD_TEXT));
@@ -365,15 +361,14 @@ xf86CloseConsole(void)
     close(xf86Info.consoleFd);  /* make the vt-manager happy */
 }
 
-#define CHECK_FOR_REQUIRED_ARGUMENT() \
-    if (((i + 1) >= argc) || (!argv[i + 1])) { 				\
-      ErrorF("Required argument to %s not specified\n", argv[i]); 	\
-      UseMsg(); 							\
-      FatalError("Required argument to %s not specified\n", argv[i]);	\
-    }
+enum string CHECK_FOR_REQUIRED_ARGUMENT() = `
+    if (((i + 1) >= argc) || (!argv[i + 1])) { 				
+      ErrorF("Required argument to %s not specified\n", argv[i]); 	
+      UseMsg(); 							
+      FatalError("Required argument to %s not specified\n", argv[i]);	
+    }`;
 
-int
-xf86ProcessArgument(int argc, char *argv[], int i)
+int xf86ProcessArgument(int argc, char** argv, int i)
 {
     /*
      * Keep server from detaching from controlling tty.  This is useful
@@ -394,7 +389,7 @@ xf86ProcessArgument(int argc, char *argv[], int i)
     }
 
     if (!strcmp(argv[i], "-masterfd")) {
-        CHECK_FOR_REQUIRED_ARGUMENT();
+        mixin(CHECK_FOR_REQUIRED_ARGUMENT!());
         if (PrivsElevated())
             FatalError("\nCannot specify -masterfd when server is setuid/setgid\n");
         if (sscanf(argv[++i], "%d", &xf86DRMMasterFd) != 1) {
@@ -408,8 +403,7 @@ xf86ProcessArgument(int argc, char *argv[], int i)
     return 0;
 }
 
-void
-xf86UseMsg(void)
+void xf86UseMsg()
 {
     ErrorF("vtXX                   use the specified VT number\n");
     ErrorF("-keeptty               ");
@@ -417,8 +411,7 @@ xf86UseMsg(void)
     ErrorF("-masterfd <fd>         use the specified fd as the DRM master fd (not if setuid/gid)\n");
 }
 
-void
-xf86OSInputThreadInit(void)
+void xf86OSInputThreadInit()
 {
     return;
 }

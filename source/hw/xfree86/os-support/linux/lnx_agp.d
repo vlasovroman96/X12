@@ -1,3 +1,11 @@
+module lnx_agp.c;
+@nogc nothrow:
+extern(C): __gshared:
+
+private template HasVersion(string versionId) {
+	mixin("version("~versionId~") {enum HasVersion = true;} else {enum HasVersion = false;}");
+}
+import core.stdc.config: c_long, c_ulong;
 /*
  * Abstraction of the AGP GART interface.
  *
@@ -6,44 +14,42 @@
  * Copyright © 2000 VA Linux Systems, Inc.
  * Copyright © 2001 The XFree86 Project, Inc.
  */
-#include <xorg-config.h>
+import xorg_config;
 
-#include <errno.h>
-#include <X11/X.h>
+import core.stdc.errno;
+import X11.X;
 
-#include "xf86.h"
-#include "xf86Priv.h"
-#include "xf86_os_support.h"
-#include "xf86_OSlib.h"
+import xf86;
+import xf86Priv;
+import xf86_os_support;
+import xf86_OSlib;
 
-#if defined(__linux__)
-#include <asm/ioctl.h>
-#include <linux/agpgart.h>
-#elif defined(__FreeBSD__) || defined(__FreeBSD_kernel__) || defined(__NetBSD__) || defined(__OpenBSD__) || defined(__DragonFly__)
-#include <sys/ioctl.h>
-#include <sys/agpio.h>
-#endif
+version (linux) {
+import c_asm.ioctl;
+import linux.agpgart;
+} 
+static if (HasVersion!"__FreeBSD__" || HasVersion!"__FreeBSD_kernel__" || HasVersion!"__NetBSD__" || HasVersion!"__OpenBSD__" || HasVersion!"__DragonFly__") {
+import core.sys.posix.sys.ioctl;
+import sys.agpio;
+}
 
-#ifndef AGP_DEVICE
-#define AGP_DEVICE		"/dev/agpgart"
-#endif
+enum AGP_DEVICE =		"/dev/agpgart";
+
 /* AGP page size is independent of the host page size. */
-#ifndef AGP_PAGE_SIZE
-#define AGP_PAGE_SIZE		4096
-#endif
-#define AGPGART_MAJOR_VERSION	0
-#define AGPGART_MINOR_VERSION	99
+enum AGP_PAGE_SIZE =		4096;
 
-static int gartFd = -1;
-static int acquiredScreen = -1;
-static Bool initDone = FALSE;
+enum AGPGART_MAJOR_VERSION =	0;
+enum AGPGART_MINOR_VERSION =	99;
+
+private int gartFd = -1;
+private int acquiredScreen = -1;
+private Bool initDone = FALSE;
 
 /*
  * Close /dev/agpgart.  This frees all associated memory allocated during
  * this server generation.
  */
-Bool
-xf86GARTCloseScreen(int screenNum)
+Bool xf86GARTCloseScreen(int screenNum)
 {
     if (gartFd != -1) {
         close(gartFd);
@@ -60,7 +66,7 @@ xf86GARTCloseScreen(int screenNum)
 static Bool
 GARTInit(int screenNum)
 {
-    struct _agp_info agpinf;
+    _agp_info agpinf;
 
     if (initDone)
         return gartFd != -1;
@@ -74,7 +80,7 @@ GARTInit(int screenNum)
 
     if (gartFd == -1) {
         xf86DrvMsg(screenNum, X_ERROR,
-                   "GARTInit: Unable to open " AGP_DEVICE " (%s)\n",
+                   "GARTInit: Unable to open " ~ AGP_DEVICE ~ " (%s)\n",
                    strerror(errno));
         return FALSE;
     }
@@ -90,69 +96,67 @@ GARTInit(int screenNum)
     }
     xf86ReleaseGART(-1);
 
-#if defined(__linux__)
+static if(HasVersion!"linux") {
     /* Per Dave Jones, every effort will be made to keep the
      * agpgart interface backwards compatible, so allow all
      * future versions.
      */
-    if (
-#if (AGPGART_MAJOR_VERSION > 0) /* quiet compiler */
-           agpinf.version.major < AGPGART_MAJOR_VERSION ||
-#endif
-           (agpinf.version.major == AGPGART_MAJOR_VERSION &&
-            agpinf.version.minor < AGPGART_MINOR_VERSION)) {
+     bool cond = (agpinf.version_.major == AGPGART_MAJOR_VERSION &&
+            agpinf.version_.minor < AGPGART_MINOR_VERSION);
+    static if((AGPGART_MAJOR_VERSION > 0)) {
+        cond = cond || agpinf.version_.major < AGPGART_MAJOR_VERSION;
+    }
+    if (cond) {
         xf86DrvMsg(screenNum, X_ERROR,
                    "GARTInit: Kernel agpgart driver version is not current"
-                   " (%d.%d vs %d.%d)\n",
-                   agpinf.version.major, agpinf.version.minor,
+                   ~ " (%d.%d vs %d.%d)\n",
+                   agpinf.version_.major, agpinf.version_.minor,
                    AGPGART_MAJOR_VERSION, AGPGART_MINOR_VERSION);
         close(gartFd);
         gartFd = -1;
         return FALSE;
     }
-#endif
+}
 
     return TRUE;
 }
 
-Bool
-xf86AgpGARTSupported(void)
+Bool xf86AgpGARTSupported()
 {
     return GARTInit(-1);
 }
 
-AgpInfoPtr
-xf86GetAGPInfo(int screenNum)
+AgpInfoPtr xf86GetAGPInfo(int screenNum)
 {
-    struct _agp_info agpinf;
-    AgpInfoPtr info;
+    _agp_info agpinf = void;
+    AgpInfoPtr info = void;
 
     if (!GARTInit(screenNum))
-        return NULL;
+        return null;
 
-    if ((info = calloc(1, sizeof(AgpInfo))) == NULL) {
+    if ((info = calloc(1, AgpInfo.sizeof)) == null) {
         xf86DrvMsg(screenNum, X_ERROR,
                    "xf86GetAGPInfo: Failed to allocate AgpInfo\n");
-        return NULL;
+        return null;
     }
 
-    memset((char *) &agpinf, 0, sizeof(agpinf));
+    memset(cast(char*) &agpinf, 0, agpinf.sizeof);
 
     if (ioctl(gartFd, AGPIOC_INFO, &agpinf) != 0) {
         xf86DrvMsg(screenNum, X_ERROR,
                    "xf86GetAGPInfo: AGPIOC_INFO failed (%s)\n",
                    strerror(errno));
         free(info);
-        return NULL;
+        return null;
     }
 
-    info->bridgeId = agpinf.bridge_id;
-    info->agpMode = agpinf.agp_mode;
-    info->base = agpinf.aper_base;
-    info->size = agpinf.aper_size;
-    info->totalPages = agpinf.pg_total;
-    info->systemPages = agpinf.pg_system;
-    info->usedPages = agpinf.pg_used;
+    info.bridgeId = agpinf.bridge_id;
+    info.agpMode = agpinf.agp_mode;
+    info.base = agpinf.aper_base;
+    info.size = agpinf.aper_size;
+    info.totalPages = agpinf.pg_total;
+    info.systemPages = agpinf.pg_system;
+    info.usedPages = agpinf.pg_used;
 
     xf86DrvMsg(screenNum, X_INFO, "Kernel reported %zu total, %zu used\n",
                agpinf.pg_total, agpinf.pg_used);
@@ -165,8 +169,7 @@ xf86GetAGPInfo(int screenNum)
  * count instead of using acquiredScreen?
  */
 
-Bool
-xf86AcquireGART(int screenNum)
+Bool xf86AcquireGART(int screenNum)
 {
     if (screenNum != -1 && !GARTInit(screenNum))
         return FALSE;
@@ -183,8 +186,7 @@ xf86AcquireGART(int screenNum)
     return TRUE;
 }
 
-Bool
-xf86ReleaseGART(int screenNum)
+Bool xf86ReleaseGART(int screenNum)
 {
     if (screenNum != -1 && !GARTInit(screenNum))
         return FALSE;
@@ -196,9 +198,20 @@ xf86ReleaseGART(int screenNum)
          * to give up access to the GART, but not to remove any
          * allocations.
          */
-#if !defined(__linux__)
+static if (!HasVersion!"linux") {
         if (screenNum == -1)
-#endif
+        {
+            if (ioctl(gartFd, AGPIOC_RELEASE, 0) != 0) {
+                xf86DrvMsg(screenNum, X_WARNING,
+                           "xf86ReleaseGART: AGPIOC_RELEASE failed (%s)\n",
+                           strerror(errno));
+                return FALSE;
+            }
+            acquiredScreen = -1;
+        }
+        return TRUE;
+}
+else
         {
             if (ioctl(gartFd, AGPIOC_RELEASE, 0) != 0) {
                 xf86DrvMsg(screenNum, X_WARNING,
@@ -213,12 +226,10 @@ xf86ReleaseGART(int screenNum)
     return FALSE;
 }
 
-int
-xf86AllocateGARTMemory(int screenNum, unsigned long size, int type,
-                       unsigned long *physical)
+int xf86AllocateGARTMemory(int screenNum, c_ulong size, int type, c_ulong* physical)
 {
-    struct _agp_allocate alloc;
-    int pages;
+    _agp_allocate alloc = void;
+    int pages = void;
 
     /*
      * Allocates "size" bytes of GART memory (rounds up to the next
@@ -240,7 +251,7 @@ xf86AllocateGARTMemory(int screenNum, unsigned long size, int type,
 
     if (ioctl(gartFd, AGPIOC_ALLOCATE, &alloc) != 0) {
         xf86DrvMsg(screenNum, X_WARNING, "xf86AllocateGARTMemory: "
-                   "allocation of %d pages failed\n\t(%s)\n", pages,
+                   ~ "allocation of %d pages failed\n\t(%s)\n", pages,
                    strerror(errno));
         return -1;
     }
@@ -251,8 +262,7 @@ xf86AllocateGARTMemory(int screenNum, unsigned long size, int type,
     return alloc.key;
 }
 
-Bool
-xf86DeallocateGARTMemory(int screenNum, int key)
+Bool xf86DeallocateGARTMemory(int screenNum, int key)
 {
     if (!GARTInit(screenNum) || acquiredScreen != screenNum)
         return FALSE;
@@ -263,26 +273,25 @@ xf86DeallocateGARTMemory(int screenNum, int key)
         return FALSE;
     }
 
-#ifdef __linux__
-    if (ioctl(gartFd, AGPIOC_DEALLOCATE, (int *) (uintptr_t) key) != 0) {
-#else
+version (linux) {
+    if (ioctl(gartFd, AGPIOC_DEALLOCATE, cast(int*) cast(uintptr_t) key) != 0) {
+//! #else
     if (ioctl(gartFd, AGPIOC_DEALLOCATE, &key) != 0) {
-#endif
-        xf86DrvMsg(screenNum, X_WARNING, "xf86DeAllocateGARTMemory: "
+//! #endif
+        xf86DrvMsg(screenNum, X_WARNING, "xf86DeAllocateGARTMemory: "~
                    "deallocation gart memory with key %d failed\n\t(%s)\n",
                    key, strerror(errno));
         return FALSE;
     }
 
-    return TRUE;
+    return TRUE;}
 }
 
 /* Bind GART memory with "key" at "offset" */
-Bool
-xf86BindGARTMemory(int screenNum, int key, unsigned long offset)
+Bool xf86BindGARTMemory(int screenNum, int key, c_ulong offset)
 {
-    struct _agp_bind bind;
-    int pageOffset;
+    _agp_bind bind = void;
+    int pageOffset = void;
 
     if (!GARTInit(screenNum) || acquiredScreen != screenNum)
         return FALSE;
@@ -295,7 +304,7 @@ xf86BindGARTMemory(int screenNum, int key, unsigned long offset)
 
     if (offset % AGP_PAGE_SIZE != 0) {
         xf86DrvMsg(screenNum, X_WARNING, "xf86BindGARTMemory: "
-                   "offset (0x%lx) is not page-aligned (%d)\n",
+                   ~ "offset (0x%lx) is not page-aligned (%d)\n",
                    offset, AGP_PAGE_SIZE);
         return FALSE;
     }
@@ -303,15 +312,15 @@ xf86BindGARTMemory(int screenNum, int key, unsigned long offset)
 
     xf86DrvMsgVerb(screenNum, X_INFO, 3,
                    "xf86BindGARTMemory: bind key %d at 0x%08lx "
-                   "(pgoffset %d)\n", key, offset, pageOffset);
+                   ~ "(pgoffset %d)\n", key, offset, pageOffset);
 
     bind.pg_start = pageOffset;
     bind.key = key;
 
     if (ioctl(gartFd, AGPIOC_BIND, &bind) != 0) {
         xf86DrvMsg(screenNum, X_WARNING, "xf86BindGARTMemory: "
-                   "binding of gart memory with key %d\n"
-                   "\tat offset 0x%lx failed (%s)\n",
+                   ~ "binding of gart memory with key %d\n"
+                   ~ "\tat offset 0x%lx failed (%s)\n",
                    key, offset, strerror(errno));
         return FALSE;
     }
@@ -320,10 +329,9 @@ xf86BindGARTMemory(int screenNum, int key, unsigned long offset)
 }
 
 /* Unbind GART memory with "key" */
-Bool
-xf86UnbindGARTMemory(int screenNum, int key)
+Bool xf86UnbindGARTMemory(int screenNum, int key)
 {
-    struct _agp_unbind unbind;
+    _agp_unbind unbind = void;
 
     if (!GARTInit(screenNum) || acquiredScreen != screenNum)
         return FALSE;
@@ -339,8 +347,8 @@ xf86UnbindGARTMemory(int screenNum, int key)
 
     if (ioctl(gartFd, AGPIOC_UNBIND, &unbind) != 0) {
         xf86DrvMsg(screenNum, X_WARNING, "xf86UnbindGARTMemory: "
-                   "unbinding of gart memory with key %d "
-                   "failed (%s)\n", key, strerror(errno));
+                   ~ "unbinding of gart memory with key %d "
+                   ~ "failed (%s)\n", key, strerror(errno));
         return FALSE;
     }
 
@@ -348,4 +356,5 @@ xf86UnbindGARTMemory(int screenNum, int key)
                    "xf86UnbindGARTMemory: unbind key %d\n", key);
 
     return TRUE;
+}
 }

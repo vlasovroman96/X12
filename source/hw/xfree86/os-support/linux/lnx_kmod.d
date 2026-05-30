@@ -1,25 +1,27 @@
-#include <xorg-config.h>
+module lnx_kmod.c;
+@nogc nothrow:
+extern(C): __gshared:
+import xorg_config;
 
-#include <errno.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <sys/wait.h>
-#include <signal.h>
-#include "xf86_OSlib.h"
-#include "xf86.h"
+import core.stdc.errno;
+import core.sys.posix.fcntl;
+import core.sys.posix.unistd;
+import core.sys.posix.sys.wait;
+import core.stdc.signal;
+import xf86_OSlib;
+import xf86;
 
-#define MODPROBE_PATH_FILE      "/proc/sys/kernel/modprobe"
-#define MAX_PATH                1024
+enum MODPROBE_PATH_FILE =      "/proc/sys/kernel/modprobe";
+enum MAX_PATH =                1024;
 
-#if 0
+version (none) {
 /* XFree86 #defines execl to be the xf86execl() function which does
  * a fork AND exec.  We don't want that.  We want the regular,
  * standard execl().
  */
-#ifdef execl
-#undef execl
-#endif
-#endif
+version (execl) {
+}
+}
 
 /*
  * Load a Linux kernel module.
@@ -30,17 +32,16 @@
  * Return:
  *    0 for failure, 1 for success
  */
-int
-xf86LoadKernelModule(const char *modName)
+int xf86LoadKernelModule(const(char)* modName)
 {
-    char mpPath[MAX_PATH] = "";
-    int fd = -1, status;
-    pid_t pid;
+    char[MAX_PATH] mpPath = "";
+    int fd = -1, status = void;
+    pid_t pid = void;
 
     /* get the path to the modprobe program */
     fd = open(MODPROBE_PATH_FILE, O_RDONLY);
     if (fd >= 0) {
-        int count = read(fd, mpPath, MAX_PATH - 1);
+        int count = read(fd, mpPath.ptr, MAX_PATH - 1);
 
         if (count <= 0) {
             mpPath[0] = 0;
@@ -54,7 +55,7 @@ xf86LoadKernelModule(const char *modName)
 
     if (mpPath[0] == 0) {
         /* we failed to get the path from the system, use a default */
-        strcpy(mpPath, "/sbin/modprobe");
+        strcpy(mpPath.ptr, "/sbin/modprobe");
     }
 
     /* now fork/exec the modprobe command */
@@ -70,10 +71,10 @@ xf86LoadKernelModule(const char *modName)
          */
         if (setreuid(0, 0)) {
             LogMessageVerb(X_WARNING, 1, "LoadKernelModule: "
-                           "Setting of real/effective user Id to 0/0 failed");
+                           ~ "Setting of real/effective user Id to 0/0 failed");
         }
         setenv("PATH", "/sbin", 1);
-        execl(mpPath, "modprobe", modName, NULL);
+        execl(mpPath.ptr, "modprobe", modName, null);
         LogMessageVerb(X_WARNING, 1, "LoadKernelModule %s\n", strerror(errno));
         exit(EXIT_FAILURE);     /* if we get here the child's exec failed */
         break;
@@ -84,7 +85,7 @@ xf86LoadKernelModule(const char *modName)
         /* XXX we loop over waitpid() because it sometimes fails on
          * the first attempt.  Don't know why!
          */
-        int count = 0, p;
+        int count = 0, p = void;
 
         do {
             p = waitpid(pid, &status, 0);

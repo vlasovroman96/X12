@@ -1,3 +1,11 @@
+module lnx_video.c;
+@nogc nothrow:
+extern(C): __gshared:
+
+private template HasVersion(string versionId) {
+	mixin("version("~versionId~") {enum HasVersion = true;} else {enum HasVersion = false;}");
+}
+import core.stdc.config: c_long, c_ulong;
 /*
  * Copyright 1992 by Orest Zborowski <obz@Kodak.com>
  * Copyright 1993 by David Wexelblat <dwex@goblin.org>
@@ -22,77 +30,75 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  *
  */
-#include <xorg-config.h>
+import xorg_config;
 
-#include <errno.h>
-#include <string.h>
-#include <sys/mman.h>
-#include <X11/X.h>
+import core.stdc.errno;
+import core.stdc.string;
+import core.sys.posix.sys.mman;
+import X11.X;
 
-#include "input.h"
-#include "scrnintstr.h"
+import input;
+import scrnintstr;
 
-#include "xf86.h"
-#include "xf86_os_support.h"
-#include "xf86Priv.h"
-#include "xf86_OSlib.h"
+import xf86;
+import xf86_os_support;
+import xf86Priv;
+import xf86_OSlib;
 
-static Bool ExtendedEnabled = FALSE;
+private Bool ExtendedEnabled = FALSE;
 
-#ifdef __ia64__
+version (__ia64__) {
 
-#include "compiler.h"
-#include <sys/io.h>
+import compiler;
+import sys.io;
 
-#elif !defined(__powerpc__) && \
-      !defined(__mc68000__) && \
-      !defined(__sparc__) && \
-      !defined(__mips__) && \
-      !defined(__nds32__) && \
-      !defined(__arm__) && \
-      !defined(__aarch64__) && \
-      !defined(__arc__) && \
-      !defined(__xtensa__)
+} 
+static if (!HasVersion!"__powerpc__" && 
+      !HasVersion!"__mc68000__" && 
+      !HasVersion!"__sparc__" && 
+      !HasVersion!"__mips__" && 
+      !HasVersion!"__nds32__" && 
+      !HasVersion!"__arm__" && 
+      !HasVersion!"__aarch64__" && 
+      !HasVersion!"__arc__" && 
+      !HasVersion!"__xtensa__") {
 
 /*
  * Due to conflicts with "compiler.h", don't rely on <sys/io.h> to declare
  * these.
  */
-extern int ioperm(unsigned long __from, unsigned long __num, int __turn_on);
+extern int ioperm(c_ulong __from, c_ulong __num, int __turn_on);
 extern int iopl(int __level);
 
-#endif
+}
 
 /***************************************************************************/
 /* Video Memory Mapping section                                            */
 /***************************************************************************/
 
-void
-xf86OSInitVidMem(VidMemInfoPtr pVidMem)
+void xf86OSInitVidMem(VidMemInfoPtr pVidMem)
 {
-    pVidMem->initialised = TRUE;
+    pVidMem.initialised = TRUE;
 }
 
 /***************************************************************************/
 /* I/O Permissions section                                                 */
 /***************************************************************************/
 
-#if defined(__powerpc__)
-volatile unsigned char *ioBase = NULL;
+version (__powerpc__) {
+/*volatile*/ ubyte* ioBase = null;
 
-#ifndef __NR_pciconfig_iobase
-#define __NR_pciconfig_iobase	200
-#endif
+enum __NR_pciconfig_iobase =	200;
 
-static Bool
-hwEnableIO(void)
+
+private Bool hwEnableIO()
 {
-    int fd;
-    unsigned int ioBase_phys = syscall(__NR_pciconfig_iobase, 2, 0, 0);
+    int fd = void;
+    uint ioBase_phys = syscall(__NR_pciconfig_iobase, 2, 0, 0);
 
     fd = open("/dev/mem", O_RDWR);
-    if (ioBase == NULL) {
-        ioBase = (volatile unsigned char *) mmap(0, 0x20000,
+    if (ioBase == null) {
+        ioBase = cast(/*volatile*/ ubyte*) mmap(0, 0x20000,
                                                  PROT_READ | PROT_WRITE,
                                                  MAP_SHARED, fd, ioBase_phys);
     }
@@ -101,24 +107,22 @@ hwEnableIO(void)
     return ioBase != MAP_FAILED;
 }
 
-static void
-hwDisableIO(void)
+private void hwDisableIO()
 {
     munmap(ioBase, 0x20000);
-    ioBase = NULL;
+    ioBase = null;
 }
 
-#elif defined(__i386__) || defined(__x86_64__) || defined(__ia64__) || \
-      defined(__alpha__)
+} else static if (HasVersion!"__i386__" || HasVersion!"__x86_64__" || HasVersion!"__ia64__" || 
+      HasVersion!"__alpha__") {
 
-static Bool
-hwEnableIO(void)
+private Bool hwEnableIO()
 {
-    short i;
-    size_t n=0;
-    int begin, end;
-    char *buf=NULL, target[5];
-    FILE *fp;
+    short i = void;
+    size_t n = 0;
+    int begin = void, end = void;
+    char* buf = null; char[5] target = void;
+    FILE* fp = void;
 
     /* xf86-video-vesa and others (at least mach64) need access to all I/O ports */
     if (iopl(3)) {
@@ -136,63 +140,60 @@ hwEnableIO(void)
         }
     }
 
-#if !defined(__alpha__)
+static if (!HasVersion!"__alpha__") {
     target[4] = '\0';
 
     /* trap access to the keyboard controller(s) and timer chip(s) */
     fp = fopen("/proc/ioports", "r");
     while (getline(&buf, &n, fp) != -1) {
-        if ((strstr(buf, "keyboard") != NULL) || (strstr(buf, "timer") != NULL)) {
+        if ((strstr(buf, "keyboard") != null) || (strstr(buf, "timer") != null)) {
             for (i=0; i<4; i++)
                 target[i] = buf[i+2];
-            begin = atoi(target);
+            begin = atoi(target.ptr);
 
             for (i=0; i<4; i++)
                 target[i] = buf[i+7];
-            end = atoi(target);
+            end = atoi(target.ptr);
 
             ioperm(begin, end-begin+1, 0);
         }
     }
     free(buf);
     fclose(fp);
-#endif
+}
 
     return TRUE;
 }
 
-static void
-hwDisableIO(void)
+private void hwDisableIO()
 {
     iopl(0);
     ioperm(0, 1024, 0);
 }
 
-#else /* non-IO architectures */
+} else { /* non-IO architectures */
 
-#define hwEnableIO() TRUE
-#define hwDisableIO() do {} while (0)
+enum string hwEnableIO() = `TRUE`;
+enum string hwDisableIO() = `do {} while (0)`;
 
-#endif
+}
 
-Bool
-xf86EnableIO(void)
+Bool xf86EnableIO()
 {
     if (ExtendedEnabled)
         return TRUE;
 
-    ExtendedEnabled = hwEnableIO();
+    ExtendedEnabled = mixin(hwEnableIO!());
 
     return ExtendedEnabled;
 }
 
-void
-xf86DisableIO(void)
+void xf86DisableIO()
 {
     if (!ExtendedEnabled)
         return;
 
-    hwDisableIO();
+    mixin(hwDisableIO!());
 
     ExtendedEnabled = FALSE;
 }

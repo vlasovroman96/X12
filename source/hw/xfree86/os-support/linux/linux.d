@@ -1,3 +1,6 @@
+module linux.h;
+@nogc nothrow:
+extern(C): __gshared:
 /*
  * Copyright © 2015 Red Hat, Inc.
  *
@@ -23,9 +26,7 @@
  * Author: Hans de Goede <hdegoede@redhat.com>
  */
 
-#ifndef XF86_LINUX_H
-#define XF86_LINUX_H
-
+ 
 int linux_parse_vt_settings(int may_fail);
 
-#endif
+
