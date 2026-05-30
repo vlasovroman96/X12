@@ -1,5 +1,8 @@
+module kmod_noop.c;
+@nogc nothrow:
+extern(C): __gshared:
 /*
- * Copyright (c) 1999-2003 by The XFree86 Project, Inc.
+ * Copyright (c) 2000 by The XFree86 Project, Inc.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -24,23 +27,12 @@
  * the sale, use or other dealings in this Software without prior written
  * authorization from the copyright holder(s) and author(s).
  */
-#include <xorg-config.h>
+import xorg_config;
 
-#include <X11/X.h>
+import xf86_OSproc;
 
-#include "xf86.h"
-#include "xf86Priv.h"
-#include "xf86_os_support.h"
-#include "xf86_OSlib.h"
-
-int
-xf86InstallSIGIOHandler(int fd, void (*f) (int, void *), void *closure)
+int xf86LoadKernelModule(const(char)* pathname)
 {
-    return 0;
-}
-
-int
-xf86RemoveSIGIOHandler(int fd)
-{
-    return 0;
+    cast(void) pathname;
+    return 0;                   /* failure */
 }

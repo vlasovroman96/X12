@@ -1,3 +1,6 @@
+module posix_tty.c;
+@nogc nothrow:
+extern(C): __gshared:
 /*
  * Copyright 1993-2003 by The XFree86 Project, Inc.
  *
@@ -51,77 +54,75 @@
  * in this Software without prior written authorization from Metro Link.
  *
  */
-#include <xorg-config.h>
+import xorg_config;
 
-#include <errno.h>
-#include <X11/X.h>
+import core.stdc.errno;
+import X11.X;
 
-#include "os/log_priv.h"
-#include "os/xserver_poll.h"
+import os.log_priv;
+import os.xserver_poll;
 
-#include "xf86.h"
-#include "xf86Opt_priv.h"
-#include "xf86Priv.h"
-#include "xf86_OSlib.h"
+import xf86;
+import xf86Opt_priv;
+import xf86Priv;
+import xf86_OSlib;
 
-static int
-GetBaud(int baudrate)
+private int GetBaud(int baudrate)
 {
-#ifdef B300
+version (B300) {
     if (baudrate == 300)
         return B300;
-#endif
-#ifdef B1200
+}
+version (B1200) {
     if (baudrate == 1200)
         return B1200;
-#endif
-#ifdef B2400
+}
+version (B2400) {
     if (baudrate == 2400)
         return B2400;
-#endif
-#ifdef B4800
+}
+version (B4800) {
     if (baudrate == 4800)
         return B4800;
-#endif
-#ifdef B9600
+}
+version (B9600) {
     if (baudrate == 9600)
         return B9600;
-#endif
-#ifdef B19200
+}
+version (B19200) {
     if (baudrate == 19200)
         return B19200;
-#endif
-#ifdef B38400
+}
+version (B38400) {
     if (baudrate == 38400)
         return B38400;
-#endif
-#ifdef B57600
+}
+version (B57600) {
     if (baudrate == 57600)
         return B57600;
-#endif
-#ifdef B115200
+}
+version (B115200) {
     if (baudrate == 115200)
         return B115200;
-#endif
-#ifdef B230400
+}
+version (B230400) {
     if (baudrate == 230400)
         return B230400;
-#endif
-#ifdef B460800
+}
+version (B460800) {
     if (baudrate == 460800)
         return B460800;
-#endif
+}
     return 0;
 }
 
-int
-xf86OpenSerial(XF86OptionPtr options)
+int xf86OpenSerial(XF86OptionPtr options)
 {
-    struct termios t;
-    int fd, i;
-    char *dev;
+    termios t = void;
+    int fd = void, i = void;
+    char* dev = void;
 
-    dev = xf86SetStrOption(options, "Device", NULL);
+    dev = xf86SetStrOption(options, "Device", null);
     if (!dev) {
         LogMessageVerb(X_ERROR, 1, "xf86OpenSerial: No Device specified.\n");
         return -1;
@@ -185,13 +186,12 @@ xf86OpenSerial(XF86OptionPtr options)
     return fd;
 }
 
-int
-xf86SetSerial(int fd, XF86OptionPtr options)
+int xf86SetSerial(int fd, XF86OptionPtr options)
 {
-    struct termios t;
-    int val;
-    char *s;
-    int baud, r;
+    termios t = void;
+    int val = void;
+    char* s = void;
+    int baud = void, r = void;
 
     if (fd < 0)
         return -1;
@@ -253,7 +253,7 @@ xf86SetSerial(int fd, XF86OptionPtr options)
         }
     }
 
-    if ((s = xf86SetStrOption(options, "Parity", NULL))) {
+    if ((s = xf86SetStrOption(options, "Parity", null))) {
         if (xf86NameCmp(s, "Odd") == 0) {
             t.c_cflag |= PARENB | PARODD;
         }
@@ -279,7 +279,7 @@ xf86SetSerial(int fd, XF86OptionPtr options)
         t.c_cc[VTIME] = val;
     }
 
-    if ((s = xf86SetStrOption(options, "FlowControl", NULL))) {
+    if ((s = xf86SetStrOption(options, "FlowControl", null))) {
         xf86MarkOptionUsedByName(options, "FlowControl");
         if (xf86NameCmp(s, "Xoff") == 0) {
             t.c_iflag |= IXOFF;
@@ -302,17 +302,17 @@ xf86SetSerial(int fd, XF86OptionPtr options)
     }
 
     if ((xf86SetBoolOption(options, "ClearDTR", FALSE))) {
-#ifdef CLEARDTR_SUPPORT
-#if defined(TIOCMBIC)
+version (CLEARDTR_SUPPORT) {
+version (TIOCMBIC) {
         val = TIOCM_DTR;
         SYSCALL(ioctl(fd, TIOCMBIC, &val));
-#else
-        SYSCALL(ioctl(fd, TIOCCDTR, NULL));
-#endif
-#else
+} else {
+        SYSCALL(ioctl(fd, TIOCCDTR, null));
+}
+} else {
         LogMessageVerb(X_WARNING, 1, "Option ClearDTR not supported on this OS\n");
         return -1;
-#endif
+}
         xf86MarkOptionUsedByName(options, "ClearDTR");
     }
 
@@ -326,11 +326,10 @@ xf86SetSerial(int fd, XF86OptionPtr options)
     return r;
 }
 
-int
-xf86SetSerialSpeed(int fd, int speed)
+int xf86SetSerialSpeed(int fd, int speed)
 {
-    struct termios t;
-    int baud, r;
+    termios t = void;
+    int baud = void, r = void;
 
     if (fd < 0)
         return -1;
@@ -354,48 +353,44 @@ xf86SetSerialSpeed(int fd, int speed)
     return r;
 }
 
-int
-xf86ReadSerial(int fd, void *buf, int count)
+int xf86ReadSerial(int fd, void* buf, int count)
 {
-    int r;
-    int i;
+    int r = void;
+    int i = void;
 
     SYSCALL(r = read(fd, buf, count));
-    DebugF("ReadingSerial: 0x%x", (unsigned char) *(((unsigned char *) buf)));
+    DebugF("ReadingSerial: 0x%x", cast(ubyte) *((cast(ubyte*) buf)));
     for (i = 1; i < r; i++)
-        DebugF(", 0x%x", (unsigned char) *(((unsigned char *) buf) + i));
+        DebugF(", 0x%x", cast(ubyte) *((cast(ubyte*) buf) + i));
     DebugF("\n");
     return r;
 }
 
-int
-xf86WriteSerial(int fd, const void *buf, int count)
+int xf86WriteSerial(int fd, const(void)* buf, int count)
 {
-    int r;
-    int i;
+    int r = void;
+    int i = void;
 
-    DebugF("WritingSerial: 0x%x", (unsigned char) *(((unsigned char *) buf)));
+    DebugF("WritingSerial: 0x%x", cast(ubyte) *((cast(ubyte*) buf)));
     for (i = 1; i < count; i++)
-        DebugF(", 0x%x", (unsigned char) *(((unsigned char *) buf) + i));
+        DebugF(", 0x%x", cast(ubyte) *((cast(ubyte*) buf) + i));
     DebugF("\n");
     SYSCALL(r = write(fd, buf, count));
     return r;
 }
 
-int
-xf86CloseSerial(int fd)
+int xf86CloseSerial(int fd)
 {
-    int r;
+    int r = void;
 
     SYSCALL(r = close(fd));
     return r;
 }
 
-int
-xf86WaitForInput(int fd, int timeout)
+int xf86WaitForInput(int fd, int timeout)
 {
-    int r;
-    struct pollfd poll_fd;
+    int r = void;
+    pollfd poll_fd = void;
 
     poll_fd.fd = fd;
     poll_fd.events = POLLIN;
@@ -413,12 +408,11 @@ xf86WaitForInput(int fd, int timeout)
     return r;
 }
 
-int
-xf86FlushInput(int fd)
+int xf86FlushInput(int fd)
 {
-    struct pollfd poll_fd;
+    pollfd poll_fd = void;
     /* this needs to be big enough to flush an evdev event. */
-    char c[256];
+    char[256] c = void;
 
     DebugF("FlushingSerial\n");
     if (tcflush(fd, TCIFLUSH) == 0)
@@ -427,66 +421,52 @@ xf86FlushInput(int fd)
     poll_fd.fd = fd;
     poll_fd.events = POLLIN;
     while (xserver_poll(&poll_fd, 1, 0) > 0) {
-        if (read(fd, &c, sizeof(c)) < 1)
+        if (read(fd, &c, c.sizeof) < 1)
             return 0;
     }
     return 0;
 }
 
-static struct states {
+struct states {
     int xf;
     int os;
-} modemStates[] = {
-#ifdef TIOCM_LE
-    {
-    XF86_M_LE, TIOCM_LE},
-#endif
-#ifdef TIOCM_DTR
-    {
-    XF86_M_DTR, TIOCM_DTR},
-#endif
-#ifdef TIOCM_RTS
-    {
-    XF86_M_RTS, TIOCM_RTS},
-#endif
-#ifdef TIOCM_ST
-    {
-    XF86_M_ST, TIOCM_ST},
-#endif
-#ifdef TIOCM_SR
-    {
-    XF86_M_SR, TIOCM_SR},
-#endif
-#ifdef TIOCM_CTS
-    {
-    XF86_M_CTS, TIOCM_CTS},
-#endif
-#ifdef TIOCM_CAR
-    {
-    XF86_M_CAR, TIOCM_CAR},
-#elif defined(TIOCM_CD)
-    {
-    XF86_M_CAR, TIOCM_CD},
-#endif
-#ifdef TIOCM_RNG
-    {
-    XF86_M_RNG, TIOCM_RNG},
-#elif defined(TIOCM_RI)
-    {
-    XF86_M_CAR, TIOCM_RI},
-#endif
-#ifdef TIOCM_DSR
-    {
-    XF86_M_DSR, TIOCM_DSR},
-#endif
-};
+}
+private immutable State[] modemStates = () {
+    State[] states;
+    
+    static if (is(typeof(TIOCM_LE)))   states ~= State(XF86_M_LE, TIOCM_LE);
+    static if (is(typeof(TIOCM_DTR)))  states ~= State(XF86_M_DTR, TIOCM_DTR);
+    static if (is(typeof(TIOCM_RTS)))  states ~= State(XF86_M_RTS, TIOCM_RTS);
+    static if (is(typeof(TIOCM_ST)))   states ~= State(XF86_M_ST, TIOCM_ST);
+    static if (is(typeof(TIOCM_SR)))   states ~= State(XF86_M_SR, TIOCM_SR);
+    static if (is(typeof(TIOCM_CTS)))  states ~= State(XF86_M_CTS, TIOCM_CTS);
+    
+    static if (is(typeof(TIOCM_CAR))) {
+        states ~= State(XF86_M_CAR, TIOCM_CAR);
+    } else static if (is(typeof(TIOCM_CD))) {
+        states ~= State(XF86_M_CAR, TIOCM_CD);
+    }
+    
+    static if (is(typeof(TIOCM_RNG))) {
+        states ~= State(XF86_M_RNG, TIOCM_RNG);
+    } else static if (is(typeof(TIOCM_RI))) {
+        states ~= State(XF86_M_CAR, TIOCM_RI); // Сохранена ваша логика XF86_M_CAR
+    }
+    
+    static if (is(typeof(TIOCM_DSR)))  states ~= State(XF86_M_DSR, TIOCM_DSR);
+    
+    return states;
+}();
 
-static int numStates = ARRAY_SIZE(modemStates);
+static this() {
+    
+}
 
-static int
-xf2osState(int state)
+private int numStates = ARRAY_SIZE(modemStates.ptr);
+
+private int xf2osState(int state)
 {
-    int i;
+    int i = void;
     int ret = 0;
 
     for (i = 0; i < numStates; i++)
@@ -495,10 +475,9 @@ xf2osState(int state)
     return ret;
 }
 
-static int
-os2xfState(int state)
+private int os2xfState(int state)
 {
-    int i;
+    int i = void;
     int ret = 0;
 
     for (i = 0; i < numStates; i++)
@@ -507,10 +486,9 @@ os2xfState(int state)
     return ret;
 }
 
-static int
-getOsStateMask(void)
+private int getOsStateMask()
 {
-    int i;
+    int i = void;
     int ret = 0;
 
     for (i = 0; i < numStates; i++)
@@ -518,13 +496,12 @@ getOsStateMask(void)
     return ret;
 }
 
-static int osStateMask = 0;
+private int osStateMask = 0;
 
-int
-xf86SetSerialModemState(int fd, int state)
+int xf86SetSerialModemState(int fd, int state)
 {
-    int ret;
-    int s;
+    int ret = void;
+    int s = void;
 
     if (fd < 0)
         return -1;
@@ -533,9 +510,9 @@ xf86SetSerialModemState(int fd, int state)
     if (!isatty(fd))
         return 0;
 
-#ifndef TIOCMGET
+version (TIOCMGET) {} else {
     return -1;
-#else
+} version (TIOCMGET) {
     if (!osStateMask)
         osStateMask = getOsStateMask();
 
@@ -550,14 +527,13 @@ xf86SetSerialModemState(int fd, int state)
         return -1;
     else
         return 0;
-#endif
+}
 }
 
-int
-xf86GetSerialModemState(int fd)
+int xf86GetSerialModemState(int fd)
 {
-    int ret;
-    int s;
+    int ret = void;
+    int s = void;
 
     if (fd < 0)
         return -1;
@@ -566,21 +542,20 @@ xf86GetSerialModemState(int fd)
     if (!isatty(fd))
         return 0;
 
-#ifndef TIOCMGET
+version (TIOCMGET) {} else {
     return -1;
-#else
+} version (TIOCMGET) {
     SYSCALL((ret = ioctl(fd, TIOCMGET, &s)));
     if (ret < 0)
         return -1;
     return os2xfState(s);
-#endif
+}
 }
 
-int
-xf86SerialModemSetBits(int fd, int bits)
+int xf86SerialModemSetBits(int fd, int bits)
 {
-    int ret;
-    int s;
+    int ret = void;
+    int s = void;
 
     if (fd < 0)
         return -1;
@@ -589,20 +564,19 @@ xf86SerialModemSetBits(int fd, int bits)
     if (!isatty(fd))
         return 0;
 
-#ifndef TIOCMGET
+version (TIOCMGET) {} else {
     return -1;
-#else
+} version (TIOCMGET) {
     s = xf2osState(bits);
     SYSCALL((ret = ioctl(fd, TIOCMBIS, &s)));
     return ret;
-#endif
+}
 }
 
-int
-xf86SerialModemClearBits(int fd, int bits)
+int xf86SerialModemClearBits(int fd, int bits)
 {
-    int ret;
-    int s;
+    int ret = void;
+    int s = void;
 
     if (fd < 0)
         return -1;
@@ -611,11 +585,11 @@ xf86SerialModemClearBits(int fd, int bits)
     if (!isatty(fd))
         return 0;
 
-#ifndef TIOCMGET
+version (TIOCMGET) {} else {
     return -1;
-#else
+} version (TIOCMGET) {
     s = xf2osState(bits);
     SYSCALL((ret = ioctl(fd, TIOCMBIC, &s)));
     return ret;
-#endif
+}
 }

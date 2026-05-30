@@ -1,50 +1,52 @@
-#include <xorg-config.h>
+module drm_platform.c;
+@nogc nothrow:
+extern(C): __gshared:
+import xorg_config;
 
-#ifdef XSERVER_PLATFORM_BUS
+version (XSERVER_PLATFORM_BUS) {
 
-#include <xf86drm.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <errno.h>
-#include <string.h>
+import xf86drm;
+import core.sys.posix.fcntl;
+import core.sys.posix.unistd;
+import core.stdc.errno;
+import core.stdc.string;
 
-#include "config/hotplug_priv.h"
+import config.hotplug_priv;
 
 /* Linux platform device support */
-#include "xf86_OSproc.h"
+import xf86_OSproc;
 
-#include "xf86_priv.h"
-#include "xf86_os_support.h"
-#include "xf86platformBus_priv.h"
-#include "xf86Bus.h"
+import xf86_priv;
+import xf86_os_support;
+import xf86platformBus_priv;
+import xf86Bus;
 
-#include "../linux/systemd-logind.h"
-#include "seatd-libseat.h"
+import linux.systemd_logind;
+import seatd.libseat;
 
-static Bool
-get_drm_info(struct OdevAttributes *attribs, char *path, int delayed_index)
+private Bool get_drm_info(OdevAttributes* attribs, char* path, int delayed_index)
 {
-    drmVersionPtr v;
+    drmVersionPtr v = void;
     int fd = -1;
     int err = 0;
     Bool paused = FALSE, server_fd = FALSE;
 
-    LogMessage(X_INFO, "Platform probe for %s\n", attribs->syspath);
+    LogMessage(X_INFO, "Platform probe for %s\n", attribs.syspath);
 
     fd = seatd_libseat_open_graphics(path);
     if (fd != -1) {
-        attribs->fd = fd;
+        attribs.fd = fd;
         server_fd = TRUE;
     } else {
-       fd = systemd_logind_take_fd(attribs->major, attribs->minor, path, &paused);
+       fd = systemd_logind_take_fd(attribs.major, attribs.minor, path, &paused);
        if (fd != -1) {
             if (paused) {
                 LogMessage(X_ERROR,
                         "Error systemd-logind returned paused fd for drm node\n");
-                systemd_logind_release_fd(attribs->major, attribs->minor, -1);
+                systemd_logind_release_fd(attribs.major, attribs.minor, -1);
                 return FALSE;
             }
-            attribs->fd = fd;
+            attribs.fd = fd;
             server_fd = TRUE;
         }
     }
@@ -70,38 +72,37 @@ get_drm_info(struct OdevAttributes *attribs, char *path, int delayed_index)
     v = drmGetVersion(fd);
     if (!v) {
         LogMessageVerb(X_ERROR, 1, "%s: failed to query DRM version\n", path);
-        goto out;
+        goto out_;
     }
 
-    xf86_platform_odev_attributes(delayed_index)->driver = XNFstrdup(v->name);
+    xf86_platform_odev_attributes(delayed_index).driver = XNFstrdup(v.name);
     drmFreeVersion(v);
 
-out:
+out_:
     if (!server_fd)
         close(fd);
     return (err == 0);
 }
 
-Bool
-xf86PlatformDeviceCheckBusID(struct xf86_platform_device *device, const char *busid)
+Bool xf86PlatformDeviceCheckBusID(xf86_platform_device* device, const(char)* busid)
 {
-    const char *syspath = device->attribs->syspath;
-    BusType bustype;
-    const char *id;
+    const(char)* syspath = device.attribs.syspath;
+    BusType bustype = void;
+    const(char)* id = void;
 
     if (!syspath)
         return FALSE;
 
     bustype = StringToBusType(busid, &id);
     if (bustype == BUS_PCI) {
-        struct pci_device *pPci = device->pdev;
+        pci_device* pPci = device.pdev;
         if (!pPci)
             return FALSE;
 
         if (xf86ComparePciBusString(busid,
-                                    ((pPci->domain << 8)
-                                     | pPci->bus),
-                                    pPci->dev, pPci->func)) {
+                                    ((pPci.domain << 8)
+                                     | pPci.bus),
+                                    pPci.dev, pPci.func)) {
             return TRUE;
         }
     }
@@ -117,18 +118,17 @@ xf86PlatformDeviceCheckBusID(struct xf86_platform_device *device, const char *bu
         return TRUE;
     }
     else if (bustype == BUS_USB) {
-        if (strcasecmp(busid, device->attribs->busid))
+        if (strcasecmp(busid, device.attribs.busid))
             return FALSE;
         return TRUE;
     }
     return FALSE;
 }
 
-void
-xf86PlatformReprobeDevice(int index, struct OdevAttributes *attribs)
+void xf86PlatformReprobeDevice(int index, OdevAttributes* attribs)
 {
-    Bool ret;
-    char *dpath = attribs->path;
+    Bool ret = void;
+    char* dpath = attribs.path;
 
     ret = get_drm_info(attribs, dpath, index);
     if (ret == FALSE) {
@@ -140,18 +140,17 @@ xf86PlatformReprobeDevice(int index, struct OdevAttributes *attribs)
         xf86_remove_platform_device(index);
 }
 
-void
-xf86PlatformDeviceProbe(struct OdevAttributes *attribs)
+void xf86PlatformDeviceProbe(OdevAttributes* attribs)
 {
-    int i;
-    char *path = attribs->path;
-    Bool ret;
+    int i = void;
+    char* path = attribs.path;
+    Bool ret = void;
 
     if (!path)
         goto out_free;
 
     for (i = 0; i < xf86_num_platform_devices; i++) {
-        char *dpath = xf86_platform_odev_attributes(i)->path;
+        char* dpath = xf86_platform_odev_attributes(i).path;
 
         if (dpath && !strcmp(path, dpath))
             break;
@@ -179,11 +178,11 @@ out_free:
     config_odev_free_attributes(attribs);
 }
 
-void NewGPUDeviceRequest(struct OdevAttributes *attribs)
+void NewGPUDeviceRequest(OdevAttributes* attribs)
 {
     int old_num = xf86_num_platform_devices;
-    int ret;
-    const char *driver_name;
+    int ret = void;
+    const(char)* driver_name = void;
 
     xf86PlatformDeviceProbe(attribs);
 
@@ -205,22 +204,22 @@ void NewGPUDeviceRequest(struct OdevAttributes *attribs)
     return;
 }
 
-void DeleteGPUDeviceRequest(struct OdevAttributes *attribs)
+void DeleteGPUDeviceRequest(OdevAttributes* attribs)
 {
-    int index;
-    char *syspath = attribs->syspath;
+    int index = void;
+    char* syspath = attribs.syspath;
 
     if (!syspath)
-        goto out;
+        goto out_;
 
     for (index = 0; index < xf86_num_platform_devices; index++) {
-        char *dspath = xf86_platform_odev_attributes(index)->syspath;
+        char* dspath = xf86_platform_odev_attributes(index).syspath;
         if (dspath && !strcmp(syspath, dspath))
             break;
     }
 
     if (index == xf86_num_platform_devices)
-        goto out;
+        goto out_;
 
     ErrorF("xf86: remove device %d %s\n", index, syspath);
 
@@ -228,8 +227,8 @@ void DeleteGPUDeviceRequest(struct OdevAttributes *attribs)
             xf86_remove_platform_device(index);
     else
             xf86platformRemoveDevice(index);
-out:
+out_:
     config_odev_free_attributes(attribs);
 }
 
-#endif
+}

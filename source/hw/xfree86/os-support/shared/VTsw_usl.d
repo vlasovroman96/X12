@@ -1,3 +1,6 @@
+module VTsw_usl.c;
+@nogc nothrow:
+extern(C): __gshared:
 /*
  * Copyright 1993 by David Wexelblat <dwex@XFree86.org>
  *
@@ -20,18 +23,18 @@
  * PERFORMANCE OF THIS SOFTWARE.
  *
  */
-#include <xorg-config.h>
+import xorg_config;
 
-#include <X11/X.h>
+import X11.X;
 
-#include "os/osdep.h"
+import os.osdep;
 
-#include "xf86.h"
-#include "xf86Priv.h"
-#include "xf86_os_support.h"
-#include "xf86_OSlib.h"
+import xf86;
+import xf86Priv;
+import xf86_os_support;
+import xf86_OSlib;
 
-#include "seatd-libseat.h"
+import seatd_libseat;
 
 /*
  * Handle the VT-switching interface for OSs that use USL-style ioctl()s
@@ -43,22 +46,19 @@
  * This function is the signal handler for the VT-switching signal.  It
  * is only referenced inside the OS-support layer.
  */
-void
-xf86VTRequest(int sig)
+void xf86VTRequest(int sig)
 {
-    OsSignal(sig, (void (*)(int)) xf86VTRequest);
+    OsSignal(sig, cast(void function(int)) xf86VTRequest);
     xf86Info.vtRequestsPending = TRUE;
     return;
 }
 
-Bool
-xf86VTSwitchPending(void)
+Bool xf86VTSwitchPending()
 {
     return xf86Info.vtRequestsPending ? TRUE : FALSE;
 }
 
-Bool
-xf86VTSwitchAway(void)
+Bool xf86VTSwitchAway()
 {
     xf86Info.vtRequestsPending = FALSE;
     if (seatd_libseat_controls_session())
@@ -69,8 +69,7 @@ xf86VTSwitchAway(void)
         return TRUE;
 }
 
-Bool
-xf86VTSwitchTo(void)
+Bool xf86VTSwitchTo()
 {
     xf86Info.vtRequestsPending = FALSE;
     if (seatd_libseat_controls_session())
@@ -81,13 +80,12 @@ xf86VTSwitchTo(void)
         return TRUE;
 }
 
-Bool
-xf86VTActivate(int vtno)
+Bool xf86VTActivate(int vtno)
 {
-#ifdef VT_ACTIVATE
+version (VT_ACTIVATE) {
     if (ioctl(xf86Info.consoleFd, VT_ACTIVATE, vtno) < 0) {
         return FALSE;
     }
-#endif
+}
     return TRUE;
 }

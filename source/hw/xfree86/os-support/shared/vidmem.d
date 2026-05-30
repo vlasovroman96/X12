@@ -1,3 +1,6 @@
+module vidmem.c;
+@nogc nothrow:
+extern(C): __gshared:
 /*
  * Copyright (c) 1993-2003 by The XFree86 Project, Inc.
  *
@@ -24,28 +27,27 @@
  * the sale, use or other dealings in this Software without prior written
  * authorization from the copyright holder(s) and author(s).
  */
-#include <xorg-config.h>
+import xorg_config;
 
-#include <X11/X.h>
-#include "input.h"
-#include "scrnintstr.h"
+import X11.X;
+import input;
+import scrnintstr;
 
-#include "xf86.h"
-#include "xf86Priv.h"
-#include "xf86_os_support.h"
-#include "xf86_OSlib.h"
+import xf86;
+import xf86Priv;
+import xf86_os_support;
+import xf86_OSlib;
 
 /*
  * This file contains the common part of the video memory mapping functions
  */
 
-static VidMemInfo vidMemInfo = { FALSE, };
+private VidMemInfo vidMemInfo = { FALSE, };
 
-void
-xf86InitVidMem(void)
+void xf86InitVidMem()
 {
     if (!vidMemInfo.initialised) {
-        memset(&vidMemInfo, 0, sizeof(VidMemInfo));
+        memset(&vidMemInfo, 0, VidMemInfo.sizeof);
         xf86OSInitVidMem(&vidMemInfo);
     }
 }

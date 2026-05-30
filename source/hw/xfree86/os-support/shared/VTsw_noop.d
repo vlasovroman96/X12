@@ -1,3 +1,6 @@
+module VTsw_noop.c;
+@nogc nothrow:
+extern(C): __gshared:
 /*
  * Copyright 1993 by David Wexelblat <dwex@XFree86.org>
  *
@@ -20,26 +23,35 @@
  * PERFORMANCE OF THIS SOFTWARE.
  *
  */
+import xorg_config;
+
+import X11.X;
+
+import xf86;
+import xf86Priv;
+import xf86_os_support;
+import xf86_OSlib;
+
 /*
- * Some platforms don't bother with I/O permissions,
- * or the permissions are implicit with opening/enabling the console.
+ * No-op functions for OSs without VTs
  */
 
-#include <xorg-config.h>
+Bool xf86VTSwitchPending()
+{
+    return FALSE;
+}
 
-#include <X11/X.h>
-#include "xf86.h"
-#include "xf86Priv.h"
-#include "xf86_OSlib.h"
+Bool xf86VTSwitchAway()
+{
+    return FALSE;
+}
 
-Bool
-xf86EnableIO(void)
+Bool xf86VTSwitchTo()
 {
     return TRUE;
 }
 
-void
-xf86DisableIO(void)
+Bool xf86VTActivate(int vtno)
 {
-    return;
+    return TRUE;
 }

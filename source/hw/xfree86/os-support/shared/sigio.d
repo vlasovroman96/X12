@@ -1,3 +1,10 @@
+module sigio.c;
+@nogc nothrow:
+extern(C): __gshared:
+
+private template HasVersion(string versionId) {
+	mixin("version("~versionId~") {enum HasVersion = true;} else {enum HasVersion = false;}");
+}
 /* sigio.c -- Support for SIGIO handler installation and removal
  * Created: Thu Jun  3 15:39:18 1999 by faith@precisioninsight.com
  *
@@ -51,51 +58,50 @@
  * the sale, use or other dealings in this Software without prior written
  * authorization from the copyright holder(s) and author(s).
  */
-#include <xorg-config.h>
+import xorg_config;
 
-#include <errno.h>
-#include <sys/stat.h>
-#include <X11/X.h>
+import core.stdc.errno;
+import core.sys.posix.sys.stat;
+import X11.X;
 
-#include "os/osdep.h"
-#include "os/xserver_poll.h"
+import os.osdep;
+import os.xserver_poll;
 
-#include "xf86.h"
-#include "xf86Priv.h"
-#include "xf86_os_support.h"
-#include "xf86_OSlib.h"
-#include "inputstr.h"
+import xf86;
+import xf86Priv;
+import xf86_os_support;
+import xf86_OSlib;
+import inputstr;
 
-#ifdef HAVE_STROPTS_H
-#include <stropts.h>
-#endif
+version (HAVE_STROPTS_H) {
+import stropts;
+}
 
-#ifdef MAXDEVICES
+version (MAXDEVICES) {
 /* MAXDEVICES represents the maximum number of input devices usable
  * at the same time plus one entry for DRM support.
  */
-#define MAX_FUNCS   (MAXDEVICES + 1)
-#else
-#define MAX_FUNCS 16
-#endif
+enum MAX_FUNCS =   (MAXDEVICES + 1);
+} else {
+enum MAX_FUNCS = 16;
+}
 
-typedef struct _xf86SigIOFunc {
-    void (*f) (int, void *);
+struct Xf86SigIOFunc {
+    void function(int, void*) f;
     int fd;
-    void *closure;
-} Xf86SigIOFunc;
+    void* closure;
+}
 
-static Xf86SigIOFunc xf86SigIOFuncs[MAX_FUNCS];
-static int xf86SigIOMax;
-static struct pollfd *xf86SigIOFds;
-static int xf86SigIONum;
+private Xf86SigIOFunc[MAX_FUNCS] xf86SigIOFuncs;
+private int xf86SigIOMax;
+private pollfd* xf86SigIOFds;
+private int xf86SigIONum;
 
-static Bool
-xf86SigIOAdd(int fd)
+private Bool xf86SigIOAdd(int fd)
 {
-    struct pollfd *n;
+    pollfd* n = void;
 
-    n = realloc(xf86SigIOFds, (xf86SigIONum + 1) * sizeof (struct pollfd));
+    n = cast(pollfd*) realloc(xf86SigIOFds, (xf86SigIONum + 1) * pollfd.sizeof);
     if (!n)
         return FALSE;
 
@@ -106,13 +112,12 @@ xf86SigIOAdd(int fd)
     return TRUE;
 }
 
-static void
-xf86SigIORemove(int fd)
+private void xf86SigIORemove(int fd)
 {
-    int i;
+    int i = void;
     for (i = 0; i < xf86SigIONum; i++)
         if (xf86SigIOFds[i].fd == fd) {
-            memmove(&xf86SigIOFds[i], &xf86SigIOFds[i+1], (xf86SigIONum - i - 1) * sizeof (struct pollfd));
+            memmove(&xf86SigIOFds[i], &xf86SigIOFds[i+1], (xf86SigIONum - i - 1) * pollfd.sizeof);
             xf86SigIONum--;
             break;
         }
@@ -122,12 +127,11 @@ xf86SigIORemove(int fd)
  * SIGIO gives no way of discovering which fd signalled, select
  * to discover
  */
-static void
-xf86SIGIO(int sig)
+private void xf86SIGIO(int sig)
 {
-    int i, f;
+    int i = void, f = void;
     int save_errno = errno;     /* do not clobber the global errno */
-    int r;
+    int r = void;
 
     inSignalContext = TRUE;
 
@@ -150,42 +154,38 @@ xf86SIGIO(int sig)
     inSignalContext = FALSE;
 }
 
-static int
-xf86IsPipe(int fd)
+private int xf86IsPipe(int fd)
 {
-    struct stat buf;
+    stat buf = void;
 
     if (fstat(fd, &buf) < 0)
         return 0;
     return S_ISFIFO(buf.st_mode);
 }
 
-static void
-block_sigio(void)
+private void block_sigio()
 {
-    sigset_t set;
+    sigset_t set = void;
 
     sigemptyset(&set);
     sigaddset(&set, SIGIO);
-    xthread_sigmask(SIG_BLOCK, &set, NULL);
+    xthread_sigmask(SIG_BLOCK, &set, null);
 }
 
-static void
-release_sigio(void)
+private void release_sigio()
 {
-    sigset_t set;
+    sigset_t set = void;
 
     sigemptyset(&set);
     sigaddset(&set, SIGIO);
-    xthread_sigmask(SIG_UNBLOCK, &set, NULL);
+    xthread_sigmask(SIG_UNBLOCK, &set, null);
 }
 
-int
-xf86InstallSIGIOHandler(int fd, void (*f) (int, void *), void *closure)
+int xf86InstallSIGIOHandler(int fd, void function(int, void*) f, void* closure)
 {
-    struct sigaction sa;
-    struct sigaction osa;
-    int i;
+    sigaction sa = void;
+    sigaction osa = void;
+    int i = void;
     int installed = FALSE;
 
     for (i = 0; i < MAX_FUNCS; i++) {
@@ -193,7 +193,7 @@ xf86InstallSIGIOHandler(int fd, void (*f) (int, void *), void *closure)
             if (xf86IsPipe(fd))
                 return 0;
             block_sigio();
-#ifdef O_ASYNC
+version (O_ASYNC) {
             if (fcntl(fd, F_SETFL, fcntl(fd, F_GETFL) | O_ASYNC) == -1) {
                 LogMessageVerb(X_WARNING, 1, "fcntl(%d, O_ASYNC): %s\n",
                                fd, strerror(errno));
@@ -207,8 +207,8 @@ xf86InstallSIGIOHandler(int fd, void (*f) (int, void *), void *closure)
                     installed = TRUE;
                 }
             }
-#endif
-#if defined(I_SETSIG) && defined(HAVE_ISASTREAM)
+}
+static if (HasVersion!"I_SETSIG" && HasVersion!"HAVE_ISASTREAM") {
             /* System V Streams - used on Solaris for input devices */
             if (!installed && isastream(fd)) {
                 if (ioctl(fd, I_SETSIG, S_INPUT | S_ERROR | S_HANGUP) == -1) {
@@ -219,7 +219,7 @@ xf86InstallSIGIOHandler(int fd, void (*f) (int, void *), void *closure)
                     installed = TRUE;
                 }
             }
-#endif
+}
             if (!installed) {
                 release_sigio();
                 return 0;
@@ -248,14 +248,13 @@ xf86InstallSIGIOHandler(int fd, void (*f) (int, void *), void *closure)
     return 0;
 }
 
-int
-xf86RemoveSIGIOHandler(int fd)
+int xf86RemoveSIGIOHandler(int fd)
 {
-    struct sigaction sa;
-    struct sigaction osa;
-    int i;
-    int max;
-    int ret;
+    sigaction sa = void;
+    sigaction osa = void;
+    int i = void;
+    int max = void;
+    int ret = void;
 
     max = 0;
     ret = 0;
@@ -274,17 +273,17 @@ xf86RemoveSIGIOHandler(int fd)
         }
     }
     if (ret) {
-#ifdef O_ASYNC
+version (O_ASYNC) {
         fcntl(fd, F_SETFL, fcntl(fd, F_GETFL) & ~O_ASYNC);
-#endif
-#if defined(I_SETSIG) && defined(HAVE_ISASTREAM)
+}
+static if (HasVersion!"I_SETSIG" && HasVersion!"HAVE_ISASTREAM") {
         if (isastream(fd)) {
             if (ioctl(fd, I_SETSIG, 0) == -1) {
                 LogMessageVerb(X_WARNING, 1, "fcntl(%d, I_SETSIG, 0): %s\n",
                                fd, strerror(errno));
             }
         }
-#endif
+}
         xf86SigIOMax = max;
         if (!max) {
             sigemptyset(&sa.sa_mask);

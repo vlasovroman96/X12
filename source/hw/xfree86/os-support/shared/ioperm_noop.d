@@ -1,3 +1,6 @@
+module ioperm_noop.c;
+@nogc nothrow:
+extern(C): __gshared:
 /*
  * Copyright 1993 by David Wexelblat <dwex@XFree86.org>
  *
@@ -20,39 +23,24 @@
  * PERFORMANCE OF THIS SOFTWARE.
  *
  */
-#include <xorg-config.h>
-
-#include <X11/X.h>
-
-#include "xf86.h"
-#include "xf86Priv.h"
-#include "xf86_os_support.h"
-#include "xf86_OSlib.h"
-
 /*
- * No-op functions for OSs without VTs
+ * Some platforms don't bother with I/O permissions,
+ * or the permissions are implicit with opening/enabling the console.
  */
 
-Bool
-xf86VTSwitchPending(void)
-{
-    return FALSE;
-}
+import xorg_config;
 
-Bool
-xf86VTSwitchAway(void)
-{
-    return FALSE;
-}
+import X11.X;
+import xf86;
+import xf86Priv;
+import xf86_OSlib;
 
-Bool
-xf86VTSwitchTo(void)
+Bool xf86EnableIO()
 {
     return TRUE;
 }
 
-Bool
-xf86VTActivate(int vtno)
+void xf86DisableIO()
 {
-    return TRUE;
+    return;
 }

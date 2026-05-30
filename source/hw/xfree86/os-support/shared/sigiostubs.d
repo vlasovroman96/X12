@@ -1,5 +1,8 @@
+module sigiostubs.c;
+@nogc nothrow:
+extern(C): __gshared:
 /*
- * Copyright (c) 2000 by The XFree86 Project, Inc.
+ * Copyright (c) 1999-2003 by The XFree86 Project, Inc.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -24,13 +27,21 @@
  * the sale, use or other dealings in this Software without prior written
  * authorization from the copyright holder(s) and author(s).
  */
-#include <xorg-config.h>
+import xorg_config;
 
-#include "xf86_OSproc.h"
+import X11.X;
 
-int
-xf86LoadKernelModule(const char *pathname)
+import xf86;
+import xf86Priv;
+import xf86_os_support;
+import xf86_OSlib;
+
+int xf86InstallSIGIOHandler(int fd, void function(int, void*) f, void* closure)
 {
-    (void) pathname;
-    return 0;                   /* failure */
+    return 0;
+}
+
+int xf86RemoveSIGIOHandler(int fd)
+{
+    return 0;
 }

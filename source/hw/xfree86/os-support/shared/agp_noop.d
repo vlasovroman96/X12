@@ -1,5 +1,9 @@
+module agp_noop.c;
+@nogc nothrow:
+extern(C): __gshared:
+import core.stdc.config: c_long, c_ulong;
 /*
- * Copyright (c) 2000 by The XFree86 Project, Inc.
+ * Copyright (c) 2000-2003 by The XFree86 Project, Inc.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -25,19 +29,61 @@
  * authorization from the copyright holder(s) and author(s).
  */
 
-/* Stubs for the OS-support layer power-management functions. */
-#include <xorg-config.h>
+/*
+ * Abstraction of the AGP GART interface.  Stubs for platforms without
+ * AGP GART support.
+ */
+import xorg_config;
 
-#include <X11/X.h>
+import X11.X;
 
-#include "os.h"
-#include "xf86.h"
-#include "xf86Priv.h"
-#include "xf86_os_support.h"
-#include "xf86_OSproc.h"
+import xf86;
+import xf86Priv;
+import xf86_os_support;
+import xf86_OSlib;
+import xf86_os_support;
 
-PMClose
-xf86OSPMOpen(void)
+Bool xf86GARTCloseScreen(int screenNum)
 {
-    return NULL;
+    return FALSE;
+}
+
+Bool xf86AgpGARTSupported()
+{
+    return FALSE;
+}
+
+AgpInfoPtr xf86GetAGPInfo(int screenNum)
+{
+    return null;
+}
+
+Bool xf86AcquireGART(int screenNum)
+{
+    return FALSE;
+}
+
+Bool xf86ReleaseGART(int screenNum)
+{
+    return FALSE;
+}
+
+int xf86AllocateGARTMemory(int screenNum, c_ulong size, int type, c_ulong* physical)
+{
+    return -1;
+}
+
+Bool xf86DeallocateGARTMemory(int screenNum, int key)
+{
+    return FALSE;
+}
+
+Bool xf86BindGARTMemory(int screenNum, int key, c_ulong offset)
+{
+    return FALSE;
+}
+
+Bool xf86UnbindGARTMemory(int screenNum, int key)
+{
+    return FALSE;
 }
