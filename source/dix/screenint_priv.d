@@ -1,4 +1,4 @@
-module screenint_priv.h;
+module dix.screenint_priv;
 @nogc nothrow:
 extern(C): __gshared:
 /* SPDX-License-Identifier: MIT OR X11
@@ -7,7 +7,7 @@ extern(C): __gshared:
  * Copyright © 1987, 1998 The Open Group
  */
  
-public import stdbool;
+// public import stdbool;
 public import deimos.X11.Xdefs;
 
 public import include.callback;

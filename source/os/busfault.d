@@ -1,4 +1,4 @@
-module busfault.c;
+module os.busfault.c;
 @nogc nothrow:
 extern(C): __gshared:
 /*

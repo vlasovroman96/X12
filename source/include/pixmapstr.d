@@ -1,4 +1,4 @@
-module pixmapstr.h;
+module include.pixmapstr.h;
 @nogc nothrow:
 extern(C): __gshared:
 import core.stdc.config: c_long, c_ulong;

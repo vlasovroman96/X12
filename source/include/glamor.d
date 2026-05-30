@@ -120,7 +120,7 @@ extern int glamor_block_handler(ScreenPtr screen);
 
 extern int glamor_create_pixmap(ScreenPtr screen, int w, int h, int depth, uint usage);
 
-/* needed by Xrdp module */
+/* needed by Xrdp module include.*/
 enum GLAMOR_CREATE_PIXMAP_CPU =        0x100;
 enum GLAMOR_CREATE_PIXMAP_FIXUP =      0x101;
 enum GLAMOR_CREATE_FBO_NO_FBO =        0x103;

@@ -1,4 +1,4 @@
-module string.c;
+module os.string.c;
 @nogc nothrow:
 extern(C): __gshared:
 /* SPDX-License-Identifier: MIT OR X11

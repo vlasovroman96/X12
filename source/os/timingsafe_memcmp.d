@@ -1,4 +1,4 @@
-module timingsafe_memcmp.c;
+module os.timingsafe_memcmp.c;
 @nogc nothrow:
 extern(C): __gshared:
 /*

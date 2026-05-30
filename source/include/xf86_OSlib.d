@@ -1,4 +1,4 @@
-module xf86_OSlib.h;
+module include.xf86_OSlib.h;
 @nogc nothrow:
 extern(C): __gshared:
 

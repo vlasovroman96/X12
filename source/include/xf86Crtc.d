@@ -1,4 +1,4 @@
-module xf86Crtc.h;
+module include.xf86Crtc.h;
 @nogc nothrow:
 extern(C): __gshared:
 import core.stdc.config: c_long, c_ulong;

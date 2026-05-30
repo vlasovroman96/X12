@@ -1,4 +1,4 @@
-module wfbrename.h;
+module include.wfbrename.h;
 @nogc nothrow:
 extern(C): __gshared:
  

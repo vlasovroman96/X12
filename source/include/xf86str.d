@@ -1,4 +1,4 @@
-module xf86str.h;
+module include.xf86str.h;
 @nogc nothrow:
 extern(C): __gshared:
 
@@ -729,7 +729,7 @@ struct _ScrnInfoRec {
     DevUnion* privates;         /* Other privates can hook in
                                  * here */
     DriverPtr drv;              /* xf86DriverList[] entry */
-    void* module_;               /* Pointer to module head */
+    void* module_;               /* Pointer to module include.head */
     int colorKey;
     int overlayFlags;
 

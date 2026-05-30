@@ -1,4 +1,4 @@
-module os.log;
+module os.os.log;
 @nogc nothrow:
 extern(C): __gshared:
 import core.stdc.config: c_long, c_ulong;

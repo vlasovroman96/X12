@@ -246,7 +246,7 @@ extern _X_EXPORT DRI2CopyRegion(DrawablePtr pDraw, RegionPtr pRegion, uint dest,
  *
  * Provides a mechanism to other modules (e.g., 2D drivers) to determine the
  * version of the DRI2 extension.  While it is possible to peek directly at
- * the \c XF86ModuleData from a layered module, such a module will fail to
+ * the \c XF86ModuleData from a layered module, such a module include.will fail to
  * load (due to an unresolved symbol) if the DRI2 extension is not loaded.
  *
  * \param major  Location to store the major version of the DRI2 extension

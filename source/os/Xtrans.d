@@ -1,4 +1,4 @@
-module Xtrans.c;
+module os.Xtrans.c;
 @nogc nothrow:
 extern(C): __gshared:
 

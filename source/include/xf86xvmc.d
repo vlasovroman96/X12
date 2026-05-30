@@ -1,4 +1,4 @@
-module xf86xvmc.h;
+module include.xf86xvmc.h;
 @nogc nothrow:
 extern(C): __gshared:
 

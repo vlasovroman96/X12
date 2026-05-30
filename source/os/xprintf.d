@@ -1,4 +1,4 @@
-module xprintf.c;
+module os.xprintf.c;
 @nogc nothrow:
 extern(C): __gshared:
 /**

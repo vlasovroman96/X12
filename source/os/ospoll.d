@@ -1,4 +1,4 @@
-module ospoll.c;
+module os.ospoll.c;
 @nogc nothrow:
 extern(C): __gshared:
 

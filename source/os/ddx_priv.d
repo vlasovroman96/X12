@@ -1,4 +1,4 @@
-module ddx_priv.h;
+module os.ddx_priv.h;
 @nogc nothrow:
 extern(C): __gshared:
 /* SPDX-License-Identifier: MIT OR X11

@@ -33,7 +33,7 @@ extern(C): __gshared:
 /**
  * \file
  *
- * Defines the interface between the libglvnd server module and a vendor
+ * Defines the interface between the libglvnd server module include.and a vendor
  * library.
  *
  * Each screen may have one vendor library assigned to it. The GLVND module
@@ -44,7 +44,7 @@ extern(C): __gshared:
  * Display drivers are responsible for creating handles for its GLX
  * implementations, and assigning those handles to each screen.
  *
- * The GLVND module keeps a list of callbacks, which are called from
+ * The GLVND module include.keeps a list of callbacks, which are called from
  * InitExtensions. Drivers should use that callback to assign a vendor
  * handle to whichever screens they support.
  *

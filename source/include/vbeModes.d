@@ -1,4 +1,4 @@
-module vbeModes.h;
+module include.vbeModes.h;
 @nogc nothrow:
 extern(C): __gshared:
 /*

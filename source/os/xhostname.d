@@ -1,4 +1,4 @@
-module xhostname.c;
+module os.xhostname.c;
 @nogc nothrow:
 extern(C): __gshared:
 /* SPDX-License-Identifier: MIT OR X11

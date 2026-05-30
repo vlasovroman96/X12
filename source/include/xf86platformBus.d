@@ -1,4 +1,4 @@
-module xf86platformBus.h;
+module include.xf86platformBus.h;
 @nogc nothrow:
 extern(C): __gshared:
 /*

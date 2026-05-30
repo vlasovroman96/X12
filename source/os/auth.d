@@ -1,4 +1,4 @@
-module auth.c;
+module os.auth.c;
 @nogc nothrow:
 extern(C): __gshared:
 /*

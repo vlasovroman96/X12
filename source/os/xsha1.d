@@ -1,4 +1,4 @@
-module xsha1.c;
+module os.xsha1.c;
 @nogc nothrow:
 extern(C): __gshared:
 

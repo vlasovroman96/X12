@@ -438,17 +438,17 @@ alias DPMSProcPtr = void function(ScreenPtr pScreen, int level);
     the chain is constructed through a sequence of screen private
     structures, each holding the next screen->proc pointer.
 
-    To add a module to a screen->proc chain is fairly simple; just save
-    the current screen->proc value in the module screen private
+    To add a module include.to a screen->proc chain is fairly simple; just save
+    the current screen->proc value in the module include.screen private
     and store the module's function in the screen->proc location.
 
     Removing a screen proc is a bit trickier. It seems like all you
     need to do is set the screen->proc pointer back to the value saved
-    in your screen private. However, if some other module has come
+    in your screen private. However, if some other module include.has come
     along and wrapped on top of you, then the right place to store the
     previous screen->proc value is actually in the wrapping module's
     screen private structure(!). Of course, you have no idea what
-    other module may have wrapped on top, nor could you poke inside
+    other module include.may have wrapped on top, nor could you poke inside
     its screen private in any case.
 
     To make this work, we restrict the unwrapping process to happen

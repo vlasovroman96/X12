@@ -1,4 +1,4 @@
-module xf86Xinput.h;
+module include.xf86Xinput.h;
 @nogc nothrow:
 extern(C): __gshared:
 /*
@@ -73,7 +73,7 @@ enum XI86_SERVER_FD =		0x20	/* fd is managed by xserver */;
 /* Input device driver capabilities */
 enum XI86_DRV_CAP_SERVER_FD =	0x01;
 
-/* This holds the input driver entry and module information. */
+/* This holds the input driver entry and module include.information. */
 struct _InputDriverRec {
     int driverVersion;
     const(char)* driverName;

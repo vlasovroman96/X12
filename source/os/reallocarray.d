@@ -1,4 +1,4 @@
-module reallocarray.c;
+module os.reallocarray.c;
 @nogc nothrow:
 extern(C): __gshared:
 /*	$OpenBSD: reallocarray.c,v 1.2 2014/12/08 03:45:00 bcook Exp $	*/

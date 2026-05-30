@@ -1,4 +1,4 @@
-module xkbstr.h;
+module include.xkbstr.h;
 @nogc nothrow:
 extern(C): __gshared:
 

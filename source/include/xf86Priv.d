@@ -1,4 +1,4 @@
-module xf86Priv.h;
+module include.xf86Priv.h;
 @nogc nothrow:
 extern(C): __gshared:
 /*

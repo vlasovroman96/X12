@@ -1,4 +1,4 @@
-module servermd.h;
+module include.servermd.h;
 @nogc nothrow:
 extern(C): __gshared:
 /***********************************************************

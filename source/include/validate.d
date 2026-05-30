@@ -1,4 +1,4 @@
-module validate.h;
+module include.validate;
 @nogc nothrow:
 extern(C): __gshared:
 
@@ -28,8 +28,8 @@ in this Software without prior written authorization from The Open Group.
 */
 
  
-public import miscstruct;
-public import regionstr;
+public import include.miscstruct;
+public import include.regionstr;
 
 enum VTKind { VTOther, VTStack, VTMove, VTUnmap, VTMap, VTBroken }
 alias VTOther = VTKind.VTOther;

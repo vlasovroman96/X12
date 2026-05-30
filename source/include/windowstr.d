@@ -1,4 +1,4 @@
-module windowstr.h;
+module include.windowstr.h;
 @nogc nothrow:
 extern(C): __gshared:
 /***********************************************************

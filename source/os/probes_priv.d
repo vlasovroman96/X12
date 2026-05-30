@@ -1,4 +1,4 @@
-module probes_priv.h;
+module os.probes_priv.h;
 @nogc nothrow:
 extern(C): __gshared:
 /*

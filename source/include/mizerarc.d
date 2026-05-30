@@ -1,4 +1,4 @@
-module mizerarc.h;
+module include.mizerarc.h;
 @nogc nothrow:
 extern(C): __gshared:
 /************************************************************

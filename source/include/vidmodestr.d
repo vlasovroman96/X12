@@ -1,4 +1,4 @@
-module vidmodestr.h;
+module include.vidmodestr.h;
 @nogc nothrow:
 extern(C): __gshared:
  

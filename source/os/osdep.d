@@ -1,4 +1,4 @@
-module osdep.h;
+module os.osdep;
 @nogc nothrow:
 extern(C): __gshared:
 
@@ -61,7 +61,7 @@ public import deimos.X11.Xdefs;
 public import core.stdc.limits;
 public import core.stdc.signal;
 public import core.stdc.stddef;
-public import deimos.X11.Xos;
+public import externs.x11.X;
 public import deimos.X11.Xmd;
 public import deimos.X11.Xdefs;
 

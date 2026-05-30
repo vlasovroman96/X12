@@ -1,4 +1,4 @@
-module xf86Module.h;
+module include.xf86Module.h;
 @nogc nothrow:
 extern(C): __gshared:
 /*
@@ -101,10 +101,10 @@ enum LoaderErrorCode {
     LDR_NOENT,                  /* Module file does not exist */
     LDR_NOLOAD,                 /* type specific loader failed */
     LDR_ONCEONLY,               /* Module should only be loaded once (not an error) */
-    LDR_MISMATCH,               /* the module didn't match the spec'd requirements */
+    LDR_MISMATCH,               /* the module include.didn't match the spec'd requirements */
     LDR_BADUSAGE,               /* LoadModule is called with bad arguments */
-    LDR_INVALID,                /* The module doesn't have a valid ModuleData object */
-    LDR_BADOS,                  /* The module doesn't support the OS */
+    LDR_INVALID,                /* The module include.doesn't have a valid ModuleData object */
+    LDR_BADOS,                  /* The module include.doesn't support the OS */
     LDR_MODSPECIFIC             /* A module-specific error in the SetupProc */
 }
 alias LDR_NOERROR = LoaderErrorCode.LDR_NOERROR;
@@ -120,7 +120,7 @@ alias LDR_MODSPECIFIC = LoaderErrorCode.LDR_MODSPECIFIC;
 
 
 /*
- * Some common module classes.  The moduleclass can be used to identify
+ * Some common module include.classes.  The moduleclass can be used to identify
  * that modules loaded are of the correct type.  This is a finer
  * classification than the ABI classes even though the default set of
  * classes have the same names.  For example, not all modules that require
@@ -141,9 +141,9 @@ struct XF86ModuleVersionInfo {
     CARD8 majorversion;         /* module-specific major version */
     CARD8 minorversion;         /* module-specific minor version */
     CARD16 patchlevel;          /* module-specific patch level */
-    const(char)* abiclass;       /* ABI class that the module uses */
+    const(char)* abiclass;       /* ABI class that the module include.uses */
     CARD32 abiversion;          /* ABI version */
-    const(char)* moduleclass;    /* module class description */
+    const(char)* moduleclass;    /* module include.class description */
     CARD32[4] checksum;         /* contains a digital signature of the */
     /* version info structure */
 }
@@ -156,9 +156,9 @@ struct XF86ModReqInfo {
     CARD8 majorversion;         /* module-specific major version */
     CARD8 minorversion;         /* module-specific minor version */
     CARD16 patchlevel;          /* module-specific patch level */
-    const(char)* abiclass;       /* ABI class that the module uses */
+    const(char)* abiclass;       /* ABI class that the module include.uses */
     CARD32 abiversion;          /* ABI version */
-    const(char)* moduleclass;    /* module class */
+    const(char)* moduleclass;    /* module include.class */
 }
 
 enum string MODULE_VERSION_NUMERIC(string maj, string min, string patch) = `
@@ -180,21 +180,21 @@ alias ModuleTearDownProc = void function(void*);
 enum string MODULESETUPPROTO(string func) = `void* func(void*, void*, int*, int*);`;
 
 /*
- * Module information header. Every loadable module needs to export a symbol
- * of that type, so the loader can call into the module for initialization.
+ * Module information header. Every loadable module include.needs to export a symbol
+ * of that type, so the loader can call into the module include.for initialization.
  * The symbol must be named <modulename> + "ModuleData".
  */
 struct XF86ModuleData {
     /* must point to structure with version information */
     XF86ModuleVersionInfo* vers;
-    /* called on module load (if not null) */
+    /* called on module include.load (if not null) */
     ModuleSetupProc setup;
-    /* called on module teardown with setup()'s result as parameter (if not null) */
+    /* called on module include.teardown with setup()'s result as parameter (if not null) */
     ModuleTearDownProc teardown;
 }
 
 /*
- * declare module version info structure for an input driver module
+ * declare module include.version info structure for an input driver module
  */
 enum string XF86_MODULE_VERSION_INPUT(string _name, string _major, string _minor, string _patchlevel) = `
     static XF86ModuleVersionInfo modVersion = { 
@@ -212,7 +212,7 @@ enum string XF86_MODULE_VERSION_INPUT(string _name, string _major, string _minor
     };`;
 
 /*
- * declare module version info structure for an video driver module
+ * declare module include.version info structure for an video driver module
  */
 enum string XF86_MODULE_VERSION_VIDEO(string _name, string _major, string _minor, string _patchlevel) = `
     static XF86ModuleVersionInfo modVersion = { 

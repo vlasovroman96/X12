@@ -1,4 +1,4 @@
-module strndup.c;
+module os.strndup.c;
 @nogc nothrow:
 extern(C): __gshared:
 /*

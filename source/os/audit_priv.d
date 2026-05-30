@@ -1,4 +1,4 @@
-module audit_priv.h;
+module os.audit_priv.h;
 @nogc nothrow:
 extern(C): __gshared:
 /* SPDX-License-Identifier: MIT OR X11

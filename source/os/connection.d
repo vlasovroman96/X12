@@ -1,4 +1,4 @@
-module connection.c;
+module os.connection.c;
 @nogc nothrow:
 extern(C): __gshared:
 

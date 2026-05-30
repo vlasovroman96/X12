@@ -1,4 +1,4 @@
-module dpms.c;
+module Xext.dpms;
 @nogc nothrow:
 extern(C): __gshared:
 /*****************************************************************
@@ -33,7 +33,7 @@ import build.dix_config;
 
 import deimos.X11.X;
 import deimos.X11.Xproto;
-import deimos.X11.extensions.dpmsproto;
+import externs.x11.X;
 
 import dix.dix_priv;
 import dix.request_priv;

@@ -1,4 +1,4 @@
-module propertyst.h;
+module include.propertyst.h;
 @nogc nothrow:
 extern(C): __gshared:
 /***********************************************************

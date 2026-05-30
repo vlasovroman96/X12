@@ -1,4 +1,4 @@
-module osinit.c;
+module os.osinit.c;
 @nogc nothrow:
 extern(C): __gshared:
 

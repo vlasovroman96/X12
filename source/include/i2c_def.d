@@ -1,4 +1,4 @@
-module i2c_def.h;
+module include.i2c_def.h;
 @nogc nothrow:
 extern(C): __gshared:
  

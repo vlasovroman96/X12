@@ -1,4 +1,4 @@
-module backtrace.c;
+module os.backtrace.c;
 @nogc nothrow:
 extern(C): __gshared:
 

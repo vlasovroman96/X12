@@ -1,4 +1,4 @@
-module xf86Cursor.h;
+module include.xf86Cursor.h;
 @nogc nothrow:
 extern(C): __gshared:
 

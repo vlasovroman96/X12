@@ -1,4 +1,4 @@
-module strlcpy.c;
+module os.strlcpy.c;
 @nogc nothrow:
 extern(C): __gshared:
 /*

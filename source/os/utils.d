@@ -1,4 +1,4 @@
-module utils.c;
+module os.utils.c;
 @nogc nothrow:
 extern(C): __gshared:
 

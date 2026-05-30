@@ -1,4 +1,4 @@
-module xf86sbusBus.h;
+module include.xf86sbusBus.h;
 @nogc nothrow:
 extern(C): __gshared:
 import core.stdc.config: c_long, c_ulong;

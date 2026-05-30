@@ -1,4 +1,4 @@
-module mitauth.c;
+module os.mitauth.c;
 @nogc nothrow:
 extern(C): __gshared:
 /*

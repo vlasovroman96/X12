@@ -1,4 +1,4 @@
-module screensaver_priv.h;
+module dix.screensaver_priv;
 @nogc nothrow:
 extern(C): __gshared:
 /* SPDX-License-Identifier: MIT OR X11
@@ -6,7 +6,7 @@ extern(C): __gshared:
  * Copyright © 2024 Enrico Weigelt, metux IT consult <info@metux.net>
  */
  
-public import stdbool;
+// public import stdbool;
 public import deimos.X11.Xdefs;
 public import deimos.X11.Xmd;
 

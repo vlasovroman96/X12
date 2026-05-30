@@ -1,4 +1,4 @@
-module mipointrst.h;
+module include.mipointrst.h;
 @nogc nothrow:
 extern(C): __gshared:
 /*

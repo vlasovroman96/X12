@@ -1,4 +1,4 @@
-module client.c;
+module os.client.c;
 @nogc nothrow:
 extern(C): __gshared:
 
