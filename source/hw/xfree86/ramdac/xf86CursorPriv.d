@@ -1,12 +1,13 @@
-#ifndef _XF86CURSORPRIV_H
-#define _XF86CURSORPRIV_H
+module hw.xfree86.ramdac.xf86CursorPriv;
+@nogc nothrow:
+extern(C): __gshared:
+ 
+public import xorg_config;
 
-#include <xorg-config.h>
+public import xf86Cursor;
+public import mipointrst;
 
-#include "xf86Cursor.h"
-#include "mipointrst.h"
-
-typedef struct {
+struct _Xf86CursorScreenRec {
     Bool SWCursor;
     Bool isUp;
     Bool showTransparent;
@@ -23,16 +24,17 @@ typedef struct {
     miPointerSpriteFuncPtr spriteFuncs;
     Bool PalettedCursor;
     ColormapPtr pInstalledMap;
-    Bool (*SwitchMode) (ScrnInfoPtr, DisplayModePtr);
-    xf86EnableDisableFBAccessProc *EnableDisableFBAccess;
+    Bool function(ScrnInfoPtr, DisplayModePtr) SwitchMode;
+    xf86EnableDisableFBAccessProc* EnableDisableFBAccess;
     CursorPtr SavedCursor;
 
     /* Number of requests to force HW cursor */
     int ForceHWCursorCount;
     Bool HWCursorForced;
 
-    void *transparentData;
-} xf86CursorScreenRec, *xf86CursorScreenPtr;
+    void* transparentData;
+}alias xf86CursorScreenRec = _Xf86CursorScreenRec;
+alias xf86CursorScreenPtr = xf86CursorScreenRec*;
 
 Bool xf86SetCursor(ScreenPtr pScreen, CursorPtr pCurs, int x, int y);
 void xf86SetTransparentCursor(ScreenPtr pScreen);
@@ -41,8 +43,8 @@ void xf86RecolorCursor(ScreenPtr pScreen, CursorPtr pCurs, Bool displayed);
 Bool xf86InitHardwareCursor(ScreenPtr pScreen, xf86CursorInfoPtr infoPtr);
 
 Bool xf86CheckHWCursor(ScreenPtr pScreen, CursorPtr cursor, xf86CursorInfoPtr infoPtr);
-extern _X_EXPORT DevPrivateKeyRec xf86CursorScreenKeyRec;
+extern export DevPrivateKeyRec xf86CursorScreenKeyRec;
 
 extern DevScreenPrivateKeyRec xf86ScreenCursorBitsKeyRec;
 
-#endif                          /* _XF86CURSORPRIV_H */
+                          /* _XF86CURSORPRIV_H */
