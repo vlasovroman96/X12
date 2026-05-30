@@ -1,4 +1,4 @@
-module Pointer.c;
+module hw.xnest.Pointer;
 @nogc nothrow:
 extern(C): __gshared:
 /*

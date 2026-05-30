@@ -168,8 +168,8 @@ enum BLACK_MSG =
 enum WHITE_MSG = 
 "The White keyword must be followed by red, green and blue values.";
 enum SCREEN_MSG = 
-"The Screen keyword must be followed by an optional number, a screen name\n" 
-"\tin quotes, and optional position/layout information.";
+"The Screen keyword must be followed by an optional number, a screen name\n" ~
+"in quotes, and optional position/layout information.";
 enum INVALID_SCR_MSG = 
 "Invalid Screen line.";
 enum INPUTDEV_MSG = 
@@ -200,7 +200,7 @@ enum INVALID_GAMMA_MSG =
 "gamma correction value(s) expected\n either one value or three r/g/b values.";
 enum GROUP_MSG = 
 "The Group keyword must be followed by either a group name in quotes or\n" 
-"\ta numerical group id.";
+~ "a numerical group id.";
 enum MULTIPLE_MSG = 
 "Multiple \"%s\" lines.";
 enum MUST_BE_OCTAL_MSG = 
