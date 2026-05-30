@@ -54,13 +54,13 @@ import os.probes_priv;
 import Xext.panoramiX;
 import Xext.panoramiXsrv;
 
-import misc;
+import include.misc;
 import include.resource;
 import include.inputstr;
 import include.scrnintstr;
 import include.cursorstr;
 import dixstruct;
-import globals;
+import include.globals;
 import mipointer;
 import eventstr;
 import eventconvert;

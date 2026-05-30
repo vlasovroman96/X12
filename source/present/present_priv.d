@@ -31,7 +31,7 @@ public import include.present;
 public import include.syncsdk;
 
 public import include.scrnintstr;
-public import misc;
+public import include.misc;
 public import list;
 public import include.windowstr;
 public import dixstruct;

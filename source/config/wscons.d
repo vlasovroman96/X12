@@ -38,7 +38,7 @@ import core.sys.posix.unistd;
 
 import include.input;
 import include.inputstr;
-import os;
+import include.os;
 import config.config_backends;
 
 enum WSCONS_KBD_DEVICE = "/dev/wskbd";

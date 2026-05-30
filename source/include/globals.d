@@ -1,4 +1,4 @@
-module globals.h;
+module include.globals;
 @nogc nothrow:
 extern(C): __gshared:
  

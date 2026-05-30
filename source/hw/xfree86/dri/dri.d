@@ -61,7 +61,7 @@ import include.sarea;
 
 import xf86;
 import include.xf86drm;
-import misc;
+import include.misc;
 import dixstruct;
 import include.extnsionst;
 import include.cursorstr;

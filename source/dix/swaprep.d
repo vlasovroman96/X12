@@ -56,11 +56,11 @@ import deimos.X11.fonts.fontstruct;
 
 import dix.dix_priv;
 
-import misc;
+import include.misc;
 import dixstruct;
 import include.scrnintstr;
 import swaprep;
-import globals;
+import include.globals;
 
 
 

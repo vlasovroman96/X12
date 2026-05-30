@@ -1,4 +1,4 @@
-module bigreq.c;
+module Xext.bigreq;
 @nogc nothrow:
 extern(C): __gshared:
 /*

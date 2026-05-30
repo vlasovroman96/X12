@@ -21,7 +21,7 @@ import build.dix_config;
 
 import core.sys.posix.sys.types;
 import core.stdc.string;
-import os;
+import include.os;
 
 /*
  * Appends src to string dst of size siz (unlike strncat, siz is the

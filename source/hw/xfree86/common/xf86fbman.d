@@ -38,7 +38,7 @@ import X11.X;
 
 import os.log_priv;
 
-import misc;
+import include.misc;
 import xf86;
 import include.scrnintstr;
 import regionstr;

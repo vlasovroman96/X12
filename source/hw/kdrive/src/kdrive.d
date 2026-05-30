@@ -49,7 +49,7 @@ import include.privates;
 version (RANDR) {
 import include.randrstr;
 }
-import glx_extinit;
+import include.glx_extinit;
 
 version (XV) {
 import kxv;

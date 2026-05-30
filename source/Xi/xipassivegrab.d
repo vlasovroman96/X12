@@ -49,7 +49,7 @@ import include.inputstr;           /* DeviceIntPtr      */
 import include.windowstr;          /* window structure  */
 import swaprep;
 import exglobals;          /* BadDevice */
-import misc;
+import include.misc;
 
 int ProcXIPassiveGrabDevice(ClientPtr client)
 {

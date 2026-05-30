@@ -77,11 +77,11 @@ import core.sys.posix.sys.shm;
 } /* CONFIG-MITSHM */
 import include.dix;
 import miline;
-import glx_extinit;
+import include.glx_extinit;
 import include.randrstr;
 
 version (GLAMOR) {
-import glamor;
+import include.glamor;
 import glamor_egl;
 
 import core.sys.posix.unistd;

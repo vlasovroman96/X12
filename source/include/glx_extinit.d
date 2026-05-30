@@ -1,4 +1,4 @@
-module glx_extinit.h;
+module include.glx_extinit;
 @nogc nothrow:
 extern(C): __gshared:
 /*

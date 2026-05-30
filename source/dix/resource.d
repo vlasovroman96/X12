@@ -137,8 +137,8 @@ import os.probes_priv;
 import Xext.panoramiX;
 import Xext.panoramiXsrv;
 
-import misc;
-import os;
+import include.misc;
+import include.os;
 import include.resource;
 import dixstruct;
 import opaque;

@@ -46,7 +46,7 @@ import dix.dix_priv;
 import os.auth;
 import os.ossock;
 
-import misc;
+import include.misc;
 import osdep;
 import xdmcp;
 import xdmauth;

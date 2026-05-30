@@ -54,7 +54,7 @@ import include.windowstr;          /* window structure  */
 import include.scrnintstr;         /* screen structure  */
 import include.extnsionst;
 import exglobals;
-import misc;
+import include.misc;
 import xace;
 import xiquerydevice;      /* for GetDeviceUse */
 import xkbsrv;

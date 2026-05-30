@@ -1,4 +1,4 @@
-module inlcude.fd_notify;
+module include.fd_notify;
 @nogc nothrow:
 extern(C): __gshared:
 /* SPDX-License-Identifier: MIT OR X11

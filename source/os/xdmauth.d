@@ -46,7 +46,7 @@ import os.auth;
 import os.io_priv;
 import os.Xtrans;
 
-import os;
+import include.os;
 import osdep;
 
 version (XDMCP) {

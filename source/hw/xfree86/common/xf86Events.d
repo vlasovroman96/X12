@@ -68,7 +68,7 @@ import hw.xfree86.common.action_priv;
 import mi.mi_priv;
 import os.log_priv;
 
-import misc;
+import include.misc;
 import xf86_priv;
 import xf86Priv;
 import xf86_os_support;

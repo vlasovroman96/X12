@@ -33,7 +33,7 @@ extern(C): __gshared:
 */
 import xorg_config;
 
-import misc;
+import include.misc;
 import xf86;
 import xf86_OSproc;
 import xf86_OSlib;

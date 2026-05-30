@@ -7,7 +7,7 @@ import X11.X;
 
 import include.xorgVersion;
 
-import os;
+import include.os;
 import include.servermd;
 import include.pixmapstr;
 import include.windowstr;

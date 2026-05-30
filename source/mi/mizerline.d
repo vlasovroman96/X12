@@ -50,7 +50,7 @@ import build.dix_config;
 
 import deimos.X11.X;
 
-import misc;
+import include.misc;
 import include.scrnintstr;
 import include.gcstruct;
 import include.windowstr;

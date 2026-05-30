@@ -63,7 +63,7 @@ import dix.screen_hooks_priv;
 import glamor.glamor_priv;
 import os.bug_priv;
 
-import glamor;
+import include.glamor;
 import glamor_egl;
 import glamor_egl_ext;
 import glamor_egl_priv;

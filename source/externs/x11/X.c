@@ -1,4 +1,11 @@
-#include <X11.Xfuncs.h>;
+
+// #define _IMPORTC_
+#include <X11/Xfuncs.h>
+#include <X11/extensions/XI2proto.h>
+// #endif
+
+
+
 
 // import core.stdc.string;
 

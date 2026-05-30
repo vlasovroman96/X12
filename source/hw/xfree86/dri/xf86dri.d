@@ -54,7 +54,7 @@ import include.dristruct;
 import include.sarea;
 
 import xf86;
-import misc;
+import include.misc;
 import dixstruct;
 import include.extnsionst;
 import include.cursorstr;

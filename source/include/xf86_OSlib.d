@@ -219,7 +219,7 @@ version = CLEARDTR_SUPPORT;
 /**************************************************************************/
 
 /* For PATH_MAX */
-public import misc;
+public import include.misc;
 
 /*
  * Hack originally for ISC 2.2 POSIX headers, but may apply elsewhere,

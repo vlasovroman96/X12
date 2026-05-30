@@ -26,7 +26,7 @@ import mi.mi_priv;
 
 import screenint;
 import include.input;
-import misc;
+import include.misc;
 import include.scrnintstr;
 import include.windowstr;
 import include.servermd;

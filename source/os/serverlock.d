@@ -68,7 +68,7 @@ import dix.dix_priv;
 import os.serverlock;
 import os.osdep;
 
-import os;
+import include.os;
 import opaque;
 
 /*

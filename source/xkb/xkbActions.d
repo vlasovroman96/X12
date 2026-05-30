@@ -47,7 +47,7 @@ import mi.mi_priv;
 import mi.mipointer_priv;
 import xkb.xkbsrv_priv;
 
-import misc;
+import include.misc;
 import include.inputstr;
 import include.exevents;
 import eventstr;

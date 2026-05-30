@@ -36,10 +36,10 @@ import core.stdc.string;
 
 import xkb.xkbsrv_priv;
 
-import misc;
+import include.misc;
 import include.inputstr;
 import xkbgeom_priv;
-import os;
+import include.os;
 
 import xkb.xkbsrv_priv;
 

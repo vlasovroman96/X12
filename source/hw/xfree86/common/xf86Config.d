@@ -71,7 +71,7 @@ import xf86Config;
 import xf86Priv;
 import xf86_OSlib;
 import configProcs;
-import globals;
+import include.globals;
 import include.extension;
 import xf86pciBus;
 import xf86Xinput;

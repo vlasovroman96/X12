@@ -89,7 +89,7 @@ import mi.mi_priv;
 import Xext.panoramiX;
 import Xext.panoramiXsrv;
 
-import misc;
+import include.misc;
 import regionstr;
 import include.scrnintstr;
 import include.gcstruct;
@@ -97,7 +97,7 @@ import include.windowstr;
 import include.pixmap;
 import include.input;
 import dixstruct;
-import globals;
+import include.globals;
 
 /*
     machine-independent graphics exposure code.  any device that uses

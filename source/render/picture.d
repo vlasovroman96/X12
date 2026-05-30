@@ -33,9 +33,9 @@ import dix.screen_hooks_priv;
 import include.extinit;
 import os.osdep;
 
-import misc;
+import include.misc;
 import include.scrnintstr;
-import os;
+import include.os;
 import regionstr;
 import validate;
 import include.windowstr;

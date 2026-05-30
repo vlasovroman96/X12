@@ -27,7 +27,7 @@ import os.osdep;
 
 import screenint;
 import include.input;
-import misc;
+import include.misc;
 import include.scrnintstr;
 import include.servermd;
 

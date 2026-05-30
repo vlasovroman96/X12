@@ -1,4 +1,4 @@
-module screenint.h;
+module include.screenint;
 @nogc nothrow:
 extern(C): __gshared:
 /***********************************************************
@@ -48,7 +48,7 @@ SOFTWARE.
 ******************************************************************/
 
  
-public import misc;
+public import include.misc;
 
 alias PixmapFormatPtr = _PixmapFormat*;
 alias VisualPtr = _Visual*;

@@ -43,7 +43,7 @@ import xkb.xkbout_priv;
 import xkb.xkbsrv_priv;
 import xkb.xkbtext_priv;
 
-import misc;
+import include.misc;
 import include.inputstr;
 import include.dix;
 import xkbstr;

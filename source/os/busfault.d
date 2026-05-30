@@ -30,7 +30,7 @@ import deimos.X11.Xdefs;
 
 import os.busfault;
 
-import misc;
+import include.misc;
 import list;
 import core.stdc.stddef;
 import core.stdc.stdlib;

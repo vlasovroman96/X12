@@ -33,7 +33,7 @@ import os.osdep;
 
 import screenint;
 import include.inputstr;
-import misc;
+import include.misc;
 import include.scrnintstr;
 import include.servermd;
 

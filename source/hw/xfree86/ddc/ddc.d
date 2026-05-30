@@ -17,7 +17,7 @@ import xorg_config;
 import include.xf86DDC;
 import os.osdep;
 
-import misc;
+import include.misc;
 import xf86;
 import xf86_OSproc;
 import core.stdc.string;

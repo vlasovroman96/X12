@@ -39,7 +39,7 @@ import GL.internal.dri_interface;
 
 import miext.extinit_priv;
 
-import os;
+import include.os;
 import glxserver;
 import glxext;
 import glxcontext;

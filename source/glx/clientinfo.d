@@ -25,7 +25,7 @@ extern(C): __gshared:
  */
 import build.dix_config;
 
-import misc;
+import include.misc;
 import glxserver;
 import indirect_dispatch;
 import unpack;

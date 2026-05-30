@@ -1,4 +1,4 @@
-module Xprintf.h;
+module include.Xprintf;
 @nogc nothrow:
 extern(C): __gshared:
 
@@ -33,7 +33,7 @@ public import core.stdc.stdio;
 public import core.stdc.stdarg;
 // public import deimos.X11.Xfuncproto;
 
-public import os;
+public import include.os;
 
 version (_X_RESTRICT_KYWD) {} else {
 static if (HasVersion!"restrict" /* assume autoconf set it correctly */ || 

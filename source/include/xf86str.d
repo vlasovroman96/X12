@@ -41,7 +41,7 @@ import core.stdc.config: c_long, c_ulong;
 
  
 public import include.xlibre_ptrtypes;
-public import misc;
+public import include.misc;
 public import include.input;
 public import include.scrnintstr;
 public import include.pixmapstr;

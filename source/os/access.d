@@ -96,7 +96,7 @@ import os.Xtrans;
 import deimos.X11.Xauth;
 import deimos.X11.X;
 import deimos.X11.Xproto;
-import misc;
+import include.misc;
 import core.stdc.errno;
 import core.sys.posix.sys.types;
 

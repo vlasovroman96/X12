@@ -43,7 +43,7 @@ import os.osdep;
 
 import include.scrnintstr;
 import include.resource;
-import globals;
+import include.globals;
 import micmap;
 
 enum MIN_TRUE_DEPTH =  6;

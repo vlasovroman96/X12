@@ -71,7 +71,7 @@ import os.bug_priv;
 import os.osdep;
 
 import include.scrnintstr;
-import os;
+import include.os;
 import include.extnsionst;
 import dixstruct;
 import include.pixmapstr;

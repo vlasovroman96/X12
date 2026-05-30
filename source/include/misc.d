@@ -120,8 +120,8 @@ enum TRUE = 1;
 enum FALSE = 0;
 }
 
-public import os;                 /* for ALLOCATE_LOCAL and DEALLOCATE_LOCAL */
-public import deimos.X11.Xfuncs;         /* for bcopy, bzero, and bcmp */
+public import include.os;                 /* for ALLOCATE_LOCAL and DEALLOCATE_LOCAL */
+public import externs.x11.X;         /* for bcopy, bzero, and bcmp */
 
 enum NullBox = cast(BoxPtr)0;
 

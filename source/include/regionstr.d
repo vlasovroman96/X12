@@ -1,4 +1,4 @@
-module regionstr.h;
+module include.regionstr;
 @nogc nothrow:
 extern(C): __gshared:
 import core.stdc.config: c_long, c_ulong;
@@ -52,7 +52,7 @@ SOFTWARE.
 alias RegionRec = pixman_region16;
 alias RegionPtr = pixman_region16*;
 
-public import miscstruct;
+public import include.miscstruct;
 
 /* Return values from RectIn() */
 

@@ -36,7 +36,7 @@ import build.dix_config;
 import sleepuntil;
 import deimos.X11.X;
 import deimos.X11.Xmd;
-import misc;
+import include.misc;
 import include.windowstr;
 import dixstruct;
 import include.pixmapstr;

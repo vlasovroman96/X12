@@ -44,8 +44,8 @@ import os.screensaver;
 import os.osdep;
 import Xext.geext_priv;
 
-import misc;
-import os;
+import include.misc;
+import include.os;
 import dixstruct;
 import include.extnsionst;
 import opaque;

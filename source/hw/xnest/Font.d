@@ -27,7 +27,7 @@ import X11.fonts.libxfont2;
 
 import dix.dix_priv;
 
-import misc;
+import include.misc;
 import regionstr;
 import dixfontstr;
 import include.scrnintstr;

@@ -46,9 +46,9 @@ extern(C): __gshared:
  
 public import dix.screen_hooks_priv;
 
-public import misc;
+public import include.misc;
 public import include.scrnintstr;
-public import os;
+public import include.os;
 public import regionstr;
 public import validate;
 public import include.windowstr;
@@ -58,7 +58,7 @@ public import include.cursorstr;
 public import dixstruct;
 public import include.gcstruct;
 public import include.servermd;
-public import globals;
+public import include.globals;
 public import include.picturestr;
 public import include.extnsionst;
 public import include.privates;

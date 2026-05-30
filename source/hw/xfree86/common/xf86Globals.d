@@ -34,7 +34,7 @@ extern(C): __gshared:
 import xorg_config;
 
 import X11.X;
-import os;
+import include.os;
 import include.windowstr;
 import propertyst;
 import xf86_priv;

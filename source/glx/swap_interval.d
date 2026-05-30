@@ -30,7 +30,7 @@ import build.dix_config;
 import glxserver;
 import glxutil;
 import glxext;
-import misc;
+import include.misc;
 import singlesize;
 import unpack;
 import indirect_size_get;

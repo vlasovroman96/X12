@@ -37,7 +37,7 @@ from The Open Group.
 import build.dix_config;
 
 import deimos.X11.X;
-import os;
+import include.os;
 import osdep;
 import mitauth;
 import dixstruct;

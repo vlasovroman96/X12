@@ -15,7 +15,7 @@ public import xkb.xkbrules_priv;
 
 public import include.dix;
 public import include.input;
-public import misc;
+public import include.misc;
 public import include.privates;
 public import xkbsrv;
 public import xkbstr;

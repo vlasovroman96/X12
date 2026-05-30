@@ -37,7 +37,7 @@ import core.stdc.ctype;
 import core.stdc.stdlib;
 import core.sys.posix.unistd;
 import X11.X;
-import os;
+import include.os;
 import xf86;
 import xf86Priv;
 

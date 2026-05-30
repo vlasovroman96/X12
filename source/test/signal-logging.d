@@ -35,7 +35,7 @@ import os.fmt;
 import os.log_priv;
 
 // import assert;
-import misc;
+import include.misc;
 
 import tests_common;
 

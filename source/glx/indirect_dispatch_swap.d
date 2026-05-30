@@ -35,7 +35,7 @@ import indirect_size;
 import indirect_size_get;
 import indirect_dispatch;
 import indirect_util;
-import misc;
+import include.misc;
 import singlesize;
 
 enum string __GLX_PAD(string x) = `(((` ~ x ~ `) + 3) & ~3)`;

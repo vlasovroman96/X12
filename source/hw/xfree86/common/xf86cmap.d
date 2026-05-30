@@ -33,13 +33,13 @@ import core.stdc.math;
 import X11.X;
 import X11.Xproto;
 
-import misc;
+import include.misc;
 
 import dix.colormap_priv;
 import dix.screen_hooks_priv;
 import mi.mi_priv;
 
-import misc;
+import include.misc;
 import include.scrnintstr;
 import include.resource;
 

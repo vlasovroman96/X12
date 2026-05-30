@@ -90,11 +90,11 @@ version (DISABLE_EXT_MITSHM) {
 
 import miext.extinit_priv;
 
-import misc;
+import include.misc;
 import include.extension;
 import micmap;
-import os;
-import globals;
+import include.os;
+import include.globals;
 
 import miinitext;
 

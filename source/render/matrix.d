@@ -25,9 +25,9 @@ extern(C): __gshared:
 
 import build.dix_config;
 
-import misc;
+import include.misc;
 import include.scrnintstr;
-import os;
+import include.os;
 import regionstr;
 import validate;
 import include.windowstr;

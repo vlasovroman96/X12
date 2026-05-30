@@ -93,9 +93,9 @@ import os.log_priv;
 
 import xf86Modes;
 import include.xf86Crtc;
-import os;
+import include.os;
 import include.servermd;
-import globals;
+import include.globals;
 import xf86_priv;
 import xf86Priv;
 

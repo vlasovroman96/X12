@@ -51,7 +51,7 @@ extern(C): __gshared:
 import xorg_config;
 
 import core.stdc.string;
-import os;
+import include.os;
 import loader;
 import loaderProcs;
 

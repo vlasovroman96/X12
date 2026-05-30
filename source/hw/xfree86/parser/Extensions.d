@@ -35,7 +35,7 @@ extern(C): __gshared:
  */
 import xorg_config;
 
-import os;
+import include.os;
 import xf86Parser;
 import xf86tokens;
 import Configint;

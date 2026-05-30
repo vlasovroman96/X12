@@ -39,8 +39,8 @@ import os.fmt;
 import include.input;
 import include.inputstr;
 import config.config_backends;
-import os;
-import globals;
+import include.os;
+import include.globals;
 
 import hw.xfree86.os_support.linux.systemd_logind;
 

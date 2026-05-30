@@ -22,7 +22,7 @@ import X11.X;
 import include.vgaHW;
 import os.log_priv;
 
-import misc;
+import include.misc;
 import xf86_priv;
 import xf86_OSproc;
 import xf86Opt_priv;

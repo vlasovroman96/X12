@@ -1,4 +1,4 @@
-module inputstr.h;
+module include.inputstr;
 @nogc nothrow:
 extern(C): __gshared:
 import core.stdc.config: c_long, c_ulong;
@@ -49,12 +49,12 @@ SOFTWARE.
 ********************************************************/
 
  
-public import deimos.X11.extensions.XI2proto;
+public import externs.x11.X;
 
 public import pixman;
 public import include.input;
 public import include.window;
-public import dixstruct;
+public import include.dixstruct;
 public import include.cursorstr;
 public import include.privates;
 

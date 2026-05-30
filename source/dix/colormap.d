@@ -65,10 +65,10 @@ import dix.window_priv;
 import os.osdep;
 import os.bug_priv;
 
-import misc;
+import include.misc;
 import include.dix;
 import dixstruct;
-import os;
+import include.os;
 import include.scrnintstr;
 import include.resource;
 import include.windowstr;

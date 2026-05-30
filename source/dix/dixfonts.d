@@ -78,7 +78,7 @@ import include.scrnintstr;
 import include.resource;
 import dixstruct;
 import include.cursorstr;
-import misc;
+import include.misc;
 import opaque;
 import dixfontstr;
 import include.dixfont;

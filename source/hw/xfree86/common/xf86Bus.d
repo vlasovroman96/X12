@@ -45,7 +45,7 @@ import X11.X;
 import config.hotplug_priv;
 import os.osdep;
 
-import os;
+import include.os;
 import xf86_priv;
 import xf86Priv;
 

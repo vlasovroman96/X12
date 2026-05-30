@@ -38,7 +38,7 @@ import include.scrnintstr;
 import include.windowstr;
 import dixstruct;
 import include.extnsionst;
-import glx_extinit;
+import include.glx_extinit;
 
 import GL.glxproto;
 import vndservervendor;

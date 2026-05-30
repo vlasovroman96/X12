@@ -28,7 +28,7 @@ import core.stdc.config: c_long, c_ulong;
  *
  */
  
-public import misc;
+public import include.misc;
 public import xf86;
 public import xf86_OSproc;
 public import X11.X;

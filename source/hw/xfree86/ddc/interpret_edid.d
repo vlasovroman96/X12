@@ -34,7 +34,7 @@ import core.stdc.string;
 
 import edid_priv;
 
-import misc;
+import include.misc;
 import xf86;
 import xf86_OSproc;
 import xf86DDC_priv;

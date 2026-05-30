@@ -30,7 +30,7 @@ extern(C): __gshared:
  * MATERIALS OR THE USE OR OTHER DEALINGS IN THE MATERIALS.
  */
  
-public import glxvndabi;
+public import include.glxvndabi;
 public import vndserver;
 
 struct GlxScreenPriv {

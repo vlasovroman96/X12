@@ -52,8 +52,8 @@ public import deimos.X11.extensions.xfixesproto;
 
 public import dix.selection_priv;
 
-public import misc;
-public import os;
+public import include.misc;
+public import include.os;
 public import dixstruct;
 public import include.extnsionst;
 public import include.windowstr;

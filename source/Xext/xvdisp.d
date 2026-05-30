@@ -46,7 +46,7 @@ import Xext.panoramiXsrv;
 import Xext.shm_priv;
 import Xext.xvdix_priv;
 
-import misc;
+import include.misc;
 import include.scrnintstr;
 import include.windowstr;
 import include.pixmapstr;

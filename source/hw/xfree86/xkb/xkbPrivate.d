@@ -10,7 +10,7 @@ import hw.xfree86.common.action_priv;
 import xkb.xkbsrv_priv;
 
 import include.windowstr;
-import os;
+import include.os;
 import xf86_priv;
 
 int XkbDDXPrivate(DeviceIntPtr dev, KeyCode key, XkbAction* act)

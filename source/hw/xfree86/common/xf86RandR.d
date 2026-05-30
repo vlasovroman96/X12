@@ -32,8 +32,8 @@ import dix.screen_hooks_priv;
 import include.extinit;
 import include.xf86DDC;
 
-import os;
-import globals;
+import include.os;
+import include.globals;
 import xf86_priv;
 import xf86str;
 import xf86Priv;

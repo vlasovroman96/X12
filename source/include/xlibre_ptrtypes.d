@@ -1,4 +1,4 @@
-module xlibre_ptrtypes.h;
+module include.xlibre_ptrtypes;
 @nogc nothrow:
 extern(C): __gshared:
 /* SPDX-License-Identifier: MIT OR X11
@@ -13,9 +13,11 @@ extern(C): __gshared:
  */
  
 struct _Client;
-version (_XTYPEDEF_CLIENTPTR) {} else {
+version (_XTYPEDEF_CLIENTPTR) {
+
 alias ClientPtr = _Client*;
-version = _XTYPEDEF_CLIENTPTR;
+} else {
+// version = _XTYPEDEF_CLIENTPTR;
 }
 alias ClientRec = _Client;
 

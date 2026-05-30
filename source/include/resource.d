@@ -1,4 +1,4 @@
-module resource.h;
+module include.resource;
 @nogc nothrow:
 extern(C): __gshared:
 import core.stdc.config: c_long, c_ulong;
@@ -54,8 +54,8 @@ enum RESOURCE_H = 1;
 public import include.xlibre_ptrtypes;
 
 public import include.callback;
-public import misc;
-public import dixaccess;
+public import include.misc;
+public import include.dixaccess;
 
 /*****************************************************************
  * STUFF FOR RESOURCES

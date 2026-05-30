@@ -50,7 +50,7 @@ static if ((HasVersion!"__sparc__" || HasVersion!"__sparc") && !HasVersion!"__Op
 import xf86Bus;
 import xf86Sbus_priv;
 }
-import misc;
+import include.misc;
 import loaderProcs;
 import xf86Parser_priv;
 

@@ -43,7 +43,7 @@ import glamor_egl;
 import glamor_priv;
 import ephyr;
 import ephyr_glamor;
-import os;
+import include.os;
 
 /* until we need geometry shaders GL3.1 should suffice. */
 /* Xephyr has its own copy of this for build reasons */

@@ -32,7 +32,7 @@ from The Open Group.
  
 public import deimos.X11.Xmd;
 
-public import globals;
+public import include.globals;
 
 extern _X_EXPORT bgNoneRoot;
 

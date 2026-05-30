@@ -42,7 +42,7 @@ import dix.screen_hooks_priv;
 import include.extinit;
 import Xext.xvdix_priv;
 
-import misc;
+import include.misc;
 import xf86;
 import xf86_OSproc;
 import include.scrnintstr;

@@ -92,8 +92,8 @@ import Xext.panoramiX;
 import Xext.panoramiXsrv;
 import Xext.xvdix_priv;
 
-import misc;
-import os;
+import include.misc;
+import include.os;
 import include.scrnintstr;
 import include.windowstr;
 import include.pixmapstr;

@@ -53,7 +53,7 @@ import mi.mi_priv;
 import os.log_priv;
 import os.osdep;
 
-import os;
+import include.os;
 import include.servermd;
 import include.pixmapstr;
 import include.windowstr;

@@ -38,7 +38,7 @@ import build.dix_config;
 import core.stdc.ctype;
 import core.stdc.string;
 
-import os;
+import include.os;
 
 /*
  * Find the first occurrence of find in s, ignore case.

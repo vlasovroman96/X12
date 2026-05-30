@@ -58,7 +58,7 @@ import deimos.X11.Xatom;
 import dix.atom_priv;
 import dix.dix_priv;
 
-import misc;
+import include.misc;
 import include.resource;
 import include.dix;
 

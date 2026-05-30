@@ -1,4 +1,4 @@
-module window.h;
+module include.window;
 @nogc nothrow:
 extern(C): __gshared:
 /***********************************************************
@@ -51,9 +51,9 @@ SOFTWARE.
 public import deimos.X11.Xproto;
 
 public import include.xlibre_ptrtypes;
-public import misc;
-public import regionstr;
-public import screenint;
+public import include.misc;
+public import include.regionstr;
+public import include.screenint;
 
 enum TOTALLY_OBSCURED = 0;
 enum UNOBSCURED = 1;

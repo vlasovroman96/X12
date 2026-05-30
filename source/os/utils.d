@@ -78,7 +78,7 @@ static if (!HasVersion!"Windows" || !HasVersion!"Windows") {
 import core.sys.posix.sys.time;
 import core.sys.posix.sys.resource;
 }
-import misc;
+import include.misc;
 import deimos.X11.X;
 import os.Xtrans;
 

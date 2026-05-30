@@ -51,8 +51,8 @@ import os.screensaver;
 import Xext.panoramiX;
 import Xext.panoramiXsrv;
 
-import misc;
-import os;
+import include.misc;
+import include.os;
 import include.windowstr;
 import include.scrnintstr;
 import include.pixmapstr;

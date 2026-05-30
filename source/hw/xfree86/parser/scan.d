@@ -72,7 +72,7 @@ import os.xhostname;
 import xf86Parser_priv;
 
 /* For PATH_MAX */
-import misc;
+import include.misc;
 
 import Configint;
 import xf86tokens;

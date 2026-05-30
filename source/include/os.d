@@ -1,4 +1,4 @@
-module os.h;
+module include.os;
 @nogc nothrow:
 extern(C): __gshared:
 
@@ -65,7 +65,7 @@ public import core.stdc.time;
 
 public import include.xlibre_ptrtypes;
 public import include.callback;
-public import misc;
+public import include.misc;
 
 /*
  * @brief macro for specifying non-null arguments
@@ -182,7 +182,7 @@ extern _X_EXPORT* Xstrdup(const(char)* s);
 extern _X_EXPORT* XNFstrdup(const(char)* s);
 
 /* Include new X*asprintf API */
-public import Xprintf;
+public import include.Xprintf;
 
 alias OsSigWrapperPtr = int function(int);
 
@@ -199,13 +199,17 @@ extern _X_EXPORT TimeSinceLastInputEvent();
 
 /* Function fallbacks provided by AC_REPLACE_FUNCS in configure.ac */
 
-version (HAVE_REALLOCARRAY) {} else {
+version (HAVE_REALLOCARRAY) {
+
 enum reallocarray = xreallocarray;
+} else {
 extern _X_EXPORT* reallocarray(void* optr, size_t nmemb, size_t size);
 }
 
-version (HAVE_STRCASESTR) {} else {
+version (HAVE_STRCASESTR) {
 enum strcasestr = xstrcasestr;
+
+} else {
 extern _X_EXPORT* xstrcasestr(const(char)* s, const(char)* find);
 }
 

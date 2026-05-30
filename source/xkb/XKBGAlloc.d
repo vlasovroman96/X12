@@ -32,7 +32,7 @@ import build.dix_config;
 import core.stdc.stdio;
 import deimos.X11.X;
 import deimos.X11.Xproto;
-import misc;
+import include.misc;
 import include.inputstr;
 import xkbsrv;
 import xkbgeom_priv;

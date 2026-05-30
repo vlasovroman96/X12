@@ -43,14 +43,14 @@ import glxserver;
 import include.windowstr;
 import propertyst;
 import include.privates;
-import os;
-import glx_extinit;
+import include.os;
+import include.glx_extinit;
 import unpack;
 import glxutil;
 import glxext;
 import indirect_table;
 import indirect_util;
-import glxvndabi;
+import include.glxvndabi;
 
 /*
 ** X resources.

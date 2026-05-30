@@ -1,4 +1,4 @@
-module xkbrules.h;
+module include.xkbrules;
 @nogc nothrow:
 extern(C): __gshared:
 version (_XKBRULES_H_) {} else {

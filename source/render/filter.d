@@ -30,9 +30,9 @@ import deimos.X11.keysymdef;
 
 import dix.screenint_priv;
 
-import misc;
+import include.misc;
 import include.scrnintstr;
-import os;
+import include.os;
 import regionstr;
 import validate;
 import include.windowstr;

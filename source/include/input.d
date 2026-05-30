@@ -1,4 +1,4 @@
-module input.h;
+module include.input;
 @nogc nothrow:
 extern(C): __gshared:
 import core.stdc.config: c_long, c_ulong;
@@ -51,16 +51,16 @@ SOFTWARE.
  
 public import include.xlibre_ptrtypes;
 
-public import misc;
-public import screenint;
+public import include.misc;
+public import include.screenint;
 public import deimos.X11.Xmd;
 public import deimos.X11.Xproto;
 public import core.stdc.stdint;
 public import include.window;             /* for WindowPtr */
-public import xkbrules;
+public import include.xkbrules;
 public import include.events;
-public import list;
-public import os;
+public import include.list;
+public import include.os;
 public import deimos.X11.extensions.XI2;
 
 enum DEFAULT_KEYBOARD_CLICK = 	0;

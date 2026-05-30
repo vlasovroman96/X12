@@ -40,7 +40,7 @@ import deimos.X11.extensions.XI;
 import dix.input_priv;
 import xkb.xkbsrv_priv;
 
-import misc;
+import include.misc;
 import include.inputstr;
 
         /*

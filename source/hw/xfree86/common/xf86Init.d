@@ -91,7 +91,7 @@ import xf86InPriv;
 import include.xf86Crtc;
 import include.picturestr;
 import xf86Bus;
-import globals;
+import include.globals;
 import xserver_properties;
 
 version (DPMSExtension) {

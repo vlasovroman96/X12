@@ -41,7 +41,7 @@ import deimos.X11.Xatom;
 
 import xkb.xkbsrv_priv;
 
-import misc;
+import include.misc;
 import include.inputstr;
 import opaque;
 import property;

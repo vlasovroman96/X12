@@ -1,4 +1,4 @@
-module pixmap.h;
+module include.pixmap;
 @nogc nothrow:
 extern(C): __gshared:
 import core.stdc.config: c_long, c_ulong;
@@ -49,9 +49,9 @@ SOFTWARE.
 ******************************************************************/
 
  
-public import misc;
-public import screenint;
-public import regionstr;
+public import include.misc;
+public import include.screenint;
+public import include.regionstr;
 public import deimos.X11.extensions.randr;
 /* types for Drawable */
 enum DRAWABLE_WINDOW = 0;

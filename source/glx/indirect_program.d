@@ -37,7 +37,7 @@ import dix.request_priv;
 
 import glxserver;
 import glxext;
-import misc;
+import include.misc;
 import singlesize;
 import unpack;
 import indirect_size_get;

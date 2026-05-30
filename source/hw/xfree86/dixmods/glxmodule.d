@@ -39,9 +39,9 @@ import xf86Priv;
 import xf86;
 import colormap;
 import micmap;
-import globals;
+import include.globals;
 import glxserver;
-import glx_extinit;
+import include.glx_extinit;
 
 private MODULESETUPPROTO glxSetup;
 

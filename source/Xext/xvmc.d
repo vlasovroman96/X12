@@ -19,8 +19,8 @@ import include.xvmcext;
 import miext.extinit_priv;
 import Xext.xvdix_priv;
 
-import misc;
-import os;
+import include.misc;
+import include.os;
 import dixstruct;
 import include.resource;
 import include.scrnintstr;

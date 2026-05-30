@@ -26,7 +26,7 @@ extern(C): __gshared:
  
 public import deimos.X11.X;
 public import include.scrnintstr;
-public import misc;
+public import include.misc;
 public import list;
 public import include.windowstr;
 public import dixstruct;

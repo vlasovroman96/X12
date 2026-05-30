@@ -9,7 +9,7 @@ import X11.X;
 import dix.colormap_priv;
 import randr.randrstr_priv;
 
-import misc;
+import include.misc;
 import xf86;
 import xf86_OSproc;
 import include.scrnintstr;

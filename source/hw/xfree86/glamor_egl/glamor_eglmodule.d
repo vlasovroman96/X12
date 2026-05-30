@@ -34,7 +34,7 @@ import dix_config;
 import xf86;
 version = GLAMOR_FOR_XORG;
 import xf86Module;
-import glamor;
+import include.glamor;
 
 private XF86ModuleVersionInfo VersRec = {
     modname: GLAMOR_EGL_MODULE_NAME,

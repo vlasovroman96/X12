@@ -34,7 +34,7 @@ import GL.gl;
 import glxserver;
 import indirect_size;
 import indirect_reqsize;
-import misc;
+import include.misc;
 
 version (HAVE_ALIAS) {
 enum string ALIAS2(string from,string to) = `\

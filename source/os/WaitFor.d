@@ -72,10 +72,10 @@ import os.client_priv;
 import os.ossock;
 import os.screensaver;
 
-import misc;
+import include.misc;
 import osdep;
 import dixstruct_priv;
-import globals;
+import include.globals;
 version (DPMSExtension) {
 import dpmsproc;
 }

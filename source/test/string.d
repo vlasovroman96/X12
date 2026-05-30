@@ -33,7 +33,7 @@ extern(C): __gshared:
 import build.dix_config;
 
 import core.stdc.assert_;
-import os;
+import include.os;
 import tests_common;
 
 /* Ensure we're testing our functions, even on platforms with libc versions */

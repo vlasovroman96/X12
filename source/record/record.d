@@ -60,7 +60,7 @@ import set;
 import swaprep;
 import include.inputstr;
 import include.scrnintstr;
-import globals;
+import include.globals;
 import include.cursor;
 
 import include.protocol_versions;

@@ -1,4 +1,4 @@
-module privates.h;
+module include.privates;
 @nogc nothrow:
 extern(C): __gshared:
 /***********************************************************
@@ -19,7 +19,7 @@ public import deimos.X11.Xdefs;
 // public import deimos.X11.Xosdefs;
 // public import deimos.X11.Xfuncproto;
 public import core.stdc.assert_;
-public import misc;
+public import include.misc;
 
 /*****************************************************************
  * STUFF FOR PRIVATES

@@ -41,7 +41,7 @@ import os.fmt;
 import include.input;
 import include.inputstr;
 import config.config_backends;
-import os;
+import include.os;
 
 enum LIBHAL_PROP_KEY = "input.x11_options.";
 enum LIBHAL_XKB_PROP_KEY = "input.xkb.";

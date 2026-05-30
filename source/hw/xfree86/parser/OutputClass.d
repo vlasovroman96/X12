@@ -29,7 +29,7 @@ import xorg_config;
 
 import os.fmt;
 
-import os;
+import include.os;
 import xf86Parser_priv;
 import xf86tokens;
 import Configint;

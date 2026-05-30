@@ -57,7 +57,7 @@ import build.dix_config;
 
 import core.stdc.string;
 
-import misc;
+import include.misc;
 import set;
 
 /*

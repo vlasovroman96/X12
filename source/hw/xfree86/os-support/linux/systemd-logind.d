@@ -35,14 +35,14 @@ import core.sys.posix.unistd;
 import config.dbus_core;
 import config.hotplug_priv;
 
-import os;
+import include.os;
 import linux;
 import xf86_os_support;
 import xf86_priv;
 import xf86platformBus_priv;
 import xf86Xinput_priv;
 import xf86Priv;
-import globals;
+import include.globals;
 
 import systemd_logind;
 

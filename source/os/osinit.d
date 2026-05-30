@@ -72,8 +72,8 @@ import os.log_priv;
 import os.osdep;
 import os.serverlock;
 
-import misc;
-import os;
+import include.misc;
+import include.os;
 import opaque;
 import dixstruct;
 import dixstruct_priv;

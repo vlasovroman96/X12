@@ -28,7 +28,7 @@ extern(C): __gshared:
 import xorg_config;
 
 import include.extension;
-import globals;
+import include.globals;
 
 import xf86_priv;
 import xf86Config;

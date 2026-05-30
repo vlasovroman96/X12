@@ -24,7 +24,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 public import selinux.selinux;
 public import selinux.avc;
 
-public import globals;
+public import include.globals;
 public import dixaccess;
 public import dixstruct;
 public import include.privates;

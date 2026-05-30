@@ -1,4 +1,4 @@
-module miscstruct.h;
+module include.miscstruct;
 @nogc nothrow:
 extern(C): __gshared:
 import core.stdc.config: c_long, c_ulong;
@@ -51,9 +51,9 @@ SOFTWARE.
 version (MISCSTRUCT_H) {} else {
 enum MISCSTRUCT_H = 1;
 
-public import misc;
+public import include.misc;
 public import deimos.X11.Xprotostr;
-public import pixman;
+public import externs.pixman;
 
 alias DDXPointRec = xPoint;
 

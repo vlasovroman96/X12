@@ -38,7 +38,7 @@ import os.osdep;
 
 import ephyr;
 import ephyrlog;
-import glx_extinit;
+import include.glx_extinit;
 
 extern Window EphyrPreExistingHostWin;
 extern Bool EphyrWantGrayScale;

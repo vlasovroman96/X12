@@ -48,13 +48,13 @@ import dix.screenint_priv;
 import os.log_priv;
 import os.osdep;
 
-import misc;
+import include.misc;
 import dixstruct;
 import include.extnsionst;
 import include.scrnintstr;
 import include.servermd;
 import vidmodestr;
-import globals;
+import include.globals;
 import protocol_versions;
 
 private int VidModeErrorBase;

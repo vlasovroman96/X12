@@ -46,7 +46,7 @@ import dix.inpututils_priv;
 import mi.mi_priv;
 import os.fmt;
 
-import misc;
+import include.misc;
 import include.resource;
 import include.windowstr;
 import include.inputstr;

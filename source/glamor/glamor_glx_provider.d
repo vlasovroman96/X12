@@ -45,7 +45,7 @@ import glxutil;
 import compint;
 import deimos.X11.extensions.composite;
 import glamor_priv;
-import glamor;
+import include.glamor;
 
 /* Can't get these from <GL/glx.h> since it pulls in client headers */
 enum GLX_RGBA_BIT =		0x00000001;

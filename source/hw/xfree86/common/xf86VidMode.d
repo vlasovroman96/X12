@@ -43,7 +43,7 @@ import X11.X;
 import dix.screenint_priv;
 import os.log_priv;
 
-import os;
+import include.os;
 import xf86_priv;
 import xf86Priv;
 

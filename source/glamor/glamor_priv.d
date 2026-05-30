@@ -33,7 +33,7 @@ import core.stdc.config: c_long, c_ulong;
 
 public import os.bug_priv;
 
-public import glamor;
+public import include.glamor;
 public import xvdix;
 
 static if (XSYNC) {

@@ -46,7 +46,7 @@ import Xi.handlers;
 
 import include.inputstr;
 import exglobals;
-import misc;
+import include.misc;
 
 extern XExtensionVersion XIVersion;     /* defined in getvers.c */
 

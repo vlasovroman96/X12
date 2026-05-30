@@ -35,7 +35,7 @@ extern(C): __gshared:
 public import deimos.X11.X;
 public import deimos.X11.Xproto;
 public import deimos.X11.Xmd;
-public import misc;
+public import include.misc;
 public import dixstruct;
 public import include.pixmapstr;
 public import include.gcstruct;
@@ -63,7 +63,7 @@ alias __GLXclientState = __GLXclientStateRec;
 public import glxscreens;
 public import glxdrawable;
 public import glxcontext;
-public import glx_extinit;
+public import include.glx_extinit;
 
 extern __GLXscreen* glxGetScreen(ScreenPtr pScreen);
 extern __GLXclientState* glxGetClient(ClientPtr pClient);

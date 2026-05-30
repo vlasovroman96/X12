@@ -33,8 +33,8 @@ import include.extinit;
 import include.xf86DDC;
 
 import xf86;
-import os;
-import globals;
+import include.os;
+import include.globals;
 import xf86Modes;
 import xf86Priv;
 import mipointer;

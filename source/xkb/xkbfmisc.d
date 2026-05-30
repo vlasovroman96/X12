@@ -42,7 +42,7 @@ import deimos.X11.Xproto;
 import xkb.xkbfmisc_priv;
 import xkb.xkbout_priv;
 
-import misc;
+import include.misc;
 import include.inputstr;
 import include.dix;
 import xkbstr;

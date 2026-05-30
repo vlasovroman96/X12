@@ -36,7 +36,7 @@ import core.sys.posix.unistd;
 
 import config.hotplug_priv;
 
-import os;
+import include.os;
 import include.inputstr;
 import config.config_backends;
 

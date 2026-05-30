@@ -32,7 +32,7 @@ extern(C): __gshared:
 
  
 public import build.dix_config;
-public import glxvndabi;
+public import include.glxvndabi;
 
 enum GLXContextID = CARD32;
 enum GLXDrawable = CARD32;

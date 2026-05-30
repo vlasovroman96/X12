@@ -37,8 +37,8 @@ import build.dix_config;
 
 import deimos.X11.X;
 import deimos.X11.Xproto;
-import misc;
-import os;
+import include.misc;
+import include.os;
 import include.windowstr;
 import include.scrnintstr;
 import include.pixmapstr;

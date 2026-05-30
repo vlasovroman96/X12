@@ -27,7 +27,7 @@ import xcb.xcb_aux;
 
 import screenint;
 import include.input;
-import misc;
+import include.misc;
 import include.cursorstr;
 import include.scrnintstr;
 import include.servermd;

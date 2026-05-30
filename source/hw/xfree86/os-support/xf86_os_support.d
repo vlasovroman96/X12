@@ -11,7 +11,7 @@ extern(C): __gshared:
  
 public import X11.Xdefs;
 
-public import os;
+public import include.os;
 public import dix.dix_priv;
 
 /*

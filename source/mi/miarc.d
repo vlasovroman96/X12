@@ -59,7 +59,7 @@ import deimos.X11.Xfuncproto;
 
 import mi.mi_priv;
 
-import misc;
+import include.misc;
 import include.gcstruct;
 import include.scrnintstr;
 import include.pixmapstr;

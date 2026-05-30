@@ -66,7 +66,7 @@ import core.sys.posix.unistd;
 
 import os.client_priv;
 
-import os;
+import include.os;
 import dixstruct;
 
 version (__sun) {

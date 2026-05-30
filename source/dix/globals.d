@@ -58,13 +58,13 @@ import dix.dix_priv;
 import dix.server_priv;
 import dix.settings_priv;
 
-import misc;
+import include.misc;
 import include.windowstr;
 import include.scrnintstr;
 import include.input;
 import include.dixfont;
 import dixstruct;
-import os;
+import include.os;
 
 ScreenInfo screenInfo;
 

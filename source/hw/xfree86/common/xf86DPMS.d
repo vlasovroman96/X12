@@ -33,8 +33,8 @@ extern(C): __gshared:
 import xorg_config;
 
 import X11.X;
-import os;
-import globals;
+import include.os;
+import include.globals;
 import include.windowstr;
 import xf86;
 import xf86Priv;

@@ -43,10 +43,10 @@ import include.scrnintstr;
 import ephyrlog;
 
 version (GLAMOR) {
-import glamor;
+import include.glamor;
 }
 import ephyr_glamor;
-import glx_extinit;
+import include.glx_extinit;
 import xkbsrv;
 
 extern Bool ephyr_glamor;

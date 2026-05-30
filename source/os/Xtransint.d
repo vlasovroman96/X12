@@ -220,7 +220,7 @@ version (__clang__) {
 version (XTRANSDEBUG) {
 public import core.stdc.stdarg;
 
-public import os;
+public import include.os;
 } /* XTRANSDEBUG */
 
 pragma(inline, true) private void prmsg(int lvl, const(char)* f, ...)

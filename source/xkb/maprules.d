@@ -47,10 +47,10 @@ import deimos.X11.keysym;
 import os.log_priv;
 import xkb.xkbrules_priv;
 
-import misc;
+import include.misc;
 import include.inputstr;
 import include.dix;
-import os;
+import include.os;
 import xkbstr;
 import xkbsrv;
 

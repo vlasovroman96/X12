@@ -110,8 +110,8 @@ import os.serverlock;
 import Xext.panoramiXsrv;
 
 import include.scrnintstr;
-import misc;
-import os;
+import include.misc;
+import include.os;
 import include.windowstr;
 import include.resource;
 import dixstruct;

@@ -31,8 +31,8 @@ import core.stdc.config: c_long, c_ulong;
 
 import build.dix_config;
 
-import os;
-import misc;
+import include.os;
+import include.misc;
 
 import core.stdc.errno;
 import core.stdc.string;

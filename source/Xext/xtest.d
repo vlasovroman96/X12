@@ -55,8 +55,8 @@ import os.osdep;
 import Xext.panoramiX;
 import Xext.panoramiXsrv;
 
-import misc;
-import os;
+import include.misc;
+import include.os;
 import dixstruct;
 import include.extnsionst;
 import include.windowstr;

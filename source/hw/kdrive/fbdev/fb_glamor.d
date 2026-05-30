@@ -12,7 +12,7 @@ import X11.Xfuncproto;
 
 import include.scrnintstr;
 
-import glamor;
+import include.glamor;
 import glamor_egl;
 
 import fbdev;

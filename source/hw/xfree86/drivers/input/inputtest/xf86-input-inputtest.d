@@ -44,7 +44,7 @@ import xkbsrv;
 import xf86;
 import xf86Xinput_priv;
 import xserver_properties;
-import os;
+import include.os;
 
 import xf86_input_inputtest_protocol;
 

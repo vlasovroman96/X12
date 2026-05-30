@@ -35,7 +35,7 @@ import core.sys.posix.unistd;
 import core.stdc.errno;
 import libseat;
 
-import os;
+import include.os;
 import xf86;
 import xf86_priv;
 version (XSERVER_PLATFORM_BUS) {
@@ -45,7 +45,7 @@ import xf86platformBus;
 import xf86Xinput;
 import xf86Xinput_priv;
 import xf86Priv;
-import globals;
+import include.globals;
 
 import config.hotplug_priv;
 

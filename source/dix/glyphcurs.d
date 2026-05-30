@@ -53,7 +53,7 @@ import build.dix_config;
 import dix.cursor_priv;
 import dix.screenint_priv;
 
-import misc;
+import include.misc;
 import deimos.X11.fonts.fontstruct;
 import dixfontstr;
 import include.scrnintstr;

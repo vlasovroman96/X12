@@ -37,7 +37,7 @@ import deimos.X11.keysym;
 import os.log_priv;
 import xkb.xkbsrv_priv;
 
-import misc;
+import include.misc;
 import include.inputstr;
 
 /***====================================================================***/

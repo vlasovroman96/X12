@@ -8,7 +8,7 @@ extern(C): __gshared:
  
 public import deimos.X11.extensions.XIproto;
 
-public import misc;
+public import include.misc;
 public import include.window;
 public import include.input;
 public import include.cursor;

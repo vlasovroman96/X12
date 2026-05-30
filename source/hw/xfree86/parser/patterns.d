@@ -10,10 +10,10 @@ import xorg_config;
 
 import core.stdc.stdio;
 import core.stdc.stdlib;
-import misc;
+import include.misc;
 import xf86Parser_priv;
 import configProcs;
-import os;
+import include.os;
 
 /*
  *  Utilities used by InputClass.c and OutputClass.c

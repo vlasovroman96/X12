@@ -52,7 +52,7 @@ import include.scrnintstr;
 import opaque;
 import include.inputstr;
 import migc;
-import misc;
+import include.misc;
 import dixstruct;
 import include.resource;
 import panoramiXh;

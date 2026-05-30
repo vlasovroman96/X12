@@ -52,7 +52,7 @@ import core.stdc.config: c_long, c_ulong;
 import xorg_config;
 
 import include.dix;
-import os;
+import include.os;
 import loaderProcs;
 import xf86Module;
 import loader;

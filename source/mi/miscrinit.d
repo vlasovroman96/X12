@@ -39,7 +39,7 @@ import include.shmint;
 import mi.mi_priv;
 
 import include.servermd;
-import misc;
+import include.misc;
 import include.scrnintstr;
 import include.pixmapstr;
 import include.dix;

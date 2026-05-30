@@ -110,9 +110,9 @@ import os.log_priv;
 import os.osdep;
 import os.probes_priv;
 
-import misc;               /* for typedef of pointer */
+import include.misc;               /* for typedef of pointer */
 import dixstruct_priv;
-import globals;
+import include.globals;
 import xace;
 
 version (HAVE_GETPEERUCRED) {

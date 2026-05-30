@@ -21,7 +21,7 @@ import X11.Xproto;
 import screenint;
 import include.inputstr;
 import include.input;
-import misc;
+import include.misc;
 import include.scrnintstr;
 import include.servermd;
 import mipointer;

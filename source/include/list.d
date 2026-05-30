@@ -1,4 +1,4 @@
-module list.h;
+module include.list;
 @nogc nothrow:
 extern(C): __gshared:
 /*

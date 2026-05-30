@@ -30,7 +30,7 @@ extern(C): __gshared:
  */
  
 public import core.stdc.assert_;
-public import os;
+public import include.os;
 
 version (DEBUG) {} else {
 /*we are not in debug mode*/

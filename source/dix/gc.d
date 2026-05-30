@@ -58,7 +58,7 @@ import deimos.X11.Xproto;
 import dix.gc_priv;
 import os.osdep;
 
-import misc;
+import include.misc;
 import include.resource;
 import include.gcstruct;
 import include.pixmapstr;

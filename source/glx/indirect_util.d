@@ -45,7 +45,7 @@ import singlesize;
 import glxext;
 import indirect_table;
 import indirect_util;
-import misc;
+import include.misc;
 
 enum string __GLX_PAD(string a) = `(((` ~ a ~ `)+3)&~3)`;
 

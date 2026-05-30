@@ -58,7 +58,7 @@ import indirect_dispatch;
 import indirect_table;
 import indirect_util;
 import include.protocol_versions;
-import glxvndabi;
+import include.glxvndabi;
 import xace;
 
 private char[4] GLXServerVendorName = "SGI";

@@ -1,4 +1,4 @@
-module gc.h;
+module include.gc;
 @nogc nothrow:
 extern(C): __gshared:
 /***********************************************************
@@ -51,7 +51,7 @@ SOFTWARE.
 public import deimos.X11.X;              /* for GContext, Mask */
 public import deimos.X11.Xdefs;          /* for Bool */
 public import deimos.X11.Xproto;
-public import screenint;          /* for ScreenPtr */
+public import include.screenint;          /* for ScreenPtr */
 public import include.pixmap;             /* for DrawablePtr */
 
 /* clientClipType field in GC */

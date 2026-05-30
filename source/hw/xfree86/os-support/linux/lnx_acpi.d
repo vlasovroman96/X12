@@ -14,7 +14,7 @@ import core.stdc.errno;
 
 import os.log_priv;
 
-import os;
+import include.os;
 import xf86_priv;
 import xf86Priv;
 import xf86_os_support;

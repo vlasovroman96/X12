@@ -33,7 +33,7 @@ import xorg_config;
 
 import X11.X;
 
-import os;
+import include.os;
 import xf86;
 import xf86Priv;
 import xf86_os_support;

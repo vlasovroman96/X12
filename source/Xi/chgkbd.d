@@ -63,7 +63,7 @@ import Xi.handlers;
 
 import include.inputstr;           /* DeviceIntPtr      */
 import XIstubs;
-import globals;
+import include.globals;
 import include.exevents;
 import exglobals;
 import chgptr;

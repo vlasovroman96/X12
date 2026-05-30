@@ -48,7 +48,7 @@ import Xext.damage.damageext_priv;
 import Xext.panoramiX;
 import Xext.panoramiXsrv;
 
-import misc;
+import include.misc;
 import include.cursor;
 import include.cursorstr;
 import include.extnsionst;
@@ -59,7 +59,7 @@ import include.scrnintstr;
 import include.window;
 import include.windowstr;
 import include.pixmapstr;
-import globals;
+import include.globals;
 import include.servermd;
 import include.resource;
 import picturestr_priv;

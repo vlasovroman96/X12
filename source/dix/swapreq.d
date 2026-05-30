@@ -57,7 +57,7 @@ import deimos.X11.Xprotostr;
 import dix.dix_priv;
 import dix.reqhandlers_priv;
 
-import misc;
+import include.misc;
 import dixstruct;
 import include.extnsionst;         /* for SendEvent */
 import swapreq;

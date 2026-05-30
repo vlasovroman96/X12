@@ -17,7 +17,7 @@ import X11.fonts.fontstruct;
 
 import dix.screen_hooks_priv;
 
-import misc;
+import include.misc;
 import include.pixmapstr;
 import include.input;
 import mi;

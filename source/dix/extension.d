@@ -57,7 +57,7 @@ import dix.extension_priv;
 import dix.registry_priv;
 import dix.request_priv;
 
-import misc;
+import include.misc;
 import dixstruct;
 import include.extnsionst;
 import include.gcstruct;

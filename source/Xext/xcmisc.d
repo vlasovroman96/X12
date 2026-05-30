@@ -42,8 +42,8 @@ import dix.resource_priv;
 import dix.rpcbuf_priv;
 import miext.extinit_priv;
 
-import misc;
-import os;
+import include.misc;
+import include.os;
 import dixstruct;
 import include.extnsionst;
 import swaprep;

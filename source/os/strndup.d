@@ -35,7 +35,7 @@ import build.dix_config;
 import core.stdc.stddef;
 import core.stdc.stdlib;
 import core.stdc.string;
-import os;
+import include.os;
 
 char* strndup(const(char)* str, size_t n)
 {

@@ -85,10 +85,10 @@ import os.io_priv;
 import os.osdep;
 import os.ossock;
 
-import os;
+import include.os;
 import opaque;
 import dixstruct;
-import misc;
+import include.misc;
 
 CallbackListPtr ReplyCallback = null;
 CallbackListPtr FlushCallback;

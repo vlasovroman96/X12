@@ -25,7 +25,7 @@ import os.ddx_priv;
 
 import screenint;
 import include.input;
-import misc;
+import include.misc;
 import include.scrnintstr;
 import include.servermd;
 import include.extinit;
