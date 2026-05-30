@@ -1,3 +1,7 @@
+module hw.xfree86.os_support.misc.SlowBcopy;
+@nogc nothrow:
+extern(C): __gshared:
+import core.stdc.config: c_long, c_ulong;
 /*******************************************************************************
   for Alpha Linux
 *******************************************************************************/
@@ -11,52 +15,50 @@
  *   Slowbcopy(char *src, char *dst, int count)
  *
  */
-#include <xorg-config.h>
+import xorg_config;
 
-#include <X11/X.h>
-#include "xf86.h"
-#include "xf86Priv.h"
-#include "xf86_OSlib.h"
-#include "compiler.h"
+import X11.X;
+import xf86;
+import xf86Priv;
+import xf86_OSlib;
+import compiler;
 
 /* The outb() isn't needed on my machine, but who knows ... -- ost */
-void
-xf86SlowBcopy(unsigned char *src, unsigned char *dst, int len)
+void xf86SlowBcopy(ubyte* src, ubyte* dst, int len)
 {
     while (len--)
         *dst++ = *src++;
 }
 
-#ifdef __alpha__
+version (__alpha__) {
 
-#ifdef __linux__
+version (linux) {
 
-unsigned long _bus_base(void);
+c_ulong _bus_base();
 
-#define useSparse() (!_bus_base())
+enum string useSparse() = `(!_bus_base())`;
 
-#define SPARSE (7)
+enum SPARSE = (7);
 
-#else
+} else {
 
-#define useSparse() 0
+enum string useSparse() = `0`;
 
-#define SPARSE 0
+enum SPARSE = 0;
 
-#endif
+}
 
-void
-xf86SlowBCopyFromBus(unsigned char *src, unsigned char *dst, int count)
+void xf86SlowBCopyFromBus(ubyte* src, ubyte* dst, int count)
 {
-    if (useSparse()) {
-        unsigned long addr;
-        long result;
+    if (mixin(useSparse!())) {
+        c_ulong addr = void;
+        c_long result = void;
 
-        addr = (unsigned long) src;
+        addr = cast(c_ulong) src;
         while (count) {
-            result = *(volatile int *) addr;
+            result = *cast(/*volatile*/ int*) addr;
             result >>= ((addr >> SPARSE) & 3) * 8;
-            *dst++ = (unsigned char) (0xffUL & result);
+            *dst++ = cast(ubyte) (0xffUL & result);
             addr += 1 << SPARSE;
             count--;
             outb(0x80, 0x00);
@@ -66,16 +68,15 @@ xf86SlowBCopyFromBus(unsigned char *src, unsigned char *dst, int count)
         xf86SlowBcopy(src, dst, count);
 }
 
-void
-xf86SlowBCopyToBus(unsigned char *src, unsigned char *dst, int count)
+void xf86SlowBCopyToBus(ubyte* src, ubyte* dst, int count)
 {
-    if (useSparse()) {
-        unsigned long addr;
+    if (mixin(useSparse!())) {
+        c_ulong addr = void;
 
-        addr = (unsigned long) dst;
+        addr = cast(c_ulong) dst;
         while (count) {
-            *(volatile unsigned int *) addr =
-                (unsigned short) (*src) * 0x01010101;
+            *cast(/*volatile*/ uint*) addr =
+                cast(ushort) (*src) * 0x01010101;
             src++;
             addr += 1 << SPARSE;
             count--;
@@ -85,4 +86,4 @@ xf86SlowBCopyToBus(unsigned char *src, unsigned char *dst, int count)
     else
         xf86SlowBcopy(src, dst, count);
 }
-#endif
+}
