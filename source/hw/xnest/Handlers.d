@@ -1,3 +1,6 @@
+module Handlers.c;
+@nogc nothrow:
+extern(C): __gshared:
 /*
 
 Copyright 1993 by Davor Matic
@@ -11,12 +14,27 @@ the suitability of this software for any purpose.  It is provided "as
 is" without express or implied warranty.
 
 */
+import xorg_config;
 
-#ifndef XNESTINIT_H
-#define XNESTINIT_H
+import X11.X;
+import X11.Xproto;
+import screenint;
+import input;
+import misc;
+import scrnintstr;
+import windowstr;
+import servermd;
 
-#include <X11/Xdefs.h>
+import Display;
+import Events;
+import Handlers;
 
-extern Bool xnestDoFullGeneration;
+void xnestBlockHandler(void* blockData, void* timeout)
+{
+    xnestCollectEvents();
+}
 
-#endif                          /* XNESTINIT_H */
+void xnestWakeupHandler(void* blockData, int result)
+{
+    xnestCollectEvents();
+}

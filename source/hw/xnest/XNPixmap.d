@@ -1,0 +1,41 @@
+module XNPixmap.h;
+@nogc nothrow:
+extern(C): __gshared:
+/*
+
+Copyright 1993 by Davor Matic
+
+Permission to use, copy, modify, distribute, and sell this software
+and its documentation for any purpose is hereby granted without fee,
+provided that the above copyright notice appear in all copies and that
+both that copyright notice and this permission notice appear in
+supporting documentation.  Davor Matic makes no representations about
+the suitability of this software for any purpose.  It is provided "as
+is" without express or implied warranty.
+
+*/
+
+ 
+public import X11.Xdefs;
+
+extern DevPrivateKeyRec xnestPixmapPrivateKeyRec;
+
+enum xnestPixmapPrivateKey = (&xnestPixmapPrivateKeyRec);
+
+struct xnestPrivPixmap {
+    Pixmap pixmap;
+}
+
+enum string xnestPixmapPriv(string pPixmap) = `(cast(xnestPrivPixmap*) 
+    dixLookupPrivate(&(` ~ pPixmap ~ `).devPrivates, xnestPixmapPrivateKey))`;
+
+enum string xnestPixmap(string pPixmap) = `(` ~ xnestPixmapPriv!(pPixmap) ~ `.pixmap)`;
+
+enum string xnestSharePixmap(string pPixmap) = `((` ~ pPixmap ~ `).refcnt++)`;
+
+PixmapPtr xnestCreatePixmap(ScreenPtr pScreen, int width, int height, int depth, uint usage_hint);
+Bool xnestDestroyPixmap(PixmapPtr pPixmap);
+Bool xnestModifyPixmapHeader(PixmapPtr pPixmap, int width, int height, int depth, int bitsPerPixel, int devKind, void* pPixData);
+RegionPtr xnestPixmapToRegion(PixmapPtr pPixmap);
+
+                          /* XNESTPIXMAP_H */

@@ -1,3 +1,6 @@
+module Display.c;
+@nogc nothrow:
+extern(C): __gshared:
 /*
 
 Copyright 1993 by Davor Matic
@@ -11,44 +14,44 @@ the suitability of this software for any purpose.  It is provided "as
 is" without express or implied warranty.
 
 */
-#include <dix-config.h>
+import xorg_config;
 
-#include <string.h>
-#include <errno.h>
+import core.stdc.string;
+import core.stdc.errno;
 
-#include <X11/X.h>
-#include <X11/Xproto.h>
+import X11.X;
+import X11.Xproto;
 
-#include "os/client_priv.h"
-#include "os/osdep.h"
+import os.client_priv;
+import os.osdep;
 
-#include "screenint.h"
-#include "input.h"
-#include "misc.h"
-#include "scrnintstr.h"
-#include "servermd.h"
+import screenint;
+import input;
+import misc;
+import scrnintstr;
+import servermd;
 
-#include "xnest-xcb.h"
+import xnest_xcb;
 
-#include "Display.h"
-#include "Init.h"
-#include "Args.h"
 
-#include "icon"
-#include "screensaver"
+import Display;
+import Init;
+import Args;
 
-Colormap *xnestDefaultColormaps;
+import ic;
+import screensav;
+
+Colormap* xnestDefaultColormaps;
 int xnestNumPixmapFormats;
-Drawable xnestDefaultDrawables[MAXDEPTH + 1];
+Drawable[MAXDEPTH + 1] xnestDefaultDrawables;
 Pixmap xnestIconBitmap;
 Pixmap xnestScreenSaverPixmap;
-uint32_t xnestBitmapGC;
-uint32_t xnestEventMask;
+uint xnestBitmapGC;
+uint xnestEventMask;
 
-void
-xnestOpenDisplay(int argc, char *argv[])
+void xnestOpenDisplay(int argc, char** argv)
 {
-    int i;
+    int i = void;
 
     if (!xnestDoFullGeneration)
         return;
@@ -58,7 +61,7 @@ xnestOpenDisplay(int argc, char *argv[])
     if (!xnest_upstream_setup(xnestDisplayName))
         FatalError("Unable to open display \"%s\".\n", xnestDisplayName);
 
-    if (xnestParentWindow != (Window) 0)
+    if (xnestParentWindow != cast(Window) 0)
         xnestEventMask = XCB_EVENT_MASK_STRUCTURE_NOTIFY;
     else
         xnestEventMask = 0L;
@@ -66,22 +69,22 @@ xnestOpenDisplay(int argc, char *argv[])
     for (i = 0; i <= MAXDEPTH; i++)
         xnestDefaultDrawables[i] = XCB_WINDOW_NONE;
 
-    xcb_format_t *fmt = xcb_setup_pixmap_formats(xnestUpstreamInfo.setup);
-    const xcb_format_t *fmtend = fmt + xcb_setup_pixmap_formats_length(xnestUpstreamInfo.setup);
+    xcb_format_t* fmt = xcb_setup_pixmap_formats(xnestUpstreamInfo.setup);
+    const(xcb_format_t)* fmtend = fmt + xcb_setup_pixmap_formats_length(xnestUpstreamInfo.setup);
     for(; fmt != fmtend; ++fmt) {
-        xcb_depth_iterator_t depth_iter;
+        xcb_depth_iterator_t depth_iter = void;
         for (depth_iter = xcb_screen_allowed_depths_iterator(xnestUpstreamInfo.screenInfo);
              depth_iter.rem;
              xcb_depth_next(&depth_iter))
         {
-            if (fmt->depth == 1 || fmt->depth == depth_iter.data->depth) {
-                uint32_t pixmap = xcb_generate_id(xnestUpstreamInfo.conn);
+            if (fmt.depth == 1 || fmt.depth == depth_iter.data.depth) {
+                uint pixmap = xcb_generate_id(xnestUpstreamInfo.conn);
                 xcb_create_pixmap(xnestUpstreamInfo.conn,
-                                  fmt->depth,
+                                  fmt.depth,
                                   pixmap,
-                                  xnestUpstreamInfo.screenInfo->root,
+                                  xnestUpstreamInfo.screenInfo.root,
                                   1, 1);
-                xnestDefaultDrawables[fmt->depth] = pixmap;
+                xnestDefaultDrawables[fmt.depth] = pixmap;
             }
         }
     }
@@ -91,7 +94,7 @@ xnestOpenDisplay(int argc, char *argv[])
                   xnestBitmapGC,
                   xnestDefaultDrawables[1],
                   0,
-                  NULL);
+                  null);
 
     if (!(xnestUserGeometry & XCB_CONFIG_WINDOW_X))
         xnestGeometry.x = 0;
@@ -101,10 +104,10 @@ xnestOpenDisplay(int argc, char *argv[])
 
     if (xnestParentWindow == 0) {
         if (!(xnestUserGeometry & XCB_CONFIG_WINDOW_WIDTH))
-            xnestGeometry.width = 3 * xnestUpstreamInfo.screenInfo->width_in_pixels / 4;
+            xnestGeometry.width = 3 * xnestUpstreamInfo.screenInfo.width_in_pixels / 4;
 
         if (!(xnestUserGeometry & XCB_CONFIG_WINDOW_HEIGHT))
-            xnestGeometry.height = 3 * xnestUpstreamInfo.screenInfo->height_in_pixels / 4;
+            xnestGeometry.height = 3 * xnestUpstreamInfo.screenInfo.height_in_pixels / 4;
     }
 
     if (!xnestUserBorderWidth)
@@ -112,23 +115,22 @@ xnestOpenDisplay(int argc, char *argv[])
 
     xnestIconBitmap =
         xnest_create_bitmap_from_data(xnestUpstreamInfo.conn,
-                                      xnestUpstreamInfo.screenInfo->root,
-                                      (const char *) icon_bits, icon_width, icon_height);
+                                      xnestUpstreamInfo.screenInfo.root,
+                                      cast(const(char)*) icon_bits, icon_width, icon_height);
 
     xnestScreenSaverPixmap =
         xnest_create_pixmap_from_bitmap_data(
                                     xnestUpstreamInfo.conn,
-                                    xnestUpstreamInfo.screenInfo->root,
-                                    (const char *) screensaver_bits,
+                                    xnestUpstreamInfo.screenInfo.root,
+                                    cast(const(char)*) screensaver_bits,
                                     screensaver_width,
                                     screensaver_height,
-                                    xnestUpstreamInfo.screenInfo->white_pixel,
-                                    xnestUpstreamInfo.screenInfo->black_pixel,
-                                    xnestUpstreamInfo.screenInfo->root_depth);
+                                    xnestUpstreamInfo.screenInfo.white_pixel,
+                                    xnestUpstreamInfo.screenInfo.black_pixel,
+                                    xnestUpstreamInfo.screenInfo.root_depth);
 }
 
-void
-xnestCloseDisplay(void)
+void xnestCloseDisplay()
 {
     if (!xnestDoFullGeneration || !xnestUpstreamInfo.conn)
         return;
@@ -138,11 +140,11 @@ xnestCloseDisplay(void)
        the display connection.  There is no need to generate extra protocol.
      */
     free(xnestVisualMap);
-    xnestVisualMap = NULL;
+    xnestVisualMap = null;
     xnestNumVisualMap = 0;
 
     xcb_disconnect(xnestUpstreamInfo.conn);
-    xnestUpstreamInfo.conn = NULL;
-    xnestUpstreamInfo.screenInfo = NULL;
-    xnestUpstreamInfo.setup = NULL;
+    xnestUpstreamInfo.conn = null;
+    xnestUpstreamInfo.screenInfo = null;
+    xnestUpstreamInfo.setup = null;
 }

@@ -1,3 +1,6 @@
+module XNFont.h;
+@nogc nothrow:
+extern(C): __gshared:
 /*
 
 Copyright 1993 by Davor Matic
@@ -12,24 +15,17 @@ is" without express or implied warranty.
 
 */
 
-#ifndef XNESTCOMMON_H
-#define XNESTCOMMON_H
+ 
+public import X11.Xdefs;
 
-#include "colormap.h"
+public import xcb.xcb;
 
-#define UNDEFINED -1
+extern int xnestFontPrivateIndex;
 
-#define MAXDEPTH 32
-#define MAXVISUALSPERDEPTH 256
+enum string xnestFontPriv(string pFont) = `
+  (cast(xnestPrivFont*)FontGetPrivate(` ~ pFont ~ `, xnestFontPrivateIndex))`;
 
-extern int xnestNumPixmapFormats;
-extern Drawable xnestDefaultDrawables[MAXDEPTH + 1];
-extern Pixmap xnestIconBitmap;
-extern Pixmap xnestScreenSaverPixmap;
-extern uint32_t xnestBitmapGC;
-extern uint32_t xnestEventMask;
+Bool xnestRealizeFont(ScreenPtr pScreen, FontPtr pFont);
+Bool xnestUnrealizeFont(ScreenPtr pScreen, FontPtr pFont);
 
-void xnestOpenDisplay(int argc, char *argv[]);
-void xnestCloseDisplay(void);
-
-#endif                          /* XNESTCOMMON_H */
+                          /* XNESTFONT_H */

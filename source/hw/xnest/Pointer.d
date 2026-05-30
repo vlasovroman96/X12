@@ -1,3 +1,6 @@
+module Pointer.c;
+@nogc nothrow:
+extern(C): __gshared:
 /*
 
 Copyright 1993 by Davor Matic
@@ -11,47 +14,46 @@ the suitability of this software for any purpose.  It is provided "as
 is" without express or implied warranty.
 
 */
-#include <dix-config.h>
+import xorg_config;
 
-#include <X11/X.h>
-#include <X11/Xproto.h>
-#include "screenint.h"
-#include "inputstr.h"
-#include "input.h"
-#include "misc.h"
-#include "scrnintstr.h"
-#include "servermd.h"
-#include "mipointer.h"
+import X11.X;
+import X11.Xproto;
+import screenint;
+import inputstr;
+import input;
+import misc;
+import scrnintstr;
+import servermd;
+import mipointer;
 
-#include "xnest-xcb.h"
+import xnest_xcb;
 
-#include "Display.h"
-#include "Screen.h"
-#include "Pointer.h"
-#include "Args.h"
 
-#include "xserver-properties.h"
-#include "exevents.h"           /* For XIGetKnownProperty */
+import Display;
+import Screen;
+import Pointer;
+import Args;
 
-DeviceIntPtr xnestPointerDevice = NULL;
+import xserver_properties;
+import exevents;           /* For XIGetKnownProperty */
 
-void
-xnestChangePointerControl(DeviceIntPtr pDev, PtrCtrl * ctrl)
+DeviceIntPtr xnestPointerDevice = null;
+
+void xnestChangePointerControl(DeviceIntPtr pDev, PtrCtrl* ctrl)
 {
     xcb_change_pointer_control(xnestUpstreamInfo.conn,
-                               ctrl->num,
-                               ctrl->den,
-                               ctrl->threshold,
+                               ctrl.num,
+                               ctrl.den,
+                               ctrl.threshold,
                                TRUE,
                                TRUE);
 }
 
-int
-xnestPointerProc(DeviceIntPtr pDev, int onoff)
+int xnestPointerProc(DeviceIntPtr pDev, int onoff)
 {
-    Atom btn_labels[MAXBUTTONS] = { 0 };
-    Atom axes_labels[2] = { 0 };
-    int i;
+    Atom[MAXBUTTONS] btn_labels = 0;
+    Atom[2] axes_labels = 0;
+    int i = void;
 
     switch (onoff) {
     case DEVICE_INIT:
@@ -72,14 +74,13 @@ xnestPointerProc(DeviceIntPtr pDev, int onoff)
                                   &defaultPointerControl.den,
                                   &defaultPointerControl.threshold);
 
-        xcb_generic_error_t *pm_err = NULL;
-        xcb_get_pointer_mapping_reply_t *pm_reply =
-            xcb_get_pointer_mapping_reply(
+        xcb_generic_error_t* pm_err = null;
+        xcb_get_pointer_mapping_reply_t* pm_reply = xcb_get_pointer_mapping_reply(
                 xnestUpstreamInfo.conn,
                 xcb_get_pointer_mapping(xnestUpstreamInfo.conn),
                 &pm_err);
         if (pm_err) {
-            ErrorF("failed getting pointer mapping %d\n", pm_err->error_code);
+            ErrorF("failed getting pointer mapping %d\n", pm_err.error_code);
             free(pm_err);
             break;
         }
@@ -89,17 +90,17 @@ xnestPointerProc(DeviceIntPtr pDev, int onoff)
             break;
         }
 
-        const int nmap = xcb_get_pointer_mapping_map_length(pm_reply);
-        uint8_t *map = xcb_get_pointer_mapping_map(pm_reply);
+        const(int) nmap = xcb_get_pointer_mapping_map_length(pm_reply);
+        ubyte* map = xcb_get_pointer_mapping_map(pm_reply);
         for (i=0; i<nmap; i++)
             map[i] = i;         /* buttons are already mapped */
 
-        InitPointerDeviceStruct(&pDev->public,
+        InitPointerDeviceStruct(&pDev.public_,
                                 map,
                                 nmap,
-                                btn_labels,
-                                xnestChangePointerControl,
-                                GetMotionHistorySize(), 2, axes_labels);
+                                btn_labels.ptr,
+                                &xnestChangePointerControl,
+                                GetMotionHistorySize(), 2, axes_labels.ptr);
         free(pm_reply);
         break;
     }
@@ -121,6 +122,6 @@ xnestPointerProc(DeviceIntPtr pDev, int onoff)
         break;
     case DEVICE_CLOSE:
         break;
-    }
+    default: break;}
     return Success;
 }

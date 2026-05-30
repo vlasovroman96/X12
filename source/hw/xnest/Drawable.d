@@ -1,3 +1,6 @@
+module Drawable.h;
+@nogc nothrow:
+extern(C): __gshared:
 /*
 
 Copyright 1993 by Davor Matic
@@ -12,15 +15,13 @@ is" without express or implied warranty.
 
 */
 
-#ifndef XNESTEVENTS_H
-#define XNESTEVENTS_H
+ 
+public import XNWindow;
+public import XNPixmap;
 
-#include <X11/Xmd.h>
+enum string xnestDrawable(string pDrawable) = `
+  (WindowDrawable((` ~ pDrawable ~ `).type) ?	
+   xnestWindow(cast(WindowPtr)` ~ pDrawable ~ `) : 
+   xnestPixmap(cast(PixmapPtr)` ~ pDrawable ~ `))`;
 
-extern CARD32 lastEventTime;
-
-void SetTimeSinceLastInputEvent(void);
-void xnestCollectEvents(void);
-void xnestQueueKeyEvent(int type, unsigned int keycode);
-
-#endif                          /* XNESTEVENTS_H */
+                          /* XNESTDRAWABLE_H */

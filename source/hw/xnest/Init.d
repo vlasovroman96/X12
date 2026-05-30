@@ -1,3 +1,6 @@
+module Init.c;
+@nogc nothrow:
+extern(C): __gshared:
 /*
 
 Copyright 1993 by Davor Matic
@@ -11,88 +14,87 @@ the suitability of this software for any purpose.  It is provided "as
 is" without express or implied warranty.
 
 */
-#include <dix-config.h>
+import xorg_config;
 
-#include <stddef.h>
-#include <X11/X.h>
-#include <X11/Xdefs.h>
-#include <X11/Xproto.h>
-#include <X11/fonts/fontstruct.h>
-#include <X11/fonts/libxfont2.h>
+import core.stdc.stddef;
+import X11.X;
+import X11.Xdefs;
+import X11.Xproto;
+import X11.fonts.fontstruct;
+import X11.fonts.libxfont2;
 
-#include "dix/screenint_priv.h"
-#include "mi/mi_priv.h"
-#include "miext/extinit_priv.h"
-#include "os/ddx_priv.h"
-#include "os/log_priv.h"
-#include "os/osdep.h"
+import dix.screenint_priv;
+import mi.mi_priv;
+import miext.extinit_priv;
+import os.ddx_priv;
+import os.log_priv;
+import os.osdep;
 
-#include "screenint.h"
-#include "input.h"
-#include "misc.h"
-#include "scrnintstr.h"
-#include "windowstr.h"
-#include "servermd.h"
-#include "dixfontstr.h"
+import screenint;
+import input;
+import misc;
+import scrnintstr;
+import windowstr;
+import servermd;
+import dixfontstr;
 
-#include "xnest-xcb.h"
-#include "Display.h"
-#include "Screen.h"
-#include "Pointer.h"
-#include "Keyboard.h"
-#include "Handlers.h"
-#include "Events.h"
-#include "Init.h"
-#include "Args.h"
-#include "Drawable.h"
-#include "XNGC.h"
-#include "XNFont.h"
-#ifdef DPMSExtension
-#include "dpmsproc.h"
-#endif
+import xnest_xcb;
+
+import Display;
+import Screen;
+import Pointer;
+import Keyboard;
+import Handlers;
+import Events;
+import Init;
+import Args;
+import Drawable;
+import XNGC;
+import XNFont;
+version (DPMSExtension) {
+import dpmsproc;
+}
 
 Bool xnestDoFullGeneration = TRUE;
 
 /* Xnest doesn't support GLX yet, so we don't link it, but still have
    satisfy DIX's symbol requirements */
-#ifdef GLXEXT
-void
-GlxExtensionInit(void)
+version (GLXEXT) {
+void GlxExtensionInit()
 {
 }
 
 Bool noGlxExtension = FALSE;
-#endif
+}
 
-void
-InitOutput(int argc, char *argv[])
+void InitOutput(int argc, char** argv)
 {
-    int i;
+    int i = void;
 
     xnestOpenDisplay(argc, argv);
 
-    screenInfo.imageByteOrder = xnestUpstreamInfo.setup->image_byte_order;
-    screenInfo.bitmapScanlineUnit = xnestUpstreamInfo.setup->bitmap_format_scanline_unit;
-    screenInfo.bitmapScanlinePad = xnestUpstreamInfo.setup->bitmap_format_scanline_pad;
-    screenInfo.bitmapBitOrder = xnestUpstreamInfo.setup->bitmap_format_bit_order;
+    screenInfo.imageByteOrder = xnestUpstreamInfo.setup.image_byte_order;
+    screenInfo.bitmapScanlineUnit = xnestUpstreamInfo.setup.bitmap_format_scanline_unit;
+    screenInfo.bitmapScanlinePad = xnestUpstreamInfo.setup.bitmap_format_scanline_pad;
+    screenInfo.bitmapBitOrder = xnestUpstreamInfo.setup.bitmap_format_bit_order;
     screenInfo.numPixmapFormats = 0;
 
-    xcb_format_t *fmt = xcb_setup_pixmap_formats(xnestUpstreamInfo.setup);
-    const xcb_format_t *fmtend = fmt + xcb_setup_pixmap_formats_length(xnestUpstreamInfo.setup);
+    xcb_format_t* fmt = xcb_setup_pixmap_formats(xnestUpstreamInfo.setup);
+    const(xcb_format_t)* fmtend = fmt + xcb_setup_pixmap_formats_length(xnestUpstreamInfo.setup);
     for(; fmt != fmtend; ++fmt) {
-        xcb_depth_iterator_t depth_iter;
+        xcb_depth_iterator_t depth_iter = void;
         for (depth_iter = xcb_screen_allowed_depths_iterator(xnestUpstreamInfo.screenInfo);
              depth_iter.rem;
              xcb_depth_next(&depth_iter))
         {
-            if ((fmt->depth == 1) ||
-                (fmt->depth == depth_iter.data->depth)) {
+            if ((fmt.depth == 1) ||
+                (fmt.depth == depth_iter.data.depth)) {
                 screenInfo.formats[screenInfo.numPixmapFormats].depth =
-                    fmt->depth;
+                    fmt.depth;
                 screenInfo.formats[screenInfo.numPixmapFormats].bitsPerPixel =
-                    fmt->bits_per_pixel;
+                    fmt.bits_per_pixel;
                 screenInfo.formats[screenInfo.numPixmapFormats].scanlinePad =
-                    fmt->scanline_pad;
+                    fmt.scanline_pad;
                 screenInfo.numPixmapFormats++;
                 break;
             }
@@ -112,16 +114,14 @@ InitOutput(int argc, char *argv[])
     xnestDoFullGeneration = FALSE;
 }
 
-static void
-xnestNotifyConnection(int fd, int ready, void *data)
+private void xnestNotifyConnection(int fd, int ready, void* data)
 {
     xnestCollectEvents();
 }
 
-void
-InitInput(int argc, char *argv[])
+void InitInput(int argc, char** argv)
 {
-    int rc;
+    int rc = void;
 
     rc = AllocDevicePair(serverClient, "Xnest",
                          &xnestPointerDevice,
@@ -134,43 +134,38 @@ InitInput(int argc, char *argv[])
     mieqInit();
 
     SetNotifyFd(xcb_get_file_descriptor(xnestUpstreamInfo.conn),
-                xnestNotifyConnection,
+                &xnestNotifyConnection,
                 X_NOTIFY_READ,
-                NULL);
+                null);
 
-    RegisterBlockAndWakeupHandlers(xnestBlockHandler, xnestWakeupHandler, NULL);
+    RegisterBlockAndWakeupHandlers(xnestBlockHandler, xnestWakeupHandler, null);
 }
 
-void
-CloseInput(void)
+void CloseInput()
 {
     mieqFini();
 }
 
-void
-ddxGiveUp(enum ExitCode error)
+void ddxGiveUp(ExitCode error)
 {
     xnestDoFullGeneration = TRUE;
     xnestCloseDisplay();
 }
 
-void
-OsVendorInit(void)
+void OsVendorInit()
 {
     return;
 }
 
-void
-OsVendorFatalError(const char *f, va_list args)
+void OsVendorFatalError(const(char)* f, va_list args)
 {
     return;
 }
 
-#if INPUTTHREAD
+static if (INPUTTHREAD) {
 /** This function is called in Xserver/os/inputthread.c when starting
     the input thread. */
-void
-ddxInputThreadInit(void)
+void ddxInputThreadInit()
 {
 }
-#endif
+}

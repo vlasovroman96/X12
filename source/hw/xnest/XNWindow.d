@@ -1,3 +1,7 @@
+module XNWindow.h;
+@nogc nothrow:
+extern(C): __gshared:
+import core.stdc.config: c_long, c_ulong;
 /*
 
 Copyright 1993 by Davor Matic
@@ -12,56 +16,54 @@ is" without express or implied warranty.
 
 */
 
-#ifndef XNESTWINDOW_H
-#define XNESTWINDOW_H
+ 
+public import X11.Xdefs;
+public import xcb.xcb;
 
-#include <X11/Xdefs.h>
-#include <xcb/xcb.h>
-
-typedef struct {
+struct xnestPrivWin {
     xcb_window_t window;
     xcb_window_t parent;
     int x;
     int y;
-    unsigned int width;
-    unsigned int height;
-    unsigned int border_width;
+    uint width;
+    uint height;
+    uint border_width;
     xcb_window_t sibling_above;
     RegionPtr bounding_shape;
     RegionPtr clip_shape;
-} xnestPrivWin;
+}
 
-typedef struct {
+struct xnestWindowMatch {
     WindowPtr pWin;
     xcb_window_t window;
-} xnestWindowMatch;
+}
 
 extern DevPrivateKeyRec xnestWindowPrivateKeyRec;
 
-#define xnestWindowPrivateKey (&xnestWindowPrivateKeyRec)
+enum xnestWindowPrivateKey = (&xnestWindowPrivateKeyRec);
 
-#define xnestWindowPriv(pWin) ((xnestPrivWin *) \
-    dixLookupPrivate(&(pWin)->devPrivates, xnestWindowPrivateKey))
+enum string xnestWindowPriv(string pWin) = `(cast(xnestPrivWin*) 
+    dixLookupPrivate(&(` ~ pWin ~ `).devPrivates, xnestWindowPrivateKey))`;
 
-#define xnestWindow(pWin) (xnestWindowPriv(pWin)->window)
+enum string xnestWindow(string pWin) = `(` ~ xnestWindowPriv!(pWin) ~ `.window)`;
 
-#define xnestWindowParent(pWin) \
-  ((pWin)->parent ? \
-   xnestWindow((pWin)->parent) : \
-   xnestDefaultWindows[pWin->drawable.pScreen->myNum])
+enum string xnestWindowParent(string pWin) = `
+  ((` ~ pWin ~ `).parent ? 
+   ` ~ xnestWindow!(`(` ~ pWin ~ `).parent`) ~ ` : 
+   xnestDefaultWindows[` ~ pWin ~ `.drawable.pScreen.myNum])`;
 
-#define xnestWindowSiblingAbove(pWin) \
-  ((pWin)->prevSib ? xnestWindow((pWin)->prevSib) : XCB_WINDOW_NONE)
+enum string xnestWindowSiblingAbove(string pWin) = `
+  ((` ~ pWin ~ `).prevSib ? ` ~ xnestWindow!(`(` ~ pWin ~ `).prevSib`) ~ ` : XCB_WINDOW_NONE)`;
 
-#define xnestWindowSiblingBelow(pWin) \
-  ((pWin)->nextSib ? xnestWindow((pWin)->nextSib) : XCB_WINDOW_NONE)
+enum string xnestWindowSiblingBelow(string pWin) = `
+  ((` ~ pWin ~ `).nextSib ? ` ~ xnestWindow!(`(` ~ pWin ~ `).nextSib`) ~ ` : XCB_WINDOW_NONE)`;
 
 WindowPtr xnestWindowPtr(xcb_window_t window);
 Bool xnestCreateWindow(WindowPtr pWin);
 Bool xnestDestroyWindow(WindowPtr pWin);
 Bool xnestPositionWindow(WindowPtr pWin, int x, int y);
-void xnestConfigureWindow(WindowPtr pWin, unsigned int mask);
-Bool xnestChangeWindowAttributes(WindowPtr pWin, unsigned long mask);
+void xnestConfigureWindow(WindowPtr pWin, uint mask);
+Bool xnestChangeWindowAttributes(WindowPtr pWin, c_ulong mask);
 Bool xnestRealizeWindow(WindowPtr pWin);
 Bool xnestUnrealizeWindow(WindowPtr pWin);
 void xnestCopyWindow(WindowPtr pWin, xPoint oldOrigin, RegionPtr oldRegion);
@@ -72,4 +74,4 @@ void xnestShapeWindow(WindowPtr pWin);
 /* ScreenRec operations */
 void xnest_screen_ClearToBackground(WindowPtr pWin, int x, int y, int w, int h, Bool generateExposures);
 
-#endif                          /* XNESTWINDOW_H */
+                          /* XNESTWINDOW_H */

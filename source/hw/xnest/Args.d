@@ -1,3 +1,6 @@
+module Args.c;
+@nogc nothrow:
+extern(C): __gshared:
 /*
 
 Copyright 1993 by Davor Matic
@@ -11,28 +14,29 @@ the suitability of this software for any purpose.  It is provided "as
 is" without express or implied warranty.
 
 */
-#include <dix-config.h>
+import xorg_config;
 
-#include <X11/X.h>
-#include <X11/Xdefs.h>
-#include <X11/Xproto.h>
+import X11.X;
+import X11.Xdefs;
+import X11.Xproto;
 
-#include "miext/extinit_priv.h"
-#include "os/ddx_priv.h"
+import miext.extinit_priv;
+import os.ddx_priv;
 
-#include "screenint.h"
-#include "input.h"
-#include "misc.h"
-#include "scrnintstr.h"
-#include "servermd.h"
-#include "extinit.h"
+import screenint;
+import input;
+import misc;
+import scrnintstr;
+import servermd;
+import extinit;
 
-#include "xnest-xcb.h"
+import xnest_xcb;
 
-#include "Display.h"
-#include "Args.h"
 
-char *xnestDisplayName = NULL;
+import Display;
+import Args;
+
+char* xnestDisplayName = null;
 int xnestDefaultClass;
 Bool xnestUserDefaultClass = FALSE;
 int xnestDefaultDepth;
@@ -42,24 +46,23 @@ xRectangle xnestGeometry = { 0 };
 int xnestUserGeometry = 0;
 int xnestBorderWidth;
 Bool xnestUserBorderWidth = FALSE;
-char *xnestWindowName = NULL;
+char* xnestWindowName = null;
 int xnestNumScreens = 0;
 Bool xnestDoDirectColormaps = FALSE;
 xcb_window_t xnestParentWindow = 0;
 
-int
-ddxProcessArgument(int argc, char *argv[], int i)
+int ddxProcessArgument(int argc, char** argv, int i)
 {
     /* disable some extensions we currently don't support yet */
-#ifdef CONFIG_MITSHM
+version (CONFIG_MITSHM) {
     noMITShmExtension = TRUE;
-#endif /* CONFIG_MITSHM */
+} /* CONFIG_MITSHM */
 
     noCompositeExtension = TRUE;
 
-#ifdef DPMSExtension
+version (DPMSExtension) {
     noDPMSExtension = TRUE;
-#endif
+}
 
     if (!strcmp(argv[i], "-display")) {
         if (++i < argc) {
@@ -166,15 +169,14 @@ ddxProcessArgument(int argc, char *argv[], int i)
     }
     if (!strcmp(argv[i], "-parent")) {
         if (++i < argc) {
-            xnestParentWindow = (XID) strtol(argv[i], (char **) NULL, 0);
+            xnestParentWindow = cast(XID) strtol(argv[i], cast(char**) null, 0);
             return 2;
         }
     }
     return 0;
 }
 
-void
-ddxUseMsg(void)
+void ddxUseMsg()
 {
     ErrorF("-display string        display name of the real server\n");
     ErrorF("-class string          default visual class\n");
